@@ -31,9 +31,9 @@ public class GrapplingHook : MonoBehaviour
     private ObiRopeCursor cursor;
 
     private RaycastHit hookAttachment;
-    private bool attached = false;
+	private bool attached = false;
 
-    void Awake()
+	void Awake()
     {
 
         // Create both the rope and the solver:	
