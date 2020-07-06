@@ -26,17 +26,13 @@ public class CamMain : MonoBehaviour
 		Cursor.lockState = CursorLockMode.Locked;//锁定中央
 		Cursor.visible = false;
 		CAMERA.Start();
-		MOVE.Start();//移动的初始化
+		MoveController.Start();//移动的初始化
 		MyUI.Start();
 	}
 	private void Update()
 	{
-
-		
-		//GameObject.Find("MainCamera").transform.position = new Vector3(0, 0, 0);
-		if(Global.boolMove)MOVE.Update();//移动
+		if(Global.boolMove) MoveController.Update();//移动
 		CAMERA.Update();//更新摄像机
-		//FPS.Update();//更新FPS
 		Global.Other.Loop();
 	}
 	private void OnGUI()
@@ -45,7 +41,6 @@ public class CamMain : MonoBehaviour
 		//FPS.OnGUI();//显示FPS
 		MyUI.OnGUI();
 	}
-	
 
 	public static class CAMERA
 	{
@@ -125,109 +120,6 @@ public class CamMain : MonoBehaviour
 			}
 		}
 	}
-	public static class MOVE
-	{
-		[DllImport("user32.dll")]
-		public static extern short GetKeyState(int keyCode);
-
-		//下面是第一人称移动
-		static CharacterController meController;
-		public static float MoveSpMax = 0.1f;//上限
-		public static float MoveSp = 0;//移动速度
-
-		static float RotSp = 1;
-		public static void Start()
-		{
-			//初始化一下，以后就用这个东西控制了
-			meController = Camera.main.GetComponent<CharacterController>();
-		}
-		public static void Update()
-		{
-			//旋转
-			{
-				Vector3 camRot = Camera.main.transform.eulerAngles;
-				//鼠标移动距离
-				float rh = Input.GetAxis("Mouse X");//鼠标沿x移动
-				float rv = Input.GetAxis("Mouse Y");
-				camRot.x -= rv * RotSp;
-				camRot.y += rh * RotSp;
-				//Debug.Log(camRot);
-				if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
-				if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
-				if (camRot.x < -89) camRot.x = -89;
-				Camera.main.transform.eulerAngles = camRot;
-			}
-			//移动
-			{
-				//切换速度
-				bool W = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-				bool D = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
-				bool S = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
-				bool A = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-				bool Up = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
-				bool Down = Input.GetKey(KeyCode.Space);
-				int Keys = 0;
-				if (W) Keys |= 1;
-				if (D) Keys |= 2;
-				if (S) Keys |= 4;
-				if (A) Keys |= 8;
-				if (Up) Keys |= 16;
-				if (Down) Keys |= 32;
-				if (MoveSp > MoveSpMax) MoveSp = MoveSpMax;
-				//if (frames > 20) MoveSp = MoveSpMax;
-				MoveSp = MoveSpMax;
-
-				if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
-				{
-					MoveSp = 0.01f;
-				}
-
-				{//移动
-					float dFront = 0;//z+
-					float dRight = 0;//x+
-					float dUp = 0;
-					if (W) dFront += MoveSp;
-					if (D) dRight += MoveSp;
-					if (S) dFront -= MoveSp;
-					if (A) dRight -= MoveSp;
-					if (Up) dUp -= MoveSp;
-					if (Down) dUp += MoveSp;
-					//Camera.main.transform.Translate(new Vector3(dRight, dUp, dFront), Space.Self);
-					Vector3 world = Camera.main.gameObject.transform.TransformDirection(new Vector3(dRight, dUp, dFront));
-					meController.Move(world);
-					
-				}
-			}
-		}
-
-	}
-
-	/*
-	private static class FPS
-	{
-		//下面是FPS显示
-		private static string FpsText;
-		private static float lastInterval;
-		private static int frames;
-		private static Rect rect = new Rect(0, 0, 100, 100);
-		public static void Update()
-		{
-			++frames;
-			if (Time.realtimeSinceStartup > lastInterval + 1.0f)
-			{
-				float fps = frames / (Time.realtimeSinceStartup - lastInterval);
-				FpsText = fps.ToString("f2");
-				frames = 0;
-				lastInterval = Time.realtimeSinceStartup;
-			}
-		}
-		public static void OnGUI()
-		{
-			GUI.skin.label.normal.textColor = Color.black;//字体颜色为黑色
-			GUI.Label(rect, "FPS:" + FpsText);
-		}
-	}
-	*/
 
 	private static class MyUI
 	{
@@ -281,7 +173,6 @@ public class CamMain : MonoBehaviour
 				case 3:GUI.DrawTexture(rectTex, yellow);break;
 				case 4:GUI.DrawTexture(rectTex, green);break;
 			}
-			
 		}
 	}
 }
