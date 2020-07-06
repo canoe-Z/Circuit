@@ -31,24 +31,24 @@ public class TAmmeter : MonoBehaviour
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int mA = bodyItem.childsPorts[1].PortID_Global;
 		int A = bodyItem.childsPorts[2].PortID_Global;
-		Global.MyCircuit.UF.Union(GND, mA);
-		Global.MyCircuit.UF.Union(GND, A);
+		CircuitcalCulator.UF.Union(GND, mA);
+		CircuitcalCulator.UF.Union(GND, A);
 	}
 	public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int mA = bodyItem.childsPorts[1].PortID_Global;
 		int A = bodyItem.childsPorts[2].PortID_Global;
 		//获取端口ID并完成内部连接
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[0]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[1]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[2]);
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
 		//电流表将其电流加入检测序列
-		Global.MyCircuit.tammeter.Add(this);
+		CircuitcalCulator.tammeter.Add(this);
 	}
 	public void Calculate()//计算自身电流
 	{

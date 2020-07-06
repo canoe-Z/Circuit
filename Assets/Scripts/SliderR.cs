@@ -40,34 +40,34 @@ public class SliderR : MonoBehaviour
 	public void LoadElement()
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		//获取端口ID并完成内部连接
 		int TL, TR, L, R;
 		TL = bodyItem.childsPorts[0].PortID_Global;
 		TR = bodyItem.childsPorts[1].PortID_Global;
 		L = bodyItem.childsPorts[2].PortID_Global;
 		R = bodyItem.childsPorts[3].PortID_Global;
-		Global.MyCircuit.UF.Union(TL, L);
-		Global.MyCircuit.UF.Union(TL, R);
-		Global.MyCircuit.UF.Union(TL, TR);
+		CircuitcalCulator.UF.Union(TL, L);
+		CircuitcalCulator.UF.Union(TL, R);
+		CircuitcalCulator.UF.Union(TL, TR);
 	}
 	public void SetElement()
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		//获取端口ID并完成内部连接
 		int TL, TR, L, R;
 		TL = bodyItem.childsPorts[0].PortID_Global;
 		TR = bodyItem.childsPorts[1].PortID_Global;
 		L = bodyItem.childsPorts[2].PortID_Global;
 		R = bodyItem.childsPorts[3].PortID_Global;
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RL));
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RR));
-		Global.MyCircuit.entities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[0]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[1]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[2]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[3]);
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RL));
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RR));
+		CircuitcalCulator.entities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[3]);
 
 	}
 }

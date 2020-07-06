@@ -66,14 +66,14 @@ public class Ammeter : MonoBehaviour
 		int V0 = bodyItem.childsPorts[1].PortID_Global;
 		int V1 = bodyItem.childsPorts[2].PortID_Global;
 		int V2 = bodyItem.childsPorts[3].PortID_Global;
-		Global.MyCircuit.UF.Union(GND, V0);
-		Global.MyCircuit.UF.Union(GND, V1);
-		Global.MyCircuit.UF.Union(GND, V2);
+		CircuitcalCulator.UF.Union(GND, V0);
+		CircuitcalCulator.UF.Union(GND, V1);
+		CircuitcalCulator.UF.Union(GND, V2);
 	}
 	public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int V0 = bodyItem.childsPorts[1].PortID_Global;
 		int V1 = bodyItem.childsPorts[2].PortID_Global;
@@ -85,15 +85,15 @@ public class Ammeter : MonoBehaviour
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 		//获取端口ID并完成内部连接
-		Global.MyCircuit.entities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
-		Global.MyCircuit.entities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
-		Global.MyCircuit.entities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[0]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[1]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[2]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[3]);
+		CircuitcalCulator.entities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
+		CircuitcalCulator.entities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
+		CircuitcalCulator.entities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[3]);
 		//电流表将其电流加入检测序列
-		Global.MyCircuit.ammeter.Add(this);
+		CircuitcalCulator.ammeter.Add(this);
 	}
 	public void Calculate()//计算自身电流
 	{

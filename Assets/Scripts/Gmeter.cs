@@ -58,7 +58,7 @@ public class Gmeter : MonoBehaviour
 		pin.transform.localPosition = pos;
 
 		//ID实时更新
-		//EntityID = Global.MyCircuit.EntityNum;
+		//EntityID = CircuitcalCulator.EntityNum;
 		//LeftPortID = bodyItem.childsPorts[0].PortID_Global;
 		//RightPortID = bodyItem.childsPorts[1].PortID_Global;
 	}
@@ -80,21 +80,21 @@ public class Gmeter : MonoBehaviour
 		int LeftPortID, RightPortID;
 		LeftPortID = bodyItem.childsPorts[0].PortID_Global;
 		RightPortID = bodyItem.childsPorts[1].PortID_Global;
-		Global.MyCircuit.UF.Union(LeftPortID, RightPortID);
+		CircuitcalCulator.UF.Union(LeftPortID, RightPortID);
 	}
 
 	public void SetElement()
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		int LeftPortID, RightPortID;
 		LeftPortID = bodyItem.childsPorts[0].PortID_Global;
 		RightPortID = bodyItem.childsPorts[1].PortID_Global;
-		Global.MyCircuit.entities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[0]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[1]);
+		CircuitcalCulator.entities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
 		//电位计将其电流加入检测序列
-		Global.MyCircuit.gmeter.Add(this);
+		CircuitcalCulator.gmeter.Add(this);
 	}
 
 	public void Calculate()//计算自身电流

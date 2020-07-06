@@ -18,10 +18,10 @@ public class NormItem : MonoBehaviour
 			int.TryParse(disorderPorts[i].name, out int ID); //名字转换成ID
 			childsPorts[ID] = disorderPorts[i];
 			childsPorts[ID].PortID = ID;
-			childsPorts[ID].PortID_Global = ID + Global.MyCircuit.PortNum;
+			childsPorts[ID].PortID_Global = ID + CircuitcalCulator.PortNum;
 			childsPorts[ID].father = this;
 		}
-		Global.MyCircuit.PortNum += disorderPorts.Length; //全局ID++
+		CircuitcalCulator.PortNum += disorderPorts.Length; //全局ID++
 
     }
 

@@ -30,20 +30,20 @@ public class TVoltmeter : MonoBehaviour
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int mV = bodyItem.childsPorts[1].PortID_Global;
 		int V = bodyItem.childsPorts[2].PortID_Global;
-		Global.MyCircuit.UF.Union(GND, mV);
-		Global.MyCircuit.UF.Union(GND, V);
+		CircuitcalCulator.UF.Union(GND, mV);
+		CircuitcalCulator.UF.Union(GND, V);
 	}
 	public void SetElement()//添加元件
 	{
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int mV = bodyItem.childsPorts[1].PortID_Global;
 		int V = bodyItem.childsPorts[2].PortID_Global;
 		//获取端口ID并完成内部连接
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
-		Global.MyCircuit.entities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[0]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[1]);
-		Global.MyCircuit.ports.Add(bodyItem.childsPorts[2]);
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
+		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
 	}
 }

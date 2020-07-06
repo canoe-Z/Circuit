@@ -58,7 +58,7 @@ public class Switch : MonoBehaviour
 	public void LoadElement()
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		//得到端口ID
 		int L, M, R;
 		L = bodyItem.childsPorts[0].PortID_Global;
@@ -66,17 +66,17 @@ public class Switch : MonoBehaviour
 		R = bodyItem.childsPorts[2].PortID_Global;
 		if (state == 2)
 		{
-			Global.MyCircuit.UF.Union(R, M);
+			CircuitcalCulator.UF.Union(R, M);
 		}
 		else if (state == 0)
 		{
-			Global.MyCircuit.UF.Union(L, M);
+			CircuitcalCulator.UF.Union(L, M);
 		}
 	}
 	public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
-		int EntityID = Global.MyCircuit.EntityNum;
+		int EntityID = CircuitcalCulator.EntityNum;
 		//得到端口ID
 		int L, M, R;
 		L = bodyItem.childsPorts[0].PortID_Global;
@@ -84,11 +84,11 @@ public class Switch : MonoBehaviour
 		R = bodyItem.childsPorts[2].PortID_Global;
 		if (state == 2)
 		{
-			Global.MyCircuit.entities.Add(new VoltageSource(string.Concat("EntityID.ToString()", "_", R), R.ToString(), M.ToString(), 0));
+			CircuitcalCulator.entities.Add(new VoltageSource(string.Concat("EntityID.ToString()", "_", R), R.ToString(), M.ToString(), 0));
 		}
 		else if (state == 0)
 		{
-			Global.MyCircuit.entities.Add(new VoltageSource(string.Concat("EntityID.ToString()", "_", L), L.ToString(), M.ToString(), 0));
+			CircuitcalCulator.entities.Add(new VoltageSource(string.Concat("EntityID.ToString()", "_", L), L.ToString(), M.ToString(), 0));
 		}
 	}
 }
