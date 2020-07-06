@@ -1,19 +1,19 @@
 ﻿using System.Runtime.InteropServices;
 using UnityEngine;
-public static class MoveController
+public class MoveController : MonoBehaviour
 {
 	[DllImport("user32.dll")]
 	private static extern short GetKeyState(int keyCode);
-	private static CharacterController _characterController;
-	private static readonly float RotateSpeed = 1;
-	private static readonly float DefaultMoveSpeed = 0.1f;
-	private static float MoveSpeed;
-	private static bool W, A, S, D, Up, Down;
-	public static void Start()
+	private CharacterController _characterController;
+	private readonly float RotateSpeed = 1;
+	private readonly float DefaultMoveSpeed = 0.1f;
+	private float MoveSpeed;
+	private bool W, A, S, D, Up, Down;
+	void Start()
 	{
 		_characterController = Camera.main.GetComponent<CharacterController>();
 	}
-	public static void Update()
+	void Update()
 	{
 		GetKeyState();
 		SetMoveSpeed();
@@ -21,7 +21,7 @@ public static class MoveController
 		Move();
 	}
 
-	public static void Rotate()
+	public void Rotate()
 	{
 		Vector3 camRot = Camera.main.transform.eulerAngles;
 		//鼠标移动距离
@@ -35,19 +35,19 @@ public static class MoveController
 		Camera.main.transform.eulerAngles = camRot;
 	}
 
-	public static void SetMoveSpeed(float moveSpeed)
+	public void SetMoveSpeed(float moveSpeed)
 	{
 		MoveSpeed = moveSpeed;
 		SlowMove();
 
 	}
-	public static void SetMoveSpeed()
+	public void SetMoveSpeed()
 	{
 		MoveSpeed = DefaultMoveSpeed;
 		SlowMove();
 	}
 
-	public static void SlowMove()
+	public void SlowMove()
 	{
 		//(((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
 		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
@@ -56,7 +56,7 @@ public static class MoveController
 		}
 	}
 
-	public static void GetKeyState()
+	public void GetKeyState()
 	{
 		W = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
 		D = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
@@ -66,7 +66,7 @@ public static class MoveController
 		Down = Input.GetKey(KeyCode.Space);
 	}
 
-	public static void Move()
+	public void Move()
 	{
 		float dFront = 0;
 		float dRight = 0;

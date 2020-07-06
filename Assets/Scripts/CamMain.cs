@@ -26,12 +26,12 @@ public class CamMain : MonoBehaviour
 		Cursor.lockState = CursorLockMode.Locked;//锁定中央
 		Cursor.visible = false;
 		CAMERA.Start();
-		MoveController.Start();//移动的初始化
+		//MoveController.Start();//移动的初始化
 		MyUI.Start();
 	}
 	private void Update()
 	{
-		if(Global.boolMove) MoveController.Update();//移动
+		//if(Global.boolMove) MoveController.Update();//移动
 		CAMERA.Update();//更新摄像机
 		Global.Other.Loop();
 	}
