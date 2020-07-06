@@ -8,22 +8,7 @@ using System;
 
 public static class Global
 {
-	static GameObject menu = null;
 	public static bool boolMove = true;//可以通过鼠标移动
-	public static void OpenMenu()
-	{
-		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
-		Cursor.visible = true;
-		boolMove = false;
-		menu.SetActive(true);
-	}
-	public static void CloseMenu()
-	{
-		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
-		Cursor.visible = false;
-		boolMove = true;
-		menu.SetActive(false);
-	}
 	public static class Other
 	{
 		//单击端口以连接导线
@@ -62,20 +47,9 @@ public static class Global
 		{
 			CircuitcalCulator.CalculateAll();
 		}
-		public static void SetUp()//摄像机的Start
-		{
-			menu = GameObject.Find("Menu");
-			if (menu == null) Debug.LogError("未找到菜单");
-			CloseMenu();
-		}
 		//Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
 		public static void Loop()//每帧由摄像机调用
 		{
-			if (Input.GetKeyDown(KeyCode.Escape)) //开启菜单
-			{
-				if (boolMove) OpenMenu();
-				else CloseMenu();
-			}
 			if (Input.GetMouseButtonDown(1))//右键清除连接状态
 			{
 				prePort = null;

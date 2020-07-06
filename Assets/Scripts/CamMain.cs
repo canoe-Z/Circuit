@@ -22,7 +22,6 @@ public class CamMain : MonoBehaviour
 	}
 	private void Start()
 	{
-		Global.Other.SetUp();
 		Cursor.lockState = CursorLockMode.Locked;//锁定中央
 		Cursor.visible = false;
 		CAMERA.Start();

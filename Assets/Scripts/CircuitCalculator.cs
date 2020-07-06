@@ -132,12 +132,12 @@ public static class CircuitcalCulator
 			{
 				if (AllSource[i].IsConnected(j))
 				{
-					Debug.LogError("电源E" + j + "有连接");
+					Debug.LogWarning("电源E" + j + "有连接");
 					AllSource[i].LoadElement(j);
 				}
 				else
 				{
-					Debug.LogError("电源E" + j + "无连接");
+					Debug.LogWarning("电源E" + j + "无连接");
 				}
 			}
 		}

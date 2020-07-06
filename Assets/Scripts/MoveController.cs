@@ -23,6 +23,7 @@ public class MoveController : MonoBehaviour
 
 	public void Rotate()
 	{
+		if (!Global.boolMove) return;//在菜单的时候禁止转头
 		Vector3 camRot = Camera.main.transform.eulerAngles;
 		//鼠标移动距离
 		float rh = Input.GetAxis("Mouse X");
