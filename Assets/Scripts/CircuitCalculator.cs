@@ -20,6 +20,8 @@ public static class CircuitCalculator
 	public static WeightedQuickUnionUF UF = new WeightedQuickUnionUF(10000);//并查集
 	public static List<CircuitLine> ProblemLine = new List<CircuitLine>();//问题导线
 	public static List<CircuitLine> GoodLine = new List<CircuitLine>();//正常导线
+	//public static List<INormal> normalEntity = new List<INormal>();
+	//public static List<EntityBase> allEntity = new List<EntityBase>();
 
 	public static void CalculateAll()
 	{
@@ -33,11 +35,12 @@ public static class CircuitCalculator
 		GoodLine.Clear();
 		ProblemLine.Clear();
 		SpiceON();
+		//normalEntity[1].LoadElement();
 	}
 	private static void SpiceON()
 	{
 		LoadElement();//预加载
-		//预连接导线
+					  //预连接导线
 		CircuitLine[] AllLine = GameObject.FindObjectsOfType<CircuitLine>();
 		for (int i = 0; i < AllLine.Length; i++)
 		{
@@ -117,223 +120,62 @@ public static class CircuitCalculator
 	private static void LoadElement() //通过并查集预连接
 	{
 		UF.Clear(10000);
-		Resistance[] AllResistance = GameObject.FindObjectsOfType<Resistance>();
-		for (int i = 0; i < AllResistance.Length; i++)
+		EntityBase[] allEntity = GameObject.FindObjectsOfType<EntityBase>();
+		for (int i = 0; i < allEntity.Length; i++)
 		{
-			if (AllResistance[i].IsConnected())
+			if (allEntity[i] is INormal)
 			{
-				AllResistance[i].LoadElement();
-			}
-		}
-		Source[] AllSource = GameObject.FindObjectsOfType<Source>();
-		for (int i = 0; i < AllSource.Length; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (AllSource[i].IsConnected(j))
+				if ((allEntity[i] as INormal).IsConnected())
 				{
-					Debug.LogWarning("电源E" + j + "有连接");
-					AllSource[i].LoadElement(j);
+					(allEntity[i] as INormal).LoadElement();
 				}
-				else
+				Debug.LogError("111");
+			}
+			else if (allEntity[i] is IComplex)
+			{
+				for (int j = 0; j < 3; j++)
 				{
-					Debug.LogWarning("电源E" + j + "无连接");
+					if ((allEntity[i] as IComplex).IsConnected(j))
+					{
+						Debug.LogWarning("电源E" + j + "有连接");
+						(allEntity[i] as IComplex).LoadElement(j);
+					}
+					else
+					{
+						Debug.LogWarning("电源E" + j + "无连接");
+					}
 				}
-			}
-		}
-		Voltmeter[] AllVoltmeter = GameObject.FindObjectsOfType<Voltmeter>();
-		for (int i = 0; i < AllVoltmeter.Length; i++)
-		{
-			if (AllVoltmeter[i].IsConnected())
-			{
-				AllVoltmeter[i].LoadElement();
-			}
-		}
-		TVoltmeter[] AllTVoltmeter = GameObject.FindObjectsOfType<TVoltmeter>();
-		for (int i = 0; i < AllVoltmeter.Length; i++)
-		{
-			if (AllTVoltmeter[i].IsConnected())
-			{
-				AllTVoltmeter[i].LoadElement();
-			}
-		}
-		Ammeter[] AllAmmeter = GameObject.FindObjectsOfType<Ammeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllAmmeter[i].IsConnected())
-			{
-				AllAmmeter[i].LoadElement();
-			}
-		}
-		TAmmeter[] AllTAmmeter = GameObject.FindObjectsOfType<TAmmeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllTAmmeter[i].IsConnected())
-			{
-				AllTAmmeter[i].LoadElement();
-			}
-		}
-		RBox[] AllRBox = GameObject.FindObjectsOfType<RBox>();
-		for (int i = 0; i < AllRBox.Length; i++)
-		{
-			if (AllRBox[i].IsConnected())
-			{
-				AllRBox[i].LoadElement();
-			}
-		}
-		SourceStand[] AllSourceStand = GameObject.FindObjectsOfType<SourceStand>();
-		for (int i = 0; i < AllSourceStand.Length; i++)
-		{
-			if (AllSourceStand[i].IsConnected())
-			{
-				AllSourceStand[i].LoadElement();
-			}
-		}
-		Gmeter[] AllGmeter = GameObject.FindObjectsOfType<Gmeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllGmeter[i].IsConnected())
-			{
-				AllGmeter[i].LoadElement();
-			}
-		}
-		Switch[] AllSwitch = GameObject.FindObjectsOfType<Switch>();
-		for (int i = 0; i < AllSwitch.Length; i++)
-		{
-			if (AllSwitch[i].IsConnected())
-			{
-				AllSwitch[i].LoadElement();
-			}
-		}
-		SliderR[] AllSliderR = GameObject.FindObjectsOfType<SliderR>();
-		for (int i = 0; i < AllSliderR.Length; i++)
-		{
-			if (AllSliderR[i].IsConnected())
-			{
-				AllSliderR[i].LoadElement();
-			}
-		}
-		Solar[] AllSolar = GameObject.FindObjectsOfType<Solar>();
-		for (int i = 0; i < AllSolar.Length; i++)
-		{
-			if (AllSolar[i].IsConnected())
-			{
-				AllSolar[i].LoadElement();
+				Debug.LogError("222");
 			}
 		}
 	}
+
 	private static void SetElement() //已经将有问题的节点的可连接标志去除，正式连接
 	{
 		EntityNum = 0;
-		Resistance[] AllResistance = GameObject.FindObjectsOfType<Resistance>();
-		for (int i = 0; i < AllResistance.Length; i++)
+		EntityBase[] allEntity = GameObject.FindObjectsOfType<EntityBase>();
+		for (int i = 0; i < allEntity.Length; i++)
 		{
-			if (AllResistance[i].IsConnected())
+			if (allEntity[i] is INormal)
 			{
-				AllResistance[i].SetElement();
-				EntityNum++;
-			}
-		}
-		Source[] AllSource = GameObject.FindObjectsOfType<Source>();
-		for (int i = 0; i < AllSource.Length; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (AllSource[i].IsConnected(j))
+				if ((allEntity[i] as INormal).IsConnected())
 				{
-					AllSource[i].SetElement(j);
+					(allEntity[i] as INormal).SetElement();
+					EntityNum++;
 				}
+				Debug.LogError("333");
 			}
-			EntityNum++;
-		}
-		Voltmeter[] AllVoltmeter = GameObject.FindObjectsOfType<Voltmeter>();
-		for (int i = 0; i < AllVoltmeter.Length; i++)
-		{
-			if (AllVoltmeter[i].IsConnected())
+			else if (allEntity[i] is IComplex)
 			{
-				AllVoltmeter[i].SetElement();
+				for (int j = 0; j < 3; j++)
+				{
+					if ((allEntity[i] as IComplex).IsConnected(j))
+					{
+						(allEntity[i] as IComplex).SetElement(j);
+					}
+				}
 				EntityNum++;
-			}
-		}
-		TVoltmeter[] AllTVoltmeter = GameObject.FindObjectsOfType<TVoltmeter>();
-		for (int i = 0; i < AllVoltmeter.Length; i++)
-		{
-			if (AllTVoltmeter[i].IsConnected())
-			{
-				AllTVoltmeter[i].SetElement();
-				EntityNum++;
-			}
-		}
-		Ammeter[] AllAmmeter = GameObject.FindObjectsOfType<Ammeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllAmmeter[i].IsConnected())
-			{
-				AllAmmeter[i].SetElement();
-				EntityNum++;
-			}
-		}
-		TAmmeter[] AllTAmmeter = GameObject.FindObjectsOfType<TAmmeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllTAmmeter[i].IsConnected())
-			{
-				AllTAmmeter[i].SetElement();
-				EntityNum++;
-			}
-		}
-		RBox[] AllRBox = GameObject.FindObjectsOfType<RBox>();
-		for (int i = 0; i < AllRBox.Length; i++)
-		{
-			if (AllRBox[i].IsConnected())
-			{
-				AllRBox[i].SetElement();
-				EntityNum++;
-			}
-		}
-		SourceStand[] AllSourceStand = GameObject.FindObjectsOfType<SourceStand>();
-		for (int i = 0; i < AllSourceStand.Length; i++)
-		{
-			if (AllSourceStand[i].IsConnected())
-			{
-				AllSourceStand[i].SetElement();
-				EntityNum++;
-			}
-		}
-		Gmeter[] AllGmeter = GameObject.FindObjectsOfType<Gmeter>();
-		for (int i = 0; i < AllAmmeter.Length; i++)
-		{
-			if (AllGmeter[i].IsConnected())
-			{
-				AllGmeter[i].SetElement();
-				EntityNum++;
-			}
-		}
-		Switch[] AllSwitch = GameObject.FindObjectsOfType<Switch>();
-		for (int i = 0; i < AllSwitch.Length; i++)
-		{
-			if (AllSwitch[i].IsConnected())
-			{
-				AllSwitch[i].SetElement();
-				EntityNum++;
-			}
-		}
-		SliderR[] AllSliderR = GameObject.FindObjectsOfType<SliderR>();
-		for (int i = 0; i < AllSliderR.Length; i++)
-		{
-			if (AllSliderR[i].IsConnected())
-			{
-				AllSliderR[i].SetElement();
-				EntityNum++;
-			}
-		}
-		Solar[] AllSolar = GameObject.FindObjectsOfType<Solar>();
-		for (int i = 0; i < AllSolar.Length; i++)
-		{
-			if (AllSolar[i].IsConnected())
-			{
-				AllSolar[i].SetElement();
-				EntityNum++;
+				Debug.LogError("444");
 			}
 		}
 	}

@@ -51,7 +51,7 @@ abstract public class EntityBase : MonoBehaviour
 	}
 }
 
-interface INormal
+public interface INormal
 {
 	bool IsConnected();
 	void LoadElement();
@@ -59,7 +59,7 @@ interface INormal
 }
 
 //复合元件，具有可独立连接的特性，例如直流电源的三个电源是彼此独立的
-interface IComplex
+public interface IComplex
 {
 	bool IsConnected(int n);
 	void LoadElement(int n);
