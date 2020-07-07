@@ -35,7 +35,6 @@ public static class CircuitCalculator
 		GoodLine.Clear();
 		ProblemLine.Clear();
 		SpiceON();
-		//normalEntity[1].LoadElement();
 	}
 	private static void SpiceON()
 	{
