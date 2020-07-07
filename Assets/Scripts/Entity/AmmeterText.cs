@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class AmmeterText : MonoBehaviour
@@ -17,14 +15,14 @@ public class AmmeterText : MonoBehaviour
     void Update()
     {
         double Atext;
-        double GND = TAmmeter.bodyItem.childsPorts[0].U;
-        double mA = TAmmeter.bodyItem.childsPorts[1].I;
-        double A = TAmmeter.bodyItem.childsPorts[2].I;
-        if (TAmmeter.bodyItem.childsPorts[1].Connected == 1)
+        double GND = TAmmeter.childsPorts[0].U;
+        double mA = TAmmeter.childsPorts[1].I;
+        double A = TAmmeter.childsPorts[2].I;
+        if (TAmmeter.childsPorts[1].Connected == 1)
         {
             Atext = mA * 1000;
         }
-        else if (TAmmeter.bodyItem.childsPorts[2].Connected == 1)
+        else if (TAmmeter.childsPorts[2].Connected == 1)
         {
             Atext = A;
         }

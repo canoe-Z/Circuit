@@ -352,11 +352,11 @@ public static class CircuitCalculator
 					{
 						UF.Union(AllSource[i].G[j], 0);
 						entities.Add(new VoltageSource(string.Concat(AllSource[i].EntityID.ToString(), "_GND", j), AllSource[i].G[j].ToString(), "0", 0));
-						Debug.LogError("电源E" + j + "有连接但悬空，将其接地");
+						Debug.LogWarning("电源E" + j + "有连接但悬空，将其接地");
 					}
 					else
 					{
-						Debug.LogError("电源E" + j + "已经接地");
+						Debug.LogWarning("电源E" + j + "已经接地");
 					}
 				}
 			}

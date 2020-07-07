@@ -9,7 +9,7 @@ public class CircuitPort : MonoBehaviour
 	public double I = 0;//流出接线柱的电流
 	public int PortID;//本接线柱ID
 	public int PortID_Global;//本接线柱ID_全局
-	public NormItem father;
+	public EntityBase father;
 	private void OnMouseDown()
 	{
 		if (!Global.boolMove) return;

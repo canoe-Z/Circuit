@@ -1,30 +1,22 @@
 ﻿using System;
-using System.Numerics;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 
-public class Solar : MonoBehaviour
+public class Solar : EntityBase
 {
-	double IscMax = 0.06;
+	readonly double IscMax = 0.06;
 	double Isc;
 	public int GND,P;
-	public NormItem bodyItem;
 	public MySlider[] sliders = new MySlider[1];
 	public int EntityID;
 	void Start()
 	{
-		bodyItem = this.gameObject.GetComponent<NormItem>();
+		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
 		sliders[slidersDisorder[0].SliderID] = slidersDisorder[0];
 	}
-
 
 	void Update()
 	{
@@ -33,7 +25,7 @@ public class Solar : MonoBehaviour
 	//电路相关
 	public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (bodyItem.childsPorts[0].Connected == 1 || bodyItem.childsPorts[1].Connected == 1)
+		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -44,8 +36,8 @@ public class Solar : MonoBehaviour
 	}
 	public void LoadElement()//添加元件
 	{
-		GND = bodyItem.childsPorts[0].PortID_Global;
-		P = bodyItem.childsPorts[1].PortID_Global;
+		GND = childsPorts[0].PortID_Global;
+		P = childsPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(GND, P);
 	}
 
@@ -78,8 +70,8 @@ public class Solar : MonoBehaviour
 	public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		GND = bodyItem.childsPorts[0].PortID_Global;
-		P = bodyItem.childsPorts[1].PortID_Global;
+		GND = childsPorts[0].PortID_Global;
+		P = childsPorts[1].PortID_Global;
 		//获取端口ID并完成内部连接
 		Debug.LogError("短路电流为" + Isc);
 		CircuitCalculator.entities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
@@ -87,7 +79,7 @@ public class Solar : MonoBehaviour
 		CircuitCalculator.entities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
 		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
 		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]);
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitCalculator.ports.Add(childsPorts[0]);
+		CircuitCalculator.ports.Add(childsPorts[1]);
 	}
 }

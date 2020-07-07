@@ -80,7 +80,7 @@ public static class Global
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}
 		}
-		public static void OverItem(NormItem which)//鼠标置于某物体上
+		public static void OverItem(EntityBase which)//鼠标置于某物体上
 		{
 			if (prePort == null) CamMain.ShowTips("捕捉到接线柱并单击，开始连接导线。\n", 0);
 			else CamMain.ShowTips("在接线柱处单击，继续连接导线。\n按 鼠标右键 清除当前连接。\n", 0);

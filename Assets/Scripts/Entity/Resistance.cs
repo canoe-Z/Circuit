@@ -1,27 +1,21 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using SpiceSharp;
-using SpiceSharp.Components;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Components;
 
-public class Resistance : MonoBehaviour
+public class Resistance : EntityBase , INormal
 {
-	public NormItem bodyItem;
 	public double Rnum = 120;
-    // Start is called before the first frame update
-    void Start()
+	public void Start()
     {
+		FindCircuitPort();
 		if (double.TryParse(this.gameObject.name, out double Rnum)) //阻值
 		{
 			this.Rnum = Rnum;
 		}
-		bodyItem = this.gameObject.GetComponent<NormItem>();
 	}
 
 	//电路相关
 	public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (bodyItem.childsPorts[0].Connected == 1 || bodyItem.childsPorts[1].Connected == 1)
+		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -34,8 +28,8 @@ public class Resistance : MonoBehaviour
 	{
 		//获取端口ID并完成并查集连接
 		int LeftPortID, RightPortID;
-		LeftPortID = bodyItem.childsPorts[0].PortID_Global;
-		RightPortID = bodyItem.childsPorts[1].PortID_Global;
+		LeftPortID = childsPorts[0].PortID_Global;
+		RightPortID = childsPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 	public void SetElement()
@@ -44,10 +38,10 @@ public class Resistance : MonoBehaviour
 		int EntityID = CircuitCalculator.EntityNum;
 		//获取端口ID并完成内部连接
 		int LeftPortID, RightPortID;
-		LeftPortID = bodyItem.childsPorts[0].PortID_Global;
-		RightPortID = bodyItem.childsPorts[1].PortID_Global;
+		LeftPortID = childsPorts[0].PortID_Global;
+		RightPortID = childsPorts[1].PortID_Global;
 		CircuitCalculator.entities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Rnum));
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]); 
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitCalculator.ports.Add(childsPorts[0]); 
+		CircuitCalculator.ports.Add(childsPorts[1]);
 	}
 }

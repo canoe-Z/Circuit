@@ -17,14 +17,14 @@ public class VoltmeterText : MonoBehaviour
     void Update()
     {
         double Vtext;
-        double GND = TVoltmeter.bodyItem.childsPorts[0].U;
-        double mV = TVoltmeter.bodyItem.childsPorts[1].U;
-        double V = TVoltmeter.bodyItem.childsPorts[2].U;
-        if (TVoltmeter.bodyItem.childsPorts[1].Connected == 1)
+        double GND = TVoltmeter.childsPorts[0].U;
+        double mV = TVoltmeter.childsPorts[1].U;
+        double V = TVoltmeter.childsPorts[2].U;
+        if (TVoltmeter.childsPorts[1].Connected == 1)
         {
             Vtext = (mV - GND) * 1000;
         }
-        else if (TVoltmeter.bodyItem.childsPorts[2].Connected == 1)
+        else if (TVoltmeter.childsPorts[2].Connected == 1)
         {
             Vtext = V - GND;
         }

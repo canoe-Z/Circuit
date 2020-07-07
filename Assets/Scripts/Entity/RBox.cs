@@ -1,23 +1,16 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using SpiceSharp;
+﻿using UnityEngine;
 using SpiceSharp.Components;
-using SpiceSharp.Simulations;
 
-public class RBox : MonoBehaviour
+public class RBox : EntityBase, INormal
 {
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
-	NormItem bodyItem;
 	MySlider[] sliders = new MySlider[6];
-	// Start is called before the first frame update
 	void Start()
 	{
-		bodyItem = this.gameObject.GetComponent<NormItem>();
+		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		//Debug.Log(sliders.Length);
-		//sliders = slidersDisorder;
 		for (int i = 0; i < 6; i++)
 		{
 			sliders[slidersDisorder[i].SliderID] = slidersDisorder[i];
@@ -25,7 +18,6 @@ public class RBox : MonoBehaviour
 		}
 	}
 
-    // Update is called once per frame
     void Update()
 	{
 		int total = 0;
@@ -40,7 +32,7 @@ public class RBox : MonoBehaviour
 	}
 	public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (bodyItem.childsPorts[0].Connected == 1 || bodyItem.childsPorts[1].Connected == 1 || bodyItem.childsPorts[2].Connected == 1 || bodyItem.childsPorts[3].Connected == 1)
+		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
 		{
 			return true;
 		}
@@ -54,10 +46,10 @@ public class RBox : MonoBehaviour
 	{
 		//获取端口ID并完成并查集连接
 		int G, R999, R99, R9;
-		G = bodyItem.childsPorts[0].PortID_Global;
-		R999 = bodyItem.childsPorts[3].PortID_Global;//顺序翻转
-		R99 = bodyItem.childsPorts[2].PortID_Global;
-		R9 = bodyItem.childsPorts[1].PortID_Global;
+		G = childsPorts[0].PortID_Global;
+		R999 = childsPorts[3].PortID_Global;//顺序翻转
+		R99 = childsPorts[2].PortID_Global;
+		R9 = childsPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
@@ -67,10 +59,10 @@ public class RBox : MonoBehaviour
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;
-		G = bodyItem.childsPorts[0].PortID_Global;
-		R999 = bodyItem.childsPorts[3].PortID_Global;//顺序翻转
-		R99 = bodyItem.childsPorts[2].PortID_Global;
-		R9 = bodyItem.childsPorts[1].PortID_Global;
+		G = childsPorts[0].PortID_Global;
+		R999 = childsPorts[3].PortID_Global;//顺序翻转
+		R99 = childsPorts[2].PortID_Global;
+		R9 = childsPorts[1].PortID_Global;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
@@ -81,9 +73,9 @@ public class RBox : MonoBehaviour
 		CircuitCalculator.entities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
 		CircuitCalculator.entities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
 		CircuitCalculator.entities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]);
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[2]);
-		CircuitCalculator.ports.Add(bodyItem.childsPorts[3]);
+		CircuitCalculator.ports.Add(childsPorts[0]);
+		CircuitCalculator.ports.Add(childsPorts[1]);
+		CircuitCalculator.ports.Add(childsPorts[2]);
+		CircuitCalculator.ports.Add(childsPorts[3]);
 	}
 }
