@@ -70,13 +70,13 @@ public class Voltmeter : MonoBehaviour
 		int V0 = bodyItem.childsPorts[1].PortID_Global;
 		int V1 = bodyItem.childsPorts[2].PortID_Global;
 		int V2 = bodyItem.childsPorts[3].PortID_Global;
-		CircuitcalCulator.UF.Union(GND, V0);
-		CircuitcalCulator.UF.Union(GND, V1);
-		CircuitcalCulator.UF.Union(GND, V2);
+		CircuitCalculator.UF.Union(GND, V0);
+		CircuitCalculator.UF.Union(GND, V1);
+		CircuitCalculator.UF.Union(GND, V2);
 	}
 	public void SetElement()//添加元件
 	{
-		int EntityID = CircuitcalCulator.EntityNum;
+		int EntityID = CircuitCalculator.EntityNum;
 		int GND = bodyItem.childsPorts[0].PortID_Global;
 		int V0 = bodyItem.childsPorts[1].PortID_Global;
 		int V1 = bodyItem.childsPorts[2].PortID_Global;
@@ -88,12 +88,12 @@ public class Voltmeter : MonoBehaviour
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 		//获取端口ID并完成内部连接
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[3]);
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[2]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[3]);
 	}
 }

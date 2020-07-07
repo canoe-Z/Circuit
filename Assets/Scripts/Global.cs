@@ -38,14 +38,14 @@ public static class Global
 					gameObject.transform.parent = rope.transform;
 					gameObject.AddComponent<CircuitLine>().CreateLine(prePort.gameObject, which.gameObject);
 					prePort = null;
-					CircuitcalCulator.CalculateAll();//连接完导线，计算
+					CircuitCalculator.CalculateAll();//连接完导线，计算
 				}
 			}
 		}
 		//滑块部分
 		public static void DragSlider(MySlider which) //滑动滑块时
 		{
-			CircuitcalCulator.CalculateAll();
+			CircuitCalculator.CalculateAll();
 		}
 		//Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
 		public static void Loop()//每帧由摄像机调用
@@ -56,7 +56,7 @@ public static class Global
 			}
 			if (Input.GetMouseButtonUp(1))//右键抬起时，删除完毕导线，开始计算
 			{
-				CircuitcalCulator.CalculateAll();//删除导线，计算
+				CircuitCalculator.CalculateAll();//删除导线，计算
 			}
 			if (Input.GetKeyDown(KeyCode.Q)) colorID--; //颜色控制
 			if (Input.GetKeyDown(KeyCode.E)) colorID++;
@@ -75,7 +75,7 @@ public static class Global
 			CamMain.ShowTips(null, 1);
 			CamMain.ShowTips(null, 2);
 			CamMain.ShowTips(null, 3);
-			if(CircuitcalCulator.error == 1)
+			if(CircuitCalculator.error == 1)
 			{
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}
@@ -88,7 +88,7 @@ public static class Global
 			if (Input.GetMouseButtonDown(2)) which.Straighten();
 			CamMain.ShowTips(null, 2);
 			CamMain.ShowTips(null, 3);
-			if (CircuitcalCulator.error == 1)
+			if (CircuitCalculator.error == 1)
 			{
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}
@@ -100,7 +100,7 @@ public static class Global
 			CamMain.ShowTips(null, 1);
 			CamMain.ShowTips(null, 2);
 			CamMain.ShowTips(null, 3);
-			if (CircuitcalCulator.error == 1)
+			if (CircuitCalculator.error == 1)
 			{
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}
@@ -112,7 +112,7 @@ public static class Global
 			CamMain.ShowTips(null, 1);
 			CamMain.ShowTips("按 鼠标右键 删除这个导线。\n", 2);
 			CamMain.ShowTips(null, 3);
-			if (CircuitcalCulator.error == 1)
+			if (CircuitCalculator.error == 1)
 			{
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}
@@ -124,7 +124,7 @@ public static class Global
 			CamMain.ShowTips(null, 1);
 			CamMain.ShowTips(null, 2);
 			CamMain.ShowTips("滑动以调节参数。\n", 3);
-			if (CircuitcalCulator.error == 1)
+			if (CircuitCalculator.error == 1)
 			{
 				CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 			}

@@ -44,14 +44,14 @@ public class Source : MonoBehaviour
 	{
 		G[n] = bodyItem.childsPorts[2 * n + 1].PortID_Global;
 		V[n] = bodyItem.childsPorts[2 * n].PortID_Global;
-		CircuitcalCulator.UF.Union(G[n], V[n]);
+		CircuitCalculator.UF.Union(G[n], V[n]);
 	}
 	public void SetElement(int n)
 	{
-		EntityID = CircuitcalCulator.EntityNum;
+		EntityID = CircuitCalculator.EntityNum;
 		G[n] = bodyItem.childsPorts[2 * n + 1].PortID_Global;
 		V[n] = bodyItem.childsPorts[2 * n].PortID_Global;
-		CircuitcalCulator.entities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
-		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
+		CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
+		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
 	}
 }

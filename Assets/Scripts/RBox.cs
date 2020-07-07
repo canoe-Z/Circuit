@@ -58,14 +58,14 @@ public class RBox : MonoBehaviour
 		R999 = bodyItem.childsPorts[3].PortID_Global;//顺序翻转
 		R99 = bodyItem.childsPorts[2].PortID_Global;
 		R9 = bodyItem.childsPorts[1].PortID_Global;
-		CircuitcalCulator.UF.Union(G, R9);
-		CircuitcalCulator.UF.Union(G, R99);
-		CircuitcalCulator.UF.Union(G, R999);
+		CircuitCalculator.UF.Union(G, R9);
+		CircuitCalculator.UF.Union(G, R99);
+		CircuitCalculator.UF.Union(G, R999);
 	}
 	public void SetElement()
 	{
 		//获取元件ID作为元件名称
-		int EntityID = CircuitcalCulator.EntityNum;
+		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;
 		G = bodyItem.childsPorts[0].PortID_Global;
 		R999 = bodyItem.childsPorts[3].PortID_Global;//顺序翻转
@@ -78,12 +78,12 @@ public class RBox : MonoBehaviour
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 		//获取端口ID并完成内部连接
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
-		CircuitcalCulator.entities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[2]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[3]);
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
+		CircuitCalculator.entities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[2]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[3]);
 	}
 }

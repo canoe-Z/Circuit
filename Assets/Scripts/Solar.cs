@@ -46,7 +46,7 @@ public class Solar : MonoBehaviour
 	{
 		GND = bodyItem.childsPorts[0].PortID_Global;
 		P = bodyItem.childsPorts[1].PortID_Global;
-		CircuitcalCulator.UF.Union(GND, P);
+		CircuitCalculator.UF.Union(GND, P);
 	}
 
 	//二极管模型
@@ -77,17 +77,17 @@ public class Solar : MonoBehaviour
 
 	public void SetElement()//添加元件
 	{
-		int EntityID = CircuitcalCulator.EntityNum;
+		int EntityID = CircuitCalculator.EntityNum;
 		GND = bodyItem.childsPorts[0].PortID_Global;
 		P = bodyItem.childsPorts[1].PortID_Global;
 		//获取端口ID并完成内部连接
 		Debug.LogError("短路电流为" + Isc);
-		CircuitcalCulator.entities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
-		CircuitcalCulator.entities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
-		CircuitcalCulator.entities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
-		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
-		CircuitcalCulator.entities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[0]);
-		CircuitcalCulator.ports.Add(bodyItem.childsPorts[1]);
+		CircuitCalculator.entities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
+		CircuitCalculator.entities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
+		CircuitCalculator.entities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
+		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[0]);
+		CircuitCalculator.ports.Add(bodyItem.childsPorts[1]);
 	}
 }

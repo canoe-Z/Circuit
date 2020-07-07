@@ -5,7 +5,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 
-public static class CircuitcalCulator
+public static class CircuitCalculator
 {
 	public static int PortNum = 0;//端口总数，创建端口时++
 	public static int EntityNum = 0;//元件总数，创建元件时++
