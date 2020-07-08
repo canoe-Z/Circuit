@@ -3,23 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Wdw_EscapeMenu : MonoBehaviour
+public class Wdw_Menu : MonoBehaviour
 {
 	public GameObject mainThings;
-	public Button yes;
-	public Button no;
-	public Button addSource;
-    void Start()
-    {
+	public Button exitGame;
+	public Button continueGame;
+	public Button copy_0;
+	public GameObject beCopied_0;
+	public Button copy_1;
+	public GameObject beCopied_1;
+	public Button copy_2;
+	public GameObject beCopied_2;
+	void Start()
+	{
 		if (mainThings == null) Debug.LogError("这里没挂");
-		if (yes == null) Debug.LogError("这里没挂");
-		if (no == null) Debug.LogError("这里没挂");
-		if (addSource == null) Debug.LogError("这里没挂");
+		if (exitGame == null) Debug.LogError("这里没挂");
+		if (continueGame == null) Debug.LogError("这里没挂");
+		if (copy_0 == null) Debug.LogError("这里没挂");
+		if (copy_1 == null) Debug.LogError("这里没挂");
+		if (copy_2 == null) Debug.LogError("这里没挂");
 		CloseMenu();
-		yes.onClick.AddListener(OnYesButton);
-		no.onClick.AddListener(OnNoButton);
-		addSource.onClick.AddListener(OnAddSourceButton);
-    }
+		exitGame.onClick.AddListener(OnYesButton);
+		continueGame.onClick.AddListener(OnNoButton);
+		copy_0.onClick.AddListener(OnButton_0);
+		copy_1.onClick.AddListener(OnButton_1);
+		copy_2.onClick.AddListener(OnButton_2);
+	}
 
 	// Update is called once per frame
 	void Update()
@@ -34,7 +43,7 @@ public class Wdw_EscapeMenu : MonoBehaviour
 			else CloseMenu();
 		}
 	}
-	
+
 	//打开菜单
 	void OpenMenu()
 	{
@@ -66,8 +75,16 @@ public class Wdw_EscapeMenu : MonoBehaviour
 		CloseMenu();
 	}
 
-	void OnAddSourceButton()
+	void OnButton_0()
 	{
-		Debug.LogError("这里还没写好");
+		if (beCopied_0 == null) Debug.LogError("这里没挂");
+	}
+	void OnButton_1()
+	{
+		if (beCopied_1 == null) Debug.LogError("这里没挂");
+	}
+	void OnButton_2()
+	{
+		if (beCopied_2 == null) Debug.LogError("这里没挂");
 	}
 }
