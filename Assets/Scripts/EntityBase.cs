@@ -22,7 +22,7 @@ abstract public class EntityBase : MonoBehaviour
 	//物体控制
 	public void OnMouseDrag()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		if (HitCheck("Table", out Vector3 hitPos))
 		{
 			this.transform.position = hitPos;
@@ -42,7 +42,7 @@ abstract public class EntityBase : MonoBehaviour
 	}
 	public void OnMouseOver()//持续期间
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		Global.Other.OverItem(this);
 	}
 	public void Straighten()//摆正元件

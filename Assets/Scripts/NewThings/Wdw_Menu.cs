@@ -35,11 +35,11 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.P))
 		{
-			Global.boolMove = false;
+			MoveController.boolMove = false;
 		}
 		if (Input.GetKeyDown(KeyCode.Escape))//开启或者关闭菜单，取决于是否进行过无法移动锁定
 		{
-			if (Global.boolMove) OpenMenu();
+			if (MoveController.boolMove) OpenMenu();
 			else CloseMenu();
 		}
 	}
@@ -49,7 +49,7 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
-		Global.boolMove = false;//不允许移动视角
+		MoveController.boolMove = false;//不允许移动视角
 		mainThings.SetActive(true);
 	}
 	//关闭菜单
@@ -57,7 +57,7 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
-		Global.boolMove = true;//允许移动视角
+		MoveController.boolMove = true;//允许移动视角
 		mainThings.SetActive(false);
 	}
 

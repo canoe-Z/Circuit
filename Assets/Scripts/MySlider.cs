@@ -25,12 +25,12 @@ public class MySlider : MonoBehaviour
 	}
 	private void OnMouseOver()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		Global.Other.OverSlider();
 	}
 	private void OnMouseDrag()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		Vector3 hitPos;
 		if (HitOnlyOne(out hitPos))//打到就算
 		{

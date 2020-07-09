@@ -30,7 +30,7 @@ public class CamMain : MonoBehaviour
 	}
 	private void Update()
 	{
-		//if(Global.boolMove) MoveController.Update();//移动
+		//if(MoveController.boolMove) MoveController.Update();//移动
 		CAMERA.Update();//更新摄像机
 		Global.Other.Loop();
 	}

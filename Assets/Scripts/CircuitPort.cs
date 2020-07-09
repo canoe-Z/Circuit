@@ -12,22 +12,22 @@ public class CircuitPort : MonoBehaviour
 	public EntityBase father;
 	private void OnMouseDown()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		Global.Other.ClickPort(this);
 	}
 	private void OnMouseEnter()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		this.gameObject.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 	private void OnMouseOver()//持续期间
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		Global.Other.OverPort(this);
 	}
 	private void OnMouseExit()
 	{
-		if (!Global.boolMove) return;
+		if (!MoveController.boolMove) return;
 		this.gameObject.transform.localScale = new Vector3(1, 1, 1);
 	}
 }

@@ -2,6 +2,7 @@
 using UnityEngine;
 public class MoveController : MonoBehaviour
 {
+	public static bool boolMove = true;
 	[DllImport("user32.dll")]
 	private static extern short GetKeyState(int keyCode);
 	private CharacterController _characterController;
@@ -23,7 +24,7 @@ public class MoveController : MonoBehaviour
 
 	public void Rotate()
 	{
-		if (!Global.boolMove) return;//在菜单的时候禁止转头
+		if (!MoveController.boolMove) return;//在菜单的时候禁止转头
 		Vector3 camRot = Camera.main.transform.eulerAngles;
 		//鼠标移动距离
 		float rh = Input.GetAxis("Mouse X");
