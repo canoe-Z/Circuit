@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3184503, g: 0.35714272, b: 0.3770067, a: 1}
+  m_IndirectSpecularColor: {r: 0.3180066, g: 0.35714516, b: 0.37688002, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1391,8 +1391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &42275034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1995,7 +1993,6 @@ GameObject:
   m_Component:
   - component: {fileID: 66165037}
   - component: {fileID: 66165038}
-  - component: {fileID: 66165041}
   - component: {fileID: 66165040}
   - component: {fileID: 66165039}
   - component: {fileID: 66165043}
@@ -2073,20 +2070,6 @@ MonoBehaviour:
   G: 0
   V: 0
   EntityID: 0
---- !u!114 &66165041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66165036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &66165042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3595,8 +3578,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &143282646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4845,8 +4826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &180043467
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7748,8 +7727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &305620841
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8077,8 +8054,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &315668427
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8667,8 +8642,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &333737530
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16140,8 +16113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &612007355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20391,8 +20362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &772047984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23207,7 +23176,6 @@ GameObject:
   m_Component:
   - component: {fileID: 879081832}
   - component: {fileID: 879081831}
-  - component: {fileID: 879081830}
   - component: {fileID: 879081829}
   - component: {fileID: 879081828}
   - component: {fileID: 879081834}
@@ -23251,20 +23219,6 @@ MonoBehaviour:
   G: 0
   V: 0
   EntityID: 0
---- !u!114 &879081830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879081827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!54 &879081831
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23736,8 +23690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &899941060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24824,8 +24776,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &925768845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -27850,8 +27800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1051378082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28514,8 +28462,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1078584414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32129,7 +32075,6 @@ GameObject:
   - component: {fileID: 1198444863}
   - component: {fileID: 1198444862}
   - component: {fileID: 1198444861}
-  - component: {fileID: 1198444859}
   - component: {fileID: 1198444860}
   - component: {fileID: 1198444865}
   - component: {fileID: 1198444864}
@@ -32140,20 +32085,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1198444859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198444858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1198444860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38648,8 +38579,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!54 &1433568819
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -41769,8 +41698,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1530313817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43247,7 +43174,6 @@ GameObject:
   - component: {fileID: 1573831485}
   - component: {fileID: 1573831484}
   - component: {fileID: 1573831483}
-  - component: {fileID: 1573831482}
   - component: {fileID: 1573831481}
   - component: {fileID: 1573831480}
   - component: {fileID: 1573831479}
@@ -43305,20 +43231,6 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
---- !u!114 &1573831482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1573831478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!54 &1573831483
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -47541,7 +47453,6 @@ GameObject:
   - component: {fileID: 1709543700}
   - component: {fileID: 1709543702}
   - component: {fileID: 1709543703}
-  - component: {fileID: 1709543701}
   - component: {fileID: 1709543705}
   - component: {fileID: 1709543704}
   m_Layer: 0
@@ -47588,20 +47499,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 1, z: 2.7}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &1709543701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1709543698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!54 &1709543702
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -48244,7 +48141,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1724925439}
   - component: {fileID: 1724925440}
-  - component: {fileID: 1724925441}
   - component: {fileID: 1724925443}
   - component: {fileID: 1724925442}
   - component: {fileID: 1724925445}
@@ -48294,20 +48190,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1724925441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1724925438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &1724925442
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -48719,7 +48601,6 @@ GameObject:
   - component: {fileID: 1742799477}
   - component: {fileID: 1742799476}
   - component: {fileID: 1742799475}
-  - component: {fileID: 1742799474}
   - component: {fileID: 1742799473}
   - component: {fileID: 1742799472}
   - component: {fileID: 1742799471}
@@ -48777,20 +48658,6 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
---- !u!114 &1742799474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742799470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!54 &1742799475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -51150,8 +51017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1852708567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53511,8 +53376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!114 &1928489331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57624,8 +57487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
 --- !u!65 &2062134364
 BoxCollider:
   m_ObjectHideFlags: 0
