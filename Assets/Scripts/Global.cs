@@ -167,13 +167,5 @@ public static class Global
 			}
 			return false;
 		}
-		public static void OutDouble(double[] will)
-		{
-			Debug.Log("一组数据" + will.Length);
-			for (int i = 0; i < will.Length; i++)
-			{
-				Debug.Log(will[i] + "序号" + i);
-			}
-		}
 	}
 }
