@@ -23,7 +23,7 @@ abstract public class EntityBase : MonoBehaviour
 	public void OnMouseDrag()
 	{
 		if (!Global.boolMove) return;
-		if (Global.Fun.HitCheck("Table", out Vector3 hitPos))
+		if (HitCheck("Table", out Vector3 hitPos))
 		{
 			this.transform.position = hitPos;
 		}
@@ -48,6 +48,24 @@ abstract public class EntityBase : MonoBehaviour
 	public void Straighten()//摆正元件
 	{
 		this.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+	}
+	public static bool HitCheck(string tag, out Vector3 hitPos)
+	{
+		hitPos = new Vector3(0, 0, 0);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit[] hitObj;
+		hitObj = Physics.RaycastAll(ray);
+
+		for (int i = 0; i < hitObj.Length; i++)
+		{
+			GameObject hitedItem = hitObj[i].collider.gameObject;
+			if (tag == null || hitedItem.tag == tag)
+			{
+				hitPos = hitObj[i].point;
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

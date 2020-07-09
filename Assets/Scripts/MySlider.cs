@@ -32,7 +32,7 @@ public class MySlider : MonoBehaviour
 	{
 		if (!Global.boolMove) return;
 		Vector3 hitPos;
-		if (Global.Fun.HitOnlyOne(out hitPos))//打到就算
+		if (HitOnlyOne(out hitPos))//打到就算
 		{
 			Global.Other.DragSlider(this);//发消息
 			Vector3 localPos = transform.parent.InverseTransformPoint(hitPos);//转换成本地坐标
@@ -58,5 +58,20 @@ public class MySlider : MonoBehaviour
 		localPos.z = newPos;
 		this.SliderPos = localPos.z;
 		transform.localPosition = localPos;
+	}
+
+	public static bool HitOnlyOne(out Vector3 hitpos)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out RaycastHit hitObj))
+		{
+			hitpos = hitObj.point;
+			return true;
+		}
+		else
+		{
+			hitpos = new Vector3(0, 0, 0);
+		}
+		return false;
 	}
 }

@@ -130,42 +130,4 @@ public static class Global
 			}
 		}
 	}
-	//电路程序
-
-	//特殊功能函数
-	public static class Fun
-	{
-		public static bool HitCheck(string tag, out Vector3 hitPos)
-		{
-			hitPos = new Vector3(0, 0, 0);
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit[] hitObj;
-			hitObj = Physics.RaycastAll(ray);
-
-			for (int i = 0; i < hitObj.Length; i++)
-			{
-				GameObject hitedItem = hitObj[i].collider.gameObject;
-				if (tag == null || hitedItem.tag == tag)
-				{
-					hitPos = hitObj[i].point;
-					return true;
-				}
-			}
-			return false;
-		}
-		public static bool HitOnlyOne(out Vector3 hitpos)
-		{
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast(ray, out RaycastHit hitObj))
-			{
-				hitpos = hitObj.point;
-				return true;
-			}
-			else
-			{
-				hitpos = new Vector3(0, 0, 0);
-			}
-			return false;
-		}
-	}
 }
