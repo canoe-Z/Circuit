@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
-
 public static class ShowTip
 {
-	//鼠标置于某端口上
+	/// <summary>
+	/// 鼠标置于某端口上
+	/// </summary>
+	/// <param name="which">鼠标置于的端口</param>
 	public static void OverPort(CircuitPort which)
 	{
 		if (Global.Other.prePort == null) CamMain.ShowTips("单击以连接导线。\n", 0);
@@ -19,7 +21,10 @@ public static class ShowTip
 			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 		}
 	}
-	//鼠标置于某物体上
+	/// <summary>
+	/// 鼠标置于某元件上
+	/// </summary>
+	/// <param name="which">鼠标置于的元件</param>
 	public static void OverItem(EntityBase which)
 	{
 		if (Global.Other.prePort == null) CamMain.ShowTips("捕捉到接线柱并单击，开始连接导线。\n", 0);
@@ -33,7 +38,9 @@ public static class ShowTip
 			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 		}
 	}
-	//鼠标置于其他位置
+	/// <summary>
+	/// 鼠标置于其他位置
+	/// </summary>
 	public static void OverElse()
 	{
 		if (Global.Other.prePort == null) CamMain.ShowTips("捕捉到接线柱并单击，开始连接导线。\n", 0);
@@ -46,7 +53,9 @@ public static class ShowTip
 			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 		}
 	}
-	//鼠标置于导线上
+	/// <summary>
+	/// 鼠标置于导线上
+	/// </summary>
 	public static void OverChain()
 	{
 		if (Global.Other.prePort == null) CamMain.ShowTips("捕捉到接线柱并单击，开始连接导线。\n", 0);
@@ -59,7 +68,9 @@ public static class ShowTip
 			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
 		}
 	}
-	//鼠标置于滑块上
+	/// <summary>
+	/// 鼠标置于滑块上
+	/// </summary>
 	public static void OverSlider()
 	{
 		if (Global.Other.prePort == null) CamMain.ShowTips("捕捉到接线柱并单击，开始连接导线。\n", 0);
