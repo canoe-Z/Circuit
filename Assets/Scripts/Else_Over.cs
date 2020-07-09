@@ -6,6 +6,6 @@ public class Else_Over : MonoBehaviour
 {
 	private void OnMouseOver()
 	{
-		Global.Other.OverElse();
+		ShowTip.OverElse();
 	}
 }

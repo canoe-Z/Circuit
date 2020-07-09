@@ -23,7 +23,7 @@ public class CircuitPort : MonoBehaviour
 	private void OnMouseOver()//持续期间
 	{
 		if (!MoveController.boolMove) return;
-		Global.Other.OverPort(this);
+		ShowTip.OverPort(this);
 	}
 	private void OnMouseExit()
 	{

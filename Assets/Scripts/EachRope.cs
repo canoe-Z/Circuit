@@ -16,7 +16,7 @@ public class EachRope : MonoBehaviour
 	}
 	private void OnMouseOver()
 	{
-		Global.Other.OverChain();
+		ShowTip.OverChain();
 		if (Input.GetMouseButtonDown(1))
 		{
 			DestroyRope();

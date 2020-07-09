@@ -10,7 +10,7 @@ public class RopeChain : MonoBehaviour
 	}
 	private void OnMouseOver()
 	{
-		Global.Other.OverChain();
+		ShowTip.OverChain();
 	}
 	private void OnMouseDrag()
 	{

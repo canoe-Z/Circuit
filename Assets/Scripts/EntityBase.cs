@@ -43,7 +43,7 @@ abstract public class EntityBase : MonoBehaviour
 	public void OnMouseOver()//持续期间
 	{
 		if (!MoveController.boolMove) return;
-		Global.Other.OverItem(this);
+		ShowTip.OverItem(this);
 	}
 	public void Straighten()//摆正元件
 	{

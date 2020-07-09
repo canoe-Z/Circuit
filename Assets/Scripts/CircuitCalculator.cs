@@ -20,8 +20,6 @@ public static class CircuitCalculator
 	public static WeightedQuickUnionUF UF = new WeightedQuickUnionUF(10000);//并查集
 	public static List<CircuitLine> ProblemLine = new List<CircuitLine>();//问题导线
 	public static List<CircuitLine> GoodLine = new List<CircuitLine>();//正常导线
-	//public static List<INormal> normalEntity = new List<INormal>();
-	//public static List<EntityBase> allEntity = new List<EntityBase>();
 
 	public static void CalculateAll()
 	{
@@ -128,7 +126,6 @@ public static class CircuitCalculator
 				{
 					(allEntity[i] as INormal).LoadElement();
 				}
-				Debug.LogError("111");
 			}
 			else if (allEntity[i] is IComplex)
 			{
@@ -144,7 +141,6 @@ public static class CircuitCalculator
 						Debug.LogWarning("电源E" + j + "无连接");
 					}
 				}
-				Debug.LogError("222");
 			}
 		}
 	}
@@ -162,7 +158,6 @@ public static class CircuitCalculator
 					(allEntity[i] as INormal).SetElement();
 					EntityNum++;
 				}
-				Debug.LogError("333");
 			}
 			else if (allEntity[i] is IComplex)
 			{
@@ -174,7 +169,6 @@ public static class CircuitCalculator
 					}
 				}
 				EntityNum++;
-				Debug.LogError("444");
 			}
 		}
 	}
