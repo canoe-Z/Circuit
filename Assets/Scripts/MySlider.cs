@@ -27,6 +27,7 @@ public class MySlider : MonoBehaviour
 	{
 		if (!MoveController.boolMove) return;
 		ShowTip.OverSlider();
+		ShowTip.IsTipShowed = false;
 	}
 	private void OnMouseDrag()
 	{

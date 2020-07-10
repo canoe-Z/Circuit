@@ -44,6 +44,7 @@ abstract public class EntityBase : MonoBehaviour
 	{
 		if (!MoveController.boolMove) return;
 		ShowTip.OverItem(this);
+		ShowTip.IsTipShowed = false;
 	}
 	public void Straighten()//摆正元件
 	{

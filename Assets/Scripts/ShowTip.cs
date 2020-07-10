@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
-public static class ShowTip
+
+/// <summary>
+/// 根据鼠标的不同情况显示文字
+/// </summary>
+public class ShowTip : MonoBehaviour
 {
+	public static bool IsTipShowed = false;
 	/// <summary>
 	/// 鼠标置于某端口上
 	/// </summary>
@@ -16,10 +21,7 @@ public static class ShowTip
 		CamMain.ShowTips(null, 1);
 		CamMain.ShowTips(null, 2);
 		CamMain.ShowTips(null, 3);
-		if (CircuitCalculator.error == 1)
-		{
-			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
-		}
+		IsTipShowed = true;
 	}
 	/// <summary>
 	/// 鼠标置于某元件上
@@ -33,10 +35,7 @@ public static class ShowTip
 		if (Input.GetMouseButtonDown(2)) which.Straighten();
 		CamMain.ShowTips(null, 2);
 		CamMain.ShowTips(null, 3);
-		if (CircuitCalculator.error == 1)
-		{
-			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
-		}
+		IsTipShowed = true;
 	}
 	/// <summary>
 	/// 鼠标置于其他位置
@@ -48,10 +47,6 @@ public static class ShowTip
 		CamMain.ShowTips(null, 1);
 		CamMain.ShowTips(null, 2);
 		CamMain.ShowTips(null, 3);
-		if (CircuitCalculator.error == 1)
-		{
-			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
-		}
 	}
 	/// <summary>
 	/// 鼠标置于导线上
@@ -63,10 +58,7 @@ public static class ShowTip
 		CamMain.ShowTips(null, 1);
 		CamMain.ShowTips("按 鼠标右键 删除这个导线。\n", 2);
 		CamMain.ShowTips(null, 3);
-		if (CircuitCalculator.error == 1)
-		{
-			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
-		}
+		IsTipShowed = true;
 	}
 	/// <summary>
 	/// 鼠标置于滑块上
@@ -78,6 +70,19 @@ public static class ShowTip
 		CamMain.ShowTips(null, 1);
 		CamMain.ShowTips(null, 2);
 		CamMain.ShowTips("滑动以调节参数。\n", 3);
+		IsTipShowed = true;
+	}
+
+	private void Update()
+	{
+		if(!IsTipShowed)
+		{
+			OverElse();
+		}
+	}
+
+	private void FixedUpdate()
+	{
 		if (CircuitCalculator.error == 1)
 		{
 			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);

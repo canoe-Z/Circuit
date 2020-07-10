@@ -11,6 +11,7 @@ public class RopeChain : MonoBehaviour
 	private void OnMouseOver()
 	{
 		ShowTip.OverChain();
+		ShowTip.IsTipShowed = false;
 	}
 	private void OnMouseDrag()
 	{
