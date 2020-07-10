@@ -36,7 +36,6 @@ public class CircuitCalculator : MonoBehaviour
 	{
 		EntityNum = 0;
 		gndLines.Clear();
-		GNDLine.GlobalGNDLineID = 0;
 		ports.Clear();
 		entities.Clear();
 		GoodLine.Clear();
@@ -49,7 +48,6 @@ public class CircuitCalculator : MonoBehaviour
 	public static void CalculateSome()
 	{
 		EntityNum = 0;
-		gndLines.Clear();
 		ports.Clear();
 		entities.Clear();
 		SomeSpiceON();
@@ -108,6 +106,7 @@ public class CircuitCalculator : MonoBehaviour
 			foreach (CircuitPort i in ports)
 			{
 				i.U = exportDataEventArgs.GetVoltage(i.PortID_Global.ToString());
+				Debug.Log(exportDataEventArgs.GetVoltage(i.PortID_Global.ToString()));
 			}
 		};
 
@@ -115,12 +114,13 @@ public class CircuitCalculator : MonoBehaviour
 		try
 		{
 			op.Run(ckt);
+			Debug.Log(GoodLine.Count);
 			Debug.Log("仿真成功");
 		}
 		catch
 		{
-			Debug.Log("悬空导线的数目为：" + ProblemLine.Count);
-			Debug.LogWarning("仿真失败，电路无通路");
+			Debug.Log(ProblemLine.Count);
+			Debug.Log("电路中存在悬空状态");
 		}
 
 		//计算电流
@@ -163,6 +163,7 @@ public class CircuitCalculator : MonoBehaviour
 			foreach (CircuitPort i in ports)
 			{
 				i.U = exportDataEventArgs.GetVoltage(i.PortID_Global.ToString());
+				Debug.Log(exportDataEventArgs.GetVoltage(i.PortID_Global.ToString()));
 			}
 		};
 
@@ -170,12 +171,13 @@ public class CircuitCalculator : MonoBehaviour
 		try
 		{
 			op.Run(ckt);
+			Debug.Log(GoodLine.Count);
 			Debug.Log("仿真成功");
 		}
 		catch
 		{
-			Debug.Log("悬空导线的数目为：" + ProblemLine.Count);
-			Debug.LogWarning("仿真失败，电路无通路");
+			Debug.Log(ProblemLine.Count);
+			Debug.Log("电路中存在悬空状态");
 		}
 
 		//计算电流
@@ -221,7 +223,7 @@ public class CircuitCalculator : MonoBehaviour
 
 public class GNDLine
 {
-	public static int GlobalGNDLineID = 0;
+	public int GlobalGNDLineID = 0;
 	public int GNDLineID;
 	public int PortToGND;
 	public GNDLine(int portToGND)

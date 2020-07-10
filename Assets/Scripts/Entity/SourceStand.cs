@@ -51,6 +51,11 @@ public class SourceStand : EntityBase, ISource
 			{
 				CircuitCalculator.UF.Union(G, 0);
 				CircuitCalculator.gndLines.Add(new GNDLine(G));
+				Debug.LogError("额外电源悬空，将额外电源接地");
+			}
+			else
+			{
+				Debug.LogError("额外电源已经接地");
 			}
 		}
 	}

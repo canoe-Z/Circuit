@@ -64,7 +64,12 @@ public class Source : EntityBase, ISource
 		{
 			if (IsConnected(j))
 			{
+				Debug.LogWarning("电源E" + j + "有连接");
 				LoadElement(j);
+			}
+			else
+			{
+				Debug.LogWarning("电源E" + j + "无连接");
 			}
 		}
 	}
@@ -82,13 +87,19 @@ public class Source : EntityBase, ISource
 		{
 			if (IsConnected(j))
 			{
+				Debug.LogWarning("电源E" + j + "有连接");
 				SetElement(j);
+			}
+			else
+			{
+				Debug.LogWarning("电源E" + j + "无连接");
 			}
 		}
 	}
 
 	public void GroundCheck()
 	{
+		Debug.LogWarning("电源1111");
 		for (int j = 0; j < SourceNum; j++)
 		{
 			if (IsConnected(j))
@@ -97,6 +108,11 @@ public class Source : EntityBase, ISource
 				{
 					CircuitCalculator.UF.Union(G[j], 0);
 					CircuitCalculator.gndLines.Add(new GNDLine(G[j]));
+					Debug.LogWarning("电源E" + j + "有连接但悬空，将其接地");
+				}
+				else
+				{
+					Debug.LogWarning("电源E" + j + "已经接地");
 				}
 			}
 		}
