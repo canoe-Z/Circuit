@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using SpiceSharp;
+﻿using UnityEngine;
 using SpiceSharp.Components;
-using SpiceSharp.Simulations;
 
 public class SourceStand : EntityBase, ISource
 {

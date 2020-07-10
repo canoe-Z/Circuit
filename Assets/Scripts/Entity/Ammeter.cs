@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
 
-public class Ammeter : EntityBase
+public class Ammeter : EntityBase, IAmmeter
 {
 	public double MaxI0 = 0.05;
 	public double MaxI1 = 0.1;
@@ -92,9 +92,9 @@ public class Ammeter : EntityBase
 		CircuitCalculator.ports.Add(childsPorts[2]);
 		CircuitCalculator.ports.Add(childsPorts[3]);
 		//电流表将其电流加入检测序列
-		CircuitCalculator.ammeter.Add(this);
+		CircuitCalculator.ammeters.Add(this);
 	}
-	public void Calculate()//计算自身电流
+	public void CalculateCurrent()//计算自身电流
 	{
 		childsPorts[1].I = (childsPorts[1].U - childsPorts[0].U) / R0;
 		childsPorts[2].I = (childsPorts[2].U - childsPorts[0].U) / R1;

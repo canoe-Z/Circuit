@@ -14,26 +14,22 @@ public static class CircuitCalculator
 	public static int SourceStandardFlag = 0;//将标准电源接地后，并查集仍不通
 	public static List<Entity> entities = new List<Entity>();//元件
 	public static List<CircuitPort> ports = new List<CircuitPort>();//已连接元件的端口ID(用于端口电压检测序列)
-	public static List<TAmmeter> tammeter = new List<TAmmeter>();//电流表端口电流检测序列
-	public static List<Ammeter> ammeter = new List<Ammeter>();//电流表端口电流检测序列
-	public static List<Gmeter> gmeter = new List<Gmeter>();//电位计端口电流检测序列
 	public static WeightedQuickUnionUF UF = new WeightedQuickUnionUF(10000);//并查集
 	public static List<CircuitLine> ProblemLine = new List<CircuitLine>();//问题导线
 	public static List<CircuitLine> GoodLine = new List<CircuitLine>();//正常导线
-	public static List<ISource> source = new List<ISource>();
+	public static List<ISource> sources = new List<ISource>();
+	public static List<IAmmeter> ammeters = new List<IAmmeter>();
 
 	public static void CalculateAll()
 	{
 		EntityNum = 0;
-		tammeter.Clear();
-		ammeter.Clear();
-		gmeter.Clear();
+		ammeters.Clear();
 		ports.Clear();
 		entities.Clear();
 		error = 0;
 		GoodLine.Clear();
 		ProblemLine.Clear();
-		source.Clear();
+		sources.Clear();
 		SpiceON();
 	}
 	private static void SpiceON()
@@ -50,10 +46,10 @@ public static class CircuitCalculator
 		{
 			if(allEntity[i] is ISource)
 			{
-				source.Add(allEntity[i] as ISource);
+				sources.Add(allEntity[i] as ISource);
 			}
 		}
-		foreach (ISource i in source)
+		foreach (ISource i in sources)
 		{
 			i.GroundCheck();
 		}
@@ -106,24 +102,15 @@ public static class CircuitCalculator
 			Debug.Log("电路中存在悬空状态");
 		}
 		//计算电流
-		foreach (TAmmeter i in tammeter)
+		foreach (IAmmeter i in ammeters)
 		{
-			i.Calculate();
-		}
-		foreach (Ammeter i in ammeter)
-		{
-			i.Calculate();
-		}
-		foreach (Gmeter i in gmeter)
-		{
-			i.Calculate();
+			i.CalculateCurrent();
 		}
 		//仿真通过后恢复通过并查集删除的导线
 		foreach (CircuitLine i in ProblemLine)
 		{
 			i.ReLine();
 		}
-
 	}
 	private static void LoadElement() //通过并查集预连接
 	{

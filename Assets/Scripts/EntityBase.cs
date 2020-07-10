@@ -79,9 +79,7 @@ public interface ISource
 	void GroundCheck();
 }
 
-interface ICurrent
+public interface IAmmeter
 {
-	bool IsConnected(int n);
-	void LoadElement(int n);
-	void SetElement(int n);
+	void CalculateCurrent();
 }

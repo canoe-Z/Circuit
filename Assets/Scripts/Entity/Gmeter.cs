@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
-public class Gmeter : EntityBase
+public class Gmeter : EntityBase, IAmmeter
 {
 	double MaxI = 0.001;
 	double R = 10;
@@ -85,10 +85,10 @@ public class Gmeter : EntityBase
 		CircuitCalculator.ports.Add(childsPorts[0]);
 		CircuitCalculator.ports.Add(childsPorts[1]);
 		//电位计将其电流加入检测序列
-		CircuitCalculator.gmeter.Add(this);
+		CircuitCalculator.ammeters.Add(this);
 	}
 
-	public void Calculate()//计算自身电流
+	public void CalculateCurrent()//计算自身电流
 	{
 		childsPorts[0].I = (childsPorts[1].U - childsPorts[0].U) / R;
 	}

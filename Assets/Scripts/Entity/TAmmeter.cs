@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class TAmmeter : EntityBase
+public class TAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
 	void Start()
@@ -43,9 +43,9 @@ public class TAmmeter : EntityBase
 		CircuitCalculator.ports.Add(childsPorts[1]);
 		CircuitCalculator.ports.Add(childsPorts[2]);
 		//电流表将其电流加入检测序列
-		CircuitCalculator.tammeter.Add(this);
+		CircuitCalculator.ammeters.Add(this);
 	}
-	public void Calculate()//计算自身电流
+	public void CalculateCurrent()//计算自身电流
 	{
 		childsPorts[1].I = (childsPorts[1].U - childsPorts[0].U) / R;
 		childsPorts[2].I = (childsPorts[2].U - childsPorts[0].U) / R;
