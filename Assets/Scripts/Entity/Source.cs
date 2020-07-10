@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
 
-public class Source : EntityBase , IComplex
+public class Source : EntityBase , INormal
 {
+	public int SourceNum = 3;
 	public double R0 = 0.1;
 	public double E0Max = 30;
 	public double R1 = 0.1;
@@ -39,11 +40,38 @@ public class Source : EntityBase , IComplex
 			return false;
 		}
 	}
+	public bool IsConnected()
+	{
+		bool _isConnected = false;
+		for (int j = 0; j < 3; j++)
+		{
+			if (IsConnected(j))
+			{
+				_isConnected = true;
+			}
+		}
+		return _isConnected;
+	}
 	public void LoadElement(int n)
 	{
 		G[n] = childsPorts[2 * n + 1].PortID_Global;
 		V[n] = childsPorts[2 * n].PortID_Global;
 		CircuitCalculator.UF.Union(G[n], V[n]);
+	}
+	public void LoadElement()
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (IsConnected(j))
+			{
+				Debug.LogWarning("电源E" + j + "有连接");
+				LoadElement(j);
+			}
+			else
+			{
+				Debug.LogWarning("电源E" + j + "无连接");
+			}
+		}
 	}
 	public void SetElement(int n)
 	{
@@ -52,5 +80,20 @@ public class Source : EntityBase , IComplex
 		V[n] = childsPorts[2 * n].PortID_Global;
 		CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
 		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
+	}
+	public void SetElement()
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (IsConnected(j))
+			{
+				Debug.LogWarning("电源E" + j + "有连接");
+				SetElement(j);
+			}
+			else
+			{
+				Debug.LogWarning("电源E" + j + "无连接");
+			}
+		}
 	}
 }

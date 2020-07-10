@@ -127,21 +127,6 @@ public static class CircuitCalculator
 					(allEntity[i] as INormal).LoadElement();
 				}
 			}
-			else if (allEntity[i] is IComplex)
-			{
-				for (int j = 0; j < 3; j++)
-				{
-					if ((allEntity[i] as IComplex).IsConnected(j))
-					{
-						Debug.LogWarning("电源E" + j + "有连接");
-						(allEntity[i] as IComplex).LoadElement(j);
-					}
-					else
-					{
-						Debug.LogWarning("电源E" + j + "无连接");
-					}
-				}
-			}
 		}
 	}
 
@@ -158,17 +143,6 @@ public static class CircuitCalculator
 					(allEntity[i] as INormal).SetElement();
 					EntityNum++;
 				}
-			}
-			else if (allEntity[i] is IComplex)
-			{
-				for (int j = 0; j < 3; j++)
-				{
-					if ((allEntity[i] as IComplex).IsConnected(j))
-					{
-						(allEntity[i] as IComplex).SetElement(j);
-					}
-				}
-				EntityNum++;
 			}
 		}
 	}
