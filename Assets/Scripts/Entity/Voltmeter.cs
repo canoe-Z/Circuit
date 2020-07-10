@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
 
-public class Voltmeter : EntityBase, INormal
+public class Voltmeter : EntityBase
 {
 	public double MaxU0 = 1.5;
 	public double MaxU1 = 5;
@@ -48,7 +48,7 @@ public class Voltmeter : EntityBase, INormal
 	}
 
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
 		{
@@ -59,7 +59,7 @@ public class Voltmeter : EntityBase, INormal
 			return false;
 		}
 	}
-	public void LoadElement()//添加元件
+	override public void LoadElement()//添加元件
 	{
 		int GND = childsPorts[0].PortID_Global;
 		int V0 = childsPorts[1].PortID_Global;
@@ -69,7 +69,7 @@ public class Voltmeter : EntityBase, INormal
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
-	public void SetElement()//添加元件
+	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = childsPorts[0].PortID_Global;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
 
-public class Source : EntityBase , INormal
+public class Source : EntityBase
 {
 	public int SourceNum = 3;
 	public double R0 = 0.1;
@@ -40,7 +40,7 @@ public class Source : EntityBase , INormal
 			return false;
 		}
 	}
-	public bool IsConnected()
+	override public bool IsConnected()
 	{
 		bool _isConnected = false;
 		for (int j = 0; j < 3; j++)
@@ -58,7 +58,7 @@ public class Source : EntityBase , INormal
 		V[n] = childsPorts[2 * n].PortID_Global;
 		CircuitCalculator.UF.Union(G[n], V[n]);
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		for (int j = 0; j < 3; j++)
 		{
@@ -81,7 +81,7 @@ public class Source : EntityBase , INormal
 		CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
 		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
 	}
-	public void SetElement()
+	override public void SetElement()
 	{
 		for (int j = 0; j < 3; j++)
 		{

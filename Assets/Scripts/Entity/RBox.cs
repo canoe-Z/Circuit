@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
 
-public class RBox : EntityBase, INormal
+public class RBox : EntityBase
 {
 	public double R_99999 = 0;
 	public double R_99 = 0;
@@ -30,7 +30,7 @@ public class RBox : EntityBase, INormal
 		this.R_99 = (float)(total % 100) / (float)10;
 		this.R_09 = (float)(total % 10) / (float)10;
 	}
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
 		{
@@ -42,7 +42,7 @@ public class RBox : EntityBase, INormal
 		}
 	}
 	//电路相关
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
 		int G, R999, R99, R9;
@@ -54,7 +54,7 @@ public class RBox : EntityBase, INormal
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
 	}
-	public void SetElement()
+	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

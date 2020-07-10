@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using SpiceSharp.Components;
-public class Gmeter : EntityBase, INormal
+public class Gmeter : EntityBase
 {
 	double MaxI = 0.001;
 	double R = 10;
@@ -55,7 +55,7 @@ public class Gmeter : EntityBase, INormal
 		}
 	}
 
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
@@ -66,7 +66,7 @@ public class Gmeter : EntityBase, INormal
 			return false;
 		}
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		int LeftPortID, RightPortID;
 		LeftPortID = childsPorts[0].PortID_Global;
@@ -74,7 +74,7 @@ public class Gmeter : EntityBase, INormal
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
-	public void SetElement()
+	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

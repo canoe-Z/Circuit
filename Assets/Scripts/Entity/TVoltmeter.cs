@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class TVoltmeter : EntityBase, INormal
+public class TVoltmeter : EntityBase
 {
 	public double R = 15000;
 	void Start()
@@ -9,7 +9,7 @@ public class TVoltmeter : EntityBase, INormal
 	}
 
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 )
 		{
@@ -20,7 +20,7 @@ public class TVoltmeter : EntityBase, INormal
 			return false;
 		}
 	}
-	public void LoadElement()//添加元件
+	override public void LoadElement()//添加元件
 	{
 		int GND = childsPorts[0].PortID_Global;
 		int mV = childsPorts[1].PortID_Global;
@@ -28,7 +28,7 @@ public class TVoltmeter : EntityBase, INormal
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
-	public void SetElement()//添加元件
+	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = childsPorts[0].PortID_Global;

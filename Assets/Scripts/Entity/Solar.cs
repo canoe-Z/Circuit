@@ -23,7 +23,7 @@ public class Solar : EntityBase
 		Isc = sliders[0].SliderPos * IscMax;
 	}
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
@@ -34,7 +34,7 @@ public class Solar : EntityBase
 			return false;
 		}
 	}
-	public void LoadElement()//添加元件
+	override public void LoadElement()//添加元件
 	{
 		GND = childsPorts[0].PortID_Global;
 		P = childsPorts[1].PortID_Global;
@@ -67,7 +67,7 @@ public class Solar : EntityBase
 		return dm;
 	}
 
-	public void SetElement()//添加元件
+	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		GND = childsPorts[0].PortID_Global;

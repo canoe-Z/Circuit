@@ -120,12 +120,9 @@ public static class CircuitCalculator
 		EntityBase[] allEntity = GameObject.FindObjectsOfType<EntityBase>();
 		for (int i = 0; i < allEntity.Length; i++)
 		{
-			if (allEntity[i] is INormal)
+			if(allEntity[i].IsConnected())
 			{
-				if ((allEntity[i] as INormal).IsConnected())
-				{
-					(allEntity[i] as INormal).LoadElement();
-				}
+				allEntity[i].LoadElement();
 			}
 		}
 	}
@@ -136,13 +133,10 @@ public static class CircuitCalculator
 		EntityBase[] allEntity = GameObject.FindObjectsOfType<EntityBase>();
 		for (int i = 0; i < allEntity.Length; i++)
 		{
-			if (allEntity[i] is INormal)
+			if (allEntity[i].IsConnected())
 			{
-				if ((allEntity[i] as INormal).IsConnected())
-				{
-					(allEntity[i] as INormal).SetElement();
-					EntityNum++;
-				}
+				allEntity[i].SetElement();
+				EntityNum++;
 			}
 		}
 	}

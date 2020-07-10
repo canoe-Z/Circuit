@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class Resistance : EntityBase , INormal
+public class Resistance : EntityBase
 {
 	public double Rnum = 120;
 	public void Start()
@@ -13,7 +13,7 @@ public class Resistance : EntityBase , INormal
 	}
 
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
@@ -24,7 +24,7 @@ public class Resistance : EntityBase , INormal
 			return false;
 		}
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
 		int LeftPortID, RightPortID;
@@ -32,7 +32,7 @@ public class Resistance : EntityBase , INormal
 		RightPortID = childsPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
-	public void SetElement()
+	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

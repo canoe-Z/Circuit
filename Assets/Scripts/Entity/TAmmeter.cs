@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class TAmmeter : EntityBase , INormal
+public class TAmmeter : EntityBase
 {
 	public double R = 0.001;
 	void Start()
@@ -9,7 +9,7 @@ public class TAmmeter : EntityBase , INormal
 	}
 
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1)
 		{
@@ -20,7 +20,7 @@ public class TAmmeter : EntityBase , INormal
 			return false;
 		}
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
 		int GND = childsPorts[0].PortID_Global;
@@ -29,7 +29,7 @@ public class TAmmeter : EntityBase , INormal
 		CircuitCalculator.UF.Union(GND, mA);
 		CircuitCalculator.UF.Union(GND, A);
 	}
-	public void SetElement()//得到约束方程
+	override public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

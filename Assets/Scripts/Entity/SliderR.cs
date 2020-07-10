@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class SliderR : EntityBase, INormal
+public class SliderR : EntityBase
 {
 	public double Rmax = 300;
 	public double RL = 300;
@@ -20,7 +20,7 @@ public class SliderR : EntityBase, INormal
     }
 
 	//电路相关
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
 		{
@@ -31,7 +31,7 @@ public class SliderR : EntityBase, INormal
 			return false;
 		}
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		//获取端口ID并完成内部连接
 		int TL, TR, L, R;
@@ -43,7 +43,7 @@ public class SliderR : EntityBase, INormal
 		CircuitCalculator.UF.Union(TL, R);
 		CircuitCalculator.UF.Union(TL, TR);
 	}
-	public void SetElement()
+	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

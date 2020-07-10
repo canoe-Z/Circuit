@@ -4,7 +4,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 
-public class SourceStand : EntityBase, INormal
+public class SourceStand : EntityBase
 {
 	public double E = 1.5f;
 	public double R = 100;
@@ -16,7 +16,7 @@ public class SourceStand : EntityBase, INormal
 	}
 
 	//下面是电路相关的
-	public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
 		{
@@ -27,14 +27,14 @@ public class SourceStand : EntityBase, INormal
 			return false;
 		}
 	}
-	public void LoadElement()
+	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
 		G = childsPorts[0].PortID_Global;
 		V = childsPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(G, V);
 	}
-	public void SetElement()
+	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
 		EntityID = CircuitCalculator.EntityNum;
