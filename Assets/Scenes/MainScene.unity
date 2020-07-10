@@ -1351,7 +1351,6 @@ GameObject:
   - component: {fileID: 42275036}
   - component: {fileID: 42275035}
   - component: {fileID: 42275034}
-  - component: {fileID: 42275033}
   - component: {fileID: 42275032}
   - component: {fileID: 42275038}
   - component: {fileID: 42275037}
@@ -1379,18 +1378,6 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
---- !u!114 &42275033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 42275031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &42275034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4773,7 +4760,6 @@ GameObject:
   - component: {fileID: 180043469}
   - component: {fileID: 180043468}
   - component: {fileID: 180043467}
-  - component: {fileID: 180043466}
   - component: {fileID: 180043465}
   - component: {fileID: 180043471}
   - component: {fileID: 180043470}
@@ -4801,18 +4787,6 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
---- !u!114 &180043466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 180043464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &180043467
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7718,7 +7692,6 @@ GameObject:
   - component: {fileID: 305620843}
   - component: {fileID: 305620842}
   - component: {fileID: 305620841}
-  - component: {fileID: 305620840}
   - component: {fileID: 305620839}
   - component: {fileID: 305620845}
   - component: {fileID: 305620844}
@@ -7745,18 +7718,6 @@ MonoBehaviour:
   childsPorts: []
   state: 1
   mySlider: {fileID: 0}
---- !u!114 &305620840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 305620838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &305620841
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8044,7 +8005,6 @@ GameObject:
   - component: {fileID: 315668429}
   - component: {fileID: 315668428}
   - component: {fileID: 315668427}
-  - component: {fileID: 315668426}
   - component: {fileID: 315668425}
   - component: {fileID: 315668431}
   - component: {fileID: 315668430}
@@ -8072,18 +8032,6 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
---- !u!114 &315668426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 315668424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &315668427
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8632,7 +8580,6 @@ GameObject:
   - component: {fileID: 333737532}
   - component: {fileID: 333737531}
   - component: {fileID: 333737530}
-  - component: {fileID: 333737529}
   - component: {fileID: 333737528}
   - component: {fileID: 333737534}
   - component: {fileID: 333737533}
@@ -8660,18 +8607,6 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
---- !u!114 &333737529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 333737527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &333737530
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20314,7 +20249,6 @@ GameObject:
   - component: {fileID: 772047986}
   - component: {fileID: 772047985}
   - component: {fileID: 772047984}
-  - component: {fileID: 772047983}
   - component: {fileID: 772047982}
   - component: {fileID: 772047988}
   - component: {fileID: 772047987}
@@ -20341,18 +20275,6 @@ MonoBehaviour:
   childsPorts: []
   state: 1
   mySlider: {fileID: 0}
---- !u!114 &772047983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772047981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &772047984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -24714,7 +24636,6 @@ GameObject:
   - component: {fileID: 925768847}
   - component: {fileID: 925768846}
   - component: {fileID: 925768845}
-  - component: {fileID: 925768844}
   - component: {fileID: 925768843}
   - component: {fileID: 925768849}
   - component: {fileID: 925768848}
@@ -24742,18 +24663,6 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
---- !u!114 &925768844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 925768842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &925768845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28355,7 +28264,6 @@ GameObject:
   - component: {fileID: 1078584410}
   - component: {fileID: 1078584412}
   - component: {fileID: 1078584411}
-  - component: {fileID: 1078584413}
   - component: {fileID: 1078584414}
   - component: {fileID: 1078584416}
   - component: {fileID: 1078584415}
@@ -28415,18 +28323,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1078584413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1078584409}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1078584414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38470,7 +38366,6 @@ GameObject:
   - component: {fileID: 1433568821}
   - component: {fileID: 1433568820}
   - component: {fileID: 1433568819}
-  - component: {fileID: 1433568818}
   - component: {fileID: 1433568817}
   - component: {fileID: 1433568816}
   - component: {fileID: 1433568815}
@@ -38532,18 +38427,6 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
---- !u!114 &1433568818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433568814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1433568819
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -50898,7 +50781,6 @@ GameObject:
   - component: {fileID: 1852708564}
   - component: {fileID: 1852708563}
   - component: {fileID: 1852708567}
-  - component: {fileID: 1852708566}
   - component: {fileID: 1852708569}
   - component: {fileID: 1852708568}
   m_Layer: 0
@@ -50957,18 +50839,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1852708566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1852708562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1852708567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57387,7 +57257,6 @@ GameObject:
   - component: {fileID: 2062134366}
   - component: {fileID: 2062134365}
   - component: {fileID: 2062134364}
-  - component: {fileID: 2062134363}
   - component: {fileID: 2062134362}
   - component: {fileID: 2062134368}
   - component: {fileID: 2062134367}
@@ -57414,18 +57283,6 @@ MonoBehaviour:
   childsPorts: []
   state: 1
   mySlider: {fileID: 0}
---- !u!114 &2062134363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2062134361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638df8f5467172a40be6d7ae46a76ed8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &2062134364
 BoxCollider:
   m_ObjectHideFlags: 0
