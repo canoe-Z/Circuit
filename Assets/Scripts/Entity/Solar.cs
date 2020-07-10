@@ -91,11 +91,6 @@ public class Solar : EntityBase, ISource
 			{
 				CircuitCalculator.UF.Union(GND, 0);
 				CircuitCalculator.gndLines.Add(new GNDLine(GND));
-				Debug.LogError("太阳能电池悬空，将太阳能电池接地");
-			}
-			else
-			{
-				Debug.LogError("太阳能电池已经接地");
 			}
 		}
 	}
