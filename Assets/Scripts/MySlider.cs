@@ -19,10 +19,6 @@ public class MySlider : MonoBehaviour
 			Debug.LogError("ErrorSliderID");
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-	}
 	private void OnMouseOver()
 	{
 		if (!MoveController.boolMove) return;

@@ -4,11 +4,11 @@ using UnityEngine;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 
-public class Solar : EntityBase
+public class Solar : EntityBase, ISource
 {
 	readonly double IscMax = 0.06;
 	double Isc;
-	public int GND,P;
+	public int GND, P;
 	public MySlider[] sliders = new MySlider[1];
 	public int EntityID;
 	void Start()
@@ -81,5 +81,22 @@ public class Solar : EntityBase
 		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
 		CircuitCalculator.ports.Add(childsPorts[0]);
 		CircuitCalculator.ports.Add(childsPorts[1]);
+	}
+
+	public void GroundCheck()
+	{
+		if (IsConnected())
+		{
+			if (!CircuitCalculator.UF.Connected(GND, 0))
+			{
+				CircuitCalculator.UF.Union(GND, 0);
+				CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_GND"), GND.ToString(), "0", 0));
+				Debug.LogError("太阳能电池悬空，将太阳能电池接地");
+			}
+			else
+			{
+				Debug.LogError("太阳能电池已经接地");
+			}
+		}
 	}
 }

@@ -74,6 +74,11 @@ abstract public class EntityBase : MonoBehaviour
 	abstract public void SetElement();
 }
 
+public interface ISource
+{
+	void GroundCheck();
+}
+
 interface ICurrent
 {
 	bool IsConnected(int n);

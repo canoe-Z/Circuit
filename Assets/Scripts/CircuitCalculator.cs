@@ -20,6 +20,7 @@ public static class CircuitCalculator
 	public static WeightedQuickUnionUF UF = new WeightedQuickUnionUF(10000);//并查集
 	public static List<CircuitLine> ProblemLine = new List<CircuitLine>();//问题导线
 	public static List<CircuitLine> GoodLine = new List<CircuitLine>();//正常导线
+	public static List<ISource> source = new List<ISource>();
 
 	public static void CalculateAll()
 	{
@@ -32,20 +33,30 @@ public static class CircuitCalculator
 		error = 0;
 		GoodLine.Clear();
 		ProblemLine.Clear();
+		source.Clear();
 		SpiceON();
 	}
 	private static void SpiceON()
 	{
 		LoadElement();//预加载
-					  //预连接导线
+		//预连接导线
 		CircuitLine[] AllLine = GameObject.FindObjectsOfType<CircuitLine>();
 		for (int i = 0; i < AllLine.Length; i++)
 		{
 			UF.Union(AllLine[i].startID_Global, AllLine[i].endID_Global);
 		}
-		SourceCheck();
-		SolarCheck();
-		ExSourceCheck();
+		EntityBase[] allEntity = GameObject.FindObjectsOfType<EntityBase>();
+		for (int i = 0; i < allEntity.Length; i++)
+		{
+			if(allEntity[i] is ISource)
+			{
+				source.Add(allEntity[i] as ISource);
+			}
+		}
+		foreach (ISource i in source)
+		{
+			i.GroundCheck();
+		}
 		//检查对地连通性，区分出问题导线
 		for (int i = 0; i < AllLine.Length; i++)
 		{
@@ -137,73 +148,6 @@ public static class CircuitCalculator
 			{
 				allEntity[i].SetElement();
 				EntityNum++;
-			}
-		}
-	}
-
-	//电源检测
-	private static void SourceCheck()
-	{
-		Source[] AllSource = GameObject.FindObjectsOfType<Source>();
-		for (int i = 0; i < AllSource.Length; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				if (AllSource[i].IsConnected(j))
-				{
-					if (!UF.Connected(AllSource[i].G[j], 0))
-					{
-						UF.Union(AllSource[i].G[j], 0);
-						entities.Add(new VoltageSource(string.Concat(AllSource[i].EntityID.ToString(), "_GND", j), AllSource[i].G[j].ToString(), "0", 0));
-						Debug.LogWarning("电源E" + j + "有连接但悬空，将其接地");
-					}
-					else
-					{
-						Debug.LogWarning("电源E" + j + "已经接地");
-					}
-				}
-			}
-		}
-	}
-	//额外电源检测
-	private static void ExSourceCheck()
-	{
-		SourceStand[] AllSourceStand = GameObject.FindObjectsOfType<SourceStand>();
-		for (int i = 0; i < AllSourceStand.Length; i++)
-		{
-			if (AllSourceStand[i].IsConnected())
-			{
-				if (!UF.Connected(AllSourceStand[i].G, 0))
-				{
-					UF.Union(AllSourceStand[i].G, 0);
-					entities.Add(new VoltageSource(string.Concat(AllSourceStand[i].EntityID.ToString(), "_GND"), AllSourceStand[i].G.ToString(), "0", 0));
-					Debug.LogError("额外电源悬空，将额外电源接地");
-				}
-				else
-				{
-					Debug.LogError("额外电源已经接地");
-				}
-			}
-		}
-	}
-	//太阳能电池检测
-	private static void SolarCheck()
-	{
-		Solar[] AllSolar = GameObject.FindObjectsOfType<Solar>();
-		for (int i = 0; i < AllSolar.Length; i++)
-		{
-			if (AllSolar[i].IsConnected())
-			{
-				if (!UF.Connected(AllSolar[i].GND, 0))
-				{
-					UF.Union(AllSolar[i].GND, 0);
-					entities.Add(new VoltageSource(string.Concat(AllSolar[i].EntityID.ToString(), "_GND"), AllSolar[i].GND.ToString(), "0", 0));
-					Debug.LogError("太阳能电池悬空，将太阳能电池接地");
-				}
-				else
-				{
-					Debug.LogError("太阳能电池已经接地");
-				}
 			}
 		}
 	}
