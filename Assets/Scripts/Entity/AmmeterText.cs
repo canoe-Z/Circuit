@@ -14,9 +14,8 @@ public class AmmeterText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        double Atext;
-        double GND = TAmmeter.childsPorts[0].U;
-        double mA = TAmmeter.childsPorts[1].I;
+		double Atext;
+		double mA = TAmmeter.childsPorts[1].I;
         double A = TAmmeter.childsPorts[2].I;
         if (TAmmeter.childsPorts[1].Connected == 1)
         {

@@ -12,9 +12,8 @@ public class MySlider : MonoBehaviour
 	// Start is called before the first frame update
 	void Awake()//防止爹比儿子先出来
 	{
-		int id;
-		if (int.TryParse(this.gameObject.name, out id))
-			this.SliderID = id;
+		if (int.TryParse(this.gameObject.name, out int id))
+			SliderID = id;
 		else
 			Debug.LogError("ErrorSliderID");
 	}
@@ -28,8 +27,7 @@ public class MySlider : MonoBehaviour
 	private void OnMouseDrag()
 	{
 		if (!MoveController.boolMove) return;
-		Vector3 hitPos;
-		if (HitOnlyOne(out hitPos))//打到就算
+		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
 			Global.Other.DragSlider(this);//发消息
 			Vector3 localPos = transform.parent.InverseTransformPoint(hitPos);//转换成本地坐标
