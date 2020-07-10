@@ -38,7 +38,7 @@ public static class Global
 		//滑块部分
 		public static void DragSlider(MySlider which) //滑动滑块时
 		{
-			CircuitCalculator.CalculateByConnection();
+			CircuitCalculator.CalculateSome();
 		}
 		//Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
 		public static void Loop()//每帧由摄像机调用

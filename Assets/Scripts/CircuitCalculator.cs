@@ -22,7 +22,6 @@ public class CircuitCalculator : MonoBehaviour
 
 	public static List<EntityBase> allEntity = new List<EntityBase>();
 	public static List<CircuitLine> allLine = new List<CircuitLine>();
-
 	private void Start()
 	{
 		//寻找场景中的初始元件，加入到allEntity中去
@@ -32,8 +31,8 @@ public class CircuitCalculator : MonoBehaviour
 			allEntity.Add(allEntityArray[i]);
 		}
 	}
-
-	public static void ClearAll()
+	//连接关系改变需要重算，连接关系改变，但
+	public static void CalculateAll()
 	{
 		EntityNum = 0;
 		gndLines.Clear();
@@ -44,14 +43,24 @@ public class CircuitCalculator : MonoBehaviour
 		ProblemLine.Clear();
 		sources.Clear();
 		ammeters.Clear();
+		SpiceON();
 	}
 
-	public static void CalculateAll()
+	public static void CalculateSome()
 	{
-		ClearAll();
+		EntityNum = 0;
+		gndLines.Clear();
+		ports.Clear();
+		entities.Clear();
+		SomeSpiceON();
+	}
+	//连接关系改变需要彻底重算
+	private static void SpiceON()
+	{
 		//在并查集中加载有连接元件的内部连接
 		LoadElement();
 
+		//以下三步顺序不能调换
 		//在并查集中连接导线
 		for (int i = 0; i < allLine.Count; i++)
 		{
@@ -64,7 +73,11 @@ public class CircuitCalculator : MonoBehaviour
 			i.GroundCheck();
 		}
 
-		ConnectGND();
+		//接地
+		foreach (GNDLine i in gndLines)
+		{
+			entities.Add(new VoltageSource(string.Concat(i.GNDLineID.ToString(), "_GND"), i.PortToGND.ToString(), "0", 0));
+		}
 
 		//检查对地连通性，区分出问题导线，并分别处理
 		for (int i = 0; i < allLine.Count; i++)
@@ -84,76 +97,7 @@ public class CircuitCalculator : MonoBehaviour
 
 		//在SpiceSharp中加载元件
 		SetElement();
-		SpiceSharpCalculate();
 
-		//仿真通过后恢复通过并查集删除的导线
-		foreach (CircuitLine i in ProblemLine)
-		{
-			i.ReLine();
-		}
-	}
-
-	public static void CalculateByConnection()
-	{
-		EntityNum = 0;
-		gndLines.Clear();
-		GNDLine.GlobalGNDLineID = 0;
-		ports.Clear();
-		entities.Clear();
-		ConnectGND();
-		//直接连接正常导线
-		for (int i = 0; i < GoodLine.Count; i++)
-		{
-			entities.Add(new VoltageSource(string.Concat("Line", "_", i), GoodLine[i].startID_Global.ToString(), GoodLine[i].endID_Global.ToString(), 0));
-			EntityNum++;
-		}
-		SetElement();
-		SpiceSharpCalculate();
-	}
-
-	private static void LoadElement() //通过并查集预连接，同时按照加载不同的接口
-	{
-		UF.Clear(10000);
-		for (int i = 0; i < allEntity.Count; i++)
-		{
-			if (allEntity[i].IsConnected())
-			{
-				allEntity[i].LoadElement();
-			}
-			if (allEntity[i] is ISource)
-			{
-				sources.Add(allEntity[i] as ISource);
-			}
-			if (allEntity[i] is IAmmeter)
-			{
-				ammeters.Add(allEntity[i] as IAmmeter);
-			}
-		}
-	}
-
-	private static void SetElement() //已经将有问题的节点的可连接标志去除，正式连接
-	{
-		EntityNum = 0;
-		for (int i = 0; i < allEntity.Count; i++)
-		{
-			if (allEntity[i].IsConnected())
-			{
-				allEntity[i].SetElement();
-				EntityNum++;
-			}
-		}
-	}
-
-	private static void ConnectGND()
-	{
-		foreach (GNDLine i in gndLines)
-		{
-			entities.Add(new VoltageSource(string.Concat(i.GNDLineID.ToString(), "_GND"), i.PortToGND.ToString(), "0", 0));
-		}
-	}
-
-	private static void SpiceSharpCalculate()
-	{
 		//创建电路
 		var ckt = new Circuit(entities);
 
@@ -183,6 +127,94 @@ public class CircuitCalculator : MonoBehaviour
 		foreach (IAmmeter i in ammeters)
 		{
 			i.CalculateCurrent();
+		}
+
+		//仿真通过后恢复通过并查集删除的导线
+		foreach (CircuitLine i in ProblemLine)
+		{
+			i.ReLine();
+		}
+	}
+
+	private static void SomeSpiceON()
+	{
+		//接地
+		foreach (GNDLine i in gndLines)
+		{
+			entities.Add(new VoltageSource(string.Concat(i.GNDLineID.ToString(), "_GND"), i.PortToGND.ToString(), "0", 0));
+		}
+
+		for (int i = 0; i < GoodLine.Count; i++)
+		{
+			entities.Add(new VoltageSource(string.Concat("Line", "_", i), GoodLine[i].startID_Global.ToString(), GoodLine[i].endID_Global.ToString(), 0));
+			EntityNum++;
+		}
+
+		//在SpiceSharp中加载元件
+		SetElement();
+
+		//创建电路
+		var ckt = new Circuit(entities);
+
+		//直流工作点分析并写入端口电压值
+		var op = new OP("op");
+		op.ExportSimulationData += (sender, exportDataEventArgs) =>
+		{
+			foreach (CircuitPort i in ports)
+			{
+				i.U = exportDataEventArgs.GetVoltage(i.PortID_Global.ToString());
+			}
+		};
+
+		// 启动仿真
+		try
+		{
+			op.Run(ckt);
+			Debug.Log("仿真成功");
+		}
+		catch
+		{
+			Debug.Log("悬空导线的数目为：" + ProblemLine.Count);
+			Debug.LogWarning("仿真失败，电路无通路");
+		}
+
+		//计算电流
+		foreach (IAmmeter i in ammeters)
+		{
+			i.CalculateCurrent();
+		}
+	}
+
+	private static void LoadElement() //通过并查集预连接，同时按照加载不同的接口
+	{
+		UF.Clear(10000);
+		for (int i = 0; i < allEntity.Count; i++)
+		{
+			if(allEntity[i].IsConnected())
+			{
+				allEntity[i].LoadElement();
+			}
+			if (allEntity[i] is ISource)
+			{
+				sources.Add(allEntity[i] as ISource);
+			}
+			if (allEntity[i] is IAmmeter)
+			{
+				ammeters.Add(allEntity[i] as IAmmeter);
+			}
+		}
+	}
+
+	private static void SetElement() //已经将有问题的节点的可连接标志去除，正式连接
+	{
+		EntityNum = 0;
+		for (int i = 0; i < allEntity.Count; i++)
+		{
+			if (allEntity[i].IsConnected())
+			{
+				allEntity[i].SetElement();
+				EntityNum++;
+			}
 		}
 	}
 }
