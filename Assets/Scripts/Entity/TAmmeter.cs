@@ -42,8 +42,6 @@ public class TAmmeter : EntityBase, IAmmeter
 		CircuitCalculator.ports.Add(childsPorts[0]);
 		CircuitCalculator.ports.Add(childsPorts[1]);
 		CircuitCalculator.ports.Add(childsPorts[2]);
-		//电流表将其电流加入检测序列
-		CircuitCalculator.ammeters.Add(this);
 	}
 	public void CalculateCurrent()//计算自身电流
 	{

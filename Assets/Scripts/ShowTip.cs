@@ -80,14 +80,6 @@ public class ShowTip : MonoBehaviour
 			OverElse();
 		}
 	}
-
-	private void FixedUpdate()
-	{
-		if (CircuitCalculator.error == 1)
-		{
-			CamMain.ShowTips("电路中存在悬空状态，请检查连接\n", 0);
-		}
-	}
 }
 
 

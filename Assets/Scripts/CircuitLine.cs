@@ -12,7 +12,6 @@ public class CircuitLine : MonoBehaviour
 
 	private GameObject pStart;//端口
 	private GameObject pEnd;//端口
-	//private GameObject[] chains = null;
 
 	//对外暴露端口以注入电压
 	public CircuitPort StartPort;
@@ -29,12 +28,14 @@ public class CircuitLine : MonoBehaviour
 		EndPort.Connected = 1;
 		startID_Global = pStart.GetComponent<CircuitPort>().PortID_Global;
 		endID_Global = pEnd.GetComponent<CircuitPort>().PortID_Global;
+		CircuitCalculator.allLine.Add(this);
 	}
 
 	public void DestroyLine()
 	{
 		StartPort.Connected = 0;
 		EndPort.Connected = 0;
+		CircuitCalculator.allLine.Remove(this);
 	}
 	public void ReLine()
 	{

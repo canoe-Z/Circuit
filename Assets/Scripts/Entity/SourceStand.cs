@@ -50,7 +50,7 @@ public class SourceStand : EntityBase, ISource
 			if (!CircuitCalculator.UF.Connected(G, 0))
 			{
 				CircuitCalculator.UF.Union(G, 0);
-				CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_GND"), G.ToString(), "0", 0));
+				CircuitCalculator.gndLines.Add(new GNDLine(G));
 				Debug.LogError("额外电源悬空，将额外电源接地");
 			}
 			else

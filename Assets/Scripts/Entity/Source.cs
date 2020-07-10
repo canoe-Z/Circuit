@@ -99,6 +99,7 @@ public class Source : EntityBase, ISource
 
 	public void GroundCheck()
 	{
+		Debug.LogWarning("电源1111");
 		for (int j = 0; j < SourceNum; j++)
 		{
 			if (IsConnected(j))
@@ -106,7 +107,7 @@ public class Source : EntityBase, ISource
 				if (!CircuitCalculator.UF.Connected(G[j], 0))
 				{
 					CircuitCalculator.UF.Union(G[j], 0);
-					CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_GND", j), G[j].ToString(), "0", 0));
+					CircuitCalculator.gndLines.Add(new GNDLine(G[j]));
 					Debug.LogWarning("电源E" + j + "有连接但悬空，将其接地");
 				}
 				else

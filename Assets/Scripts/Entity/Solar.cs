@@ -90,7 +90,7 @@ public class Solar : EntityBase, ISource
 			if (!CircuitCalculator.UF.Connected(GND, 0))
 			{
 				CircuitCalculator.UF.Union(GND, 0);
-				CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_GND"), GND.ToString(), "0", 0));
+				CircuitCalculator.gndLines.Add(new GNDLine(GND));
 				Debug.LogError("太阳能电池悬空，将太阳能电池接地");
 			}
 			else
