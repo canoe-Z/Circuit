@@ -26,7 +26,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static List<EntityBase> allEntity = new List<EntityBase>();
 	public static List<CircuitLine> allLine = new List<CircuitLine>();
 
-	private void Start()
+	private void Awake()
 	{
 		//寻找场景中的初始元件，加入到allEntity中去
 		var allEntityArray = FindObjectsOfType<EntityBase>();
