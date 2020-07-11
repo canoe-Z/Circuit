@@ -16,15 +16,15 @@ public class CircuitCalculator : MonoBehaviour
 	public static List<CircuitPort> ports = new List<CircuitPort>();//已连接元件的端口ID(用于端口电压检测序列)
 	public static WeightedQuickUnionUF UF = new WeightedQuickUnionUF(10000);//并查集
 
-	public static List<CircuitLine> ProblemLine = new List<CircuitLine>();//问题导线
-	public static List<CircuitLine> GoodLine = new List<CircuitLine>();//正常导线
+	public static List<CircuitLine> DisabledLines = new List<CircuitLine>();//问题导线
+	public static List<CircuitLine> EnabledLines = new List<CircuitLine>();//正常导线
 	public static List<GNDLine> gndLines = new List<GNDLine>();//接地导线
 
 	public static List<ISource> sources = new List<ISource>();
 	public static List<IAmmeter> ammeters = new List<IAmmeter>();
 
 	public static List<EntityBase> allEntity = new List<EntityBase>();
-	public static List<CircuitLine> allLine = new List<CircuitLine>();
+	public static List<CircuitLine> allLines = new List<CircuitLine>();
 
 	private void Awake()
 	{
@@ -46,8 +46,8 @@ public class CircuitCalculator : MonoBehaviour
 		GNDLine.GlobalGNDLineID = 0;
 		ports.Clear();
 		entities.Clear();
-		GoodLine.Clear();
-		ProblemLine.Clear();
+		EnabledLines.Clear();
+		DisabledLines.Clear();
 		sources.Clear();
 		ammeters.Clear();
 	}
@@ -62,9 +62,9 @@ public class CircuitCalculator : MonoBehaviour
 		LoadElement();
 
 		//在并查集中连接导线
-		for (int i = 0; i < allLine.Count; i++)
+		for (int i = 0; i < allLines.Count; i++)
 		{
-			UF.Union(allLine[i].startID_Global, allLine[i].endID_Global);
+			UF.Union(allLines[i].startID_Global, allLines[i].endID_Global);
 		}
 
 		//对电源实行接地检测
@@ -76,18 +76,18 @@ public class CircuitCalculator : MonoBehaviour
 		ConnectGND();
 
 		//检查对地连通性，区分出问题导线，并分别处理
-		for (int i = 0; i < allLine.Count; i++)
+		for (int i = 0; i < allLines.Count; i++)
 		{
-			if (UF.Connected(allLine[i].startID_Global, 0))
+			if (UF.Connected(allLines[i].startID_Global, 0))
 			{
-				GoodLine.Add(allLine[i]);
-				entities.Add(new VoltageSource(string.Concat("Line", "_", i), allLine[i].startID_Global.ToString(), allLine[i].endID_Global.ToString(), 0));
+				EnabledLines.Add(allLines[i]);
+				entities.Add(new VoltageSource(string.Concat("Line", "_", i), allLines[i].startID_Global.ToString(), allLines[i].endID_Global.ToString(), 0));
 				EntityNum++;
 			}
 			else
 			{
-				ProblemLine.Add(allLine[i]);
-				allLine[i].DestroyLine();
+				allLines[i].DisableLine();
+				DisabledLines.Add(allLines[i]);
 			}
 		}
 
@@ -96,9 +96,9 @@ public class CircuitCalculator : MonoBehaviour
 		SpiceSharpCalculate();
 
 		//仿真通过后恢复通过并查集删除的导线
-		foreach (CircuitLine i in ProblemLine)
+		foreach (CircuitLine i in DisabledLines)
 		{
-			i.ReLine();
+			i.ReenableLine();
 		}
 	}
 
@@ -113,9 +113,9 @@ public class CircuitCalculator : MonoBehaviour
 		entities.Clear();
 		ConnectGND();
 		//直接连接正常导线
-		for (int i = 0; i < GoodLine.Count; i++)
+		for (int i = 0; i < EnabledLines.Count; i++)
 		{
-			entities.Add(new VoltageSource(string.Concat("Line", "_", i), GoodLine[i].startID_Global.ToString(), GoodLine[i].endID_Global.ToString(), 0));
+			entities.Add(new VoltageSource(string.Concat("Line", "_", i), EnabledLines[i].startID_Global.ToString(), EnabledLines[i].endID_Global.ToString(), 0));
 			EntityNum++;
 		}
 		SetElement();
@@ -199,7 +199,7 @@ public class CircuitCalculator : MonoBehaviour
 		}
 		catch
 		{
-			Debug.Log("悬空导线的数目为：" + ProblemLine.Count);
+			Debug.Log("悬空导线的数目为：" + DisabledLines.Count);
 			Debug.LogWarning("仿真失败，电路无通路");
 		}
 
