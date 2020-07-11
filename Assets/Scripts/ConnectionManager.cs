@@ -68,9 +68,7 @@ public class ConnectionManager : MonoBehaviour
 	{
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
 		rope.layer = 8; //关闭碰撞检测
-		rope.AddComponent<CircuitRope>();
 		rope.AddComponent<MeshCollider>();
-		rope.GetComponent<MeshCollider>().sharedMesh = rope.GetComponent<MeshFilter>().sharedMesh;
 		if(rope.GetComponent<MeshCollider>().sharedMesh != rope.GetComponent<MeshFilter>().sharedMesh)
 		{
 			Debug.LogError("绳子碰撞体连接时有问题");

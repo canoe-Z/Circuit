@@ -39,4 +39,24 @@ public class CircuitLine : MonoBehaviour
 		startPort.Connected = 1;
 		endPort.Connected = 1;
 	}
+	public void DestroyRope()
+	{
+		DestroyLine();
+		Destroy(gameObject);
+	}
+	private void OnMouseOver()
+	{
+		ShowTip.OverChain();
+		ShowTip.IsTipShowed = false;
+		if (Input.GetMouseButtonDown(1))
+		{
+			DestroyRope();
+		}
+	}
+
+	// Update is called once per frame
+	void FixedUpdate()
+	{
+		gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
+	}
 }
