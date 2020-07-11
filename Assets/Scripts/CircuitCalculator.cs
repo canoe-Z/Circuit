@@ -96,7 +96,6 @@ public class CircuitCalculator : MonoBehaviour
 	public static void CalculateByConnection()
 	{
 		EntityNum = 0;
-		gndLines.Clear();
 		GNDLine.GlobalGNDLineID = 0;
 		ports.Clear();
 		entities.Clear();
