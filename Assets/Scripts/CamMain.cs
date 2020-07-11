@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using System.Runtime.InteropServices;
-//
-//图形界面
-//
+
+/// <summary>
+/// 图形界面
+/// </summary>
 public class CamMain : MonoBehaviour
 {
 	//显示特定文本信息

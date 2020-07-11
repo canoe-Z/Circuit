@@ -1,28 +1,32 @@
 ﻿using UnityEngine;
+
 abstract public class EntityBase : MonoBehaviour
 {
-	public int PortNum;//本元件的端口数量
-	public CircuitPort[] childsPorts = null;//端口们的引用
+	private int portNum;//本元件的端口数量
+	public CircuitPort[] ChildPorts { get; set; } = null;//端口们的引用
 	public void FindCircuitPort()
 	{
-		CircuitPort[] disorderPorts = this.gameObject.GetComponentsInChildren<CircuitPort>();//寻找所有挂脚本的子物体
-		PortNum = disorderPorts.Length;//元件的端口数量
-		childsPorts = new CircuitPort[disorderPorts.Length];//开个数组存引用
-		for (int i = 0; i < PortNum; i++)//排个序
+		CircuitPort[] disorderPorts = this.gameObject.GetComponentsInChildren<CircuitPort>();
+		portNum = disorderPorts.Length;
+		ChildPorts = new CircuitPort[disorderPorts.Length];
+
+		// 对获取到的子端口排序
+		for (var i = 0; i < portNum; i++)
 		{
-			int.TryParse(disorderPorts[i].name, out int ID); //名字转换成ID
-			childsPorts[ID] = disorderPorts[i];
-			childsPorts[ID].PortID = ID;
-			childsPorts[ID].PortID_Global = ID + CircuitCalculator.PortNum;
-			childsPorts[ID].father = this;
+			// 名字转换成ID
+			int.TryParse(disorderPorts[i].name, out int id);
+			ChildPorts[id] = disorderPorts[i];
+			ChildPorts[id].PortID = id;
+			ChildPorts[id].PortID_Global = id + CircuitCalculator.PortNum;
+			ChildPorts[id].father = this;
 		}
-		CircuitCalculator.PortNum += disorderPorts.Length; //全局ID++
+		CircuitCalculator.PortNum += disorderPorts.Length;
 	}
 
 	//物体控制
 	public void OnMouseDrag()
 	{
-		if (!MoveController.boolMove) return;
+		if (!MoveController.CanMove) return;
 		if (HitCheck("Table", out Vector3 hitPos))
 		{
 			this.transform.position = hitPos;
@@ -42,7 +46,7 @@ abstract public class EntityBase : MonoBehaviour
 	}
 	public void OnMouseOver()//持续期间
 	{
-		if (!MoveController.boolMove) return;
+		if (!MoveController.CanMove) return;
 		ShowTip.OverItem(this);
 		ShowTip.IsTipShowed = false;
 	}

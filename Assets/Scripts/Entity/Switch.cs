@@ -37,7 +37,7 @@ public class Switch : EntityBase
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点(对于开关中间必连）
 	{
-		if (childsPorts[1].Connected == 1)
+		if (ChildPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -50,9 +50,9 @@ public class Switch : EntityBase
 	{
 		//得到端口ID
 		int L, M, R;
-		L = childsPorts[0].PortID_Global;
-		M = childsPorts[1].PortID_Global;
-		R = childsPorts[2].PortID_Global;
+		L = ChildPorts[0].PortID_Global;
+		M = ChildPorts[1].PortID_Global;
+		R = ChildPorts[2].PortID_Global;
 		if (state == 2)
 		{
 			CircuitCalculator.UF.Union(R, M);
@@ -68,16 +68,16 @@ public class Switch : EntityBase
 		int EntityID = CircuitCalculator.EntityNum;
 		//得到端口ID
 		int L, M, R;
-		L = childsPorts[0].PortID_Global;
-		M = childsPorts[1].PortID_Global;
-		R = childsPorts[2].PortID_Global;
+		L = ChildPorts[0].PortID_Global;
+		M = ChildPorts[1].PortID_Global;
+		R = ChildPorts[2].PortID_Global;
 		if (state == 2)
 		{
-			CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", R), R.ToString(), M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", R), R.ToString(), M.ToString(), 0));
 		}
 		else if (state == 0)
 		{
-			CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", L), L.ToString(), M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", L), L.ToString(), M.ToString(), 0));
 		}
 	}
 }

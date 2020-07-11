@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 public class Source : EntityBase, ISource
 {
@@ -31,7 +30,7 @@ public class Source : EntityBase, ISource
 	//电路相关
 	public bool IsConnected(int n)
 	{
-		if (childsPorts[2 * n + 1].Connected == 1 || childsPorts[2 * n].Connected == 1)
+		if (ChildPorts[2 * n + 1].Connected == 1 || ChildPorts[2 * n].Connected == 1)
 		{
 			return true;
 		}
@@ -54,8 +53,8 @@ public class Source : EntityBase, ISource
 	}
 	public void LoadElement(int n)
 	{
-		G[n] = childsPorts[2 * n + 1].PortID_Global;
-		V[n] = childsPorts[2 * n].PortID_Global;
+		G[n] = ChildPorts[2 * n + 1].PortID_Global;
+		V[n] = ChildPorts[2 * n].PortID_Global;
 		CircuitCalculator.UF.Union(G[n], V[n]);
 	}
 	override public void LoadElement()
@@ -71,10 +70,10 @@ public class Source : EntityBase, ISource
 	public void SetElement(int n)
 	{
 		EntityID = CircuitCalculator.EntityNum;
-		G[n] = childsPorts[2 * n + 1].PortID_Global;
-		V[n] = childsPorts[2 * n].PortID_Global;
-		CircuitCalculator.entities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
-		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
+		G[n] = ChildPorts[2 * n + 1].PortID_Global;
+		V[n] = ChildPorts[2 * n].PortID_Global;
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
 	}
 	override public void SetElement()
 	{
@@ -96,7 +95,7 @@ public class Source : EntityBase, ISource
 				if (!CircuitCalculator.UF.Connected(G[j], 0))
 				{
 					CircuitCalculator.UF.Union(G[j], 0);
-					CircuitCalculator.gndLines.Add(new GNDLine(G[j]));
+					CircuitCalculator.GNDLines.Add(new GNDLine(G[j]));
 				}
 			}
 		}

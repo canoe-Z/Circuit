@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MySlider : MonoBehaviour
 {
-	public int Devide = -1;
-	public int SliderID;
-	public float SliderPos = 0;
-	public int SliderPos_int = 0;
+	public int Devide { get; set; } = -1;
+	public int SliderID { get; set; }
+	public float SliderPos { get; set; } = 0;
+	public int SliderPos_int { get; set; } = 0;
 	// Start is called before the first frame update
 	void Awake()//防止爹比儿子先出来
 	{
@@ -20,13 +17,13 @@ public class MySlider : MonoBehaviour
 
 	private void OnMouseOver()
 	{
-		if (!MoveController.boolMove) return;
+		if (!MoveController.CanMove) return;
 		ShowTip.OverSlider();
 		ShowTip.IsTipShowed = false;
 	}
 	private void OnMouseDrag()
 	{
-		if (!MoveController.boolMove) return;
+		if (!MoveController.CanMove) return;
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
 			CircuitCalculator.CalculateByConnection();

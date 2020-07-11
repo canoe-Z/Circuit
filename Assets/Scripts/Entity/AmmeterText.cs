@@ -15,13 +15,13 @@ public class AmmeterText : MonoBehaviour
     void Update()
     {
 		double Atext;
-		double mA = TAmmeter.childsPorts[1].I;
-        double A = TAmmeter.childsPorts[2].I;
-        if (TAmmeter.childsPorts[1].Connected == 1)
+		double mA = TAmmeter.ChildPorts[1].I;
+        double A = TAmmeter.ChildPorts[2].I;
+        if (TAmmeter.ChildPorts[1].Connected == 1)
         {
             Atext = mA * 1000;
         }
-        else if (TAmmeter.childsPorts[2].Connected == 1)
+        else if (TAmmeter.ChildPorts[2].Connected == 1)
         {
             Atext = A;
         }

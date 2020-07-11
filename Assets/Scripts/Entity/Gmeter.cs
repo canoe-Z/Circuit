@@ -29,7 +29,7 @@ public class Gmeter : EntityBase, IAmmeter
 		}
 
 		//示数
-		double doublePin = (childsPorts[0].I) / MaxI;
+		double doublePin = (ChildPorts[0].I) / MaxI;
 		//doublePin -= 0.5;
 		pinPos = (float)(doublePin * 0.9375);
 		if (pinPos > 0.5) pinPos = 0.5f;
@@ -57,7 +57,7 @@ public class Gmeter : EntityBase, IAmmeter
 
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
+		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -69,8 +69,8 @@ public class Gmeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		int LeftPortID, RightPortID;
-		LeftPortID = childsPorts[0].PortID_Global;
-		RightPortID = childsPorts[1].PortID_Global;
+		LeftPortID = ChildPorts[0].PortID_Global;
+		RightPortID = ChildPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
@@ -79,17 +79,17 @@ public class Gmeter : EntityBase, IAmmeter
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int LeftPortID, RightPortID;
-		LeftPortID = childsPorts[0].PortID_Global;
-		RightPortID = childsPorts[1].PortID_Global;
-		CircuitCalculator.entities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
-		CircuitCalculator.ports.Add(childsPorts[0]);
-		CircuitCalculator.ports.Add(childsPorts[1]);
+		LeftPortID = ChildPorts[0].PortID_Global;
+		RightPortID = ChildPorts[1].PortID_Global;
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		//电位计将其电流加入检测序列
-		CircuitCalculator.ammeters.Add(this);
+		CircuitCalculator.Ammeters.Add(this);
 	}
 
 	public void CalculateCurrent()//计算自身电流
 	{
-		childsPorts[0].I = (childsPorts[1].U - childsPorts[0].U) / R;
+		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 	}
 }

@@ -21,9 +21,9 @@ public class Ammeter : EntityBase, IAmmeter
 	void Update()
 	{
 		double doublePin = 0;
-		doublePin += (childsPorts[1].I) / MaxI0;
-		doublePin += (childsPorts[2].I) / MaxI1;
-		doublePin += (childsPorts[3].I) / MaxI2;
+		doublePin += (ChildPorts[1].I) / MaxI0;
+		doublePin += (ChildPorts[2].I) / MaxI1;
+		doublePin += (ChildPorts[3].I) / MaxI2;
 		doublePin -= 0.5;
 		pinPos = (float)(doublePin * 0.9375);
 		if (pinPos > 0.5) pinPos = 0.5f;
@@ -49,7 +49,7 @@ public class Ammeter : EntityBase, IAmmeter
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
+		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
 		{
 			return true;
 		}
@@ -61,10 +61,10 @@ public class Ammeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
-		int GND = childsPorts[0].PortID_Global;
-		int V0 = childsPorts[1].PortID_Global;
-		int V1 = childsPorts[2].PortID_Global;
-		int V2 = childsPorts[3].PortID_Global;
+		int GND = ChildPorts[0].PortID_Global;
+		int V0 = ChildPorts[1].PortID_Global;
+		int V1 = ChildPorts[2].PortID_Global;
+		int V2 = ChildPorts[3].PortID_Global;
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
@@ -73,10 +73,10 @@ public class Ammeter : EntityBase, IAmmeter
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = childsPorts[0].PortID_Global;
-		int V0 = childsPorts[1].PortID_Global;
-		int V1 = childsPorts[2].PortID_Global;
-		int V2 = childsPorts[3].PortID_Global;
+		int GND = ChildPorts[0].PortID_Global;
+		int V0 = ChildPorts[1].PortID_Global;
+		int V1 = ChildPorts[2].PortID_Global;
+		int V2 = ChildPorts[3].PortID_Global;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
@@ -84,18 +84,18 @@ public class Ammeter : EntityBase, IAmmeter
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 		//获取端口ID并完成内部连接
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
-		CircuitCalculator.ports.Add(childsPorts[0]);
-		CircuitCalculator.ports.Add(childsPorts[1]);
-		CircuitCalculator.ports.Add(childsPorts[2]);
-		CircuitCalculator.ports.Add(childsPorts[3]);
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 	public void CalculateCurrent()//计算自身电流
 	{
-		childsPorts[1].I = (childsPorts[1].U - childsPorts[0].U) / R0;
-		childsPorts[2].I = (childsPorts[2].U - childsPorts[0].U) / R1;
-		childsPorts[3].I = (childsPorts[3].U - childsPorts[0].U) / R2;
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R0;
+		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;
+		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
 	}
 }

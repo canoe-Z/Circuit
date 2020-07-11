@@ -25,7 +25,7 @@ public class Solar : EntityBase, ISource
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
+		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -36,8 +36,8 @@ public class Solar : EntityBase, ISource
 	}
 	override public void LoadElement()//添加元件
 	{
-		GND = childsPorts[0].PortID_Global;
-		P = childsPorts[1].PortID_Global;
+		GND = ChildPorts[0].PortID_Global;
+		P = ChildPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(GND, P);
 	}
 
@@ -70,17 +70,17 @@ public class Solar : EntityBase, ISource
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		GND = childsPorts[0].PortID_Global;
-		P = childsPorts[1].PortID_Global;
+		GND = ChildPorts[0].PortID_Global;
+		P = ChildPorts[1].PortID_Global;
 		//获取端口ID并完成内部连接
 		Debug.LogError("短路电流为" + Isc);
-		CircuitCalculator.entities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
-		CircuitCalculator.entities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
-		CircuitCalculator.entities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
-		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
-		CircuitCalculator.entities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
-		CircuitCalculator.ports.Add(childsPorts[0]);
-		CircuitCalculator.ports.Add(childsPorts[1]);
+		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
+		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
+		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 	}
 
 	public void GroundCheck()
@@ -90,7 +90,7 @@ public class Solar : EntityBase, ISource
 			if (!CircuitCalculator.UF.Connected(GND, 0))
 			{
 				CircuitCalculator.UF.Union(GND, 0);
-				CircuitCalculator.gndLines.Add(new GNDLine(GND));
+				CircuitCalculator.GNDLines.Add(new GNDLine(GND));
 			}
 		}
 	}

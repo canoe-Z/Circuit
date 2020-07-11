@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 public class RBox : EntityBase
 {
@@ -32,7 +31,7 @@ public class RBox : EntityBase
 	}
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1 || childsPorts[2].Connected == 1 || childsPorts[3].Connected == 1)
+		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
 		{
 			return true;
 		}
@@ -46,10 +45,10 @@ public class RBox : EntityBase
 	{
 		//获取端口ID并完成并查集连接
 		int G, R999, R99, R9;
-		G = childsPorts[0].PortID_Global;
-		R999 = childsPorts[3].PortID_Global;//顺序翻转
-		R99 = childsPorts[2].PortID_Global;
-		R9 = childsPorts[1].PortID_Global;
+		G = ChildPorts[0].PortID_Global;
+		R999 = ChildPorts[3].PortID_Global;//顺序翻转
+		R99 = ChildPorts[2].PortID_Global;
+		R9 = ChildPorts[1].PortID_Global;
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
@@ -59,10 +58,10 @@ public class RBox : EntityBase
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;
-		G = childsPorts[0].PortID_Global;
-		R999 = childsPorts[3].PortID_Global;//顺序翻转
-		R99 = childsPorts[2].PortID_Global;
-		R9 = childsPorts[1].PortID_Global;
+		G = ChildPorts[0].PortID_Global;
+		R999 = ChildPorts[3].PortID_Global;//顺序翻转
+		R99 = ChildPorts[2].PortID_Global;
+		R9 = ChildPorts[1].PortID_Global;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
@@ -70,12 +69,12 @@ public class RBox : EntityBase
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 		//获取端口ID并完成内部连接
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
-		CircuitCalculator.entities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
-		CircuitCalculator.ports.Add(childsPorts[0]);
-		CircuitCalculator.ports.Add(childsPorts[1]);
-		CircuitCalculator.ports.Add(childsPorts[2]);
-		CircuitCalculator.ports.Add(childsPorts[3]);
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 }

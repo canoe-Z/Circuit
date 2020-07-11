@@ -7,8 +7,8 @@ public class Resistance : EntityBase
 	public void Start()
     {
 		FindCircuitPort();
-		LeftPortID = childsPorts[0].PortID_Global;
-		RightPortID = childsPorts[1].PortID_Global;
+		LeftPortID = ChildPorts[0].PortID_Global;
+		RightPortID = ChildPorts[1].PortID_Global;
 		if (double.TryParse(this.gameObject.name, out double Rnum)) //阻值
 		{
 			this.Rnum = Rnum;
@@ -18,7 +18,7 @@ public class Resistance : EntityBase
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
-		if (childsPorts[0].Connected == 1 || childsPorts[1].Connected == 1)
+		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
 			return true;
 		}
@@ -35,7 +35,7 @@ public class Resistance : EntityBase
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		CircuitCalculator.entities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Rnum));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Rnum));
 		/*
 		CircuitCalculator.ports.Add(childsPorts[0]); 
 		CircuitCalculator.ports.Add(childsPorts[1]);
