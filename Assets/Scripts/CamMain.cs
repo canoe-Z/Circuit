@@ -32,7 +32,6 @@ public class CamMain : MonoBehaviour
 	{
 		//if(MoveController.boolMove) MoveController.Update();//移动
 		CAMERA.Update();//更新摄像机
-		Global.Other.Loop();
 	}
 	private void OnGUI()
 	{
@@ -134,11 +133,11 @@ public class CamMain : MonoBehaviour
 		public static int tex = 0;
 		public static void Start()
 		{
-			Global.Other.colors[0] = Color.black;
-			Global.Other.colors[1] = Color.white;
-			Global.Other.colors[2] = Color.red;
-			Global.Other.colors[3] = Color.yellow;
-			Global.Other.colors[4] = Color.green;
+			ConnectionManager.colors[0] = Color.black;
+			ConnectionManager.colors[1] = Color.white;
+			ConnectionManager.colors[2] = Color.red;
+			ConnectionManager.colors[3] = Color.yellow;
+			ConnectionManager.colors[4] = Color.green;
 			cross = (Texture2D)Resources.Load("Cross");
 			white = (Texture2D)Resources.Load("CrossWhite");
 			red = (Texture2D)Resources.Load("CrossRed");

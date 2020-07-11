@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 //端口
 public class CircuitPort : MonoBehaviour
 {
@@ -13,7 +11,7 @@ public class CircuitPort : MonoBehaviour
 	private void OnMouseDown()
 	{
 		if (!MoveController.boolMove) return;
-		Global.Other.ClickPort(this);
+		ConnectionManager.ClickPort(this);
 	}
 	private void OnMouseEnter()
 	{

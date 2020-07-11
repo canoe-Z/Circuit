@@ -9,34 +9,34 @@ public class CircuitLine : MonoBehaviour
 	public int endID_Global;
 
 	//对外暴露端口以注入电压
-	public CircuitPort StartPort;
-	public CircuitPort EndPort;
+	public CircuitPort startPort;
+	public CircuitPort endPort;
 
 	//这函数只需要调用1次
 	public void CreateLine(GameObject Ini, GameObject Lst)
 	{
-		StartPort = Ini.GetComponent<CircuitPort>();
-		EndPort = Lst.GetComponent<CircuitPort>();
-		StartPort.Connected = 1;
-		EndPort.Connected = 1;
+		startPort = Ini.GetComponent<CircuitPort>();
+		endPort = Lst.GetComponent<CircuitPort>();
+		startPort.Connected = 1;
+		endPort.Connected = 1;
 		startID_Global = Ini.GetComponent<CircuitPort>().PortID_Global;
 		endID_Global = Lst.GetComponent<CircuitPort>().PortID_Global;
 		CircuitCalculator.allLines.Add(this);
 	}
 	public void DestroyLine()
 	{
-		StartPort.Connected = 0;
-		EndPort.Connected = 0;
+		startPort.Connected = 0;
+		endPort.Connected = 0;
 		CircuitCalculator.allLines.Remove(this);
 	}
 	public void DisableLine()
 	{
-		StartPort.Connected = 0;
-		EndPort.Connected = 0;
+		startPort.Connected = 0;
+		endPort.Connected = 0;
 	}
 	public void ReenableLine()
 	{
-		StartPort.Connected = 1;
-		EndPort.Connected = 1;
+		startPort.Connected = 1;
+		endPort.Connected = 1;
 	}
 }
