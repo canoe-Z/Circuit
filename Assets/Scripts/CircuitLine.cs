@@ -41,5 +41,6 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort.Connected = 1;
 		EndPort.Connected = 1;
+		CircuitCalculator.allLine.Add(this);
 	}
 }
