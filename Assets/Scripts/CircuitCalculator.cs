@@ -5,6 +5,9 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
 
+/// <summary>
+/// 电路计算
+/// </summary>
 public class CircuitCalculator : MonoBehaviour
 {
 	public static int PortNum = 0;//端口总数，创建端口时++
@@ -33,6 +36,9 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 清除所有计算记录和连接关系
+	/// </summary>
 	public static void ClearAll()
 	{
 		EntityNum = 0;
@@ -46,6 +52,9 @@ public class CircuitCalculator : MonoBehaviour
 		ammeters.Clear();
 	}
 
+	/// <summary>
+	/// 电路重新计算
+	/// </summary>
 	public static void CalculateAll()
 	{
 		ClearAll();
@@ -93,6 +102,9 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 在现有的连接关系上重新计算
+	/// </summary>
 	public static void CalculateByConnection()
 	{
 		EntityNum = 0;
@@ -110,7 +122,10 @@ public class CircuitCalculator : MonoBehaviour
 		SpiceSharpCalculate();
 	}
 
-	private static void LoadElement() //通过并查集预连接，同时按照加载不同的接口
+	/// <summary>
+	/// 通过并查集预连接，同时按照加载不同的接口
+	/// </summary>
+	private static void LoadElement()
 	{
 		UF.Clear(10000);
 		for (int i = 0; i < allEntity.Count; i++)
@@ -130,7 +145,10 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
-	private static void SetElement() //已经将有问题的节点的可连接标志去除，正式连接
+	/// <summary>
+	/// 正式连接（需要事先处理不接地连接）
+	/// </summary>
+	private static void SetElement()
 	{
 		EntityNum = 0;
 		for (int i = 0; i < allEntity.Count; i++)
@@ -143,6 +161,9 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 将需要接地的电源接地
+	/// </summary>
 	private static void ConnectGND()
 	{
 		foreach (GNDLine i in gndLines)
@@ -151,6 +172,10 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
+	
+	/// <summary>
+	/// 调用SpiceSharp进行计算
+	/// </summary>
 	private static void SpiceSharpCalculate()
 	{
 		//创建电路
@@ -186,6 +211,9 @@ public class CircuitCalculator : MonoBehaviour
 	}
 }
 
+/// <summary>
+/// 接地连接
+/// </summary>
 public class GNDLine
 {
 	public static int GlobalGNDLineID = 0;
@@ -199,7 +227,9 @@ public class GNDLine
 	}
 }
 
-//并查集
+/// <summary>
+/// 并查集
+/// </summary>
 public class WeightedQuickUnionUF
 {
 	private int[] id;
