@@ -27,13 +27,12 @@ public class Wdw_Menu : MonoBehaviour
 		btnCopies_2.onClick.AddListener(OnButtonCopy_2);
 	}
 
-	// Update is called once per frame
+
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.P))
-		{
-			MoveController.CanMove = false;
-		}
+		UpdateCopyThings();
+
+
 		if (Input.GetKeyDown(KeyCode.Escape))//开启或者关闭菜单，取决于是否进行过无法移动锁定
 		{
 			if (MoveController.CanMove) OpenMenu();
@@ -72,16 +71,65 @@ public class Wdw_Menu : MonoBehaviour
 		CloseMenu();
 	}
 
+
+
+
+
+	/// <summary>
+	/// 将物体复制并且移除碰撞体的系统
+	/// </summary>
+	void UpdateCopyThings()
+	{
+		if (willBeSet)//如果带了一个物体
+		{
+			RaycastHit info;
+			Transform camTr = CamMain.CAMERA.mainCam.gameObject.transform;//主摄像机
+			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, 1 << 0))//0层碰撞
+			{
+				willBeSet.transform.position = info.point;
+			}
+			if (Input.GetMouseButtonDown(0))//左键放下物体
+			{
+				OpenColl(willBeSet);//打开碰撞体
+				willBeSet = null;
+			}
+		}
+	}
+	GameObject willBeSet;//即将会被扔到桌子上的物体
+	void CloseColl(GameObject operate)//关闭上面那东西的碰撞体
+	{
+		Collider[] colliders = operate.GetComponentsInChildren<Collider>();
+		foreach(var coll in colliders)
+		{
+			coll.enabled = false;
+		}
+	}
+	void OpenColl(GameObject operate)//打开上面那东西的碰撞体
+	{
+		Collider[] colliders = operate.GetComponentsInChildren<Collider>();
+		foreach (var coll in colliders)
+		{
+			coll.enabled = true;
+		}
+
+	}
+	//下面全都是按钮
 	void OnButtonCopy_0()
 	{
-
+		willBeSet = Instantiate(gmObjSources_0, new Vector3(0, 0, 0), Quaternion.identity);
+		CloseColl(willBeSet);//关闭碰撞体
+		CloseMenu();//关闭菜单
 	}
 	void OnButtonCopy_1()
 	{
-
+		willBeSet = Instantiate(gmObjSources_1, new Vector3(0, 0, 0), Quaternion.identity);
+		CloseColl(willBeSet);//关闭碰撞体
+		CloseMenu();//关闭菜单
 	}
 	void OnButtonCopy_2()
 	{
-
+		willBeSet = Instantiate(gmObjSources_2, new Vector3(0, 0, 0), Quaternion.identity);
+		CloseColl(willBeSet);//关闭碰撞体
+		CloseMenu();//关闭菜单
 	}
 }

@@ -42,7 +42,7 @@ public class CamMain : MonoBehaviour
 
 	public static class CAMERA
 	{
-		static Camera mainCam = null;
+		public static Camera mainCam = null;
 		static Camera[] smallCam = new Camera[4];
 		static void SetAs(Camera which, Camera source)
 		{
