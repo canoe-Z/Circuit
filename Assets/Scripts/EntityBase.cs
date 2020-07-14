@@ -76,6 +76,32 @@ abstract public class EntityBase : MonoBehaviour
 	abstract public bool IsConnected();
 	abstract public void LoadElement();
 	abstract public void SetElement();
+
+	//
+	//速度限制
+	//
+
+	Rigidbody rigidBody;
+	float speedLimit = 0.5f;
+	private void Start()
+	{
+		rigidBody = GetComponent<Rigidbody>();
+		if (rigidBody == null)
+		{
+			Debug.LogError("没找到刚体");
+		}
+	}
+	private void FixedUpdate()//与物理引擎保持帧同步
+	{
+		if (rigidBody)
+		{
+			if (rigidBody.velocity.magnitude > speedLimit)
+			{
+				rigidBody.velocity = rigidBody.velocity.normalized * speedLimit;
+			}
+		}
+	}
+
 }
 
 public interface ISource

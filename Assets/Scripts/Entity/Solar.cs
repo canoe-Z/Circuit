@@ -73,7 +73,7 @@ public class Solar : EntityBase, ISource
 		GND = ChildPorts[0].PortID_Global;
 		P = ChildPorts[1].PortID_Global;
 		//获取端口ID并完成内部连接
-		Debug.LogError("短路电流为" + Isc);
+		Debug.LogWarning("短路电流为" + Isc);
 		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
 		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
 		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));

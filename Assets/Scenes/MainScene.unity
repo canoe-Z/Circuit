@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3180066, g: 0.35714516, b: 0.37688002, a: 1}
+  m_IndirectSpecularColor: {r: 0.3184503, g: 0.35714272, b: 0.3770067, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1088,10 +1088,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!54 &49296062
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1218,8 +1214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26105c3201e3c3f4197d55e441de56aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   E: 1.01865
   R: 100
   G: 0
@@ -2134,8 +2128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b984832bcaa7d0a44a3425679e3838ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   MaxU0: 1.5
   MaxU1: 5
   MaxU2: 15
@@ -3113,8 +3105,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21024edb8bf851943aceaf277685ed67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   R_99999: 0
   R_99: 0
   R_09: 0
@@ -4576,10 +4566,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &280062284
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10251,9 +10237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b89999d42ecb94a8f0dbc38c9dfaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
-  Rnum: 120
+  Rnum: 99.5
   LeftPortID: 0
   RightPortID: 0
 --- !u!54 &612007356
@@ -11136,10 +11120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &690349665
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -14385,8 +14365,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26105c3201e3c3f4197d55e441de56aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   E: 1.4072
   R: 30
   G: 0
@@ -14686,9 +14664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b89999d42ecb94a8f0dbc38c9dfaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
-  Rnum: 120
+  Rnum: 0.092
   LeftPortID: 0
   RightPortID: 0
 --- !u!54 &899941061
@@ -15974,10 +15950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!65 &962400612
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17342,9 +17314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b89999d42ecb94a8f0dbc38c9dfaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
-  Rnum: 120
+  Rnum: 121.3
   LeftPortID: 0
   RightPortID: 0
 --- !u!54 &1051378083
@@ -17912,8 +17882,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530b93b704fb3e548947a99c98b0db1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   state: 1
   mySlider: {fileID: 0}
 --- !u!114 &1078584415
@@ -18880,10 +18848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &1126666999
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20123,10 +20087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0.5
-  SliderPos_int: 0
 --- !u!23 &1182140761
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20406,8 +20366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6977cb66f4dda34f9ef548851427a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   mySlider: {fileID: 0}
 --- !u!54 &1198444861
 Rigidbody:
@@ -20646,10 +20604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &1209505710
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -22439,10 +22393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &1351029475
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -23516,10 +23466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &1397087412
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -23876,8 +23822,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825e1463d10fc0a44a1c78963574012c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   GND: 0
   P: 0
   sliders:
@@ -25450,9 +25394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b89999d42ecb94a8f0dbc38c9dfaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
-  Rnum: 120
+  Rnum: 119.2
   LeftPortID: 0
   RightPortID: 0
 --- !u!54 &1530313818
@@ -25965,10 +25907,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &1550577193
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -26183,8 +26121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac79fdb82b8c194281849aba1435cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   R: 0.001
 --- !u!114 &1573831480
 MonoBehaviour:
@@ -28667,8 +28603,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcdd04a7e2572d649bc6ba03b23d423e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   R0: 0.1
   E0Max: 15
   R1: 0.1
@@ -29038,8 +28972,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a61246319e0714a8a45edafd6f57bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   Rmax: 300
   RL: 300
   RR: 0
@@ -29249,8 +29181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac76dfa3a728cbb4fb66eafa8f433915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   R: 15000
 --- !u!114 &1742799472
 MonoBehaviour:
@@ -30472,8 +30402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d48c5d89677a54e8f8e26e94e3baaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
   MaxI0: 0.015
   MaxI1: 0.15
   MaxI2: 1.5
@@ -31787,9 +31715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b89999d42ecb94a8f0dbc38c9dfaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PortNum: 0
-  childsPorts: []
-  Rnum: 120
+  Rnum: 998948.2
   LeftPortID: 0
   RightPortID: 0
 --- !u!54 &1928489332
@@ -34384,10 +34310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &2066329919
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -35389,10 +35311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a7584ce3076c4babd5b56da918d42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  SliderID: 0
-  SliderPos: 0
-  SliderPos_int: 0
 --- !u!23 &2101883791
 MeshRenderer:
   m_ObjectHideFlags: 0

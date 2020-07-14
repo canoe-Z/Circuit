@@ -9,10 +9,6 @@ public class Resistance : EntityBase
 		FindCircuitPort();
 		LeftPortID = ChildPorts[0].PortID_Global;
 		RightPortID = ChildPorts[1].PortID_Global;
-		if (double.TryParse(this.gameObject.name, out double Rnum)) //阻值
-		{
-			this.Rnum = Rnum;
-		}
 	}
 
 	//电路相关
