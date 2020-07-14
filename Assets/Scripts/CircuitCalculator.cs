@@ -4,35 +4,44 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
+using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// 电路计算
 /// </summary>
 public class CircuitCalculator : MonoBehaviour
 {
-	public static int PortNum { get; set; } = 0;												//端口总数，创建端口时++
-	public static int EntityNum { get; set; } = 0;												//元件总数，创建元件时++
-	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();				//SpiceSharp计算的元件
+	public static int PortNum { get; set; } = 0;                                                //端口总数，创建端口时++
+	public static int EntityNum { get; set; } = 0;                                              //元件总数，创建元件时++
+	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                //SpiceSharp计算的元件
 	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         //SpiceSharp计算的端口
-	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);		//并查集，用于接地判断
+	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      //并查集，用于接地判断
+	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);      //并查集，用于接地判断
 
-	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();		//问题导线
-	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();		//正常导线
-	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();					//接地导线
+	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();      //问题导线
+	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       //正常导线
+	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();                   //接地导线
 
-	public static List<ISource> Sources { get; set; } = new List<ISource>();					//所有元件
+	public static List<ISource> Sources { get; set; } = new List<ISource>();                    //所有元件
 	public static List<IAmmeter> Ammeters { get; set; } = new List<IAmmeter>();                 //所有端口
 
 	public static List<EntityBase> AllEntities { get; set; } = new List<EntityBase>();
-	public static List<CircuitLine> AllLines { get; set; } = new List<CircuitLine>();
-
+	public static List<CircuitPort> AllPorts { get; set; } = new List<CircuitPort>();
+	//public static List<CircuitLine> AllLines { get; set; } = new List<CircuitLine>();
+	public static LinkedList<CircuitLine> AllLines { get; set; } = new LinkedList<CircuitLine>();
+	public static LinkedList<CircuitLine> RedundantLines { get; set; } = new LinkedList<CircuitLine>();
 	private void Awake()
 	{
 		// 寻找场景中的初始元件，加入到allEntity中去
-		EntityBase[] allEntityArray = FindObjectsOfType<EntityBase>();
-		for (int i = 0; i < allEntityArray.Length; i++)
+		EntityBase[] EntityArray = FindObjectsOfType<EntityBase>();
+		CircuitPort[] PortArray = FindObjectsOfType<CircuitPort>();
+		for (int i = 0; i < EntityArray.Length; i++)
 		{
-			AllEntities.Add(allEntityArray[i]);
+			AllEntities.Add(EntityArray[i]);
+		}
+		for (int i = 0; i < PortArray.Length; i++)
+		{
+			AllPorts.Add(PortArray[i]);
 		}
 	}
 
@@ -50,6 +59,8 @@ public class CircuitCalculator : MonoBehaviour
 		DisabledLines.Clear();
 		Sources.Clear();
 		Ammeters.Clear();
+		UF.Clear(10000);
+		LineUF.Clear(10000);
 	}
 
 	/// <summary>
@@ -59,36 +70,61 @@ public class CircuitCalculator : MonoBehaviour
 	{
 		ClearAll();
 
+		// 在并查集中连接导线
+		// 首先需要清空所有端口的连接状态
+		foreach(CircuitPort port in AllPorts)
+		{
+			port.Connected = 0;
+		}
+
+		// 通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
+		foreach (CircuitLine line in AllLines)
+		{
+			if (LineUF.Connected(line.StartID_Global, line.EndID_Global))
+			{
+				Debug.Log("导线被第一种问题禁用");
+				line.IsActived = false;
+				DisabledLines.Add(line);
+			}
+			else
+			{
+				LineUF.Union(line.StartID_Global, line.EndID_Global);
+				UF.Union(line.StartID_Global, line.EndID_Global);
+				line.StartPort.Connected = 1;
+				line.EndPort.Connected = 1;
+			}
+		}
+
 		// 在并查集中加载有连接元件的内部连接
 		LoadElement();
 
-		// 在并查集中连接导线
-		for (var i = 0; i < AllLines.Count; i++)
-		{
-			UF.Union(AllLines[i].StartID_Global, AllLines[i].EndID_Global);
-		}
-
 		// 对电源实行接地检测
-		foreach (ISource i in Sources)
+		foreach (ISource source in Sources)
 		{
-			i.GroundCheck();
+			source.GroundCheck();
 		}
 
 		ConnectGND();
 
-		//检查对地连通性，区分出问题导线，并分别处理
-		for (var i = 0; i < AllLines.Count; i++)
+		//检查对地连通性，对于正确连通的导线则连接，对于不通的导线需要禁用
+		int i = 0;
+		foreach (CircuitLine line in AllLines)
 		{
-			if (UF.Connected(AllLines[i].StartID_Global, 0))
+			if (line.IsActived)
 			{
-				EnabledLines.Add(AllLines[i]);
-				SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), AllLines[i].StartID_Global.ToString(), AllLines[i].EndID_Global.ToString(), 0));
-				EntityNum++;
-			}
-			else
-			{
-				AllLines[i].DisableLine();
-				DisabledLines.Add(AllLines[i]);
+				if (UF.Connected(line.StartID_Global, 0))
+				{
+					EnabledLines.Add(line);
+					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID_Global.ToString(), line.EndID_Global.ToString(), 0));
+					EntityNum++;
+				}
+				else
+				{
+					Debug.Log("导线被第二种问题禁用");
+					line.IsActived = false;
+					DisabledLines.Add(line);
+				}
+				i++;
 			}
 		}
 
@@ -96,10 +132,10 @@ public class CircuitCalculator : MonoBehaviour
 		SetElement();
 		SpiceSharpCalculate();
 
-		// 仿真通过后恢复通过并查集删除的导线
+		// 仿真通过后恢复通过并查集禁用的导线
 		foreach (CircuitLine disabledLine in DisabledLines)
 		{
-			disabledLine.ReenableLine();
+			disabledLine.IsActived = true;
 		}
 	} // public static void CalculateAll()
 
@@ -129,7 +165,6 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	private static void LoadElement()
 	{
-		UF.Clear(10000);
 		for (var i = 0; i < AllEntities.Count; i++)
 		{
 			if (AllEntities[i].IsConnected())
@@ -174,7 +209,7 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
-	
+
 	/// <summary>
 	/// 调用SpiceSharp进行计算
 	/// </summary>
@@ -197,11 +232,12 @@ public class CircuitCalculator : MonoBehaviour
 		try
 		{
 			op.Run(ckt);
+			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			Debug.Log("仿真成功");
 		}
 		catch
 		{
-			Debug.Log("悬空导线的数目为：" + DisabledLines.Count);
+			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			Debug.LogWarning("仿真失败，电路无通路");
 		}
 

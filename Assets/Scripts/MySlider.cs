@@ -26,7 +26,7 @@ public class MySlider : MonoBehaviour
 		if (!MoveController.CanMove) return;
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			CircuitCalculator.CalculateByConnection();
+			CircuitCalculator.CalculateAll();
 			Vector3 localPos = transform.parent.InverseTransformPoint(hitPos);//转换成本地坐标
 			localPos.x = 0;
 			localPos.y = 0;

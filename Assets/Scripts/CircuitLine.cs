@@ -8,6 +8,7 @@ public class CircuitLine : MonoBehaviour
 {
 	public int StartID_Global { get; set; }    // 端口的全局ID
 	public int EndID_Global { get; set; }
+	public bool IsActived { get; set; }
 
 	// 对外暴露端口以注入电压
 	public CircuitPort StartPort { get; set; }
@@ -18,30 +19,17 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort = Ini.GetComponent<CircuitPort>();
 		EndPort = Lst.GetComponent<CircuitPort>();
-		StartPort.Connected = 1;
-		EndPort.Connected = 1;
+		//StartPort.Connected = 1;
+		//EndPort.Connected = 1;
 		StartID_Global = Ini.GetComponent<CircuitPort>().PortID_Global;
 		EndID_Global = Lst.GetComponent<CircuitPort>().PortID_Global;
-		CircuitCalculator.AllLines.Add(this);
+		IsActived = true;
+		CircuitCalculator.AllLines.AddLast(this);
 	}
 
 	public void DestroyLine()
 	{
-		StartPort.Connected = 0;
-		EndPort.Connected = 0;
 		CircuitCalculator.AllLines.Remove(this);
-	}
-
-	public void DisableLine()
-	{
-		StartPort.Connected = 0;
-		EndPort.Connected = 0;
-	}
-
-	public void ReenableLine()
-	{
-		StartPort.Connected = 1;
-		EndPort.Connected = 1;
 	}
 
 	public void DestroyRope()
