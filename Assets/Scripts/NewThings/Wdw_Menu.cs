@@ -8,26 +8,23 @@ public class Wdw_Menu : MonoBehaviour
 	public GameObject mainThings;
 	public Button exitGame;
 	public Button continueGame;
-	public Button copy_0;
-	public GameObject beCopied_0;
-	public Button copy_1;
-	public GameObject beCopied_1;
-	public Button copy_2;
-	public GameObject beCopied_2;
+	public Button btnCopies_0;
+	public Button btnCopies_1;
+	public Button btnCopies_2;
+	public GameObject gmObjSources_0;
+	public GameObject gmObjSources_1;
+	public GameObject gmObjSources_2;
 	void Start()
 	{
 		if (mainThings == null) Debug.LogError("这里没挂");
 		if (exitGame == null) Debug.LogError("这里没挂");
 		if (continueGame == null) Debug.LogError("这里没挂");
-		if (copy_0 == null) Debug.LogError("这里没挂");
-		if (copy_1 == null) Debug.LogError("这里没挂");
-		if (copy_2 == null) Debug.LogError("这里没挂");
 		CloseMenu();
 		exitGame.onClick.AddListener(OnYesButton);
 		continueGame.onClick.AddListener(OnNoButton);
-		copy_0.onClick.AddListener(OnButton_0);
-		copy_1.onClick.AddListener(OnButton_1);
-		copy_2.onClick.AddListener(OnButton_2);
+		btnCopies_0.onClick.AddListener(OnButtonCopy_0);
+		btnCopies_1.onClick.AddListener(OnButtonCopy_1);
+		btnCopies_2.onClick.AddListener(OnButtonCopy_2);
 	}
 
 	// Update is called once per frame
@@ -75,16 +72,16 @@ public class Wdw_Menu : MonoBehaviour
 		CloseMenu();
 	}
 
-	void OnButton_0()
+	void OnButtonCopy_0()
 	{
-		if (beCopied_0 == null) Debug.LogError("这里没挂");
+
 	}
-	void OnButton_1()
+	void OnButtonCopy_1()
 	{
-		if (beCopied_1 == null) Debug.LogError("这里没挂");
+
 	}
-	void OnButton_2()
+	void OnButtonCopy_2()
 	{
-		if (beCopied_2 == null) Debug.LogError("这里没挂");
+
 	}
 }

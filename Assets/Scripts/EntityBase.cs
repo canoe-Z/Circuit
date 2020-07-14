@@ -82,15 +82,7 @@ abstract public class EntityBase : MonoBehaviour
 	//
 
 	Rigidbody rigidBody;
-	float speedLimit = 0.5f;
-	private void Start()
-	{
-		rigidBody = GetComponent<Rigidbody>();
-		if (rigidBody == null)
-		{
-			Debug.LogError("没找到刚体");
-		}
-	}
+	float speedLimit = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
 	{
 		if (rigidBody)
@@ -98,6 +90,15 @@ abstract public class EntityBase : MonoBehaviour
 			if (rigidBody.velocity.magnitude > speedLimit)
 			{
 				rigidBody.velocity = rigidBody.velocity.normalized * speedLimit;
+				
+			}
+		}
+		else
+		{
+			rigidBody = GetComponent<Rigidbody>();
+			if (rigidBody == null)
+			{
+				Debug.LogError("没找到刚体");
 			}
 		}
 	}
