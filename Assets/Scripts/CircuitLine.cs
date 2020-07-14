@@ -19,8 +19,6 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort = Ini.GetComponent<CircuitPort>();
 		EndPort = Lst.GetComponent<CircuitPort>();
-		//StartPort.Connected = 1;
-		//EndPort.Connected = 1;
 		StartID_Global = Ini.GetComponent<CircuitPort>().PortID_Global;
 		EndID_Global = Lst.GetComponent<CircuitPort>().PortID_Global;
 		IsActived = true;

@@ -4,7 +4,6 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
-using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// 电路计算
@@ -16,7 +15,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                //SpiceSharp计算的元件
 	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         //SpiceSharp计算的端口
 	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      //并查集，用于接地判断
-	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);      //并查集，用于接地判断
+	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);	//并查集，用于接地判断
 
 	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();      //问题导线
 	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       //正常导线
@@ -27,7 +26,6 @@ public class CircuitCalculator : MonoBehaviour
 
 	public static List<EntityBase> AllEntities { get; set; } = new List<EntityBase>();
 	public static List<CircuitPort> AllPorts { get; set; } = new List<CircuitPort>();
-	//public static List<CircuitLine> AllLines { get; set; } = new List<CircuitLine>();
 	public static LinkedList<CircuitLine> AllLines { get; set; } = new LinkedList<CircuitLine>();
 	public static LinkedList<CircuitLine> RedundantLines { get; set; } = new LinkedList<CircuitLine>();
 	private void Awake()
