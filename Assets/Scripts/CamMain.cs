@@ -22,101 +22,15 @@ public class CamMain : MonoBehaviour
 	}
 	private void Start()
 	{
-		Cursor.lockState = CursorLockMode.Locked;//锁定中央
-		Cursor.visible = false;
-		CAMERA.Start();
-		//MoveController.Start();//移动的初始化
 		MyUI.Start();
 	}
 	private void Update()
 	{
-		//if(MoveController.boolMove) MoveController.Update();//移动
-		CAMERA.Update();//更新摄像机
 	}
 	private void OnGUI()
 	{
 		GUI.skin.label.normal.textColor = Color.black;//字体颜色为黑色
-		//FPS.OnGUI();//显示FPS
 		MyUI.OnGUI();
-	}
-
-	public static class CAMERA
-	{
-		public static Camera mainCam = null;
-		static Camera[] smallCam = new Camera[4];
-		static void SetAs(Camera which, Camera source)
-		{
-			Quaternion rot = source.transform.rotation;
-			Vector3 pos = source.transform.position;
-			which.transform.SetPositionAndRotation(pos, rot);
-		}
-		static void Exchange(Camera one, Camera two)
-		{
-			Quaternion rot1 = one.transform.rotation;
-			Vector3 pos1 = one.transform.position;
-			Quaternion rot2 = two.transform.rotation;
-			Vector3 pos2 = two.transform.position;
-			one.transform.SetPositionAndRotation(pos2, rot2);
-			two.transform.SetPositionAndRotation(pos1, rot1);
-		}
-		public static void Start()
-		{
-			mainCam = Camera.main;
-			for (int i = 0; i < 4; i++)
-			{
-				smallCam[i] = GameObject.Instantiate(Camera.main);
-				smallCam[i].name = "smallCam" + i;
-				smallCam[i].depth = 1;
-				smallCam[i].enabled = false;//关闭次要摄像机
-				Destroy(smallCam[i].gameObject.GetComponent<CharacterController>());
-			}
-			smallCam[0].rect = new Rect(0, 0.6f, 0.4f, 0.4f);
-			smallCam[1].rect = new Rect(0.6f, 0.6f, 0.4f, 0.4f);
-			smallCam[2].rect = new Rect(0f, 0, 0.4f, 0.4f);
-			smallCam[3].rect = new Rect(0.6f, 0, 0.4f, 0.4f);
-			mainCam.rect = new Rect(0, 0, 1, 1);//全屏
-												
-			//Tips，7摄像机相关提示符
-			ShowTips("Shift + 数字键1234 打开/关闭1234号小摄像机，并将其视角设置为当前视角。\n数字键1234 和1234号小摄像机调换位置。\n", 7);
-		}
-		public static void Update()
-		{
-			bool SHIFT = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-			if (Input.GetKeyDown(KeyCode.X))
-			{
-				Camera.main.tag = "Untagged";
-				smallCam[3].tag = "MainCamera";
-			}
-
-			for(int i = 0; i < 4; i++)
-			{
-				if (smallCam[i].enabled)
-				{
-					if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-					{
-						if (SHIFT)
-						{
-							smallCam[i].enabled = false;
-						}
-						else
-						{
-							Exchange(smallCam[i], mainCam);
-						}
-					}
-				}
-				else
-				{
-					if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-					{
-						if (SHIFT)
-						{
-							smallCam[i].enabled = true;
-							SetAs(smallCam[i], mainCam);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	private static class MyUI

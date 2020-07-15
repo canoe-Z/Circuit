@@ -14,6 +14,8 @@ public class MoveController : MonoBehaviour
 
 	void Start()
 	{
+		Cursor.lockState = CursorLockMode.Locked;//锁定中央
+		Cursor.visible = false;
 		characterController = Camera.main.GetComponent<CharacterController>();
 	}
 
