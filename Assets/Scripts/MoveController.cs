@@ -4,6 +4,7 @@ using UnityEngine;
 public class MoveController : MonoBehaviour
 {
 	public static bool CanMove { get; set; } = true;
+	// 用于获取CapsLock的状态
 	[DllImport("user32.dll")]
 	private static extern short GetKeyState(int keyCode);
 	private CharacterController characterController;

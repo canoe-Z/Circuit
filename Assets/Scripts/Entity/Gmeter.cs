@@ -13,7 +13,6 @@ public class Gmeter : EntityBase, IAmmeter
 		FindPin();
 		//滑块
 		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
-		//if (mySlider == null) Debug.Log("Oh");
 		mySlider.Devide = 5;
 	}
 

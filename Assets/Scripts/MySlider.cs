@@ -6,6 +6,8 @@ public class MySlider : MonoBehaviour
 	public int SliderID { get; set; }
 	public float SliderPos { get; set; } = 0;
 	public int SliderPos_int { get; set; } = 0;
+	public static event EnterEventHandler MouseEnter;
+	public static event ExitEventHandler MouseExit;
 	// Start is called before the first frame update
 	void Awake()//防止爹比儿子先出来
 	{
@@ -15,13 +17,25 @@ public class MySlider : MonoBehaviour
 			Debug.LogError("ErrorSliderID");
 	}
 
-	private void OnMouseOver()
+	void OnMouseEnter()
 	{
 		if (!MoveController.CanMove) return;
-		ShowTip.OverSlider();
-		ShowTip.IsTipShowed = false;
+		MouseEnter?.Invoke(this);
 	}
-	private void OnMouseDrag()
+
+	void OnMouseOver()
+	{
+		if (!MoveController.CanMove) return;
+		MouseEnter?.Invoke(this);
+	}
+
+	void OnMouseExit()
+	{
+		if (!MoveController.CanMove) return;
+		MouseExit?.Invoke(this);
+	}
+
+	void OnMouseDrag()
 	{
 		if (!MoveController.CanMove) return;
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算

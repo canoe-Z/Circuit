@@ -3,34 +3,48 @@ using Obi;
 public class ConnectionManager : MonoBehaviour
 {
 	public static CircuitPort clickedPort = null;
-	public static Color[] colors = new Color[5]; //导线颜色配置
-	static int colorID = 0;
-	static readonly int colorMax = 5;
+
+	// 导线颜色配置
+	public static Color[] colors = new Color[5]; 
+	
+	// Obi
 	private static ObiRopeBlueprint blueprint;
 	private static ObiSolver solver = null;
-	private static readonly object padlock = new object();//用于确保线程安全
-	void Start()
+
+	// 用于确保线程安全
+	private static readonly object padlock = new object();
+
+	void Awake()
 	{
 		Physics.IgnoreLayerCollision(0, 8);
+
+		// 加载导线颜色
+		colors[0] = Color.black;
+		colors[1] = Color.white;
+		colors[2] = Color.red;
+		colors[3] = Color.yellow;
+		colors[4] = Color.green;
 	}
+
+	// Update is called once per frame
 	void Update()
 	{
-		//单击端口以连接导线
-		//Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
-		if (Input.GetMouseButtonDown(1))//右键清除连接状态
+		// 单击端口以连接导线
+		// Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
+
+		// 右键清除连接状态
+		if (Input.GetMouseButtonDown(1))
 		{
 			clickedPort = null;
 		}
-		if (Input.GetMouseButtonUp(1))//右键抬起时，删除完毕导线，开始计算
+
+		// 右键抬起时，删除完毕导线，开始计算
+		if (Input.GetMouseButtonUp(1))
 		{
-			CircuitCalculator.CalculateAll();//删除导线，计算
+			CircuitCalculator.CalculateAll();
 		}
-		if (Input.GetKeyDown(KeyCode.Q)) colorID--; //颜色控制
-		if (Input.GetKeyDown(KeyCode.E)) colorID++;
-		if (colorID < 0) colorID += colorMax;
-		if (colorID >= colorMax) colorID -= colorMax;
-		CamMain.ChangeColor(colorID);
 	}
+
 	/// <summary>
 	/// solver采用单例模式
 	/// </summary>
@@ -64,21 +78,28 @@ public class ConnectionManager : MonoBehaviour
 			//端口不能和自身连接
 		}
 	}
+
+	/// <summary>
+	/// 连接导线
+	/// </summary>
+	/// <param name="port1">接线柱1</param>
+	/// <param name="port2">接线柱2</param>
 	public static void ConnectRope(CircuitPort port1, CircuitPort port2)
 	{
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
 		rope.layer = 8; //关闭碰撞检测
 		rope.AddComponent<MeshCollider>();
-		if(rope.GetComponent<MeshCollider>().sharedMesh != rope.GetComponent<MeshFilter>().sharedMesh)
-		{
-			Debug.LogError("绳子碰撞体连接时有问题");
-		}
 		var RopeMat = Resources.Load<Material>("Button");
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
-		rope.GetComponent<MeshRenderer>().material.color = colors[colorID];
+		rope.GetComponent<MeshRenderer>().material.color = colors[DisplayController.ColorID];
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
 		clickedPort = null;
 	}
+
+	/// <summary>
+	/// 创建Obi解析器
+	/// </summary>
+	/// <returns>解析器</returns>
 	public static ObiSolver CreateSolver()
 	{
 		GameObject solverObject = new GameObject("RopeSolver", typeof(ObiSolver), typeof(ObiFixedUpdater));
@@ -87,6 +108,14 @@ public class ConnectionManager : MonoBehaviour
 		updater.solvers.Add(solver);
 		return solver;
 	}
+
+	/// <summary>
+	/// 创建绳子
+	/// </summary>
+	/// <param name="obj1">需要连接的物体1</param>
+	/// <param name="obj2">需要连接的物体2</param>
+	/// <param name="solver">使用的解析器</param>
+	/// <returns></returns>
 	public static GameObject CreateRope(GameObject obj1, GameObject obj2, ObiSolver solver)
 	{
 		GameObject ropeObject = new GameObject("Rope", typeof(ObiRope), typeof(ObiRopeExtrudedRenderer));
@@ -98,7 +127,7 @@ public class ConnectionManager : MonoBehaviour
 		blueprint.thickness = 0.025f;
 		blueprint.resolution = 0.2f;
 
-		//实现导线高出接线柱一段距离
+		// 实现导线高出接线柱一段距离
 		var pos1 = obj1.transform.TransformPoint(new Vector3(0, 0.1f, 0));
 		var pos2 = obj2.transform.TransformPoint(new Vector3(0, 0.1f, 0));
 

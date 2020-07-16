@@ -11,6 +11,8 @@ public class CircuitPort : MonoBehaviour
 	public int PortID;					//本接线柱ID
 	public int PortID_Global;			//本接线柱ID_全局
 	public EntityBase father;
+	public static event EnterEventHandler MouseEnter;
+	public static event ExitEventHandler MouseExit;
 	private void OnMouseDown()
 	{
 		if (!MoveController.CanMove) return;
@@ -19,16 +21,13 @@ public class CircuitPort : MonoBehaviour
 	private void OnMouseEnter()
 	{
 		if (!MoveController.CanMove) return;
-		this.gameObject.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-	}
-	private void OnMouseOver()//持续期间
-	{
-		if (!MoveController.CanMove) return;
-		ShowTip.OverPort(this);
+		MouseEnter?.Invoke(this);
+		gameObject.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 	private void OnMouseExit()
 	{
 		if (!MoveController.CanMove) return;
-		this.gameObject.transform.localScale = new Vector3(1, 1, 1);
+		MouseExit?.Invoke(this);
+		gameObject.transform.localScale = new Vector3(1, 1, 1);
 	}
 }

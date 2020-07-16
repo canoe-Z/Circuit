@@ -23,9 +23,6 @@ public class SmallCamManager : MonoBehaviour
 		smallCam[3].rect = new Rect(0.6f, 0, 0.4f, 0.4f);
 		// 全屏显示
 		MainCam.rect = new Rect(0, 0, 1, 1);
-
-		// Tips，7摄像机相关提示符
-		CamMain.ShowTips("Shift + 数字键1234 打开/关闭1234号小摄像机，并将其视角设置为当前视角。\n数字键1234 和1234号小摄像机调换位置。\n", 7);
 	}
 
     // Update is called once per frame

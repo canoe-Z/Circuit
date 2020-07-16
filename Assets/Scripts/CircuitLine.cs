@@ -14,6 +14,9 @@ public class CircuitLine : MonoBehaviour
 	public CircuitPort StartPort { get; set; }
 	public CircuitPort EndPort { get; set; }
 
+	public static event EnterEventHandler MouseEnter;
+	public static event ExitEventHandler MouseExit;
+
 	// 这函数只需要调用1次
 	public void CreateLine(GameObject Ini, GameObject Lst)
 	{
@@ -36,14 +39,24 @@ public class CircuitLine : MonoBehaviour
 		Destroy(gameObject);
 	}
 
+	void OnMouseEnter()
+	{
+		if (!MoveController.CanMove) return;
+		MouseEnter?.Invoke(this);
+	}
+
 	private void OnMouseOver()
 	{
-		ShowTip.OverChain();
-		ShowTip.IsTipShowed = false;
+		if (!MoveController.CanMove) return;
 		if (Input.GetMouseButtonDown(1))
 		{
 			DestroyRope();
 		}
+	}
+	private void OnMouseExit()
+	{
+		if (!MoveController.CanMove) return;
+		MouseExit?.Invoke(this);
 	}
 
 	// Update is called once per frame

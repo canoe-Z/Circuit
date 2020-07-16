@@ -4,6 +4,8 @@ abstract public class EntityBase : MonoBehaviour
 {
 	private int portNum;//本元件的端口数量
 	public CircuitPort[] ChildPorts { get; set; } = null;//端口们的引用
+	public static event EnterEventHandler MouseEnter;
+	public static event ExitEventHandler MouseExit;
 	public void FindCircuitPort()
 	{
 		CircuitPort[] disorderPorts = this.gameObject.GetComponentsInChildren<CircuitPort>();
@@ -29,7 +31,7 @@ abstract public class EntityBase : MonoBehaviour
 		if (!MoveController.CanMove) return;
 		if (HitCheck("Table", out Vector3 hitPos))
 		{
-			this.transform.position = hitPos;
+			transform.position = hitPos;
 		}
 		else
 		{
@@ -44,16 +46,27 @@ abstract public class EntityBase : MonoBehaviour
 			this.gameObject.transform.position = thispos;
 		}
 	}
-	public void OnMouseOver()//持续期间
+	void OnMouseEnter()
 	{
 		if (!MoveController.CanMove) return;
-		ShowTip.OverItem(this);
-		ShowTip.IsTipShowed = false;
+		MouseEnter?.Invoke(this);
 	}
-	public void Straighten()//摆正元件
+	void OnMouseOver()
 	{
-		this.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+		if (!MoveController.CanMove) return;
+
+		// 按鼠标中键摆正元件
+		if (Input.GetMouseButtonDown(2))
+		{
+			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+		}
 	}
+
+	void OnMouseExit()
+	{
+		MouseExit?.Invoke(this);
+	}
+
 	public static bool HitCheck(string tag, out Vector3 hitPos)
 	{
 		hitPos = new Vector3(0, 0, 0);

@@ -13,5 +13,4 @@ public class StartScript : MonoBehaviour
 	{
 		Application.Quit();
 	}
-
 }
