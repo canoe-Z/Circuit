@@ -99,9 +99,26 @@ public class Wdw_Menu : MonoBehaviour
 	void CloseColl(GameObject operate)//关闭上面那东西的碰撞体
 	{
 		Collider[] colliders = operate.GetComponentsInChildren<Collider>();
-		foreach(var coll in colliders)
+		foreach (var coll in colliders)
 		{
 			coll.enabled = false;
+		}
+		Renderer[] renderers = operate.GetComponentsInChildren<Renderer>();
+		foreach (var rend in renderers)
+		{
+			foreach (var mat in rend.materials)
+			{
+				{//变为Fade
+					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+					mat.SetInt("_ZWrite", 0);
+					mat.EnableKeyword("_ALPHABLEND_ON");
+					mat.renderQueue = 3000;
+				}
+				Color color = mat.color;
+				color.a = 0.5f;
+				mat.color = color;
+			}
 		}
 	}
 	void OpenColl(GameObject operate)//打开上面那东西的碰撞体
@@ -110,6 +127,23 @@ public class Wdw_Menu : MonoBehaviour
 		foreach (var coll in colliders)
 		{
 			coll.enabled = true;
+		}
+		Renderer[] renderers = operate.GetComponentsInChildren<Renderer>();
+		foreach (var rend in renderers)
+		{
+			foreach (var mat in rend.materials)
+			{
+				{//恢复Opaque
+					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+					mat.SetInt("_ZWrite", 1);
+					mat.DisableKeyword("_ALPHABLEND_ON");
+					mat.renderQueue = -1;
+				}
+				Color color = mat.color;
+				color.a = 1f;
+				mat.color = color;
+			}
 		}
 
 	}
