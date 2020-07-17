@@ -11,6 +11,7 @@ abstract public class EntityBase : MonoBehaviour
 	abstract public void EntityStart();
 	void Start()
 	{
+		CircuitCalculator.Entities.AddLast(this);
 		EntityStart();
 	}
 

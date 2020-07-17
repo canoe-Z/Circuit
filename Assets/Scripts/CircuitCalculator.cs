@@ -28,6 +28,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
 	public static LinkedList<CircuitLine> Lines { get; set; } = new LinkedList<CircuitLine>();
 
+	/*
 	private void Awake()
 	{
 		// 寻找场景中的初始元件，加入到Entity中去
@@ -46,6 +47,7 @@ public class CircuitCalculator : MonoBehaviour
 			Ports.AddLast(PortArray[i]);
 		}
 	}
+	*/
 
 	/// <summary>
 	/// 清除所有计算记录和连接关系
