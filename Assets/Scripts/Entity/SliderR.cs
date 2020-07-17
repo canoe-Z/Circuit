@@ -37,10 +37,10 @@ public class SliderR : EntityBase
 	{
 		// 获取端口ID并完成内部连接
 		int TL, TR, L, R;
-		TL = ChildPorts[0].PortID_Global;
-		TR = ChildPorts[1].PortID_Global;
-		L = ChildPorts[2].PortID_Global;
-		R = ChildPorts[3].PortID_Global;
+		TL = ChildPorts[0].PortID;
+		TR = ChildPorts[1].PortID;
+		L = ChildPorts[2].PortID;
+		R = ChildPorts[3].PortID;
 		CircuitCalculator.UF.Union(TL, L);
 		CircuitCalculator.UF.Union(TL, R);
 		CircuitCalculator.UF.Union(TL, TR);
@@ -52,10 +52,10 @@ public class SliderR : EntityBase
 		int EntityID = CircuitCalculator.EntityNum;
 		// 获取端口ID并完成内部连接
 		int TL, TR, L, R;
-		TL = ChildPorts[0].PortID_Global;
-		TR = ChildPorts[1].PortID_Global;
-		L = ChildPorts[2].PortID_Global;
-		R = ChildPorts[3].PortID_Global;
+		TL = ChildPorts[0].PortID;
+		TR = ChildPorts[1].PortID;
+		L = ChildPorts[2].PortID;
+		R = ChildPorts[3].PortID;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RL));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RR));
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));

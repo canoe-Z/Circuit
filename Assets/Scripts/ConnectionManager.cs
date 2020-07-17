@@ -29,9 +29,6 @@ public class ConnectionManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		// 单击端口以连接导线
-		// Tips，0Port连接，1物体拖动，2链子，3滑块，456保留
-
 		// 右键清除连接状态
 		if (Input.GetMouseButtonDown(1))
 		{
@@ -61,6 +58,10 @@ public class ConnectionManager : MonoBehaviour
 		return solver;
 	}
 
+	/// <summary>
+	/// 鼠标点击端口
+	/// </summary>
+	/// <param name="port">被点击的端口</param>
 	public static void ClickPort(CircuitPort port)
 	{
 		if (clickedPort == null)
@@ -69,13 +70,12 @@ public class ConnectionManager : MonoBehaviour
 		}
 		else
 		{
-			//连接绳子
 			if (clickedPort != port)
 			{
-				ConnectRope(clickedPort,port);
-				CircuitCalculator.CalculateAll();//连接完导线，计算
+				ConnectRope(clickedPort, port);
+				clickedPort = null;
+				CircuitCalculator.CalculateAll();
 			}
-			//端口不能和自身连接
 		}
 	}
 
@@ -87,13 +87,13 @@ public class ConnectionManager : MonoBehaviour
 	public static void ConnectRope(CircuitPort port1, CircuitPort port2)
 	{
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
-		rope.layer = 8; //关闭碰撞检测
+		// 关闭碰撞检测
+		rope.layer = 8; 
 		rope.AddComponent<MeshCollider>();
-		var RopeMat = Resources.Load<Material>("Button");
+		Material RopeMat = Resources.Load<Material>("Button");
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
 		rope.GetComponent<MeshRenderer>().material.color = colors[DisplayController.ColorID];
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
-		clickedPort = null;
 	}
 
 	/// <summary>
@@ -115,7 +115,7 @@ public class ConnectionManager : MonoBehaviour
 	/// <param name="obj1">需要连接的物体1</param>
 	/// <param name="obj2">需要连接的物体2</param>
 	/// <param name="solver">使用的解析器</param>
-	/// <returns></returns>
+	/// <returns>返回绳子实体</returns>
 	public static GameObject CreateRope(GameObject obj1, GameObject obj2, ObiSolver solver)
 	{
 		GameObject ropeObject = new GameObject("Rope", typeof(ObiRope), typeof(ObiRopeExtrudedRenderer));
@@ -128,8 +128,8 @@ public class ConnectionManager : MonoBehaviour
 		blueprint.resolution = 0.2f;
 
 		// 实现导线高出接线柱一段距离
-		var pos1 = obj1.transform.TransformPoint(new Vector3(0, 0.1f, 0));
-		var pos2 = obj2.transform.TransformPoint(new Vector3(0, 0.1f, 0));
+		Vector3 pos1 = obj1.transform.TransformPoint(new Vector3(0, 0.1f, 0));
+		Vector3 pos2 = obj2.transform.TransformPoint(new Vector3(0, 0.1f, 0));
 
 		blueprint.path.Clear();
 		blueprint.path.AddControlPoint(pos1, -Vector3.right, Vector3.right, Vector3.up, 0.1f, 0.1f, 1, 1, Color.white, "start");

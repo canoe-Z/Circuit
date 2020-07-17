@@ -2,10 +2,12 @@
 
 abstract public class EntityBase : MonoBehaviour
 {
-	private int portNum;//本元件的端口数量
-	public CircuitPort[] ChildPorts { get; set; } = null;//端口们的引用
+	private int portNum;									//本元件的端口数量
+	public CircuitPort[] ChildPorts { get; set; } = null;	//端口们的引用
+
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
+
 	public void FindCircuitPort()
 	{
 		CircuitPort[] disorderPorts = this.gameObject.GetComponentsInChildren<CircuitPort>();
@@ -18,9 +20,9 @@ abstract public class EntityBase : MonoBehaviour
 			// 名字转换成ID
 			int.TryParse(disorderPorts[i].name, out int id);
 			ChildPorts[id] = disorderPorts[i];
-			ChildPorts[id].PortID = id;
-			ChildPorts[id].PortID_Global = id + CircuitCalculator.PortNum;
-			ChildPorts[id].father = this;
+			ChildPorts[id].LocalPortID = id;
+			ChildPorts[id].PortID = id + CircuitCalculator.PortNum;
+			ChildPorts[id].Father = this;
 		}
 		CircuitCalculator.PortNum += disorderPorts.Length;
 	}
@@ -46,11 +48,13 @@ abstract public class EntityBase : MonoBehaviour
 			this.gameObject.transform.position = thispos;
 		}
 	}
+
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanMove) return;
 		MouseEnter?.Invoke(this);
 	}
+
 	void OnMouseOver()
 	{
 		if (!MoveController.CanMove) return;
@@ -61,7 +65,6 @@ abstract public class EntityBase : MonoBehaviour
 			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
 		}
 	}
-
 	void OnMouseExit()
 	{
 		MouseExit?.Invoke(this);
@@ -86,14 +89,7 @@ abstract public class EntityBase : MonoBehaviour
 		return false;
 	}
 
-	abstract public bool IsConnected();
-	abstract public void LoadElement();
-	abstract public void SetElement();
-
-	//
 	//速度限制
-	//
-
 	Rigidbody rigidBody;
 	float speedLimit = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
@@ -115,6 +111,10 @@ abstract public class EntityBase : MonoBehaviour
 			}
 		}
 	}
+
+	abstract public bool IsConnected();
+	abstract public void LoadElement();
+	abstract public void SetElement();
 
 }
 

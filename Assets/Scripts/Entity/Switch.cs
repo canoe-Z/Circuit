@@ -50,9 +50,9 @@ public class Switch : EntityBase
 	{
 		//得到端口ID
 		int L, M, R;
-		L = ChildPorts[0].PortID_Global;
-		M = ChildPorts[1].PortID_Global;
-		R = ChildPorts[2].PortID_Global;
+		L = ChildPorts[0].PortID;
+		M = ChildPorts[1].PortID;
+		R = ChildPorts[2].PortID;
 		if (state == 2)
 		{
 			CircuitCalculator.UF.Union(R, M);
@@ -68,9 +68,9 @@ public class Switch : EntityBase
 		int EntityID = CircuitCalculator.EntityNum;
 		//得到端口ID
 		int L, M, R;
-		L = ChildPorts[0].PortID_Global;
-		M = ChildPorts[1].PortID_Global;
-		R = ChildPorts[2].PortID_Global;
+		L = ChildPorts[0].PortID;
+		M = ChildPorts[1].PortID;
+		R = ChildPorts[2].PortID;
 		if (state == 2)
 		{
 			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", R), R.ToString(), M.ToString(), 0));

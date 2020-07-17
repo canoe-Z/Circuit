@@ -18,7 +18,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);	//并查集，用于接地判断
 
 	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();      //问题导线
-	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       //正常导线
+	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       //被禁用的导线
 	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();                   //接地导线
 
 	public static List<ISource> Sources { get; set; } = new List<ISource>();                    //所有元件
@@ -27,16 +27,20 @@ public class CircuitCalculator : MonoBehaviour
 	public static List<EntityBase> AllEntities { get; set; } = new List<EntityBase>();
 	public static List<CircuitPort> AllPorts { get; set; } = new List<CircuitPort>();
 	public static LinkedList<CircuitLine> AllLines { get; set; } = new LinkedList<CircuitLine>();
-	public static LinkedList<CircuitLine> RedundantLines { get; set; } = new LinkedList<CircuitLine>();
+
 	private void Awake()
 	{
-		// 寻找场景中的初始元件，加入到allEntity中去
+		// 寻找场景中的初始元件，加入到AllEntity中去
+		// 后续增加元件时，也应将其加入进来统一管理
 		EntityBase[] EntityArray = FindObjectsOfType<EntityBase>();
-		CircuitPort[] PortArray = FindObjectsOfType<CircuitPort>();
 		for (int i = 0; i < EntityArray.Length; i++)
 		{
 			AllEntities.Add(EntityArray[i]);
 		}
+
+		// 寻找场景中的初始元件的端口，加入到AllPorts中去
+		// 后续增加元件时，也应将其端口加入进来统一管理
+		CircuitPort[] PortArray = FindObjectsOfType<CircuitPort>();
 		for (int i = 0; i < PortArray.Length; i++)
 		{
 			AllPorts.Add(PortArray[i]);
@@ -222,7 +226,7 @@ public class CircuitCalculator : MonoBehaviour
 		{
 			foreach (CircuitPort i in SpicePorts)
 			{
-				i.U = exportDataEventArgs.GetVoltage(i.PortID_Global.ToString());
+				i.U = exportDataEventArgs.GetVoltage(i.PortID.ToString());
 			}
 		};
 
@@ -248,7 +252,7 @@ public class CircuitCalculator : MonoBehaviour
 }
 
 /// <summary>
-/// 接地连接
+/// 接地导线类，作用是记录需要接地的端口ID
 /// </summary>
 public class GNDLine
 {

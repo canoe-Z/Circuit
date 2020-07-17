@@ -22,18 +22,18 @@ public class TVoltmeter : EntityBase
 	}
 	override public void LoadElement()//添加元件
 	{
-		int GND = ChildPorts[0].PortID_Global;
-		int mV = ChildPorts[1].PortID_Global;
-		int V = ChildPorts[2].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int mV = ChildPorts[1].PortID;
+		int V = ChildPorts[2].PortID;
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID_Global;
-		int mV = ChildPorts[1].PortID_Global;
-		int V = ChildPorts[2].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int mV = ChildPorts[1].PortID;
+		int V = ChildPorts[2].PortID;
 		//获取端口ID并完成内部连接
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));

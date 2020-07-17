@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 
-//
-// 3D界面连个导线：先创建空物体，然后挂这个脚本，最后调用连接函数就行了
-// 电路层面：只要读取两个ID就行了
-//
+/// <summary>
+/// 3D界面连个导线：先创建空物体，然后挂这个脚本，最后调用连接函数就行了，电路层面：读取两个ID
+/// </summary>
 public class CircuitLine : MonoBehaviour
 {
 	public int StartID_Global { get; set; }    // 端口的全局ID
@@ -17,35 +16,13 @@ public class CircuitLine : MonoBehaviour
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
 
-	// 这函数只需要调用1次
-	public void CreateLine(GameObject Ini, GameObject Lst)
-	{
-		StartPort = Ini.GetComponent<CircuitPort>();
-		EndPort = Lst.GetComponent<CircuitPort>();
-		StartID_Global = Ini.GetComponent<CircuitPort>().PortID_Global;
-		EndID_Global = Lst.GetComponent<CircuitPort>().PortID_Global;
-		IsActived = true;
-		CircuitCalculator.AllLines.AddLast(this);
-	}
-
-	public void DestroyLine()
-	{
-		CircuitCalculator.AllLines.Remove(this);
-	}
-
-	public void DestroyRope()
-	{
-		DestroyLine();
-		Destroy(gameObject);
-	}
-
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanMove) return;
 		MouseEnter?.Invoke(this);
 	}
 
-	private void OnMouseOver()
+	void OnMouseOver()
 	{
 		if (!MoveController.CanMove) return;
 		if (Input.GetMouseButtonDown(1))
@@ -53,15 +30,49 @@ public class CircuitLine : MonoBehaviour
 			DestroyRope();
 		}
 	}
-	private void OnMouseExit()
+	void OnMouseExit()
 	{
 		if (!MoveController.CanMove) return;
 		MouseExit?.Invoke(this);
 	}
 
-	// Update is called once per frame
 	void FixedUpdate()
 	{
 		gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
 	}
+
+	/// <summary>
+	/// 连接导线（记录ID）
+	/// </summary>
+	/// <param name="Ini">接线柱1</param>
+	/// <param name="Lst">接线柱2</param>
+	public void CreateLine(GameObject Ini, GameObject Lst)
+	{
+		StartPort = Ini.GetComponent<CircuitPort>();
+		EndPort = Lst.GetComponent<CircuitPort>();
+		StartID_Global = Ini.GetComponent<CircuitPort>().PortID;
+		EndID_Global = Lst.GetComponent<CircuitPort>().PortID;
+		IsActived = true;
+		CircuitCalculator.AllLines.AddLast(this);
+	}
+
+	/// <summary>
+	/// 删除连接关系
+	/// </summary>
+	public void DestroyLine()
+	{
+		// 从链表中移除
+		CircuitCalculator.AllLines.Remove(this);
+	}
+
+	/// <summary>
+	/// 删除导线，包括删除绳子和连接关系
+	/// </summary>
+	public void DestroyRope()
+	{
+		DestroyLine();
+		Destroy(gameObject);
+	}
+
+
 }

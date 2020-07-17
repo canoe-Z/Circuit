@@ -23,9 +23,9 @@ public class TAmmeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
-		int GND = ChildPorts[0].PortID_Global;
-		int mA = ChildPorts[1].PortID_Global;
-		int A = ChildPorts[2].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int mA = ChildPorts[1].PortID;
+		int A = ChildPorts[2].PortID;
 		CircuitCalculator.UF.Union(GND, mA);
 		CircuitCalculator.UF.Union(GND, A);
 	}
@@ -33,9 +33,9 @@ public class TAmmeter : EntityBase, IAmmeter
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID_Global;
-		int mA = ChildPorts[1].PortID_Global;
-		int A = ChildPorts[2].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int mA = ChildPorts[1].PortID;
+		int A = ChildPorts[2].PortID;
 		//获取端口ID并完成内部连接
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));

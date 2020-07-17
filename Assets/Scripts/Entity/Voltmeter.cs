@@ -61,10 +61,10 @@ public class Voltmeter : EntityBase
 	}
 	override public void LoadElement()//添加元件
 	{
-		int GND = ChildPorts[0].PortID_Global;
-		int V0 = ChildPorts[1].PortID_Global;
-		int V1 = ChildPorts[2].PortID_Global;
-		int V2 = ChildPorts[3].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int V0 = ChildPorts[1].PortID;
+		int V1 = ChildPorts[2].PortID;
+		int V2 = ChildPorts[3].PortID;
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
@@ -72,10 +72,10 @@ public class Voltmeter : EntityBase
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID_Global;
-		int V0 = ChildPorts[1].PortID_Global;
-		int V1 = ChildPorts[2].PortID_Global;
-		int V2 = ChildPorts[3].PortID_Global;
+		int GND = ChildPorts[0].PortID;
+		int V0 = ChildPorts[1].PortID;
+		int V1 = ChildPorts[2].PortID;
+		int V2 = ChildPorts[3].PortID;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
