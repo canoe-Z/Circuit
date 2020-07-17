@@ -35,7 +35,7 @@ public class Wdw_Menu : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Escape))//开启或者关闭菜单，取决于是否进行过无法移动锁定
 		{
-			if (MoveController.CanMove) OpenMenu();
+			if (MoveController.CanOperate) OpenMenu();
 			else CloseMenu();
 		}
 	}
@@ -45,7 +45,8 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
-		MoveController.CanMove = false;//不允许移动视角
+		MoveController.CanOperate = false;//不允许移动视角
+		MoveController.CanTurn = false;
 		mainThings.SetActive(true);
 	}
 	//关闭菜单
@@ -53,7 +54,8 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
-		MoveController.CanMove = true;//允许移动视角
+		MoveController.CanOperate = true;//允许移动视角
+		MoveController.CanTurn = true;
 		mainThings.SetActive(false);
 	}
 
@@ -92,6 +94,7 @@ public class Wdw_Menu : MonoBehaviour
 			{
 				OpenColl(willBeSet);//打开碰撞体
 				willBeSet = null;
+				MoveController.CanOperate = true;//可以操作物体了
 			}
 		}
 	}
@@ -150,20 +153,23 @@ public class Wdw_Menu : MonoBehaviour
 	//下面全都是按钮
 	void OnButtonCopy_0()
 	{
-		willBeSet = Instantiate(gmObjSources_0, new Vector3(0, 0, 0), Quaternion.identity);
+		willBeSet = Instantiate(gmObjSources_0, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
+		MoveController.CanOperate = false;//禁止操作物体
 	}
 	void OnButtonCopy_1()
 	{
-		willBeSet = Instantiate(gmObjSources_1, new Vector3(0, 0, 0), Quaternion.identity);
+		willBeSet = Instantiate(gmObjSources_1, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
+		MoveController.CanOperate = false;//禁止操作物体
 	}
 	void OnButtonCopy_2()
 	{
-		willBeSet = Instantiate(gmObjSources_2, new Vector3(0, 0, 0), Quaternion.identity);
+		willBeSet = Instantiate(gmObjSources_2, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
+		MoveController.CanOperate = false;//禁止操作物体
 	}
 }

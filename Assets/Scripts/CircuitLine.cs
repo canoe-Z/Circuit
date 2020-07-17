@@ -18,13 +18,13 @@ public class CircuitLine : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseEnter?.Invoke(this);
 	}
 
 	void OnMouseOver()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		if (Input.GetMouseButtonDown(1))
 		{
 			DestroyRope();
@@ -32,7 +32,7 @@ public class CircuitLine : MonoBehaviour
 	}
 	void OnMouseExit()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseExit?.Invoke(this);
 	}
 

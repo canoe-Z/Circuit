@@ -35,7 +35,7 @@ abstract public class EntityBase : MonoBehaviour
 	//物体控制
 	public void OnMouseDrag()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		if (HitCheck("Table", out Vector3 hitPos))
 		{
 			transform.position = hitPos;
@@ -56,13 +56,13 @@ abstract public class EntityBase : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseEnter?.Invoke(this);
 	}
 
 	void OnMouseOver()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 
 		// 按鼠标中键摆正元件
 		if (Input.GetMouseButtonDown(2))

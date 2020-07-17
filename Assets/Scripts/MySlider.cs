@@ -20,25 +20,25 @@ public class MySlider : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseEnter?.Invoke(this);
 	}
 
 	void OnMouseOver()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseEnter?.Invoke(this);
 	}
 
 	void OnMouseExit()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseExit?.Invoke(this);
 	}
 
 	void OnMouseDrag()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
 			CircuitCalculator.CalculateByConnection();

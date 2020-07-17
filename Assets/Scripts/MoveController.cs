@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class MoveController : MonoBehaviour
 {
-	public static bool CanMove { get; set; } = true;
+	public static bool CanOperate { get; set; } = true;
+	public static bool CanTurn { get; set; } = true;
 	// 用于获取CapsLock的状态
 	[DllImport("user32.dll")]
 	private static extern short GetKeyState(int keyCode);
@@ -33,7 +34,7 @@ public class MoveController : MonoBehaviour
 	/// </summary>
 	public void Rotate()
 	{
-		if (!MoveController.CanMove) return;//在菜单的时候禁止转头
+		if (!MoveController.CanTurn) return;//在菜单的时候禁止转头
 		Vector3 camRot = Camera.main.transform.eulerAngles;
 		//鼠标移动距离
 		float rh = Input.GetAxis("Mouse X");

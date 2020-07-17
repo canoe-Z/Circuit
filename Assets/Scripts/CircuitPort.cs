@@ -20,20 +20,20 @@ public class CircuitPort : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		ConnectionManager.ClickPort(this);
 	}
 
 	void OnMouseEnter()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseEnter?.Invoke(this);
 		gameObject.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 
 	void OnMouseExit()
 	{
-		if (!MoveController.CanMove) return;
+		if (!MoveController.CanOperate) return;
 		MouseExit?.Invoke(this);
 		gameObject.transform.localScale = new Vector3(1, 1, 1);
 	}
