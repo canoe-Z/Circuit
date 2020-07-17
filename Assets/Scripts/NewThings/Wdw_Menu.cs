@@ -8,12 +8,16 @@ public class Wdw_Menu : MonoBehaviour
 	public GameObject mainThings;
 	public Button exitGame;
 	public Button continueGame;
-	public Button btnCopies_0;
-	public Button btnCopies_1;
-	public Button btnCopies_2;
-	public GameObject gmObjSources_0;
-	public GameObject gmObjSources_1;
-	public GameObject gmObjSources_2;
+	public Button btnCopies_RBox;
+	public Button btnCopies_Switch;
+	public GameObject gmObjSrc_RBox;
+	public GameObject gmObjSrc_Switch;
+	public InputField iptNum_SliderR;
+	public InputField iptNum_R;
+	public Button btnCopiesSP_SliderR;
+	public Button btnCopiesSP_R;
+	public GameObject gmObjSrcSP_SliderR;
+	public GameObject gmObjSrcSP_R;
 	void Start()
 	{
 		if (mainThings == null) Debug.LogError("这里没挂");
@@ -22,9 +26,11 @@ public class Wdw_Menu : MonoBehaviour
 		CloseMenu();
 		exitGame.onClick.AddListener(OnYesButton);
 		continueGame.onClick.AddListener(OnNoButton);
-		btnCopies_0.onClick.AddListener(OnButtonCopy_0);
-		btnCopies_1.onClick.AddListener(OnButtonCopy_1);
-		btnCopies_2.onClick.AddListener(OnButtonCopy_2);
+
+		btnCopies_RBox.onClick.AddListener(OnButtonCopy_RBox);
+		btnCopies_Switch.onClick.AddListener(OnButtonCopy_Switch);
+		btnCopiesSP_SliderR.onClick.AddListener(OnButtonCopySP_SliderR);
+		btnCopiesSP_R.onClick.AddListener(OnButtonCopySP_R);
 	}
 
 
@@ -151,25 +157,57 @@ public class Wdw_Menu : MonoBehaviour
 
 	}
 	//下面全都是按钮
-	void OnButtonCopy_0()
+	void OnButtonCopy_RBox()
 	{
-		willBeSet = Instantiate(gmObjSources_0, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+		willBeSet = Instantiate(gmObjSrc_RBox, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
 	}
-	void OnButtonCopy_1()
+	void OnButtonCopy_Switch()
 	{
-		willBeSet = Instantiate(gmObjSources_1, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+		willBeSet = Instantiate(gmObjSrc_Switch, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
 	}
-	void OnButtonCopy_2()
+
+	void OnButtonCopySP_SliderR()
 	{
-		willBeSet = Instantiate(gmObjSources_2, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
-		CloseColl(willBeSet);//关闭碰撞体
-		CloseMenu();//关闭菜单
-		MoveController.CanOperate = false;//禁止操作物体
+		if (double.TryParse(iptNum_SliderR.text, out double num))
+		{
+			willBeSet = Instantiate(gmObjSrcSP_SliderR, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+			SliderR sliderR = willBeSet.GetComponent<SliderR>();
+			if (sliderR)
+			{
+				sliderR.Rmax = num;
+				CloseColl(willBeSet);//关闭碰撞体
+				CloseMenu();//关闭菜单
+				MoveController.CanOperate = false;//禁止操作物体
+			}
+			else
+			{
+				Debug.LogError("你家滑动变阻器没挂脚本");
+			}
+		}
+	}
+	void OnButtonCopySP_R()
+	{
+		if (double.TryParse(iptNum_R.text, out double num))
+		{
+			willBeSet = Instantiate(gmObjSrcSP_R, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+			Resistance r = willBeSet.GetComponent<Resistance>();
+			if (r)
+			{
+				r.Rnum = num;
+				CloseColl(willBeSet);//关闭碰撞体
+				CloseMenu();//关闭菜单
+				MoveController.CanOperate = false;//禁止操作物体
+			}
+			else
+			{
+				Debug.LogError("你家电阻没挂脚本");
+			}
+		}
 	}
 }

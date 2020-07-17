@@ -1,14 +1,21 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine.UI;
 
 public class Resistance : EntityBase
 {
 	public double Rnum = 120;
-	public int LeftPortID, RightPortID;
+	public Text num;
+	int LeftPortID, RightPortID;
 	override public void EntityStart()
 	{
 		FindCircuitPort();
 		LeftPortID = ChildPorts[0].PortID;
 		RightPortID = ChildPorts[1].PortID;
+	}
+
+	private void Update()
+	{
+		if (num) num.text = Rnum.ToString();
 	}
 
 	//电路相关

@@ -2,9 +2,12 @@
 
 public class SliderR : EntityBase
 {
+	/// <summary>
+	/// 可以被随意C的数据
+	/// </summary>
 	public double Rmax = 300;
-	public double RL = 300;
-	public double RR = 0;
+	double RL = 300;
+	double RR = 0;
 	MySlider myslider;
 	override public void EntityStart()
 	{
