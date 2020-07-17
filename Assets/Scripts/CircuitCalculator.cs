@@ -10,40 +10,40 @@ using SpiceSharp.Circuits;
 /// </summary>
 public class CircuitCalculator : MonoBehaviour
 {
-	public static int PortNum { get; set; } = 0;                                                //端口总数，创建端口时++
-	public static int EntityNum { get; set; } = 0;                                              //元件总数，创建元件时++
-	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                //SpiceSharp计算的元件
-	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         //SpiceSharp计算的端口
-	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      //并查集，用于接地判断
-	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);	//并查集，用于接地判断
+	public static int PortNum { get; set; } = 0;                                                // 端口总数，创建端口时++
+	public static int EntityNum { get; set; } = 0;                                              // 元件总数，创建元件时++
+	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                // SpiceSharp计算的元件
+	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         // SpiceSharp计算的端口
+	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      // 并查集，用于接地判断
+	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);  // 并查集，用于接地判断
 
-	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();      //问题导线
-	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       //被禁用的导线
-	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();                   //接地导线
+	public static List<CircuitLine> DisabledLines { get; set; } = new List<CircuitLine>();      // 问题导线
+	public static List<CircuitLine> EnabledLines { get; set; } = new List<CircuitLine>();       // 被禁用的导线
+	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();                   // 接地导线
 
-	public static List<ISource> Sources { get; set; } = new List<ISource>();                    //所有元件
-	public static List<IAmmeter> Ammeters { get; set; } = new List<IAmmeter>();                 //所有端口
+	public static List<ISource> Sources { get; set; } = new List<ISource>();                    // 所有元件
+	public static List<IAmmeter> Ammeters { get; set; } = new List<IAmmeter>();                 // 所有端口
 
-	public static List<EntityBase> AllEntities { get; set; } = new List<EntityBase>();
-	public static List<CircuitPort> AllPorts { get; set; } = new List<CircuitPort>();
-	public static LinkedList<CircuitLine> AllLines { get; set; } = new LinkedList<CircuitLine>();
+	public static LinkedList<EntityBase> Entities { get; set; } = new LinkedList<EntityBase>();
+	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
+	public static LinkedList<CircuitLine> Lines { get; set; } = new LinkedList<CircuitLine>();
 
 	private void Awake()
 	{
-		// 寻找场景中的初始元件，加入到AllEntity中去
+		// 寻找场景中的初始元件，加入到Entity中去
 		// 后续增加元件时，也应将其加入进来统一管理
 		EntityBase[] EntityArray = FindObjectsOfType<EntityBase>();
 		for (int i = 0; i < EntityArray.Length; i++)
 		{
-			AllEntities.Add(EntityArray[i]);
+			Entities.AddLast(EntityArray[i]);
 		}
 
-		// 寻找场景中的初始元件的端口，加入到AllPorts中去
+		// 寻找场景中的初始元件的端口，加入到Ports中去
 		// 后续增加元件时，也应将其端口加入进来统一管理
 		CircuitPort[] PortArray = FindObjectsOfType<CircuitPort>();
 		for (int i = 0; i < PortArray.Length; i++)
 		{
-			AllPorts.Add(PortArray[i]);
+			Ports.AddLast(PortArray[i]);
 		}
 	}
 
@@ -74,13 +74,13 @@ public class CircuitCalculator : MonoBehaviour
 
 		// 在并查集中连接导线
 		// 首先需要清空所有端口的连接状态
-		foreach(CircuitPort port in AllPorts)
+		foreach (CircuitPort port in Ports)
 		{
 			port.Connected = 0;
 		}
 
 		// 通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
-		foreach (CircuitLine line in AllLines)
+		foreach (CircuitLine line in Lines)
 		{
 			if (LineUF.Connected(line.StartID_Global, line.EndID_Global))
 			{
@@ -110,7 +110,7 @@ public class CircuitCalculator : MonoBehaviour
 
 		//检查对地连通性，对于正确连通的导线则连接，对于不通的导线需要禁用
 		int i = 0;
-		foreach (CircuitLine line in AllLines)
+		foreach (CircuitLine line in Lines)
 		{
 			if (line.IsActived)
 			{
@@ -153,7 +153,7 @@ public class CircuitCalculator : MonoBehaviour
 		ConnectGND();
 
 		// 直接连接正常导线
-		for (int i = 0; i < EnabledLines.Count; i++)
+		for (var i = 0; i < EnabledLines.Count; i++)
 		{
 			SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), EnabledLines[i].StartID_Global.ToString(), EnabledLines[i].EndID_Global.ToString(), 0));
 			EntityNum++;
@@ -167,19 +167,19 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	private static void LoadElement()
 	{
-		for (var i = 0; i < AllEntities.Count; i++)
+		foreach (EntityBase entity in Entities)
 		{
-			if (AllEntities[i].IsConnected())
+			if (entity.IsConnected())
 			{
-				AllEntities[i].LoadElement();
+				entity.LoadElement();
 			}
-			if (AllEntities[i] is ISource)
+			if (entity is ISource)
 			{
-				Sources.Add(AllEntities[i] as ISource);
+				Sources.Add(entity as ISource);
 			}
-			if (AllEntities[i] is IAmmeter)
+			if (entity is IAmmeter)
 			{
-				Ammeters.Add(AllEntities[i] as IAmmeter);
+				Ammeters.Add(entity as IAmmeter);
 			}
 		}
 	}
@@ -190,11 +190,11 @@ public class CircuitCalculator : MonoBehaviour
 	private static void SetElement()
 	{
 		EntityNum = 0;
-		for (int i = 0; i < AllEntities.Count; i++)
+		foreach (EntityBase entity in Entities)
 		{
-			if (AllEntities[i].IsConnected())
+			if (entity.IsConnected())
 			{
-				AllEntities[i].SetElement();
+				entity.SetElement();
 				EntityNum++;
 			}
 		}
@@ -248,7 +248,7 @@ public class CircuitCalculator : MonoBehaviour
 		{
 			i.CalculateCurrent();
 		}
-	} //private static void SpiceSharpCalculate()
+	} // private static void SpiceSharpCalculate()
 }
 
 /// <summary>
@@ -331,4 +331,4 @@ public class WeightedQuickUnionUF
 			sz[pRoot] = sz[qRoot];
 		}
 	}
-} //public class WeightedQuickUnionUF
+} // public class WeightedQuickUnionUF

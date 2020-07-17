@@ -53,7 +53,7 @@ public class CircuitLine : MonoBehaviour
 		StartID_Global = Ini.GetComponent<CircuitPort>().PortID;
 		EndID_Global = Lst.GetComponent<CircuitPort>().PortID;
 		IsActived = true;
-		CircuitCalculator.AllLines.AddLast(this);
+		CircuitCalculator.Lines.AddLast(this);
 	}
 
 	/// <summary>
@@ -62,7 +62,7 @@ public class CircuitLine : MonoBehaviour
 	public void DestroyLine()
 	{
 		// 从链表中移除
-		CircuitCalculator.AllLines.Remove(this);
+		CircuitCalculator.Lines.Remove(this);
 	}
 
 	/// <summary>
