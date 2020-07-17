@@ -28,27 +28,6 @@ public class CircuitCalculator : MonoBehaviour
 	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
 	public static LinkedList<CircuitLine> Lines { get; set; } = new LinkedList<CircuitLine>();
 
-	/*
-	private void Awake()
-	{
-		// 寻找场景中的初始元件，加入到Entity中去
-		// 后续增加元件时，也应将其加入进来统一管理
-		EntityBase[] EntityArray = FindObjectsOfType<EntityBase>();
-		for (int i = 0; i < EntityArray.Length; i++)
-		{
-			Entities.AddLast(EntityArray[i]);
-		}
-
-		// 寻找场景中的初始元件的端口，加入到Ports中去
-		// 后续增加元件时，也应将其端口加入进来统一管理
-		CircuitPort[] PortArray = FindObjectsOfType<CircuitPort>();
-		for (int i = 0; i < PortArray.Length; i++)
-		{
-			Ports.AddLast(PortArray[i]);
-		}
-	}
-	*/
-
 	/// <summary>
 	/// 清除所有计算记录和连接关系
 	/// </summary>
