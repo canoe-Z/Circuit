@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 
 public class Source : EntityBase, ISource
 {
@@ -18,8 +19,13 @@ public class Source : EntityBase, ISource
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		sliders[slidersDisorder[0].SliderID] = slidersDisorder[0];
-		sliders[slidersDisorder[1].SliderID] = slidersDisorder[1];
+		foreach (var sld in slidersDisorder)
+		{
+			if (int.TryParse(sld.gameObject.name, out int id))
+				sliders[id] = sld;
+			else
+				Debug.LogError("ErrorSliderID");
+		}
 	}
 
 	void Update()

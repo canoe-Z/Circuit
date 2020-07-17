@@ -9,14 +9,10 @@ public class QuickOperate : MonoBehaviour
 {
 	void Work()
 	{
-		CircuitPort[] circuitPorts = FindObjectsOfType<CircuitPort>();
-		foreach(var port in circuitPorts)
+		MySlider[] mySliders = FindObjectsOfType<MySlider>();
+		foreach(var sl in mySliders)
 		{
-			Transform[] transforms = port.gameObject.GetComponentsInChildren<Transform>();
-			foreach(var tr in transforms)
-			{
-				tr.gameObject.layer = 9;
-			}
+			Debug.Log(sl.transform.root.gameObject);
 		}
 	}
 

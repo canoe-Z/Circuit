@@ -15,7 +15,13 @@ public class Solar : EntityBase, ISource
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		sliders[slidersDisorder[0].SliderID] = slidersDisorder[0];
+		foreach(var sld in slidersDisorder)
+		{
+			if (int.TryParse(sld.gameObject.name, out int id))
+				sliders[id] = sld;
+			else
+				Debug.LogError("ErrorSliderID");
+		}
 	}
 
 	void Update()

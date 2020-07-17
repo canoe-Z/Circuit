@@ -11,6 +11,11 @@ abstract public class EntityBase : MonoBehaviour
 	abstract public void EntityStart();
 	void Start()
 	{
+		rigidBody = GetComponent<Rigidbody>();
+		if (rigidBody == null)
+		{
+			Debug.LogError("没找到刚体");
+		}
 		CircuitCalculator.Entities.AddLast(this);
 		EntityStart();
 	}
@@ -99,21 +104,10 @@ abstract public class EntityBase : MonoBehaviour
 	float speedLimit = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
 	{
-		if (rigidBody)
+		if (rigidBody.velocity.magnitude > speedLimit)
 		{
-			if (rigidBody.velocity.magnitude > speedLimit)
-			{
-				rigidBody.velocity = rigidBody.velocity.normalized * speedLimit;
-				
-			}
-		}
-		else
-		{
-			rigidBody = GetComponent<Rigidbody>();
-			if (rigidBody == null)
-			{
-				Debug.LogError("没找到刚体");
-			}
+			rigidBody.velocity = rigidBody.velocity.normalized * speedLimit;
+
 		}
 	}
 

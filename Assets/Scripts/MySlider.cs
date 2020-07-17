@@ -3,20 +3,12 @@
 public class MySlider : MonoBehaviour
 {
 	public int Devide { get; set; } = -1;
-	public int SliderID { get; set; }
 	public float SliderPos { get; set; } = 0;
 	public int SliderPos_int { get; set; } = 0;
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
-
-	void Awake()//防止爹比儿子先出来
-	{
-		if (int.TryParse(this.gameObject.name, out int id))
-			SliderID = id;
-		else
-			Debug.LogError("ErrorSliderID");
-	}
+	
 
 	void OnMouseEnter()
 	{

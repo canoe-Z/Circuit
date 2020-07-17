@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 
 public class RBox : EntityBase
 {
@@ -10,10 +11,12 @@ public class RBox : EntityBase
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		for (int i = 0; i < 6; i++)
+		foreach (var sld in slidersDisorder)
 		{
-			sliders[slidersDisorder[i].SliderID] = slidersDisorder[i];
-			sliders[i].Devide = 10;//分成10份
+			if (int.TryParse(sld.gameObject.name, out int id))
+				sliders[id] = sld;
+			else
+				Debug.LogError("ErrorSliderID");
 		}
 	}
 
