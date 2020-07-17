@@ -3,7 +3,7 @@
 public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 	}

@@ -6,8 +6,8 @@ public class SliderR : EntityBase
 	public double RL = 300;
 	public double RR = 0;
 	MySlider myslider;
-	void Start()
-    {
+	override public void EntityStart()
+	{
 		FindCircuitPort();
 		myslider = gameObject.GetComponentInChildren<MySlider>();
 		myslider.SliderPos = 1;

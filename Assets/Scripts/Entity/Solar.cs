@@ -11,7 +11,7 @@ public class Solar : EntityBase, ISource
 	public int GND, P;
 	public MySlider[] sliders = new MySlider[1];
 	public int EntityID;
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();

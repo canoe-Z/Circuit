@@ -7,7 +7,7 @@ public class SourceStand : EntityBase, ISource
 	public double R = 100;
 	public int G, V;
 	public int EntityID;
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 	}

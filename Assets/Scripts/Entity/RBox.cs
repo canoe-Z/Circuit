@@ -6,7 +6,7 @@ public class RBox : EntityBase
 	public double R_99 = 0;
 	public double R_09 = 0;
 	MySlider[] sliders = new MySlider[6];
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();

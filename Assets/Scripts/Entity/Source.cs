@@ -14,7 +14,7 @@ public class Source : EntityBase, ISource
 	public double[] E = new double[3] { 30, 30, 5 };
 	public double[] R = new double[3] { 0.1, 0.1, 0.1 };
 	public int EntityID;
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();

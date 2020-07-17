@@ -4,8 +4,8 @@ public class Resistance : EntityBase
 {
 	public double Rnum = 120;
 	public int LeftPortID, RightPortID;
-	public void Start()
-    {
+	override public void EntityStart()
+	{
 		FindCircuitPort();
 		LeftPortID = ChildPorts[0].PortID;
 		RightPortID = ChildPorts[1].PortID;

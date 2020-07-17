@@ -7,8 +7,8 @@ public class Gmeter : EntityBase, IAmmeter
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	public MySlider mySlider = null;
-	void Start()
-    {
+	override public void EntityStart()
+	{
 		FindCircuitPort();
 		FindPin();
 		//滑块

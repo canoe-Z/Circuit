@@ -7,7 +7,7 @@ public class Switch : EntityBase
 	public MySlider mySlider = null;
 	GameObject connector = null;
 	// Start is called before the first frame update
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 		//滑块

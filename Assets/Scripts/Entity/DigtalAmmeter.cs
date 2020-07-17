@@ -3,7 +3,7 @@
 public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
-	void Start()
+	override public void EntityStart()
 	{
 		FindCircuitPort();
 	}

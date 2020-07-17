@@ -8,9 +8,15 @@ abstract public class EntityBase : MonoBehaviour
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
 
+	abstract public void EntityStart();
+	void Start()
+	{
+		EntityStart();
+	}
+
 	public void FindCircuitPort()
 	{
-		CircuitPort[] disorderPorts = this.gameObject.GetComponentsInChildren<CircuitPort>();
+		CircuitPort[] disorderPorts = gameObject.GetComponentsInChildren<CircuitPort>();
 		portNum = disorderPorts.Length;
 		ChildPorts = new CircuitPort[disorderPorts.Length];
 
@@ -36,14 +42,14 @@ abstract public class EntityBase : MonoBehaviour
 		else
 		{
 			Vector3 campos = Camera.main.transform.position;
-			Vector3 thispos = this.gameObject.transform.position;
+			Vector3 thispos = gameObject.transform.position;
 			float dis = (thispos - campos).magnitude;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			Vector3 vec = ray.direction;
 			vec.Normalize();
 			vec *= dis;
 			thispos = campos + vec;
-			this.gameObject.transform.position = thispos;
+			gameObject.transform.position = thispos;
 		}
 	}
 
@@ -110,6 +116,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
+	
 	abstract public bool IsConnected();
 	abstract public void LoadElement();
 	abstract public void SetElement();
