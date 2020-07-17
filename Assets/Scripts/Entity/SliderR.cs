@@ -9,17 +9,17 @@ public class SliderR : EntityBase
 	void Start()
     {
 		FindCircuitPort();
-		myslider = this.gameObject.GetComponentInChildren<MySlider>();
+		myslider = gameObject.GetComponentInChildren<MySlider>();
 		myslider.SliderPos = 1;
 	}
 
     void Update()
     {
-		this.RL = Rmax * myslider.SliderPos;
-		this.RR = Rmax - RL;
+		RL = Rmax * myslider.SliderPos;
+		RR = Rmax - RL;
     }
 
-	//电路相关
+	// 电路相关
 	// 判断是否有一端连接，避免浮动节点
 	override public bool IsConnected()
 	{

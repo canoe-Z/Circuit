@@ -73,6 +73,4 @@ public class CircuitLine : MonoBehaviour
 		DestroyLine();
 		Destroy(gameObject);
 	}
-
-
 }

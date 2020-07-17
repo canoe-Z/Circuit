@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class TAmmeter : EntityBase, IAmmeter
+public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
 	void Start()
@@ -20,6 +20,7 @@ public class TAmmeter : EntityBase, IAmmeter
 			return false;
 		}
 	}
+
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
@@ -29,6 +30,7 @@ public class TAmmeter : EntityBase, IAmmeter
 		CircuitCalculator.UF.Union(GND, mA);
 		CircuitCalculator.UF.Union(GND, A);
 	}
+
 	override public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称

@@ -20,9 +20,7 @@ abstract public class EntityBase : MonoBehaviour
 			// 名字转换成ID
 			int.TryParse(disorderPorts[i].name, out int id);
 			ChildPorts[id] = disorderPorts[i];
-			ChildPorts[id].LocalPortID = id;
 			ChildPorts[id].PortID = id + CircuitCalculator.PortNum;
-			ChildPorts[id].Father = this;
 		}
 		CircuitCalculator.PortNum += disorderPorts.Length;
 	}
@@ -70,7 +68,7 @@ abstract public class EntityBase : MonoBehaviour
 		MouseExit?.Invoke(this);
 	}
 
-	public static bool HitCheck(string tag, out Vector3 hitPos)
+	private static bool HitCheck(string tag, out Vector3 hitPos)
 	{
 		hitPos = new Vector3(0, 0, 0);
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

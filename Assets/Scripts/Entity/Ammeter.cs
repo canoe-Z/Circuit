@@ -6,9 +6,11 @@ public class Ammeter : EntityBase, IAmmeter
 	public double MaxI0 = 0.05;
 	public double MaxI1 = 0.1;
 	public double MaxI2 = 0.5;
+
 	public double R0 = 2;
 	public double R1 = 1;
 	public double R2 = 0.2;
+
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 

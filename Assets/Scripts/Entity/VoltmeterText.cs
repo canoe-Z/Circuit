@@ -3,26 +3,26 @@ using UnityEngine.UI;
 
 public class VoltmeterText : MonoBehaviour
 {
-    TVoltmeter TVoltmeter;
+    DigtalVoltmeter digtalVoltmeter;
 
     // Start is called before the first frame update
     void Start()
     {
-        TVoltmeter = transform.parent.gameObject.transform.parent.gameObject.GetComponent<TVoltmeter>();
+        digtalVoltmeter = transform.parent.gameObject.transform.parent.gameObject.GetComponent<DigtalVoltmeter>();
     }
 
     // Update is called once per frame
     void Update()
     {
         double Vtext;
-        double GND = TVoltmeter.ChildPorts[0].U;
-        double mV = TVoltmeter.ChildPorts[1].U;
-        double V = TVoltmeter.ChildPorts[2].U;
-        if (TVoltmeter.ChildPorts[1].Connected == 1)
+        double GND = digtalVoltmeter.ChildPorts[0].U;
+        double mV = digtalVoltmeter.ChildPorts[1].U;
+        double V = digtalVoltmeter.ChildPorts[2].U;
+        if (digtalVoltmeter.ChildPorts[1].Connected == 1)
         {
             Vtext = (mV - GND) * 1000;
         }
-        else if (TVoltmeter.ChildPorts[2].Connected == 1)
+        else if (digtalVoltmeter.ChildPorts[2].Connected == 1)
         {
             Vtext = V - GND;
         }

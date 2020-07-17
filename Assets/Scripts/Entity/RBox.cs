@@ -29,6 +29,7 @@ public class RBox : EntityBase
 		this.R_99 = (float)(total % 100) / (float)10;
 		this.R_09 = (float)(total % 10) / (float)10;
 	}
+
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
@@ -40,6 +41,7 @@ public class RBox : EntityBase
 			return false;
 		}
 	}
+
 	//电路相关
 	override public void LoadElement()
 	{

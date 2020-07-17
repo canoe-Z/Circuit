@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class TVoltmeter : EntityBase
+public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
 	void Start()
@@ -20,6 +20,7 @@ public class TVoltmeter : EntityBase
 			return false;
 		}
 	}
+
 	override public void LoadElement()//添加元件
 	{
 		int GND = ChildPorts[0].PortID;
@@ -28,6 +29,7 @@ public class TVoltmeter : EntityBase
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
+
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;

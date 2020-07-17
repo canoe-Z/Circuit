@@ -3,25 +3,25 @@ using UnityEngine.UI;
 
 public class AmmeterText : MonoBehaviour
 {
-    TAmmeter TAmmeter;
+    private DigtalAmmeter digitalAmmter;
 
     // Start is called before the first frame update
     void Start()
     {
-        TAmmeter = transform.parent.gameObject.transform.parent.gameObject.GetComponent<TAmmeter>();
+        digitalAmmter = transform.parent.gameObject.transform.parent.gameObject.GetComponent<DigtalAmmeter>();
     }
 
     // Update is called once per frame
     void Update()
     {
 		double Atext;
-		double mA = TAmmeter.ChildPorts[1].I;
-        double A = TAmmeter.ChildPorts[2].I;
-        if (TAmmeter.ChildPorts[1].Connected == 1)
+		double mA = digitalAmmter.ChildPorts[1].I;
+        double A = digitalAmmter.ChildPorts[2].I;
+        if (digitalAmmter.ChildPorts[1].Connected == 1)
         {
             Atext = mA * 1000;
         }
-        else if (TAmmeter.ChildPorts[2].Connected == 1)
+        else if (digitalAmmter.ChildPorts[2].Connected == 1)
         {
             Atext = A;
         }

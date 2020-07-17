@@ -22,6 +22,7 @@ public class Solar : EntityBase, ISource
 	{
 		Isc = sliders[0].SliderPos * IscMax;
 	}
+
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
