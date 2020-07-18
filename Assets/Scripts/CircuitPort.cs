@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// 端口
@@ -9,14 +10,31 @@ public class CircuitPort : MonoBehaviour , IUniqueIdentity
 	public double U { get; set; } = 0;					//电压探针（需要时更新）
 	public double I { get; set; } = 0;                  //流出接线柱的电流（需要时更新）
 	public int ID { get; set; }                         //接线柱全局ID
+	public int showid;
 	public EntityBase Father { get; set; }
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
 
-	void Start()
+	void Awake()
 	{
 		CircuitCalculator.Ports.AddLast(this);
+	}
+
+	void Start()
+	{
+		Father.EntityDestroy += DestroyPort;
+	}
+
+	public void DestroyPort()
+	{
+		Father.EntityDestroy -= DestroyPort;
+		CircuitCalculator.Ports.Remove(this);
+	}
+
+	void Update()
+	{
+		showid = ID;
 	}
 
 	void OnMouseDown()

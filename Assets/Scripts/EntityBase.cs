@@ -12,7 +12,7 @@ abstract public class EntityBase : MonoBehaviour
 	public event EntityDestroyEventHandler EntityDestroy;
 
 	abstract public void EntityStart();
-	void Start()
+	void Awake()
 	{
 		rigidBody = GetComponent<Rigidbody>();
 		if (rigidBody == null)
@@ -85,7 +85,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	private void DestroyEntity()
+	public void DestroyEntity()
 	{
 		EntityDestroy?.Invoke();
 		CircuitCalculator.Entities.Remove(this);
@@ -128,11 +128,9 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	
-	abstract public bool IsConnected();
-	abstract public void LoadElement();
-	abstract public void SetElement();
-
+	public abstract bool IsConnected();
+	public abstract void LoadElement();
+	public abstract void SetElement();
 }
 
 public interface ISource

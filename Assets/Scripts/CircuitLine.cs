@@ -3,15 +3,15 @@
 /// <summary>
 /// 3D界面连个导线：先创建空物体，然后挂这个脚本，最后调用连接函数就行了，电路层面：读取两个ID
 /// </summary>
-public class CircuitLine : MonoBehaviour
+public class CircuitLine : MonoBehaviour, ISave
 {
 	public int StartID_Global { get; set; }    // 端口的全局ID
 	public int EndID_Global { get; set; }
 	public bool IsActived { get; set; }
 
 	// 对外暴露端口以注入电压
-	public CircuitPort StartPort { get; set; }
-	public CircuitPort EndPort { get; set; }
+	public CircuitPort StartPort;
+	public CircuitPort EndPort;
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
@@ -79,14 +79,14 @@ public class CircuitLine : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	public LineData Save()
+	public ILoad Save()
 	{
 		return new LineData(StartID_Global, EndID_Global);
 	}
 }
 
 [System.Serializable]
-public class LineData
+public class LineData: ILoad
 {
 	public int startID;
 	public int endID;
@@ -94,5 +94,9 @@ public class LineData
 	{
 		startID = startID_Global;
 		endID = endID_Global;
+	}
+	public void Load()
+	{
+		ConnectionManager.ConnectRope(SaveManager.GetItemById(startID, CircuitCalculator.Ports), SaveManager.GetItemById(endID, CircuitCalculator.Ports));
 	}
 }
