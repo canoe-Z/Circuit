@@ -47,13 +47,12 @@ public class DigtalVoltmeter : EntityBase,ISave
 
 	public static void CreateDigtalVoltmeter(float x,float y,float z, int id1, int id2, int id3)
 	{
-		GameObject digtalVoltmeter = (GameObject)Resources.Load("DigtalVoltmeter");
-		Quaternion b = new Quaternion(0, 0, 0, 0);
-		GameObject newv = Instantiate(digtalVoltmeter, new Vector3(x, y, z),b);
-		newv.GetComponent<DigtalVoltmeter>().ChildPorts[0].ID = id1;
-		newv.GetComponent<DigtalVoltmeter>().ChildPorts[1].ID = id2;
-		newv.GetComponent<DigtalVoltmeter>().ChildPorts[2].ID = id3;
+		DigtalVoltmeter digtalVoltmeter = EntityCreator.CreateEntity<DigtalVoltmeter>(new Vector3(x,y,z));
+		digtalVoltmeter.ChildPorts[0].ID = id1;
+		digtalVoltmeter.ChildPorts[1].ID = id2;
+		digtalVoltmeter.ChildPorts[2].ID = id3;
 	}
+
 	public ILoad Save()
 	{
 		return new DigtalVoltmeterData(gameObject.transform.position, ChildPorts[0].ID, ChildPorts[1].ID, ChildPorts[2].ID);

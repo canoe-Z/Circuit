@@ -42,6 +42,7 @@ public class SaveManager : MonoBehaviour
         {
             Save();
         }
+
         if (Input.GetKeyDown(KeyCode.F9))
         {
             List<ISave> Savelist = FindAllTypes<ISave>();
@@ -86,7 +87,7 @@ public class SaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 通过ID寻找实现IUniqueIdentity接口的脚本
+    /// 通过ID寻找脚本,需要实现IUniqueIdentity接口
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="ID"></param>
@@ -114,6 +115,16 @@ public class SaveManager : MonoBehaviour
             interfaces.Add(t);
         }
         return interfaces;
+    }
+
+    public static Vector3 ToVector3(ThreeFloat pos)
+	{
+        return new Vector3(pos.x, pos.y, pos.z);
+    }
+
+    public static ThreeFloat ToThreeFloat(Vector3 pos)
+    {
+        return new ThreeFloat(pos.x, pos.y, pos.z);
     }
 }
 
@@ -146,4 +157,16 @@ public interface ILoad
     /// 读档
     /// </summary>
     void Load();
+}
+
+public class ThreeFloat
+{
+    public float x, y, z;
+
+	public ThreeFloat(float x, float y, float z)
+	{
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
 }
