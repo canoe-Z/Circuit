@@ -102,6 +102,14 @@ public class Wdw_Menu : MonoBehaviour
 				willBeSet = null;
 				MoveController.CanOperate = true;//可以操作物体了
 			}
+			else if (Input.GetMouseButtonDown(1))
+			{
+				OpenColl(willBeSet);//打开碰撞体
+				EntityBase entityBase = willBeSet.GetComponent<EntityBase>();
+				entityBase.DestroyEntity();
+				willBeSet = null;
+				MoveController.CanOperate = true;//可以操作物体了
+			}
 		}
 	}
 	GameObject willBeSet;//即将会被扔到桌子上的物体
@@ -172,11 +180,12 @@ public class Wdw_Menu : MonoBehaviour
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
 	}
-
+	
 	void OnButtonCopySP_SliderR()
 	{
 		if (double.TryParse(iptNum_SliderR.text, out double num))
 		{
+			iptNum_SliderR.text = "";
 			willBeSet = Instantiate(gmObjSrcSP_SliderR, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 			SliderR sliderR = willBeSet.GetComponent<SliderR>();
 			if (sliderR)
@@ -192,10 +201,12 @@ public class Wdw_Menu : MonoBehaviour
 			}
 		}
 	}
+	
 	void OnButtonCopySP_R()
 	{
 		if (double.TryParse(iptNum_R.text, out double num))
 		{
+			iptNum_R.text = "";
 			willBeSet = Instantiate(gmObjSrcSP_R, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 			Resistance r = willBeSet.GetComponent<Resistance>();
 			if (r)
