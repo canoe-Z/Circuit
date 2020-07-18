@@ -9801,8 +9801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rnum: 99.5
-  LeftPortID: 0
-  RightPortID: 0
+  num: {fileID: 0}
 --- !u!54 &612007356
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13946,8 +13945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rnum: 0.092
-  LeftPortID: 0
-  RightPortID: 0
+  num: {fileID: 0}
 --- !u!54 &899941061
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14410,12 +14408,16 @@ MonoBehaviour:
   mainThings: {fileID: 700246773}
   exitGame: {fileID: 966504485}
   continueGame: {fileID: 874898386}
-  btnCopies_0: {fileID: 472532408}
-  btnCopies_1: {fileID: 459150117}
-  btnCopies_2: {fileID: 1074417434}
-  gmObjSources_0: {fileID: 1532629221}
-  gmObjSources_1: {fileID: 250627173}
-  gmObjSources_2: {fileID: 1956684508}
+  btnCopies_RBox: {fileID: 0}
+  btnCopies_Switch: {fileID: 0}
+  gmObjSrc_RBox: {fileID: 0}
+  gmObjSrc_Switch: {fileID: 0}
+  iptNum_SliderR: {fileID: 0}
+  iptNum_R: {fileID: 0}
+  btnCopiesSP_SliderR: {fileID: 0}
+  btnCopiesSP_R: {fileID: 0}
+  gmObjSrcSP_SliderR: {fileID: 0}
+  gmObjSrcSP_R: {fileID: 0}
 --- !u!1 &907613792
 GameObject:
   m_ObjectHideFlags: 0
@@ -16624,8 +16626,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rnum: 121.3
-  LeftPortID: 0
-  RightPortID: 0
+  num: {fileID: 0}
 --- !u!54 &1051378083
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24757,8 +24758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rnum: 119.2
-  LeftPortID: 0
-  RightPortID: 0
+  num: {fileID: 0}
 --- !u!54 &1530313818
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28131,8 +28131,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rmax: 300
-  RL: 300
-  RR: 0
 --- !u!136 &1724925444
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30737,8 +30735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rnum: 998948.2
-  LeftPortID: 0
-  RightPortID: 0
+  num: {fileID: 0}
 --- !u!54 &1928489332
 Rigidbody:
   m_ObjectHideFlags: 0
