@@ -23,9 +23,9 @@ public class DigtalVoltmeter : EntityBase
 
 	override public void LoadElement()//添加元件
 	{
-		int GND = ChildPorts[0].PortID;
-		int mV = ChildPorts[1].PortID;
-		int V = ChildPorts[2].PortID;
+		int GND = ChildPorts[0].ID;
+		int mV = ChildPorts[1].ID;
+		int V = ChildPorts[2].ID;
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
@@ -33,9 +33,9 @@ public class DigtalVoltmeter : EntityBase
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID;
-		int mV = ChildPorts[1].PortID;
-		int V = ChildPorts[2].PortID;
+		int GND = ChildPorts[0].ID;
+		int mV = ChildPorts[1].ID;
+		int V = ChildPorts[2].ID;
 		//获取端口ID并完成内部连接
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));

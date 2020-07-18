@@ -50,9 +50,11 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort = Ini.GetComponent<CircuitPort>();
 		EndPort = Lst.GetComponent<CircuitPort>();
-		StartID_Global = Ini.GetComponent<CircuitPort>().PortID;
-		EndID_Global = Lst.GetComponent<CircuitPort>().PortID;
+		StartID_Global = Ini.GetComponent<CircuitPort>().ID;
+		EndID_Global = Lst.GetComponent<CircuitPort>().ID;
 		IsActived = true;
+		StartPort.Father.EntityDestroy += DestroyRope;
+		EndPort.Father.EntityDestroy += DestroyRope;
 		CircuitCalculator.Lines.AddLast(this);
 	}
 
@@ -62,6 +64,7 @@ public class CircuitLine : MonoBehaviour
 	public void DestroyLine()
 	{
 		// 从链表中移除
+		Debug.LogError("111");
 		CircuitCalculator.Lines.Remove(this);
 	}
 
@@ -70,7 +73,26 @@ public class CircuitLine : MonoBehaviour
 	/// </summary>
 	public void DestroyRope()
 	{
+		StartPort.Father.EntityDestroy -= DestroyRope;
+		EndPort.Father.EntityDestroy -= DestroyRope;
 		DestroyLine();
 		Destroy(gameObject);
+	}
+
+	public LineData Save()
+	{
+		return new LineData(StartID_Global, EndID_Global);
+	}
+}
+
+[System.Serializable]
+public class LineData
+{
+	public int startID;
+	public int endID;
+	public LineData(int startID_Global, int endID_Global)
+	{
+		startID = startID_Global;
+		endID = endID_Global;
 	}
 }

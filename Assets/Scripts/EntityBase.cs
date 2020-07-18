@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+public delegate void EntityDestroyEventHandler();
+
 abstract public class EntityBase : MonoBehaviour
 {
 	private int portNum;									//本元件的端口数量
@@ -7,6 +9,7 @@ abstract public class EntityBase : MonoBehaviour
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
+	public event EntityDestroyEventHandler EntityDestroy;
 
 	abstract public void EntityStart();
 	void Start()
@@ -32,7 +35,8 @@ abstract public class EntityBase : MonoBehaviour
 			// 名字转换成ID
 			int.TryParse(disorderPorts[i].name, out int id);
 			ChildPorts[id] = disorderPorts[i];
-			ChildPorts[id].PortID = id + CircuitCalculator.PortNum;
+			ChildPorts[id].ID = id + CircuitCalculator.PortNum;
+			ChildPorts[id].Father = this;
 		}
 		CircuitCalculator.PortNum += disorderPorts.Length;
 	}
@@ -74,7 +78,20 @@ abstract public class EntityBase : MonoBehaviour
 		{
 			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
 		}
+
+		if (Input.GetMouseButtonDown(1))
+		{
+			DestroyEntity();
+		}
 	}
+
+	private void DestroyEntity()
+	{
+		EntityDestroy?.Invoke();
+		CircuitCalculator.Entities.Remove(this);
+		Destroy(gameObject);
+	}
+
 	void OnMouseExit()
 	{
 		MouseExit?.Invoke(this);

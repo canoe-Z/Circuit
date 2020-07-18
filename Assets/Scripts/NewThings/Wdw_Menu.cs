@@ -153,7 +153,8 @@ public class Wdw_Menu : MonoBehaviour
 	//下面全都是按钮
 	void OnButtonCopy_0()
 	{
-		willBeSet = Instantiate(gmObjSources_0, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+		GameObject hp_bar = (GameObject)Resources.Load("DigtalVoltmeter");
+		willBeSet = Instantiate(hp_bar);//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体

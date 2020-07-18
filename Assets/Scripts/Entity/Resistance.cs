@@ -7,8 +7,8 @@ public class Resistance : EntityBase
 	override public void EntityStart()
 	{
 		FindCircuitPort();
-		LeftPortID = ChildPorts[0].PortID;
-		RightPortID = ChildPorts[1].PortID;
+		LeftPortID = ChildPorts[0].ID;
+		RightPortID = ChildPorts[1].ID;
 	}
 
 	//电路相关

@@ -59,8 +59,8 @@ public class Source : EntityBase, ISource
 	}
 	public void LoadElement(int n)
 	{
-		G[n] = ChildPorts[2 * n + 1].PortID;
-		V[n] = ChildPorts[2 * n].PortID;
+		G[n] = ChildPorts[2 * n + 1].ID;
+		V[n] = ChildPorts[2 * n].ID;
 		CircuitCalculator.UF.Union(G[n], V[n]);
 	}
 	override public void LoadElement()
@@ -76,8 +76,8 @@ public class Source : EntityBase, ISource
 	public void SetElement(int n)
 	{
 		EntityID = CircuitCalculator.EntityNum;
-		G[n] = ChildPorts[2 * n + 1].PortID;
-		V[n] = ChildPorts[2 * n].PortID;
+		G[n] = ChildPorts[2 * n + 1].ID;
+		V[n] = ChildPorts[2 * n].ID;
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
 	}

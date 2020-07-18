@@ -50,10 +50,10 @@ public class RBox : EntityBase
 	{
 		//获取端口ID并完成并查集连接
 		int G, R999, R99, R9;
-		G = ChildPorts[0].PortID;
-		R999 = ChildPorts[3].PortID;//顺序翻转
-		R99 = ChildPorts[2].PortID;
-		R9 = ChildPorts[1].PortID;
+		G = ChildPorts[0].ID;
+		R999 = ChildPorts[3].ID;//顺序翻转
+		R99 = ChildPorts[2].ID;
+		R9 = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
@@ -63,10 +63,10 @@ public class RBox : EntityBase
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;
-		G = ChildPorts[0].PortID;
-		R999 = ChildPorts[3].PortID;//顺序翻转
-		R99 = ChildPorts[2].PortID;
-		R9 = ChildPorts[1].PortID;
+		G = ChildPorts[0].ID;
+		R999 = ChildPorts[3].ID;//顺序翻转
+		R99 = ChildPorts[2].ID;
+		R9 = ChildPorts[1].ID;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)

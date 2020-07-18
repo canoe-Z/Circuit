@@ -43,8 +43,8 @@ public class Solar : EntityBase, ISource
 	}
 	override public void LoadElement()//添加元件
 	{
-		GND = ChildPorts[0].PortID;
-		P = ChildPorts[1].PortID;
+		GND = ChildPorts[0].ID;
+		P = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(GND, P);
 	}
 
@@ -77,8 +77,8 @@ public class Solar : EntityBase, ISource
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		GND = ChildPorts[0].PortID;
-		P = ChildPorts[1].PortID;
+		GND = ChildPorts[0].ID;
+		P = ChildPorts[1].ID;
 		//获取端口ID并完成内部连接
 		Debug.LogWarning("短路电流为" + Isc);
 		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));

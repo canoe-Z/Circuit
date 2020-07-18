@@ -68,8 +68,8 @@ public class Gmeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		int LeftPortID, RightPortID;
-		LeftPortID = ChildPorts[0].PortID;
-		RightPortID = ChildPorts[1].PortID;
+		LeftPortID = ChildPorts[0].ID;
+		RightPortID = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
@@ -78,8 +78,8 @@ public class Gmeter : EntityBase, IAmmeter
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int LeftPortID, RightPortID;
-		LeftPortID = ChildPorts[0].PortID;
-		RightPortID = ChildPorts[1].PortID;
+		LeftPortID = ChildPorts[0].ID;
+		RightPortID = ChildPorts[1].ID;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);

@@ -207,7 +207,7 @@ public class CircuitCalculator : MonoBehaviour
 		{
 			foreach (CircuitPort i in SpicePorts)
 			{
-				i.U = exportDataEventArgs.GetVoltage(i.PortID.ToString());
+				i.U = exportDataEventArgs.GetVoltage(i.ID.ToString());
 			}
 		};
 

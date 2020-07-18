@@ -63,10 +63,10 @@ public class Ammeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
-		int GND = ChildPorts[0].PortID;
-		int V0 = ChildPorts[1].PortID;
-		int V1 = ChildPorts[2].PortID;
-		int V2 = ChildPorts[3].PortID;
+		int GND = ChildPorts[0].ID;
+		int V0 = ChildPorts[1].ID;
+		int V1 = ChildPorts[2].ID;
+		int V2 = ChildPorts[3].ID;
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
@@ -75,10 +75,10 @@ public class Ammeter : EntityBase, IAmmeter
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID;
-		int V0 = ChildPorts[1].PortID;
-		int V1 = ChildPorts[2].PortID;
-		int V2 = ChildPorts[3].PortID;
+		int GND = ChildPorts[0].ID;
+		int V0 = ChildPorts[1].ID;
+		int V1 = ChildPorts[2].ID;
+		int V2 = ChildPorts[3].ID;
 		//指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)

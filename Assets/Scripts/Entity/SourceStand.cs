@@ -27,8 +27,8 @@ public class SourceStand : EntityBase, ISource
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
-		G = ChildPorts[0].PortID;
-		V = ChildPorts[1].PortID;
+		G = ChildPorts[0].ID;
+		V = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(G, V);
 	}
 	override public void SetElement()
@@ -36,8 +36,8 @@ public class SourceStand : EntityBase, ISource
 		//获取元件ID作为元件名称
 		EntityID = CircuitCalculator.EntityNum;
 		//获取端口ID并完成内部连接
-		G = ChildPorts[0].PortID;
-		V = ChildPorts[1].PortID;
+		G = ChildPorts[0].ID;
+		V = ChildPorts[1].ID;
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(EntityID.ToString(), V.ToString(), string.Concat(EntityID.ToString(), "_rPort"), E));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r"), string.Concat(EntityID.ToString(), "_rPort"), G.ToString(), R));
 		//默认不接地，连接到电路中使用，如果电路中没有形成对0的通路，将其接地

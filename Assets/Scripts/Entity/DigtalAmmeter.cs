@@ -24,9 +24,9 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 	override public void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
-		int GND = ChildPorts[0].PortID;
-		int mA = ChildPorts[1].PortID;
-		int A = ChildPorts[2].PortID;
+		int GND = ChildPorts[0].ID;
+		int mA = ChildPorts[1].ID;
+		int A = ChildPorts[2].ID;
 		CircuitCalculator.UF.Union(GND, mA);
 		CircuitCalculator.UF.Union(GND, A);
 	}
@@ -35,9 +35,9 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].PortID;
-		int mA = ChildPorts[1].PortID;
-		int A = ChildPorts[2].PortID;
+		int GND = ChildPorts[0].ID;
+		int mA = ChildPorts[1].ID;
+		int A = ChildPorts[2].ID;
 		//获取端口ID并完成内部连接
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));
