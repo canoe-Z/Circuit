@@ -4091,7 +4091,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525513623
 GameObject:
@@ -12007,7 +12007,7 @@ RectTransform:
   m_Children:
   - {fileID: 1864045096}
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -12158,11 +12158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825e1463d10fc0a44a1c78963574012c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GND: 0
-  P: 0
-  sliders:
-  - {fileID: 0}
   EntityID: 0
+  textLight: {fileID: 1940060953}
 --- !u!114 &1433568816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12243,7 +12240,7 @@ Transform:
   - {fileID: 791440923}
   - {fileID: 1717495922}
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1442407573
 GameObject:
@@ -16583,7 +16580,6 @@ GameObject:
   - component: {fileID: 1940060954}
   - component: {fileID: 1940060953}
   - component: {fileID: 1940060952}
-  - component: {fileID: 1940060955}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -16665,18 +16661,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1940060950}
   m_CullTransparentMesh: 0
---- !u!114 &1940060955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940060950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b6e3980f7e7bfe4cb2af187a5509303, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1944052878
 GameObject:
   m_ObjectHideFlags: 0

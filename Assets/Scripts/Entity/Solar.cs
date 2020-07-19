@@ -3,14 +3,16 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
+using UnityEngine.UI;
 
 public class Solar : EntityBase, ISource
 {
 	readonly double IscMax = 0.06;
 	double Isc;
-	public int GND, P;
-	public MySlider[] sliders = new MySlider[1];
+	int GND, P;
+	MySlider[] sliders = new MySlider[1];
 	public int EntityID;
+	public Text textLight;//光照强度的数值
 	override public void EntityAwake()
 	{
 		FindCircuitPort();
@@ -27,6 +29,10 @@ public class Solar : EntityBase, ISource
 	void Update()
 	{
 		Isc = sliders[0].SliderPos * IscMax;
+
+		//下面更新光照强度的数值
+		double stext = sliders[0].SliderPos * 1000;
+		textLight.text = stext.ToString("0.00");
 	}
 
 	//电路相关
