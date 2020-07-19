@@ -1,9 +1,21 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 挂在包含有碰撞体和刚体的物体上，令localPosition.z变动范围为0-1
+/// </summary>
 public class MySlider : MonoBehaviour
 {
+	/// <summary>
+	/// 是否为离散的，-1为连续的
+	/// </summary>
 	public int Devide { get; set; } = -1;
+	/// <summary>
+	/// 0-1的数值
+	/// </summary>
 	public float SliderPos { get; set; } = 0;
+	/// <summary>
+	/// 保证小于Devide的整数
+	/// </summary>
 	public int SliderPos_int { get; set; } = 0;
 
 	public static event EnterEventHandler MouseEnter;
@@ -30,7 +42,8 @@ public class MySlider : MonoBehaviour
 
 	void OnMouseDrag()
 	{
-		if (!MoveController.CanOperate) return;
+		if (!MoveController.CanOperate) return;//不可操作时返回
+
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
 			CircuitCalculator.CalculateByConnection();
@@ -41,7 +54,10 @@ public class MySlider : MonoBehaviour
 		}
 	}
 
-	public void ChangeSliderPos(float newPos)//包含检查
+	/// <summary>
+	/// 更改Slider的位置，已经包含了“检查数据是否满足0-1”，特别耐c
+	/// </summary>
+	public void ChangeSliderPos(float newPos)
 	{
 		if (newPos > 1) newPos = 1;
 		else if (newPos < 0) newPos = 0;
