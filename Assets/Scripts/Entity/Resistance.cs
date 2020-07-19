@@ -1,16 +1,15 @@
-﻿using SpiceSharp.Components;
+﻿using System.Collections.Generic;
+using SpiceSharp.Components;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class Resistance : EntityBase
+public class Resistance : EntityBase, ISave
 {
 	public double Rnum = 120;
 	public Text num;
-	int LeftPortID, RightPortID;
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
-		LeftPortID = ChildPorts[0].ID;
-		RightPortID = ChildPorts[1].ID;
 	}
 
 	private void Update()
@@ -32,16 +31,40 @@ public class Resistance : EntityBase
 	}
 	override public void LoadElement()
 	{
+		int LeftPortID = ChildPorts[0].ID;
+		int RightPortID = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
+
 	override public void SetElement()
 	{
 		//获取元件ID作为元件名称
+		int LeftPortID = ChildPorts[0].ID;
+		int RightPortID = ChildPorts[1].ID;
 		int EntityID = CircuitCalculator.EntityNum;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Rnum));
-		/*
-		CircuitCalculator.ports.Add(childsPorts[0]); 
-		CircuitCalculator.ports.Add(childsPorts[1]);
-		*/
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]); 
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+	}
+
+	public ILoad Save()
+	{
+		return new ResistanceData(Rnum, gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class ResistanceData : EntityBaseData, ILoad
+{
+	private readonly double rnum;
+	public ResistanceData(double rnum,Vector3 pos, List<int> id) : base(pos, id) 
+	{
+		this.rnum = rnum;
+	}
+
+	override public void Load()
+	{
+		Resistance resistance = EntityCreator.CreateEntity<Resistance>(posfloat, IDList);
+		resistance.Rnum = rnum;
 	}
 }

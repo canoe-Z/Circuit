@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
+using UnityEngine;
 
-public class Ammeter : EntityBase, IAmmeter
+public class Ammeter : EntityBase, IAmmeter , ISave
 {
 	public double MaxI0 = 0.05;
 	public double MaxI1 = 0.1;
@@ -14,7 +15,7 @@ public class Ammeter : EntityBase, IAmmeter
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		FindPin();
@@ -99,5 +100,21 @@ public class Ammeter : EntityBase, IAmmeter
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R0;
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;
 		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
+	}
+
+	public ILoad Save()
+	{
+		return new AmmeterData(gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class AmmeterData : EntityBaseData, ILoad
+{
+	public AmmeterData(Vector3 posfloat, List<int> IDlist) : base(posfloat, IDlist) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<Ammeter>(posfloat, IDList);
 	}
 }

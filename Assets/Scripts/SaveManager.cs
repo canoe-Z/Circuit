@@ -27,8 +27,10 @@ public class SaveManager : MonoBehaviour
 		{
             savedata.DataList.Add(toSave.Save());
 		}
+
         if (!Directory.Exists("Saves"))
             Directory.CreateDirectory("Saves");
+
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream saveFile = File.Create("Saves/save.binary");
         formatter.Serialize(saveFile, savedata);
@@ -45,13 +47,12 @@ public class SaveManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F9))
         {
-            List<ISave> Savelist = FindAllTypes<ISave>();
-            foreach (ISave toSave in Savelist)
+            var node1 = CircuitCalculator.Entities.First;
+            while (node1 != null)
             {
-                if (toSave is DigtalVoltmeter)
-                {
-                    (toSave as DigtalVoltmeter).DestroyEntity();
-                }
+                var next = node1.Next;
+                node1.Value.DestroyEntity();
+                node1 = next;
             }
 
             var node = CircuitCalculator.Lines.First;
@@ -62,13 +63,24 @@ public class SaveManager : MonoBehaviour
                 node = next;
             }
 
+            /*
+            Debug.LogError(CircuitCalculator.Entities.Count);
+            Debug.LogError(CircuitCalculator.Lines.Count);
+            */
+
+            /*
+            CircuitCalculator.Entities.Clear();
+            CircuitCalculator.Lines.Clear();
+            */
+
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream saveFile = File.Open("Saves/save.binary", FileMode.Open);
             SaveData datafromfile = (SaveData)formatter.Deserialize(saveFile);
             saveFile.Close();
+
             foreach (ILoad data in datafromfile.DataList)
             {
-                if (data is DigtalVoltmeterData)
+                if (data is EntityBaseData)
                 {
                     data.Load();
                 }
@@ -116,16 +128,6 @@ public class SaveManager : MonoBehaviour
         }
         return interfaces;
     }
-
-    public static Vector3 ToVector3(ThreeFloat pos)
-	{
-        return new Vector3(pos.x, pos.y, pos.z);
-    }
-
-    public static ThreeFloat ToThreeFloat(Vector3 pos)
-    {
-        return new ThreeFloat(pos.x, pos.y, pos.z);
-    }
 }
 
 /// <summary>
@@ -159,14 +161,23 @@ public interface ILoad
     void Load();
 }
 
-public class ThreeFloat
+[System.Serializable]
+public class Float3
 {
     public float x, y, z;
 
-	public ThreeFloat(float x, float y, float z)
+	public Float3(float x, float y, float z)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
+}
+
+public static class Vector3Extensions
+{
+    public static Float3 ToFloat3(this Vector3 vector)
+    {
+        return new Float3(vector.x, vector.y, vector.z);
+    }
 }

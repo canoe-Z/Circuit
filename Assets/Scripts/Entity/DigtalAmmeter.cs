@@ -1,9 +1,11 @@
-﻿using SpiceSharp.Components;
+﻿using System.Collections.Generic;
+using SpiceSharp.Components;
+using UnityEngine;
 
-public class DigtalAmmeter : EntityBase, IAmmeter
+public class DigtalAmmeter : EntityBase, IAmmeter, ISave
 {
 	public double R = 0.001;
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 	}
@@ -49,5 +51,21 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 	{
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
+	}
+
+	public ILoad Save()
+	{
+		return new DigtalAmmeterData(gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class DigtalAmmeterData : EntityBaseData, ILoad
+{
+	public DigtalAmmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<DigtalAmmeter>(posfloat, IDList);
 	}
 }

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Components;
+﻿using System.Collections.Generic;
+using SpiceSharp.Components;
 using UnityEngine;
 
 public class RBox : EntityBase
@@ -6,12 +7,12 @@ public class RBox : EntityBase
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
-	MySlider[] sliders = new MySlider[6];
-	override public void EntityStart()
+	public MySlider[] sliders = new MySlider[6];
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		foreach (var sld in slidersDisorder)
+		foreach (MySlider sld in slidersDisorder)
 		{
 			if (int.TryParse(sld.gameObject.name, out int id))
 				sliders[id] = sld;
@@ -20,10 +21,10 @@ public class RBox : EntityBase
 		}
 	}
 
-    void Update()
+	void Update()
 	{
 		int total = 0;
-		for(int i = 0; i < 6; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			total *= 10;
 			total += sliders[i].SliderPos_int;
@@ -81,5 +82,34 @@ public class RBox : EntityBase
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
+	}
+
+	public ILoad Save()
+	{
+		List<float> sliderPosList = new List<float>();
+		for (int i = 0; i < 6; i++)
+		{
+			sliderPosList.Add(sliders[i].SliderPos);
+		}
+		return new RboxData(sliderPosList, gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class RboxData : EntityBaseData, ILoad
+{
+	private readonly List<float> sliderPosList;
+	public RboxData(List<float> sliderPosList, Vector3 pos, List<int> id) : base(pos, id)
+	{
+		this.sliderPosList = sliderPosList;
+	}
+
+	override public void Load()
+	{
+		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, IDList);
+		for (int i = 0; i < 6; i++)
+		{
+			rbox.sliders[i].ChangeSliderPos(sliderPosList[i]);
+		}
 	}
 }

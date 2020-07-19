@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
+using UnityEngine;
 
-public class SourceStand : EntityBase, ISource
+public class SourceStand : EntityBase, ISource , ISave
 {
 	public double E = 1.5f;
 	public double R = 100;
 	public int G, V;
 	public int EntityID;
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 	}
@@ -53,5 +54,21 @@ public class SourceStand : EntityBase, ISource
 				CircuitCalculator.GNDLines.Add(new GNDLine(G));
 			}
 		}
+	}
+
+	public ILoad Save()
+	{
+		return new SourceStandData(gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class SourceStandData : EntityBaseData, ILoad
+{
+	public SourceStandData(Vector3 pos, List<int> id) : base(pos, id) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<SourceStand>(posfloat, IDList);
 	}
 }

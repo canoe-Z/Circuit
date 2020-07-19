@@ -1,18 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
+using UnityEngine;
 
-public class Voltmeter : EntityBase
+public class Voltmeter : EntityBase , ISave
 {
 	public double MaxU0 = 1.5;
 	public double MaxU1 = 5;
 	public double MaxU2 = 15;
+
 	public double R0 = 1500;
 	public double R1 = 5000;
 	public double R2 = 15000;
+
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		FindPin();
@@ -34,6 +37,7 @@ public class Voltmeter : EntityBase
 		pos.z = pinPos;
 		pin.transform.localPosition = pos;
 	}
+
 	public void FindPin()
 	{
 		int childNum = transform.childCount;
@@ -59,6 +63,7 @@ public class Voltmeter : EntityBase
 			return false;
 		}
 	}
+
 	override public void LoadElement()//添加元件
 	{
 		int GND = ChildPorts[0].ID;
@@ -69,6 +74,7 @@ public class Voltmeter : EntityBase
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
+
 	override public void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
@@ -91,4 +97,21 @@ public class Voltmeter : EntityBase
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
+
+	public ILoad Save()
+	{
+		return new VoltmeterData(gameObject.transform.position, ChildPortID);
+	}
 }
+
+[System.Serializable]
+public class VoltmeterData : EntityBaseData, ILoad
+{
+	public VoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<Voltmeter>(posfloat, IDList);
+	}
+}
+

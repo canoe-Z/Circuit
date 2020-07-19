@@ -40,6 +40,7 @@ public class MySlider : MonoBehaviour
 			ChangeSliderPos(localPos.z);
 		}
 	}
+
 	public void ChangeSliderPos(float newPos)//包含检查
 	{
 		if (newPos > 1) newPos = 1;

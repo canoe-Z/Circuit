@@ -1,10 +1,11 @@
-﻿using SpiceSharp.Components;
+﻿using System.Collections.Generic;
+using SpiceSharp.Components;
 using UnityEngine;
 
-public class DigtalVoltmeter : EntityBase,ISave
+public class DigtalVoltmeter : EntityBase, ISave
 {
 	public double R = 15000;
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 	}
@@ -45,38 +46,21 @@ public class DigtalVoltmeter : EntityBase,ISave
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 	}
 
-	public static void CreateDigtalVoltmeter(float x,float y,float z, int id1, int id2, int id3)
-	{
-		DigtalVoltmeter digtalVoltmeter = EntityCreator.CreateEntity<DigtalVoltmeter>(new Vector3(x,y,z));
-		digtalVoltmeter.ChildPorts[0].ID = id1;
-		digtalVoltmeter.ChildPorts[1].ID = id2;
-		digtalVoltmeter.ChildPorts[2].ID = id3;
-	}
 
 	public ILoad Save()
 	{
-		return new DigtalVoltmeterData(gameObject.transform.position, ChildPorts[0].ID, ChildPorts[1].ID, ChildPorts[2].ID);
+		return new DigtalVoltmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class DigtalVoltmeterData : ILoad
+public class DigtalVoltmeterData : EntityBaseData, ILoad
 {
-	int ID1, ID2, ID3;
-	public float X, Y, Z;
+	public DigtalVoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
 
-	public DigtalVoltmeterData(Vector3 pos,int id1,int id2,int id3)
+	override public void Load()
 	{
-		ID1 = id1;
-		ID2 = id2;
-		ID3 = id3;
-		X = pos.x;
-		Y = pos.y;
-		Z = pos.z;
-	}
-
-	public void Load()
-	{
-		DigtalVoltmeter.CreateDigtalVoltmeter(X,Y,Z,ID1,ID2,ID3);
+		EntityCreator.CreateEntity<DigtalVoltmeter>(posfloat, IDList);
 	}
 }
+

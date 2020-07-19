@@ -64,7 +64,6 @@ public class CircuitLine : MonoBehaviour, ISave
 	public void DestroyLine()
 	{
 		// 从链表中移除
-		Debug.LogError("111");
 		CircuitCalculator.Lines.Remove(this);
 	}
 

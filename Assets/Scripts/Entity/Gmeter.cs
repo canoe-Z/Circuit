@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using SpiceSharp.Components;
-public class Gmeter : EntityBase, IAmmeter
+using UnityEngine;
+
+public class Gmeter : EntityBase, IAmmeter , ISave
 {
 	double MaxI = 0.001;
 	double R = 10;
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	public MySlider mySlider = null;
-	override public void EntityStart()
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		FindPin();
@@ -90,5 +92,21 @@ public class Gmeter : EntityBase, IAmmeter
 	public void CalculateCurrent()//计算自身电流
 	{
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
+	}
+
+	public ILoad Save()
+	{
+		return new GmeterData(gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class GmeterData : EntityBaseData, ILoad
+{
+	public GmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<Gmeter>(posfloat, IDList);
 	}
 }

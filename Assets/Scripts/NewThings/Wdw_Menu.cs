@@ -196,8 +196,12 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		if (double.TryParse(iptNum_R.text, out double num))
 		{
+			Resistance r = EntityCreator.CreateEntity<Resistance>();
+			willBeSet = r.gameObject;
+				/*
 			willBeSet = Instantiate(gmObjSrcSP_R, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
 			Resistance r = willBeSet.GetComponent<Resistance>();
+				*/
 			if (r)
 			{
 				r.Rnum = num;

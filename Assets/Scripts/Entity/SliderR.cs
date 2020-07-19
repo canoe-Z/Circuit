@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Components;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class SliderR : EntityBase
+public class SliderR : EntityBase, ISave
 {
 	/// <summary>
 	/// 可以被随意C的数据
@@ -8,19 +10,19 @@ public class SliderR : EntityBase
 	public double Rmax = 300;
 	double RL = 300;
 	double RR = 0;
-	MySlider myslider;
-	override public void EntityStart()
+	public MySlider myslider;
+	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		myslider = gameObject.GetComponentInChildren<MySlider>();
 		myslider.SliderPos = 1;
 	}
 
-    void Update()
-    {
+	public void Update()
+	{
 		RL = Rmax * myslider.SliderPos;
 		RR = Rmax - RL;
-    }
+	}
 
 	// 电路相关
 	// 判断是否有一端连接，避免浮动节点
@@ -66,6 +68,30 @@ public class SliderR : EntityBase
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
+	}
 
+	public ILoad Save()
+	{
+		return new SliderRData(Rmax, myslider.SliderPos,gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class SliderRData : EntityBaseData, ILoad
+{
+	private readonly double rmax;
+	private readonly float sliderpos;
+	public SliderRData(double rmax,float sliderpos,Vector3 pos, List<int> id) : base(pos, id) 
+	{
+		this.rmax = rmax;
+		this.sliderpos = sliderpos;
+	}
+
+	override public void Load()
+	{
+		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, IDList);
+		sliderR.Rmax = rmax;
+		sliderR.myslider.ChangeSliderPos(sliderpos);
+		sliderR.Update();
 	}
 }

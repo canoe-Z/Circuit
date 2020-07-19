@@ -1,17 +1,22 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public delegate void EntityDestroyEventHandler();
 
 abstract public class EntityBase : MonoBehaviour
 {
-	private int portNum;									//本元件的端口数量
-	public CircuitPort[] ChildPorts { get; set; } = null;	//端口们的引用
+	public int PortNum { get; set; }                                    //本元件的端口数量
+	public CircuitPort[] ChildPorts { get; set; } = null;				//端口们的引用
+	public List<int> ChildPortID { get; set; } = new List<int>();
+	public bool IsIDSet { get; set; } = false;
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
 	public event EntityDestroyEventHandler EntityDestroy;
 
-	abstract public void EntityStart();
+	abstract public void EntityAwake();
+
+
 	void Awake()
 	{
 		rigidBody = GetComponent<Rigidbody>();
@@ -20,23 +25,37 @@ abstract public class EntityBase : MonoBehaviour
 			Debug.LogError("没找到刚体");
 		}
 		CircuitCalculator.Entities.AddLast(this);
-		EntityStart();
+		EntityAwake();
+	}
+
+	void Start()
+	{
+		if (!IsIDSet)
+		{
+			CircuitCalculator.PortNum += ChildPorts.Length;
+			IsIDSet = false;
+		}
+		else
+		{
+			Debug.Log("PortNum不增长");
+		}
 	}
 
 	public void FindCircuitPort()
 	{
 		CircuitPort[] disorderPorts = gameObject.GetComponentsInChildren<CircuitPort>();
-		portNum = disorderPorts.Length;
+		PortNum = disorderPorts.Length;
 		ChildPorts = new CircuitPort[disorderPorts.Length];
 
 		// 对获取到的子端口排序
-		for (var i = 0; i < portNum; i++)
+		for (var i = 0; i < PortNum; i++)
 		{
 			// 名字转换成ID
 			int.TryParse(disorderPorts[i].name, out int id);
 			ChildPorts[id] = disorderPorts[i];
 			ChildPorts[id].ID = id + CircuitCalculator.PortNum;
 			ChildPorts[id].Father = this;
+			ChildPortID.Add(ChildPorts[id].ID);
 		}
 		CircuitCalculator.PortNum += disorderPorts.Length;
 	}
@@ -131,6 +150,22 @@ abstract public class EntityBase : MonoBehaviour
 	public abstract bool IsConnected();
 	public abstract void LoadElement();
 	public abstract void SetElement();
+	//public abstract ILoad Save();
+}
+
+[System.Serializable]
+abstract public class EntityBaseData : ILoad
+{
+	public readonly List<int> IDList;
+	public readonly Float3 posfloat;
+
+	public EntityBaseData(Vector3 posfloat, List<int> IDList)
+	{
+		this.IDList = IDList;
+		this.posfloat = posfloat.ToFloat3();
+	}
+
+	public abstract void Load();
 }
 
 public interface ISource
