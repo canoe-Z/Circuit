@@ -13,6 +13,7 @@ public class Switch : EntityBase, ISave
 		FindCircuitPort();
 		//滑块
 		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
+		mySlider.SliderPos = 0.5f;
 		Debug.LogError(mySlider.SliderPos);
 		int childNum = this.transform.childCount;
 		for (int i = 0; i < childNum; i++)
