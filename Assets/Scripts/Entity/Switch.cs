@@ -1,17 +1,19 @@
-﻿using UnityEngine;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Switch : EntityBase
+public class Switch : EntityBase, ISave
 {
 	public int state = 1;
 	public MySlider mySlider = null;
 	GameObject connector = null;
-	// Start is called before the first frame update
+
 	override public void EntityAwake()
 	{
 		FindCircuitPort();
 		//滑块
 		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
+		Debug.LogError(mySlider.SliderPos);
 		int childNum = this.transform.childCount;
 		for (int i = 0; i < childNum; i++)
 		{
@@ -25,12 +27,11 @@ public class Switch : EntityBase
 	}
 
 	// 开关的状态有三种
-	void Update()
+	public void Update()
     {
 		if (mySlider.SliderPos > 0.8f) state = 2; //R
 		else if (mySlider.SliderPos < 0.2f) state = 0; //L
 		else state = 1; //M
-
 		connector.transform.LookAt(mySlider.gameObject.transform);
     }
 
@@ -79,5 +80,28 @@ public class Switch : EntityBase
 		{
 			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", L), L.ToString(), M.ToString(), 0));
 		}
+	}
+
+	public ILoad Save()
+	{
+		return new SwitchData(mySlider.SliderPos, gameObject.transform.position, ChildPortID);
+	}
+}
+
+[System.Serializable]
+public class SwitchData : EntityBaseData, ILoad
+{
+	private readonly float sliderpos;
+	public SwitchData(float sliderpos, Vector3 pos, List<int> id) : base(pos, id)
+	{
+		this.sliderpos = sliderpos;
+	}
+
+	override public void Load()
+	{
+		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, IDList);
+		Debug.LogError(sliderpos);
+		_switch.mySlider.ChangeSliderPos(sliderpos);
+		_switch.Update();
 	}
 }

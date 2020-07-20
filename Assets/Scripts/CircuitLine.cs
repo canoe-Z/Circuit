@@ -39,6 +39,7 @@ public class CircuitLine : MonoBehaviour, ISave
 	void FixedUpdate()
 	{
 		gameObject.GetComponent<MeshCollider>().sharedMesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
+		gameObject.GetComponent<MeshCollider>().convex = true;
 	}
 
 	/// <summary>
