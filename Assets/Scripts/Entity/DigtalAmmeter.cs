@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine.UI;
 
-public class DigtalAmmeter : EntityBase, IAmmeter, IAwake
+public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
 	private Text digtalAmmeterText;
 
-	public void EntityAwake()
+	public override void EntityAwake()
 	{
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
 	}

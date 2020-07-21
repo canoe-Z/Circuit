@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine;
 
-public class Voltmeter : EntityBase, IAwake
+public class Voltmeter : EntityBase
 {
 	public double MaxU0 = 1.5;
 	public double MaxU1 = 5;
@@ -14,7 +14,7 @@ public class Voltmeter : EntityBase, IAwake
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 
-	public void EntityAwake()
+	public override void EntityAwake()
 	{
 		FindPin();
 	}

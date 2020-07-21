@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderR : EntityBase, IAwake
+public class SliderR : EntityBase
 {
 	/// <summary>
 	/// 可以被随意C的数据
@@ -11,7 +11,7 @@ public class SliderR : EntityBase, IAwake
 	double RL = 300;
 	double RR = 0;
 	public MySlider myslider;
-	public void EntityAwake()
+	public override void EntityAwake()
 	{
 		myslider = gameObject.GetComponentInChildren<MySlider>();
 		myslider.SliderPos = 1;

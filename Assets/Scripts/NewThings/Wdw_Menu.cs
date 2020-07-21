@@ -204,7 +204,7 @@ public class Wdw_Menu : MonoBehaviour
 			willBeSet = r.gameObject;
 			if (r)
 			{
-				r.Rnum = num;
+				r.Value = num;
 				CloseColl(willBeSet);//关闭碰撞体
 				CloseMenu();//关闭菜单
 				MoveController.CanOperate = false;//禁止操作物体

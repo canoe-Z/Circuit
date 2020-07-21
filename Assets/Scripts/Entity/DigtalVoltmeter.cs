@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine.UI;
 
-public class DigtalVoltmeter : EntityBase, IAwake
+public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
 	private Text digtalDigtalVoltmeter;
 
-	public void EntityAwake()
+	public override void EntityAwake()
 	{
 		digtalDigtalVoltmeter = transform.FindComponent_DFS<Text>("Text");
 	}

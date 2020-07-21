@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Switch : EntityBase, IAwake
+public class Switch : EntityBase
 {
 	public int state = 1;
 	public MySlider mySlider = null;
 	GameObject connector = null;
 
-	public void EntityAwake()
+	public override void EntityAwake()
 	{
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();

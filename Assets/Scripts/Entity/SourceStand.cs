@@ -9,6 +9,8 @@ public class SourceStand : EntityBase, ISource
 	public int G, V;
 	public int EntityID;
 
+	public override void EntityAwake() { }
+
 	//下面是电路相关的
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
