@@ -162,15 +162,14 @@ public class Wdw_Menu : MonoBehaviour
 	//下面全都是按钮
 	void OnButtonCopy_RBox()
 	{
-		GameObject digtalVoltmeter = (GameObject)Resources.Load("DigtalVoltmeter");
-		willBeSet = Instantiate(digtalVoltmeter);//复制物体
+		willBeSet = EntityCreator.CreateEntity<RBox>().gameObject;//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
 	}
 	void OnButtonCopy_Switch()
 	{
-		willBeSet = Instantiate(gmObjSrc_Switch, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
+		willBeSet = EntityCreator.CreateEntity<Switch>().gameObject;//复制物体//复制物体
 		CloseColl(willBeSet);//关闭碰撞体
 		CloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
@@ -181,8 +180,8 @@ public class Wdw_Menu : MonoBehaviour
 		if (double.TryParse(iptNum_SliderR.text, out double num))
 		{
 			iptNum_SliderR.text = "";
-			willBeSet = Instantiate(gmObjSrcSP_SliderR, new Vector3(0, 0, 0), Quaternion.identity);//复制物体
-			SliderR sliderR = willBeSet.GetComponent<SliderR>();
+			SliderR sliderR = EntityCreator.CreateEntity<SliderR>();//复制物体
+			willBeSet = sliderR.gameObject;
 			if (sliderR)
 			{
 				sliderR.Rmax = num;

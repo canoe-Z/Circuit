@@ -2,15 +2,14 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class RBox : EntityBase
+public class RBox : EntityBase, IAwake
 {
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
 	public MySlider[] sliders = new MySlider[6];
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
 		foreach (MySlider sld in slidersDisorder)
 		{

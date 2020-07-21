@@ -8,10 +8,6 @@ public class SourceStand : EntityBase, ISource
 	public double R = 100;
 	public int G, V;
 	public int EntityID;
-	override public void EntityAwake()
-	{
-		FindCircuitPort();
-	}
 
 	//下面是电路相关的
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点

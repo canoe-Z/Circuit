@@ -5,10 +5,6 @@ using UnityEngine;
 public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
-	override public void EntityAwake()
-	{
-		FindCircuitPort();
-	}
 
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
@@ -55,17 +51,6 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 
 	public override EntityData Save()
 	{
-		return new DigtalAmmeterData(gameObject.transform.position, ChildPortID);
-	}
-}
-
-[System.Serializable]
-public class DigtalAmmeterData : EntityData
-{
-	public DigtalAmmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
-
-	public override void Load()
-	{
-		EntityCreator.CreateEntity<DigtalAmmeter>(posfloat, IDList);
+		return new SimpleEntityData<DigtalAmmeter>(gameObject.transform.position, ChildPortID);
 	}
 }

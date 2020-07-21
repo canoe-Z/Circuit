@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 using UnityEngine;
 
-public class Voltmeter : EntityBase
+public class Voltmeter : EntityBase, IAwake
 {
 	public double MaxU0 = 1.5;
 	public double MaxU1 = 5;
@@ -15,11 +14,10 @@ public class Voltmeter : EntityBase
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		FindPin();
-    }
+	}
 
 	void Update()
 	{
@@ -100,18 +98,6 @@ public class Voltmeter : EntityBase
 
 	public override EntityData Save()
 	{
-		return new VoltmeterData(gameObject.transform.position, ChildPortID);
+		return new SimpleEntityData<Voltmeter>(gameObject.transform.position, ChildPortID);
 	}
 }
-
-[System.Serializable]
-public class VoltmeterData : EntityData
-{
-	public VoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
-
-	override public void Load()
-	{
-		EntityCreator.CreateEntity<Voltmeter>(posfloat, IDList);
-	}
-}
-

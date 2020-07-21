@@ -7,10 +7,6 @@ public class Resistance : EntityBase
 {
 	public double Rnum = 120;
 	public Text num;
-	override public void EntityAwake()
-	{
-		FindCircuitPort();
-	}
 
 	private void Update()
 	{

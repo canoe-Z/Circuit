@@ -5,10 +5,6 @@ using UnityEngine;
 public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
-	override public void EntityAwake()
-	{
-		FindCircuitPort();
-	}
 
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
@@ -49,18 +45,7 @@ public class DigtalVoltmeter : EntityBase
 
 	public override EntityData Save()
 	{
-		return new DigtalVoltmeterData(gameObject.transform.position, ChildPortID);
-	}
-}
-
-[System.Serializable]
-public class DigtalVoltmeterData : EntityData
-{
-	public DigtalVoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
-
-	override public void Load()
-	{
-		EntityCreator.CreateEntity<DigtalVoltmeter>(posfloat, IDList);
+		return new SimpleEntityData<DigtalVoltmeter>(gameObject.transform.position, ChildPortID);
 	}
 }
 

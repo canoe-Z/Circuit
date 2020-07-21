@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Switch : EntityBase
+public class Switch : EntityBase, IAwake
 {
 	public int state = 1;
 	public MySlider mySlider = null;
 	GameObject connector = null;
 
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SliderPos = 0.5f;
@@ -28,12 +27,12 @@ public class Switch : EntityBase
 
 	// 开关的状态有三种
 	public void Update()
-    {
+	{
 		if (mySlider.SliderPos > 0.8f) state = 2; //R
 		else if (mySlider.SliderPos < 0.2f) state = 0; //L
 		else state = 1; //M
 		connector.transform.LookAt(mySlider.gameObject.transform);
-    }
+	}
 
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点(对于开关中间必连）

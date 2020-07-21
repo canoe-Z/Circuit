@@ -2,28 +2,27 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class Gmeter : EntityBase, IAmmeter
+public class Gmeter : EntityBase, IAmmeter, IAwake
 {
 	double MaxI = 0.001;
 	double R = 10;
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	public MySlider mySlider = null;
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		FindPin();
 		//滑块
 		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
 		mySlider.Devide = 5;
 	}
 
-    void Update()
+	void Update()
 	{
 		//量程
 		this.MaxI = 0.1;
 		this.R = 10;
-		for(int i = 0; i < mySlider.SliderPos_int; i++)
+		for (int i = 0; i < mySlider.SliderPos_int; i++)
 		{
 			MaxI *= 0.01;
 			R *= 2;
@@ -96,17 +95,6 @@ public class Gmeter : EntityBase, IAmmeter
 
 	public override EntityData Save()
 	{
-		return new GmeterData(gameObject.transform.position, ChildPortID);
-	}
-}
-
-[System.Serializable]
-public class GmeterData : EntityData
-{
-	public GmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
-
-	override public void Load()
-	{
-		EntityCreator.CreateEntity<Gmeter>(posfloat, IDList);
+		return new SimpleEntityData<Gmeter>(gameObject.transform.position, ChildPortID);
 	}
 }

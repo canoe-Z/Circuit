@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Source : EntityBase, ISource
+public class Source : EntityBase, ISource, IAwake
 {
 	public const int SourceNum = 3;
 	public double R0 = 0.1;
@@ -16,9 +16,8 @@ public class Source : EntityBase, ISource
 	public double[] E = new double[3] { 30, 30, 5 };
 	public double[] R = new double[3] { 0.1, 0.1, 0.1 };
 	public int EntityID;
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
 		foreach (var sld in slidersDisorder)
 		{
@@ -126,7 +125,7 @@ public class SourceData : EntityData
 	override public void Load()
 	{
 		Source source = EntityCreator.CreateEntity<Source>(posfloat, IDList);
-		for(var i =0; i<sliderPosList.Count;i++)
+		for (var i = 0; i < sliderPosList.Count; i++)
 		{
 			source.sliders[i].ChangeSliderPos(sliderPosList[i]);
 		}

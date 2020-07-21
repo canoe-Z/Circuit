@@ -14,9 +14,6 @@ abstract public class EntityBase : MonoBehaviour
 	public static event ExitEventHandler MouseExit;
 	public event EntityDestroyEventHandler EntityDestroy;
 
-	abstract public void EntityAwake();
-
-
 	void Awake()
 	{
 		rigidBody = GetComponent<Rigidbody>();
@@ -25,7 +22,11 @@ abstract public class EntityBase : MonoBehaviour
 			Debug.LogError("没找到刚体");
 		}
 		CircuitCalculator.Entities.AddLast(this);
-		EntityAwake();
+		FindCircuitPort();
+		if(this is IAwake)
+		{
+			(this as IAwake).EntityAwake();
+		}
 	}
 
 	void Start()
@@ -168,6 +169,21 @@ abstract public class EntityData
 	public abstract void Load();
 }
 
+[System.Serializable]
+public class SimpleEntityData<T> : EntityData
+{
+	public SimpleEntityData(Vector3 posfloat, List<int> IDList) : base(posfloat, IDList) { }
+
+	public override void Load()
+	{
+		EntityCreator.CreateEntity<T>(posfloat, IDList);
+	}
+}
+
+public interface IAwake
+{
+	void EntityAwake();
+}
 public interface ISource
 {
 	void GroundCheck();

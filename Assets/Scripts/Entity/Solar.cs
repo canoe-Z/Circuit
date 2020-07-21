@@ -6,7 +6,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using UnityEngine.UI;
 
-public class Solar : EntityBase, ISource
+public class Solar : EntityBase, ISource, IAwake
 {
 	readonly double IscMax = 0.06;
 	double Isc;
@@ -14,9 +14,8 @@ public class Solar : EntityBase, ISource
 	public int EntityID;
 	public MySlider slider;
 	public Text textLight;//光照强度的数值
-	override public void EntityAwake()
+	public void EntityAwake()
 	{
-		FindCircuitPort();
 		if (slider == null) Debug.LogError("没挂");
 		if (textLight == null) Debug.LogError("没挂");
 	}
