@@ -12,23 +12,21 @@ public class Solar : EntityBase, ISource, IAwake
 	double Isc;
 	int GND, P;
 	public int EntityID;
-	public MySlider slider;
-	public Text textLight;//光照强度的数值
+	private MySlider slider;
+	private Text sloarText;
 	public void EntityAwake()
 	{
-		if (slider == null) Debug.LogError("没挂");
-		if (textLight == null) Debug.LogError("没挂");
+		slider = transform.FindComponent_DFS<MySlider>("Slider");
+		sloarText = transform.FindComponent_DFS<Text>("Text");
 	}
 
 	void Update()
 	{
-		/*
-		float lightStrength = 1;
+		float fm = 6 - 5 * slider.SliderPos;//会被平方的分母
+		float lightStrength = 1 / (fm * fm);//这东西最小值1/36，最大值1
 		Isc = lightStrength * IscMax;
 		//下面更新光照强度的数值
-		double stext = lightStrength * 1000;
-		textLight.text = stext.ToString("0.00");
-		*/
+		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
 	//电路相关

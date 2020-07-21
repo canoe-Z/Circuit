@@ -1,10 +1,34 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
-using UnityEngine;
+﻿using SpiceSharp.Components;
+using UnityEngine.UI;
 
-public class DigtalAmmeter : EntityBase, IAmmeter
+public class DigtalAmmeter : EntityBase, IAmmeter, IAwake
 {
 	public double R = 0.001;
+	private Text digtalAmmeterText;
+
+	public void EntityAwake()
+	{
+		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
+	}
+
+	void Update()
+	{
+		double mA, A;
+		if (ChildPorts[1].Connected == 1)
+		{
+			mA = ChildPorts[1].I * 1000;
+			digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
+		}
+		else if (ChildPorts[2].Connected == 1)
+		{
+			A = ChildPorts[2].I;
+			digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
+		}
+		else
+		{
+			digtalAmmeterText.text = EntityText.GetText(0, 2);
+		}
+	}
 
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点

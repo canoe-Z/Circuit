@@ -1,10 +1,33 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
-using UnityEngine;
+﻿using SpiceSharp.Components;
+using UnityEngine.UI;
 
-public class DigtalVoltmeter : EntityBase
+public class DigtalVoltmeter : EntityBase, IAwake
 {
 	public double R = 15000;
+	private Text digtalDigtalVoltmeter;
+
+	public void EntityAwake()
+	{
+		digtalDigtalVoltmeter = transform.FindComponent_DFS<Text>("Text");
+	}
+	void Update()
+	{
+		double mV, V;
+		if (ChildPorts[1].Connected == 1)
+		{
+			mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
+			digtalDigtalVoltmeter.text = EntityText.GetText(mV, 999.99, 2);
+		}
+		else if (ChildPorts[2].Connected == 1)
+		{
+			V = ChildPorts[2].U - ChildPorts[0].U;
+			digtalDigtalVoltmeter.text = EntityText.GetText(V, 999.99, 2);
+		}
+		else
+		{
+			digtalDigtalVoltmeter.text = EntityText.GetText(0, 2);
+		}
+	}
 
 	//电路相关
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
