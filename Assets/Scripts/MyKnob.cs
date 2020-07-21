@@ -15,7 +15,14 @@ public class MyKnob : MonoBehaviour
 	/// 是否可以进行循环
 	/// </summary>
 	public bool canLoop = false;
-	public float angleRange = 330;
+	/// <summary>
+	/// 旋转的限制角度
+	/// </summary>
+	public float angleRange = 360;
+	/// <summary>
+	/// 模式为连续的话，每秒的速度增量，指从0-1
+	/// </summary>
+	public float speedUpPerSecond = 0.001f;
 	/// <summary>
 	/// 0-1的数值
 	/// </summary>
@@ -37,58 +44,98 @@ public class MyKnob : MonoBehaviour
 			CircuitCalculator.CalculateByConnection();
 		}
 
-		if (Input.GetMouseButtonDown(0))//左键
+		if (devide > 0)//离散才可以执行
 		{
-			UpOne();
-			calculator = true;
+			if (Input.GetMouseButtonDown(0))//左键按下
+			{
+				UpOne();
+				calculator = true;
+			}
+			else if (Input.GetMouseButtonDown(1))//右键按下
+			{
+
+				DownOne();
+				calculator = true;
+			}
 		}
-		else if (Input.GetMouseButtonDown(1))//右键
+		else//连续的
 		{
-			DownOne();
-			calculator = true;
+			if (Input.GetMouseButton(0))
+			{
+				UpYiDiandian();
+				calculator = true;
+			}
+			else if(Input.GetMouseButton(1))
+			{
+				DownYiDiandian();
+				calculator = true;
+			}
+			else
+			{
+				NotXuanZhuan();
+			}
 		}
 	}
-
+	float nowSpeedPerSec = 0;
+	//本帧没有进行旋转
+	void NotXuanZhuan()
+	{
+		nowSpeedPerSec = 0;
+	}
+	//上升一点点
+	void UpYiDiandian()
+	{
+		nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
+		//写入、检查数据
+		knobPos += nowSpeedPerSec;
+		if (knobPos > 1) knobPos = 1;
+		//旋转模型
+		transform.localEulerAngles = new Vector3(0, 0, knobPos * angleRange);
+	}
+	//下降一点点
+	void DownYiDiandian()
+	{
+		nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
+		//写入、检查数据
+		knobPos -= nowSpeedPerSec;
+		if (knobPos < 0) knobPos = 0;
+		//旋转模型、写入数据
+		transform.localEulerAngles = new Vector3(0, 0, knobPos * angleRange);
+	}
 	//加一
 	void UpOne()
 	{
-		if (devide > 0)//离散才可以执行
+		knobPos_int++;
+		if (knobPos_int >= devide)//加冒了
 		{
-			knobPos_int++;
-			if (knobPos_int >= devide)//加冒了
-			{
-				if (canLoop) knobPos_int -= devide;
-				else knobPos_int = devide - 1;
-			}
-
-			float pre = 1f / devide;//每份的长度
-			float newRot = knobPos_int * pre;//连续的角度
-
-			//旋转模型、写入数据
-			transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
-			knobPos = newRot;
+			if (canLoop) knobPos_int -= devide;
+			else knobPos_int = devide - 1;
 		}
+
+		float pre = 1f / devide;//每份的长度
+		float newRot = knobPos_int * pre;//连续的角度
+
+		//旋转模型、写入数据
+		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
+		knobPos = newRot;
 	}
 
 	//减一
 	void DownOne()
 	{
-		if (devide > 0)//离散才可以执行
+		knobPos_int--;
+		if (knobPos_int < 0)//减冒了
 		{
-			knobPos_int--;
-			if (knobPos_int < 0)//减冒了
-			{
-				if (canLoop) knobPos_int += devide;
-				else knobPos_int = 0;
-			}
-
-			float pre = 1f / devide;//每份的长度
-			float newRot = knobPos_int * pre;//连续的角度
-
-			//旋转模型、写入数据
-			transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
-			knobPos = newRot;
+			if (canLoop) knobPos_int += devide;
+			else knobPos_int = 0;
 		}
+
+		float pre = 1f / devide;//每份的长度
+		float newRot = knobPos_int * pre;//连续的角度
+
+		//旋转模型、写入数据
+		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
+		knobPos = newRot;
 	}
 
 	/// <summary>
