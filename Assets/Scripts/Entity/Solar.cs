@@ -11,7 +11,6 @@ public class Solar : EntityBase, ISource, IAwake
 	readonly double IscMax = 0.06;
 	double Isc;
 	int GND, P;
-	public int EntityID;
 	private MySlider slider;
 	private Text sloarText;
 	public void EntityAwake()
@@ -43,8 +42,8 @@ public class Solar : EntityBase, ISource, IAwake
 	}
 	override public void LoadElement()//添加元件
 	{
-		GND = ChildPorts[0].ID;
-		P = ChildPorts[1].ID;
+		int GND = ChildPorts[0].ID;
+		int P = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(GND, P);
 	}
 
