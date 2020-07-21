@@ -17,7 +17,6 @@ public class Ammeter : EntityBase, IAmmeter, IAwake
 
 	public void EntityAwake()
 	{
-		Debug.LogError("成功");
 		FindPin();
 	}
 
