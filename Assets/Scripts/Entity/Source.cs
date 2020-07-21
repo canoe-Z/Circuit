@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Source : EntityBase, ISource, IAwake
+public class Source : EntityBase, ISource
 {
 	public const int SourceNum = 3;
 	public double R0 = 0.1;
@@ -16,7 +16,8 @@ public class Source : EntityBase, ISource, IAwake
 	public double[] E = new double[3] { 30, 30, 5 };
 	public double[] R = new double[3] { 0.1, 0.1, 0.1 };
 	public int EntityID;
-	public void EntityAwake()
+
+	public override void EntityAwake()
 	{
 		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
 		foreach (var sld in slidersDisorder)

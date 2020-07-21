@@ -5,16 +5,22 @@ using UnityEngine.UI;
 
 public class Resistance : EntityBase
 {
-	public double Rnum = 120;
-	public Text num;
+	public double Value = 120;
+	public Text resistanceText;
 
-	private void Update()
+	public override void EntityAwake()
 	{
-		if (num) num.text = Rnum.ToString();
+		resistanceText = transform.FindComponent_DFS<Text>("Text");
 	}
 
-	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	void Start()
+	{
+		// 不能在Awake(）中执行，Awake()之后还可能修改阻值
+		if (resistanceText) resistanceText.text = Value.ToString();
+	}
+
+	// 电路相关
+	public override bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
@@ -25,27 +31,28 @@ public class Resistance : EntityBase
 			return false;
 		}
 	}
-	override public void LoadElement()
+
+	public override void LoadElement()
 	{
 		int LeftPortID = ChildPorts[0].ID;
 		int RightPortID = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int LeftPortID = ChildPorts[0].ID;
 		int RightPortID = ChildPorts[1].ID;
 		int EntityID = CircuitCalculator.EntityNum;
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Rnum));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Value));
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]); 
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 	}
 
 	public override EntityData Save()
 	{
-		return new ResistanceData(Rnum, gameObject.transform.position, ChildPortID);
+		return new ResistanceData(Value, gameObject.transform.position, ChildPortID);
 	}
 }
 
@@ -61,6 +68,6 @@ public class ResistanceData : EntityData
 	override public void Load()
 	{
 		Resistance resistance = EntityCreator.CreateEntity<Resistance>(posfloat, IDList);
-		resistance.Rnum = rnum;
+		resistance.Value = rnum;
 	}
 }

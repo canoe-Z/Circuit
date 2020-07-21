@@ -23,10 +23,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 		CircuitCalculator.Entities.AddLast(this);
 		FindCircuitPort();
-		if(this is IAwake)
-		{
-			(this as IAwake).EntityAwake();
-		}
+		EntityAwake();
 	}
 
 	void Start()
@@ -148,6 +145,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
+	public abstract void EntityAwake();
 	public abstract bool IsConnected();
 	public abstract void LoadElement();
 	public abstract void SetElement();
@@ -180,10 +178,6 @@ public class SimpleEntityData<T> : EntityData
 	}
 }
 
-public interface IAwake
-{
-	void EntityAwake();
-}
 public interface ISource
 {
 	void GroundCheck();

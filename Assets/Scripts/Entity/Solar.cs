@@ -6,14 +6,15 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using UnityEngine.UI;
 
-public class Solar : EntityBase, ISource, IAwake
+public class Solar : EntityBase, ISource
 {
 	readonly double IscMax = 0.06;
 	double Isc;
 	int GND, P;
 	private MySlider slider;
 	private Text sloarText;
-	public void EntityAwake()
+
+	public override void EntityAwake()
 	{
 		slider = transform.FindComponent_DFS<MySlider>("Slider");
 		sloarText = transform.FindComponent_DFS<Text>("Text");
