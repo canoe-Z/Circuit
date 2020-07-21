@@ -33,7 +33,6 @@ public class Wdw_Menu : MonoBehaviour
 		btnCopiesSP_R.onClick.AddListener(OnButtonCopySP_R);
 	}
 
-
 	void Update()
 	{
 		UpdateCopyThings();
@@ -78,10 +77,6 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		CloseMenu();
 	}
-
-
-
-
 
 	/// <summary>
 	/// 将物体复制并且移除碰撞体的系统
