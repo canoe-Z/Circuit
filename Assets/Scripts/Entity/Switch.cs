@@ -14,7 +14,7 @@ public class Switch : EntityBase, ISave
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SliderPos = 0.5f;
-		Debug.LogError(mySlider.SliderPos);
+		Debug.LogWarning(mySlider.SliderPos);
 		int childNum = this.transform.childCount;
 		for (int i = 0; i < childNum; i++)
 		{
