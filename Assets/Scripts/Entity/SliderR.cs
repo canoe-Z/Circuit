@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SliderR : EntityBase, ISave
+public class SliderR : EntityBase
 {
 	/// <summary>
 	/// 可以被随意C的数据
@@ -70,14 +70,14 @@ public class SliderR : EntityBase, ISave
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new SliderRData(Rmax, myslider.SliderPos,gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class SliderRData : EntityBaseData, ILoad
+public class SliderRData : EntityData
 {
 	private readonly double rmax;
 	private readonly float sliderpos;

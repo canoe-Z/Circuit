@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Switch : EntityBase, ISave
+public class Switch : EntityBase
 {
 	public int state = 1;
 	public MySlider mySlider = null;
@@ -14,7 +14,6 @@ public class Switch : EntityBase, ISave
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SliderPos = 0.5f;
-		Debug.LogWarning(mySlider.SliderPos);
 		int childNum = this.transform.childCount;
 		for (int i = 0; i < childNum; i++)
 		{
@@ -83,14 +82,14 @@ public class Switch : EntityBase, ISave
 		}
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new SwitchData(mySlider.SliderPos, gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class SwitchData : EntityBaseData, ILoad
+public class SwitchData : EntityData
 {
 	private readonly float sliderpos;
 	public SwitchData(float sliderpos, Vector3 pos, List<int> id) : base(pos, id)
@@ -101,7 +100,6 @@ public class SwitchData : EntityBaseData, ILoad
 	override public void Load()
 	{
 		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, IDList);
-		Debug.LogError(sliderpos);
 		_switch.mySlider.ChangeSliderPos(sliderpos);
 		_switch.Update();
 	}

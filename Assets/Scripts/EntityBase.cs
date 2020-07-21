@@ -150,16 +150,16 @@ abstract public class EntityBase : MonoBehaviour
 	public abstract bool IsConnected();
 	public abstract void LoadElement();
 	public abstract void SetElement();
-	//public abstract ILoad Save();
+	public abstract EntityData Save();
 }
 
 [System.Serializable]
-abstract public class EntityBaseData : ILoad
+abstract public class EntityData
 {
 	public readonly List<int> IDList;
 	public readonly Float3 posfloat;
 
-	public EntityBaseData(Vector3 posfloat, List<int> IDList)
+	public EntityData(Vector3 posfloat, List<int> IDList)
 	{
 		this.IDList = IDList;
 		this.posfloat = posfloat.ToFloat3();

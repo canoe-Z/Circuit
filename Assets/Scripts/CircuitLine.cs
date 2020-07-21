@@ -3,7 +3,7 @@
 /// <summary>
 /// 3D界面连个导线：先创建空物体，然后挂这个脚本，最后调用连接函数就行了，电路层面：读取两个ID
 /// </summary>
-public class CircuitLine : MonoBehaviour, ISave
+public class CircuitLine : MonoBehaviour
 {
 	public int StartID_Global { get; set; }    // 端口的全局ID
 	public int EndID_Global { get; set; }
@@ -79,14 +79,14 @@ public class CircuitLine : MonoBehaviour, ISave
 		Destroy(gameObject);
 	}
 
-	public ILoad Save()
+	public LineData Save()
 	{
 		return new LineData(StartID_Global, EndID_Global);
 	}
 }
 
 [System.Serializable]
-public class LineData: ILoad
+public class LineData
 {
 	public int startID;
 	public int endID;

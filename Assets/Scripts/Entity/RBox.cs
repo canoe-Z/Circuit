@@ -84,7 +84,7 @@ public class RBox : EntityBase
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		List<float> sliderPosList = new List<float>();
 		for (int i = 0; i < 6; i++)
@@ -96,7 +96,7 @@ public class RBox : EntityBase
 }
 
 [System.Serializable]
-public class RboxData : EntityBaseData, ILoad
+public class RboxData : EntityData
 {
 	private readonly List<float> sliderPosList;
 	public RboxData(List<float> sliderPosList, Vector3 pos, List<int> id) : base(pos, id)

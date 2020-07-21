@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class Gmeter : EntityBase, IAmmeter , ISave
+public class Gmeter : EntityBase, IAmmeter
 {
 	double MaxI = 0.001;
 	double R = 10;
@@ -94,14 +94,14 @@ public class Gmeter : EntityBase, IAmmeter , ISave
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new GmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class GmeterData : EntityBaseData, ILoad
+public class GmeterData : EntityData
 {
 	public GmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
 

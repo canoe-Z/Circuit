@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class Ammeter : EntityBase, IAmmeter , ISave
+public class Ammeter : EntityBase, IAmmeter
 {
 	public double MaxI0 = 0.05;
 	public double MaxI1 = 0.1;
@@ -50,7 +50,7 @@ public class Ammeter : EntityBase, IAmmeter , ISave
 	}
 
 	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	public override bool IsConnected()//判断是否有一端连接，避免浮动节点
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
 		{
@@ -61,7 +61,7 @@ public class Ammeter : EntityBase, IAmmeter , ISave
 			return false;
 		}
 	}
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		//获取端口ID并完成并查集连接
 		int GND = ChildPorts[0].ID;
@@ -72,7 +72,7 @@ public class Ammeter : EntityBase, IAmmeter , ISave
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
-	override public void SetElement()//得到约束方程
+	public override void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
@@ -102,14 +102,14 @@ public class Ammeter : EntityBase, IAmmeter , ISave
 		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new AmmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class AmmeterData : EntityBaseData, ILoad
+public class AmmeterData : EntityData
 {
 	public AmmeterData(Vector3 posfloat, List<int> IDlist) : base(posfloat, IDlist) { }
 

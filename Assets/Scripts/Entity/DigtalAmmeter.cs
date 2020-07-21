@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class DigtalAmmeter : EntityBase, IAmmeter, ISave
+public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
 	override public void EntityAwake()
@@ -53,18 +53,18 @@ public class DigtalAmmeter : EntityBase, IAmmeter, ISave
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new DigtalAmmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class DigtalAmmeterData : EntityBaseData, ILoad
+public class DigtalAmmeterData : EntityData
 {
 	public DigtalAmmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
 
-	override public void Load()
+	public override void Load()
 	{
 		EntityCreator.CreateEntity<DigtalAmmeter>(posfloat, IDList);
 	}

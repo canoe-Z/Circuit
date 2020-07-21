@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using UnityEngine;
 using SpiceSharp.Components;
 using SpiceSharp.Circuits;
@@ -22,14 +23,13 @@ public class Solar : EntityBase, ISource
 
 	void Update()
 	{
-		float fm = 6 - 5 * slider.SliderPos;//会被平方的分母
-		float lightStrength = 1 / (fm * fm);//这东西最小值1/36，最大值1
-
-
+		/*
+		float lightStrength = 1;
 		Isc = lightStrength * IscMax;
 		//下面更新光照强度的数值
 		double stext = lightStrength * 1000;
 		textLight.text = stext.ToString("0.00");
+		*/
 	}
 
 	//电路相关
@@ -104,4 +104,21 @@ public class Solar : EntityBase, ISource
 			}
 		}
 	}
+
+	public override EntityData Save()
+	{
+		return new SolarData(gameObject.transform.position, ChildPortID);
+	}
 }
+
+[System.Serializable]
+public class SolarData : EntityData
+{
+	public SolarData(Vector3 pos, List<int> id) : base(pos, id) { }
+
+	override public void Load()
+	{
+		EntityCreator.CreateEntity<Solar>(posfloat, IDList);
+	}
+}
+

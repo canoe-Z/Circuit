@@ -3,7 +3,7 @@ using SpiceSharp.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Resistance : EntityBase, ISave
+public class Resistance : EntityBase
 {
 	public double Rnum = 120;
 	public Text num;
@@ -47,14 +47,14 @@ public class Resistance : EntityBase, ISave
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new ResistanceData(Rnum, gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class ResistanceData : EntityBaseData, ILoad
+public class ResistanceData : EntityData
 {
 	private readonly double rnum;
 	public ResistanceData(double rnum,Vector3 pos, List<int> id) : base(pos, id) 

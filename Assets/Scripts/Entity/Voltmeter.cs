@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class Voltmeter : EntityBase , ISave
+public class Voltmeter : EntityBase
 {
 	public double MaxU0 = 1.5;
 	public double MaxU1 = 5;
@@ -98,14 +98,14 @@ public class Voltmeter : EntityBase , ISave
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new VoltmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class VoltmeterData : EntityBaseData, ILoad
+public class VoltmeterData : EntityData
 {
 	public VoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
 

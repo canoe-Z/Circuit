@@ -11,7 +11,8 @@ using UnityEngine;
 public class SaveData
 {
     // 所有数据存储在List中
-    public List<ILoad> DataList { get; set; } = new List<ILoad>();
+    public List<EntityData> EntityDataList { get; set; } = new List<EntityData>();
+    public List<LineData> LineDataList { get; set; } = new List<LineData>();
 }
 
 /// <summary>
@@ -21,12 +22,17 @@ public class SaveManager : MonoBehaviour
 {
     public void Save()
     {
-        List<ISave> Savelist = FindAllTypes<ISave>();
         SaveData savedata = new SaveData();
-        foreach(ISave toSave in Savelist)
-		{
-            savedata.DataList.Add(toSave.Save());
-		}
+
+        foreach (EntityBase entity in CircuitCalculator.Entities)
+        {
+            savedata.EntityDataList.Add(entity.Save());
+        }
+
+        foreach (CircuitLine line in CircuitCalculator.Lines)
+        {
+            savedata.LineDataList.Add(line.Save());
+        }
 
         if (!Directory.Exists("Saves"))
             Directory.CreateDirectory("Saves");
@@ -37,7 +43,6 @@ public class SaveManager : MonoBehaviour
         saveFile.Close();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F5))
@@ -47,51 +52,31 @@ public class SaveManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F9))
         {
-            var node1 = CircuitCalculator.Entities.First;
-            while (node1 != null)
-            {
-                var next = node1.Next;
-                node1.Value.DestroyEntity();
-                node1 = next;
-            }
-
-            var node = CircuitCalculator.Lines.First;
+            // 删除场景内所有元件，通过委托调用也将删除所有端口和导线
+            var node = CircuitCalculator.Entities.First;
             while (node != null)
             {
                 var next = node.Next;
-                node.Value.DestroyRope();
+                node.Value.DestroyEntity();
                 node = next;
             }
 
-            /*
-            Debug.LogError(CircuitCalculator.Entities.Count);
-            Debug.LogError(CircuitCalculator.Lines.Count);
-            */
+            if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
 
-            /*
-            CircuitCalculator.Entities.Clear();
-            CircuitCalculator.Lines.Clear();
-            */
 
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream saveFile = File.Open("Saves/save.binary", FileMode.Open);
             SaveData datafromfile = (SaveData)formatter.Deserialize(saveFile);
             saveFile.Close();
 
-            foreach (ILoad data in datafromfile.DataList)
+            foreach (EntityData entitydata in datafromfile.EntityDataList)
             {
-                if (data is EntityBaseData)
-                {
-                    data.Load();
-                }
+                entitydata.Load();
             }
 
-            foreach (ILoad data in datafromfile.DataList)
+            foreach (LineData linedata in datafromfile.LineDataList)
             {
-                if (data is LineData)
-                {
-                    data.Load();
-                }
+                linedata.Load();
             }
 
             CircuitCalculator.CalculateAll();

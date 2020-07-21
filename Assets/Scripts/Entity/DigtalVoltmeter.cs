@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class DigtalVoltmeter : EntityBase, ISave
+public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
 	override public void EntityAwake()
@@ -47,14 +47,14 @@ public class DigtalVoltmeter : EntityBase, ISave
 	}
 
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new DigtalVoltmeterData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class DigtalVoltmeterData : EntityBaseData, ILoad
+public class DigtalVoltmeterData : EntityData
 {
 	public DigtalVoltmeterData(Vector3 pos, List<int> id) : base(pos, id) { }
 

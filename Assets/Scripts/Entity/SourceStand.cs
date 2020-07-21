@@ -2,7 +2,7 @@
 using SpiceSharp.Components;
 using UnityEngine;
 
-public class SourceStand : EntityBase, ISource , ISave
+public class SourceStand : EntityBase, ISource
 {
 	public double E = 1.5f;
 	public double R = 100;
@@ -56,14 +56,14 @@ public class SourceStand : EntityBase, ISource , ISave
 		}
 	}
 
-	public ILoad Save()
+	public override EntityData Save()
 	{
 		return new SourceStandData(gameObject.transform.position, ChildPortID);
 	}
 }
 
 [System.Serializable]
-public class SourceStandData : EntityBaseData, ILoad
+public class SourceStandData : EntityData
 {
 	public SourceStandData(Vector3 pos, List<int> id) : base(pos, id) { }
 
