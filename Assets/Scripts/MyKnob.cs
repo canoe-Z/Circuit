@@ -26,14 +26,14 @@ public class MyKnob : MonoBehaviour
 	/// <summary>
 	/// 0-1的数值
 	/// </summary>
-	public float knobPos { get;private set; } = 0;
+	public float knobPos { get; private set; } = 0;
 	/// <summary>
 	/// 保证小于Devide的整数，离散的
 	/// </summary>
 	public int knobPos_int { get; private set; } = 0;
 
 
-	
+
 	bool calculator = false;//为true时将会在下一帧进行电路运算
 	void OnMouseOver()
 	{
@@ -65,7 +65,7 @@ public class MyKnob : MonoBehaviour
 				UpYiDiandian();
 				calculator = true;
 			}
-			else if(Input.GetMouseButton(1))
+			else if (Input.GetMouseButton(1))
 			{
 				DownYiDiandian();
 				calculator = true;
@@ -160,5 +160,5 @@ public class MyKnob : MonoBehaviour
 		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
 		knobPos = newRot;
 	}
-	
+
 }
