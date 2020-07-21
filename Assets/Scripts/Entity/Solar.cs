@@ -22,13 +22,12 @@ public class Solar : EntityBase, ISource, IAwake
 
 	void Update()
 	{
-		/*
-		float lightStrength = 1;
+		float fm = 6 - 5 * slider.SliderPos;
+		float lightStrength = 1 / fm;//
 		Isc = lightStrength * IscMax;
 		//下面更新光照强度的数值
 		double stext = lightStrength * 1000;
 		textLight.text = stext.ToString("0.00");
-		*/
 	}
 
 	//电路相关
