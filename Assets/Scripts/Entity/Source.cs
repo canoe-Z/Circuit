@@ -9,8 +9,8 @@ public class Source : EntityBase, ISource
 	private const double _E0MAX = 15;										//电源0最大值
 	private const double _E1MAX = 15;										//电源1最大值
 
-	public int[] G = new int[sourceNum];									//存放独立电源负极的端口ID
-	public int[] V = new int[sourceNum];									//存放独立电源正极的端口ID
+	private readonly int[] G = new int[sourceNum];							//存放独立电源负极的端口ID
+	private readonly int[] V = new int[sourceNum];							//存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      //电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  //内阻数组
 
@@ -170,7 +170,7 @@ public class SourceData : EntityData
 		Source source = EntityCreator.CreateEntity<Source>(posfloat, anglefloat, IDList);
 		for (var i = 0; i < sliderPosList.Count; i++)
 		{
-			// 此处不再需要更新值，ChangeSliderPos()会发送更新值的消息给元件
+			// 此处不再需要更新值，SliderPos的Set方法会发送更新值的消息给元件
 			source.Sliders[i].SliderPos = sliderPosList[i];
 		}
 	}
