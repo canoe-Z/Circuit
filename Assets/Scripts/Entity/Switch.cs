@@ -13,7 +13,9 @@ public class Switch : EntityBase
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SliderPos = 0.5f;
-		int childNum = this.transform.childCount;
+		mySlider.SliderEvent += UpdateSlider;
+
+		int childNum = transform.childCount;
 		for (int i = 0; i < childNum; i++)
 		{
 			if (transform.GetChild(i).name == "Connector")
@@ -23,10 +25,12 @@ public class Switch : EntityBase
 			}
 		}
 		Debug.LogError("开关儿子没有拉杆");
+
+		UpdateSlider();
 	}
 
 	// 开关的状态有三种
-	public void Update()
+	void UpdateSlider()
 	{
 		if (mySlider.SliderPos > 0.8f) state = 2; //R
 		else if (mySlider.SliderPos < 0.2f) state = 0; //L
@@ -46,6 +50,7 @@ public class Switch : EntityBase
 			return false;
 		}
 	}
+
 	override public void LoadElement()
 	{
 		//得到端口ID
@@ -62,6 +67,7 @@ public class Switch : EntityBase
 			CircuitCalculator.UF.Union(L, M);
 		}
 	}
+
 	override public void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
@@ -100,6 +106,5 @@ public class SwitchData : EntityData
 	{
 		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
 		_switch.mySlider.ChangeSliderPos(sliderpos);
-		_switch.Update();
 	}
 }

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Source : EntityBase, ISource
 {
-	private const int sourceNum = 3;                                //含有的独立电源个数
-	private const int sliderNum = 2;                                //含有的滑块个数
-	private const double _E0MAX = 30;                               //电源0最大值
-	private const double _E1MAX = 30;                               //电源1最大值
+	private const int sourceNum = 3;										//含有的独立电源个数
+	private const int sliderNum = 2;										//含有的滑块个数
+	private const double _E0MAX = 15;										//电源0最大值
+	private const double _E1MAX = 15;										//电源1最大值
 
-	public int[] G = new int[sourceNum];                            //存放独立电源负极的端口ID
-	public int[] V = new int[sourceNum];                            //存放独立电源正极的端口ID
-	public double[] E = new double[sourceNum] { 30, 30, 5 };        //电压数组
-	public double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };    //内阻数组
+	public int[] G = new int[sourceNum];									//存放独立电源负极的端口ID
+	public int[] V = new int[sourceNum];									//存放独立电源正极的端口ID
+	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      //电压数组
+	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  //内阻数组
 
 	public List<MySlider> Sliders { get; set; } = new List<MySlider>();
 
@@ -23,9 +23,17 @@ public class Source : EntityBase, ISource
 
 		// 用滑块在编辑器中的名称排序
 		Sliders.Sort((x, y) => { return x.name.CompareTo(y.name); });
+
+		foreach(MySlider slider in Sliders)
+		{
+			slider.SliderEvent += UpdateSlider;
+		}
+		
+		// 更新初值
+		UpdateSlider();
 	}
 
-	public void Update()
+	void UpdateSlider()
 	{
 		E[0] = Sliders[0].SliderPos * _E0MAX;
 		E[1] = Sliders[1].SliderPos * _E1MAX;
@@ -162,9 +170,8 @@ public class SourceData : EntityData
 		Source source = EntityCreator.CreateEntity<Source>(posfloat, anglefloat, IDList);
 		for (var i = 0; i < sliderPosList.Count; i++)
 		{
+			// 此处不再需要更新值，ChangeSliderPos()会发送更新值的消息给元件
 			source.Sliders[i].ChangeSliderPos(sliderPosList[i]);
 		}
-		// 对于包含滑块的情况，要在此处更新值，否则读档后首次计算的结果有误
-		source.Update();
 	}
 }

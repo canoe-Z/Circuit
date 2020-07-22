@@ -1,27 +1,32 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 挂在包含有碰撞体和刚体的物体上，令localPosition.z变动范围为0-1
 /// </summary>
 public class MySlider : MonoBehaviour
 {
+	// 鼠标响应事件，用于控制Tip显示
+	public static event EnterEventHandler MouseEnter;
+	public static event ExitEventHandler MouseExit;
+
+	// 滑块位置变化事件
+	public delegate void SliderEventHandler();
+	public event SliderEventHandler SliderEvent;
+
 	/// <summary>
 	/// 是否为离散的，-1为连续的
 	/// </summary>
 	public int Devide { get; set; } = -1;
+
 	/// <summary>
 	/// 0-1的数值
 	/// </summary>
 	public float SliderPos { get; set; } = 0;
+
 	/// <summary>
 	/// 保证小于Devide的整数
 	/// </summary>
 	public int SliderPos_int { get; set; } = 0;
-
-	public static event EnterEventHandler MouseEnter;
-	public static event ExitEventHandler MouseExit;
-	
 
 	void OnMouseEnter()
 	{
@@ -47,11 +52,11 @@ public class MySlider : MonoBehaviour
 
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			CircuitCalculator.CalculateByConnection();
 			Vector3 localPos = transform.parent.InverseTransformPoint(hitPos);//转换成本地坐标
 			localPos.x = 0;
 			localPos.y = 0;
 			ChangeSliderPos(localPos.z);
+			CircuitCalculator.CalculateByConnection();
 		}
 	}
 
@@ -73,8 +78,11 @@ public class MySlider : MonoBehaviour
 
 		Vector3 localPos = transform.localPosition;
 		localPos.z = newPos;
-		this.SliderPos = localPos.z;
+		SliderPos = localPos.z;
 		transform.localPosition = localPos;
+
+		//更改位置后发送消息
+		SliderEvent?.Invoke();
 	}
 
 	public static bool HitOnlyOne(out Vector3 hitpos)
