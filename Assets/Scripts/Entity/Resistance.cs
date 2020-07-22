@@ -16,7 +16,7 @@ public class Resistance : EntityBase
 	void Start()
 	{
 		// 不能在Awake(）中执行，Awake()之后还可能修改阻值
-		if (resistanceText) resistanceText.text = Value.ToString();
+		if (resistanceText) resistanceText.text = Value.ToString() + "Ω";
 	}
 
 	public override bool IsConnected()

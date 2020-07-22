@@ -6,7 +6,7 @@ public class SampleR : Resistance
 	public double SampleValue;
 	void Start()
 	{
-		if (resistanceText) resistanceText.text = SampleValue.ToString();
+		if (resistanceText) resistanceText.text = SampleValue.ToString() + "Ω";
 	}
 
 	public override EntityData Save()
