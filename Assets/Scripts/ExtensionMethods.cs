@@ -5,6 +5,7 @@ using UnityEngine;
 public class Float3
 {
 	public float x, y, z;
+	public static Float3 zero = new Float3(0, 0, 0);
 
 	public Float3(float x, float y, float z)
 	{
@@ -18,6 +19,7 @@ public class Float3
 public class Float4
 {
 	public float x, y, z, w;
+	public static Float4 zero = new Float4(0, 0, 0, 0);
 
 	public Float4(float x, float y, float z, float w)
 	{
@@ -39,7 +41,7 @@ public static class Vector3Extensions
 
 public static class QuaternionExtensions
 {
-	public static Float4 ToFloat3(this Quaternion quaternion)
+	public static Float4 ToFloat4(this Quaternion quaternion)
 	{
 		return new Float4(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
 	}
@@ -59,7 +61,7 @@ public static partial class TransformExtensions
 	/// <param name="para">遍历时调用的函数的第二个参数</param>
 	/// <param name="failReturnValue">遍历时查找失败的返回值</param>
 	/// <returns>遍历时调用的函数的返回值</returns>
-	public static TR BFSVisit<TP, TR>(this Transform root, System.Func<Transform, TP, TR> visitFunc, TP para, TR failReturnValue = default(TR))
+	public static TR BFSVisit<TP, TR>(this Transform root, System.Func<Transform, TP, TR> visitFunc, TP para, TR failReturnValue = default)
 	{
 		TR ret = visitFunc(root, para);
 		if (ret != null && !ret.Equals(failReturnValue))
@@ -92,7 +94,7 @@ public static partial class TransformExtensions
 	/// <param name="para">遍历时调用的函数的第二个参数</param>
 	/// <param name="failReturnValue">遍历时查找失败的返回值</param>
 	/// <returns>遍历时调用的函数的返回值</returns>
-	public static TR DFSVisit<TP, TR>(this Transform root, System.Func<Transform, TP, TR> visitFunc, TP para, TR failReturnValue = default(TR))
+	public static TR DFSVisit<TP, TR>(this Transform root, System.Func<Transform, TP, TR> visitFunc, TP para, TR failReturnValue = default)
 	{
 		Stack<Transform> parents = new Stack<Transform>();
 		parents.Push(root);
@@ -125,14 +127,14 @@ public static partial class TransformExtensions
 
 		if (target == null)
 		{
-			Debug.LogError(string.Format("cann't find child transform {0} in {1}", childName, trans.gameObject.name));
+			Debug.LogError(string.Format("Cann't Find Child Transform {0} in {1}", childName, trans.gameObject.name));
 			return null;
 		}
 
 		T component = target.GetComponent<T>();
 		if (component == null)
 		{
-			Debug.LogError("Component is null, type = " + typeof(T).Name);
+			Debug.LogError("Component is null, Type = " + typeof(T).Name);
 			return null;
 		}
 		return component;
@@ -147,13 +149,13 @@ public static partial class TransformExtensions
 	public static Transform FindChild_ByTag(this Transform trans, string tagName)
 	{
 		var target = BFSVisit<string, Transform>(trans,
-			(t, str) => { if (t.tag.Equals(str)) return t; return null; },
+			(t, str) => { if (t.CompareTag(str)) return t; return null; },
 			tagName
 		);
 
 		if (target == null)
 		{
-			//Debug.LogError(string.Format("cann't find child transform {0} in {1}", tagName, trans.gameObject.name));
+			Debug.LogError(string.Format("Cann't Find Child Transform {0} in {1}", tagName, trans.gameObject.name));
 			return null;
 		}
 
@@ -175,14 +177,14 @@ public static partial class TransformExtensions
 
 		if (target == null)
 		{
-			Debug.LogError(string.Format("cann't find child transform {0} in {1}", childName, trans.gameObject.name));
+			Debug.LogError(string.Format("Cann't Find Child Transform {0} in {1}", childName, trans.gameObject.name));
 			return null;
 		}
 
 		T component = target.GetComponent<T>();
 		if (component == null)
 		{
-			Debug.LogError("Component is null, type = " + typeof(T).Name);
+			Debug.LogError("Component is null, Type = " + typeof(T).Name);
 			return null;
 		}
 		return component;
@@ -314,19 +316,22 @@ public static partial class TransformExtensions
 	/// <param name="recursive"></param>
 	/// <param name="includeInactive"></param>
 	/// <returns></returns>
-	public static T[] FindComponentsInChildren<T>(this Transform transform, bool recursive = true, bool includeInactive = true) where T : Component
+	public static List<T> FindComponentsInChildren<T>(this Transform transform, bool recursive = true, bool includeInactive = true) where T : Component
 	{
-
+		List<T> list = new List<T>();
 		if (recursive)
 		{
-			var list = new List<T>();
 			GetChildren(transform, includeInactive, ref list);
-			return list.ToArray();
 		}
 		else
 		{
-			return transform.GetComponentsInChildren<T>(includeInactive);
+			T[] Components = transform.GetComponentsInChildren<T>(includeInactive);
+			foreach(T t in Components)
+			{
+				list.Add(t);
+			}
 		}
+		return list;
 	}
 
 	public static T GetComponentsInParent<T>(this Transform transform) where T : Component
@@ -346,7 +351,7 @@ public static partial class TransformExtensions
 		return null;
 	}
 
-	public static Transform GetChildByName(this Transform transform, string name, bool recursive = true, bool includeInactive = true)
+	public static Transform GetChildByName(this Transform transform, string name, bool includeInactive = true)
 	{
 		Transform target;
 		for (int i = 0; i < transform.childCount; i++)
@@ -369,7 +374,7 @@ public static partial class TransformExtensions
 		return null;
 	}
 
-	private static void GetChildren<T>(Transform t, bool includeInactive, ref System.Collections.Generic.List<T> list)
+	private static void GetChildren<T>(Transform t, bool includeInactive, ref List<T> list)
 	{
 		if (includeInactive || t.gameObject.activeSelf)
 		{

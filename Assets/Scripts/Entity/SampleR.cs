@@ -11,7 +11,7 @@ public class SampleR : Resistance
 
 	public override EntityData Save()
 	{
-		return new SampleRData(SampleValue, Value, gameObject.transform.position, ChildPortID);
+		return new SampleRData(SampleValue, Value, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -19,17 +19,17 @@ public class SampleR : Resistance
 public class SampleRData : ResistanceData
 {
 	private readonly double sampleValue;
-	private readonly double rnum;
-	public SampleRData(double sampleValue, double rnum, Vector3 pos, List<int> id) : base(rnum, pos, id)
+	private readonly double value;
+	public SampleRData(double sampleValue, double value, Vector3 pos, Quaternion angle, List<int> id) : base(value, pos, angle, id)
 	{
 		this.sampleValue = sampleValue;
-		this.rnum = rnum;
+		this.value = value;
 	}
 
 	override public void Load()
 	{
-		SampleR resistance = EntityCreator.CreateEntity<SampleR>(posfloat, IDList);
+		SampleR resistance = EntityCreator.CreateEntity<SampleR>(posfloat, anglefloat, IDList);
 		resistance.SampleValue = sampleValue;
-		resistance.Value = rnum;
+		resistance.Value = value;
 	}
 }

@@ -19,8 +19,7 @@ public class Resistance : EntityBase
 		if (resistanceText) resistanceText.text = Value.ToString();
 	}
 
-	// 电路相关
-	public override bool IsConnected()//判断是否有一端连接，避免浮动节点
+	public override bool IsConnected()
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
@@ -36,38 +35,37 @@ public class Resistance : EntityBase
 	{
 		int LeftPortID = ChildPorts[0].ID;
 		int RightPortID = ChildPorts[1].ID;
+
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
 	public override void SetElement()
 	{
-		//获取元件ID作为元件名称
+		int EntityID = CircuitCalculator.EntityNum;
 		int LeftPortID = ChildPorts[0].ID;
 		int RightPortID = ChildPorts[1].ID;
-		int EntityID = CircuitCalculator.EntityNum;
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Value));
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]); 
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 	}
 
 	public override EntityData Save()
 	{
-		return new ResistanceData(Value, gameObject.transform.position, ChildPortID);
+		return new ResistanceData(Value, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
 [System.Serializable]
 public class ResistanceData : EntityData
 {
-	private readonly double rnum;
-	public ResistanceData(double rnum,Vector3 pos, List<int> id) : base(pos, id) 
+	private readonly double value;
+	public ResistanceData(double value, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		this.rnum = rnum;
+		this.value = value;
 	}
 
 	override public void Load()
 	{
-		Resistance resistance = EntityCreator.CreateEntity<Resistance>(posfloat, IDList);
-		resistance.Value = rnum;
+		Resistance resistance = EntityCreator.CreateEntity<Resistance>(posfloat, anglefloat, IDList);
+		resistance.Value = value;
 	}
 }

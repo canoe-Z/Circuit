@@ -10,6 +10,7 @@ public class DigtalVoltmeter : EntityBase
 	{
 		digtalDigtalVoltmeter = transform.FindComponent_DFS<Text>("Text");
 	}
+
 	void Update()
 	{
 		double mV, V;
@@ -29,8 +30,7 @@ public class DigtalVoltmeter : EntityBase
 		}
 	}
 
-	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1)
 		{
@@ -42,22 +42,23 @@ public class DigtalVoltmeter : EntityBase
 		}
 	}
 
-	override public void LoadElement()//添加元件
+	override public void LoadElement()
 	{
 		int GND = ChildPorts[0].ID;
 		int mV = ChildPorts[1].ID;
 		int V = ChildPorts[2].ID;
+
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
 
-	override public void SetElement()//添加元件
+	override public void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = ChildPorts[0].ID;
 		int mV = ChildPorts[1].ID;
 		int V = ChildPorts[2].ID;
-		//获取端口ID并完成内部连接
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
@@ -65,10 +66,10 @@ public class DigtalVoltmeter : EntityBase
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 	}
 
-
 	public override EntityData Save()
 	{
-		return new SimpleEntityData<DigtalVoltmeter>(gameObject.transform.position, ChildPortID);
+		// 数字电压表属于简单元件
+		return new SimpleEntityData<DigtalVoltmeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }
 

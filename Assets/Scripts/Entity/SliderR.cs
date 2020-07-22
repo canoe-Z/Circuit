@@ -71,7 +71,7 @@ public class SliderR : EntityBase
 
 	public override EntityData Save()
 	{
-		return new SliderRData(Rmax, myslider.SliderPos,gameObject.transform.position, ChildPortID);
+		return new SliderRData(Rmax, myslider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -80,7 +80,7 @@ public class SliderRData : EntityData
 {
 	private readonly double rmax;
 	private readonly float sliderpos;
-	public SliderRData(double rmax,float sliderpos,Vector3 pos, List<int> id) : base(pos, id) 
+	public SliderRData(double rmax, float sliderpos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
 		this.rmax = rmax;
 		this.sliderpos = sliderpos;
@@ -88,7 +88,7 @@ public class SliderRData : EntityData
 
 	override public void Load()
 	{
-		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, IDList);
+		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
 		sliderR.Rmax = rmax;
 		sliderR.myslider.ChangeSliderPos(sliderpos);
 		sliderR.Update();

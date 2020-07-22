@@ -56,17 +56,17 @@ public class SourceStand : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SourceStandData(gameObject.transform.position, ChildPortID);
+		return new SourceStandData(transform.position, transform.rotation, ChildPortID);
 	}
 }
 
 [System.Serializable]
 public class SourceStandData : EntityData
 {
-	public SourceStandData(Vector3 pos, List<int> id) : base(pos, id) { }
+	public SourceStandData(Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id) { }
 
 	override public void Load()
 	{
-		EntityCreator.CreateEntity<SourceStand>(posfloat, IDList);
+		EntityCreator.CreateEntity<SourceStand>(posfloat, anglefloat, IDList);
 	}
 }

@@ -6,7 +6,7 @@ public delegate void EntityDestroyEventHandler();
 abstract public class EntityBase : MonoBehaviour
 {
 	public int PortNum { get; set; }                                    //本元件的端口数量
-	public CircuitPort[] ChildPorts { get; set; } = null;				//端口们的引用
+	public CircuitPort[] ChildPorts { get; set; } = null;               //端口们的引用
 	public List<int> ChildPortID { get; set; } = new List<int>();
 	public bool IsIDSet { get; set; } = false;
 
@@ -124,7 +124,7 @@ abstract public class EntityBase : MonoBehaviour
 		for (int i = 0; i < hitObj.Length; i++)
 		{
 			GameObject hitedItem = hitObj[i].collider.gameObject;
-			if (tag == null || hitedItem.tag == tag)
+			if (tag == null || hitedItem.CompareTag(tag))
 			{
 				hitPos = hitObj[i].point;
 				return true;
@@ -135,7 +135,7 @@ abstract public class EntityBase : MonoBehaviour
 
 	//速度限制
 	Rigidbody rigidBody;
-	float speedLimit = 1f;
+	readonly float speedLimit = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
 	{
 		if (rigidBody.velocity.magnitude > speedLimit)
@@ -157,11 +157,13 @@ abstract public class EntityData
 {
 	public readonly List<int> IDList;
 	public readonly Float3 posfloat;
+	public readonly Float4 anglefloat;
 
-	public EntityData(Vector3 posfloat, List<int> IDList)
+	public EntityData(Vector3 pos, Quaternion angle, List<int> IDList)
 	{
 		this.IDList = IDList;
-		this.posfloat = posfloat.ToFloat3();
+		posfloat = pos.ToFloat3();
+		anglefloat = angle.ToFloat4();
 	}
 
 	public abstract void Load();
@@ -170,11 +172,11 @@ abstract public class EntityData
 [System.Serializable]
 public class SimpleEntityData<T> : EntityData
 {
-	public SimpleEntityData(Vector3 posfloat, List<int> IDList) : base(posfloat, IDList) { }
+	public SimpleEntityData(Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList) { }
 
 	public override void Load()
 	{
-		EntityCreator.CreateEntity<T>(posfloat, IDList);
+		EntityCreator.CreateEntity<T>(posfloat, anglefloat, IDList);
 	}
 }
 

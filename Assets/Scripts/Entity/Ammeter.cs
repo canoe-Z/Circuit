@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 using UnityEngine;
 
 public class Ammeter : EntityBase, IAmmeter
@@ -20,7 +19,6 @@ public class Ammeter : EntityBase, IAmmeter
 		FindPin();
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
 		double doublePin = 0;
@@ -104,17 +102,7 @@ public class Ammeter : EntityBase, IAmmeter
 
 	public override EntityData Save()
 	{
-		return new AmmeterData(gameObject.transform.position, ChildPortID);
-	}
-}
-
-[System.Serializable]
-public class AmmeterData : EntityData
-{
-	public AmmeterData(Vector3 posfloat, List<int> IDlist) : base(posfloat, IDlist) { }
-
-	override public void Load()
-	{
-		EntityCreator.CreateEntity<Ammeter>(posfloat, IDList);
+		// 数字电流表属于简单元件
+		return new SimpleEntityData<Ammeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }

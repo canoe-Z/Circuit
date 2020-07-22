@@ -83,7 +83,7 @@ public class Switch : EntityBase
 
 	public override EntityData Save()
 	{
-		return new SwitchData(mySlider.SliderPos, gameObject.transform.position, ChildPortID);
+		return new SwitchData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -91,14 +91,14 @@ public class Switch : EntityBase
 public class SwitchData : EntityData
 {
 	private readonly float sliderpos;
-	public SwitchData(float sliderpos, Vector3 pos, List<int> id) : base(pos, id)
+	public SwitchData(float sliderpos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
 		this.sliderpos = sliderpos;
 	}
 
 	override public void Load()
 	{
-		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, IDList);
+		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
 		_switch.mySlider.ChangeSliderPos(sliderpos);
 		_switch.Update();
 	}

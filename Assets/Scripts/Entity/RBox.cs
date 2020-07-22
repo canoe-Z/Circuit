@@ -46,42 +46,37 @@ public class RBox : EntityBase
 		}
 	}
 
-	//电路相关
 	override public void LoadElement()
 	{
-		//获取端口ID并完成并查集连接
 		int G, R999, R99, R9;
 		G = ChildPorts[0].ID;
-		R999 = ChildPorts[3].ID;//顺序翻转
-		R99 = ChildPorts[2].ID;
 		R9 = ChildPorts[1].ID;
+		R99 = ChildPorts[2].ID;
+		R999 = ChildPorts[3].ID;
+		
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
 	}
 	override public void SetElement()
 	{
-		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;
 		G = ChildPorts[0].ID;
-		R999 = ChildPorts[3].ID;//顺序翻转
-		R99 = ChildPorts[2].ID;
 		R9 = ChildPorts[1].ID;
-		//指定三个电阻的ID
+		R99 = ChildPorts[2].ID;
+		R999 = ChildPorts[3].ID;
+
+		// 指定三个电阻的ID
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
 		{
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
-		//获取端口ID并完成内部连接
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 
 	public override EntityData Save()
@@ -91,22 +86,23 @@ public class RBox : EntityBase
 		{
 			sliderPosList.Add(sliders[i].SliderPos);
 		}
-		return new RboxData(sliderPosList, gameObject.transform.position, ChildPortID);
+		return new RboxData(sliderPosList, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
+// TODO:Rbox后期可能会改用旋钮，因此暂时不更新保存方法
 [System.Serializable]
 public class RboxData : EntityData
 {
 	private readonly List<float> sliderPosList;
-	public RboxData(List<float> sliderPosList, Vector3 pos, List<int> id) : base(pos, id)
+	public RboxData(List<float> sliderPosList, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
 		this.sliderPosList = sliderPosList;
 	}
 
 	override public void Load()
 	{
-		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, IDList);
+		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
 		for (int i = 0; i < 6; i++)
 		{
 			rbox.sliders[i].ChangeSliderPos(sliderPosList[i]);

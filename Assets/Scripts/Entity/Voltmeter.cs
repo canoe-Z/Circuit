@@ -98,6 +98,6 @@ public class Voltmeter : EntityBase
 
 	public override EntityData Save()
 	{
-		return new SimpleEntityData<Voltmeter>(gameObject.transform.position, ChildPortID);
+		return new SimpleEntityData<Voltmeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// 挂在包含有碰撞体和刚体的物体上，令localPosition.z变动范围为0-1

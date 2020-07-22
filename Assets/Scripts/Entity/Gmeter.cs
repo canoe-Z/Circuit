@@ -95,6 +95,6 @@ public class Gmeter : EntityBase, IAmmeter
 
 	public override EntityData Save()
 	{
-		return new SimpleEntityData<Gmeter>(gameObject.transform.position, ChildPortID);
+		return new SimpleEntityData<Gmeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }

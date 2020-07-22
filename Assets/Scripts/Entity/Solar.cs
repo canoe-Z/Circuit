@@ -29,8 +29,7 @@ public class Solar : EntityBase, ISource
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
-	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
+	override public bool IsConnected()
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
 		{
@@ -41,14 +40,14 @@ public class Solar : EntityBase, ISource
 			return false;
 		}
 	}
-	override public void LoadElement()//添加元件
+	override public void LoadElement()
 	{
 		int GND = ChildPorts[0].ID;
 		int P = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(GND, P);
 	}
 
-	//二极管模型
+	// 构建二极管模型
 	protected void ApplyParameters(Entity entity, string definition)
 	{
 		// Get all assignments
@@ -67,6 +66,7 @@ public class Solar : EntityBase, ISource
 			entity.SetParameter(name, value);
 		}
 	}
+
 	private DiodeModel CreateDiodeModel(string name, string parameters)
 	{
 		var dm = new DiodeModel(name);
@@ -74,12 +74,11 @@ public class Solar : EntityBase, ISource
 		return dm;
 	}
 
-	override public void SetElement()//添加元件
+	override public void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		GND = ChildPorts[0].ID;
-		P = ChildPorts[1].ID;
-		//获取端口ID并完成内部连接
+
 		Debug.LogWarning("短路电流为" + Isc);
 		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
 		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
@@ -104,18 +103,18 @@ public class Solar : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SolarData(gameObject.transform.position, ChildPortID);
+		return new SolarData(transform.position, transform.rotation, ChildPortID);
 	}
 }
 
 [System.Serializable]
 public class SolarData : EntityData
 {
-	public SolarData(Vector3 pos, List<int> id) : base(pos, id) { }
+	public SolarData(Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id) { }
 
 	override public void Load()
 	{
-		EntityCreator.CreateEntity<Solar>(posfloat, IDList);
+		EntityCreator.CreateEntity<Solar>(posfloat, anglefloat, IDList);
 	}
 }
 
