@@ -177,7 +177,7 @@ public static partial class TransformExtensions
 
 		if (target == null)
 		{
-			Debug.LogError(string.Format("Cann't Find Child Transform {0} in {1}", childName, trans.gameObject.name));
+			Debug.LogWarning(string.Format("Cann't Find Child Transform {0} in {1}", childName, trans.gameObject.name));
 			return null;
 		}
 
