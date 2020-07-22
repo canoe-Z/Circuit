@@ -171,7 +171,7 @@ public class SourceData : EntityData
 		for (var i = 0; i < sliderPosList.Count; i++)
 		{
 			// 此处不再需要更新值，ChangeSliderPos()会发送更新值的消息给元件
-			source.Sliders[i].ChangeSliderPos(sliderPosList[i]);
+			source.Sliders[i].SliderPos = sliderPosList[i];
 		}
 	}
 }

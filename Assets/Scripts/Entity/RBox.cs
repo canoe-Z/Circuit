@@ -105,7 +105,7 @@ public class RboxData : EntityData
 		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
 		for (int i = 0; i < 6; i++)
 		{
-			rbox.sliders[i].ChangeSliderPos(sliderPosList[i]);
+			rbox.sliders[i].SliderPos = sliderPosList[i];
 		}
 	}
 }

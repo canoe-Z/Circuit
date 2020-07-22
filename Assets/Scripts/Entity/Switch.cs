@@ -105,6 +105,6 @@ public class SwitchData : EntityData
 	override public void Load()
 	{
 		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
-		_switch.mySlider.ChangeSliderPos(sliderpos);
+		_switch.mySlider.SliderPos = sliderpos;
 	}
 }
