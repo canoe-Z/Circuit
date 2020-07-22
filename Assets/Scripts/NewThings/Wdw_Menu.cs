@@ -184,7 +184,7 @@ public class Wdw_Menu : MonoBehaviour
 			willBeSet = sliderR.gameObject;
 			if (sliderR)
 			{
-				sliderR.Rmax = num;
+				sliderR.RMax = num;
 				CloseColl(willBeSet);//关闭碰撞体
 				CloseMenu();//关闭菜单
 				MoveController.CanOperate = false;//禁止操作物体

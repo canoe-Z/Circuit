@@ -4,27 +4,26 @@ using UnityEngine;
 
 public class SliderR : EntityBase
 {
-	/// <summary>
-	/// 可以被随意C的数据
-	/// </summary>
-	public double Rmax = 300;
-	double RL = 300;
-	double RR = 0;
-	public MySlider myslider;
+	public double RMax { get; set; } = 300;
+
+	double RLeft = 300;
+	double RRight = 0;
+
+	public MySlider MySlider { get; set; }
+
 	public override void EntityAwake()
 	{
-		myslider = gameObject.GetComponentInChildren<MySlider>();
-		myslider.SliderPos = 1;
+		MySlider = gameObject.GetComponentInChildren<MySlider>();
+		// 注意滑变滑块的初始位置在最右边
+		MySlider.SliderPos = 1;
 	}
 
 	public void Update()
 	{
-		RL = Rmax * myslider.SliderPos;
-		RR = Rmax - RL;
+		RLeft = RMax * MySlider.SliderPos;
+		RRight = RMax - RLeft;
 	}
 
-	// 电路相关
-	// 判断是否有一端连接，避免浮动节点
 	override public bool IsConnected()
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
@@ -39,12 +38,11 @@ public class SliderR : EntityBase
 
 	override public void LoadElement()
 	{
-		// 获取端口ID并完成内部连接
-		int TL, TR, L, R;
-		TL = ChildPorts[0].ID;
-		TR = ChildPorts[1].ID;
-		L = ChildPorts[2].ID;
-		R = ChildPorts[3].ID;
+		int TL = ChildPorts[0].ID;
+		int TR = ChildPorts[1].ID;
+		int L = ChildPorts[2].ID;
+		int R = ChildPorts[3].ID;
+
 		CircuitCalculator.UF.Union(TL, L);
 		CircuitCalculator.UF.Union(TL, R);
 		CircuitCalculator.UF.Union(TL, TR);
@@ -52,45 +50,40 @@ public class SliderR : EntityBase
 
 	override public void SetElement()
 	{
-		// 获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		// 获取端口ID并完成内部连接
-		int TL, TR, L, R;
-		TL = ChildPorts[0].ID;
-		TR = ChildPorts[1].ID;
-		L = ChildPorts[2].ID;
-		R = ChildPorts[3].ID;
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RL));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RR));
+		int TL = ChildPorts[0].ID;
+		int TR = ChildPorts[1].ID;
+		int L = ChildPorts[2].ID;
+		int R = ChildPorts[3].ID;
+
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RLeft));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RRight));
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
 
 	public override EntityData Save()
 	{
-		return new SliderRData(Rmax, myslider.SliderPos, transform.position, transform.rotation, ChildPortID);
+		return new SliderRData(RMax, MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
 [System.Serializable]
 public class SliderRData : EntityData
 {
-	private readonly double rmax;
-	private readonly float sliderpos;
-	public SliderRData(double rmax, float sliderpos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	private readonly double rMax;
+	private readonly float sliderPos;
+
+	public SliderRData(double rMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
-		this.rmax = rmax;
-		this.sliderpos = sliderpos;
+		this.rMax = rMax;
+		this.sliderPos = sliderPos;
 	}
 
 	override public void Load()
 	{
 		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
-		sliderR.Rmax = rmax;
-		sliderR.myslider.ChangeSliderPos(sliderpos);
+		sliderR.RMax = rMax;
+		sliderR.MySlider.ChangeSliderPos(sliderPos);
 		sliderR.Update();
 	}
 }
