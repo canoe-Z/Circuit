@@ -13,10 +13,16 @@ public class Resistance : EntityBase
 		resistanceText = transform.FindComponent_DFS<Text>("Text");
 	}
 
+	const int maxSize = 7;//填满一行的字符数量
 	void Start()
 	{
 		// 不能在Awake(）中执行，Awake()之后还可能修改阻值
-		if (resistanceText) resistanceText.text = Value.ToString() + "Ω";
+		string str = Value.ToString() + "Ω";
+		if (str.Length > maxSize)
+		{
+			resistanceText.fontSize = resistanceText.fontSize * 7 / str.Length;
+		}
+		if (resistanceText) resistanceText.text = str;
 	}
 
 	public override bool IsConnected()
