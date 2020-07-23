@@ -177,7 +177,12 @@ public class Wdw_Menu : MonoBehaviour
 	
 	void OnButtonCopySP_SliderR()
 	{
-		if (double.TryParse(iptNum_SliderR.text, out double num))
+		string textStr = iptNum_R.text;
+		textStr = textStr.Replace("k", "000");
+		textStr = textStr.Replace("K", "000");
+		textStr = textStr.Replace("m", "000000");
+		textStr = textStr.Replace("M", "000000");
+		if (double.TryParse(textStr, out double num))
 		{
 			iptNum_SliderR.text = "";
 			SliderR sliderR = EntityCreator.CreateEntity<SliderR>();//复制物体
@@ -198,8 +203,14 @@ public class Wdw_Menu : MonoBehaviour
 	
 	void OnButtonCopySP_R()
 	{
-		if (double.TryParse(iptNum_R.text, out double num))
+		string textStr = iptNum_R.text;
+		textStr = textStr.Replace("k", "000");
+		textStr = textStr.Replace("K", "000");
+		textStr = textStr.Replace("m", "000000");
+		textStr = textStr.Replace("M", "000000");
+		if (double.TryParse(textStr, out double num))
 		{
+			iptNum_R.text = "";
 			Resistance r = EntityCreator.CreateEntity<Resistance>();
 			willBeSet = r.gameObject;
 			if (r)
