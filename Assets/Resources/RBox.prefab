@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 7129426121323570880}
   - component: {fileID: 949681176634127023}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 7827508475818259925}
   - component: {fileID: 5032775321400956383}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 5998945602929463342}
   - component: {fileID: 3085521821562857508}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -743,7 +743,7 @@ GameObject:
   - component: {fileID: 5591370548371384966}
   - component: {fileID: 8615003763772035409}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1105,7 +1105,7 @@ GameObject:
   - component: {fileID: 1672799720186172944}
   - component: {fileID: 4442181736015493390}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1262,7 +1262,7 @@ GameObject:
   - component: {fileID: 173277559128492918}
   - component: {fileID: 3314895397917985969}
   m_Layer: 10
-  m_Name: Controller
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5780,7 +5780,7 @@ MonoBehaviour:
   R_99999: 0
   R_99: 0
   R_09: 0
-  sliders:
+  myKnobs:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

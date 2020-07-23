@@ -26,11 +26,11 @@ public class MyKnob : MonoBehaviour
 	/// <summary>
 	/// 0-1的数值
 	/// </summary>
-	public float knobPos { get; private set; } = 0;
+	public float KnobPos { get; private set; } = 0;
 	/// <summary>
 	/// 保证小于Devide的整数，离散的
 	/// </summary>
-	public int knobPos_int { get; private set; } = 0;
+	public int KnobPos_int { get; private set; } = 0;
 
 
 
@@ -87,55 +87,55 @@ public class MyKnob : MonoBehaviour
 	{
 		nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 		//写入、检查数据
-		knobPos += nowSpeedPerSec;
-		if (knobPos > 1) knobPos = 1;
+		KnobPos += nowSpeedPerSec;
+		if (KnobPos > 1) KnobPos = 1;
 		//旋转模型
-		transform.localEulerAngles = new Vector3(0, 0, knobPos * angleRange);
+		transform.localEulerAngles = new Vector3(0, 0, KnobPos * angleRange);
 	}
 	//下降一点点
 	void DownYiDiandian()
 	{
 		nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 		//写入、检查数据
-		knobPos -= nowSpeedPerSec;
-		if (knobPos < 0) knobPos = 0;
+		KnobPos -= nowSpeedPerSec;
+		if (KnobPos < 0) KnobPos = 0;
 		//旋转模型、写入数据
-		transform.localEulerAngles = new Vector3(0, 0, knobPos * angleRange);
+		transform.localEulerAngles = new Vector3(0, 0, KnobPos * angleRange);
 	}
 	//加一
 	void UpOne()
 	{
-		knobPos_int++;
-		if (knobPos_int >= devide)//加冒了
+		KnobPos_int++;
+		if (KnobPos_int >= devide)//加冒了
 		{
-			if (canLoop) knobPos_int -= devide;
-			else knobPos_int = devide - 1;
+			if (canLoop) KnobPos_int -= devide;
+			else KnobPos_int = devide - 1;
 		}
 
 		float pre = 1f / devide;//每份的长度
-		float newRot = knobPos_int * pre;//连续的角度
+		float newRot = KnobPos_int * pre;//连续的角度
 
 		//旋转模型、写入数据
 		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
-		knobPos = newRot;
+		KnobPos = newRot;
 	}
 
 	//减一
 	void DownOne()
 	{
-		knobPos_int--;
-		if (knobPos_int < 0)//减冒了
+		KnobPos_int--;
+		if (KnobPos_int < 0)//减冒了
 		{
-			if (canLoop) knobPos_int += devide;
-			else knobPos_int = 0;
+			if (canLoop) KnobPos_int += devide;
+			else KnobPos_int = 0;
 		}
 
 		float pre = 1f / devide;//每份的长度
-		float newRot = knobPos_int * pre;//连续的角度
+		float newRot = KnobPos_int * pre;//连续的角度
 
 		//旋转模型、写入数据
 		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
-		knobPos = newRot;
+		KnobPos = newRot;
 	}
 
 	/// <summary>
@@ -151,14 +151,14 @@ public class MyKnob : MonoBehaviour
 		if (devide > 0)
 		{
 			float pre = 1f / devide;//每份的长度
-			knobPos_int = (int)(newRot * devide);//不连续的整数
-			if (knobPos_int == devide) knobPos_int = devide - 1;//保证不能满
-			newRot = knobPos_int * pre;
+			KnobPos_int = (int)(newRot * devide);//不连续的整数
+			if (KnobPos_int == devide) KnobPos_int = devide - 1;//保证不能满
+			newRot = KnobPos_int * pre;
 		}
 
 		//旋转模型、写入数据
 		transform.localEulerAngles = new Vector3(0, 0, newRot * angleRange);
-		knobPos = newRot;
+		KnobPos = newRot;
 	}
 
 }

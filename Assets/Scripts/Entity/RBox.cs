@@ -7,15 +7,15 @@ public class RBox : EntityBase
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
-	public MySlider[] sliders = new MySlider[6];
+	public MyKnob[] myKnobs = new MyKnob[6];
 
 	public override void EntityAwake()
 	{
-		MySlider[] slidersDisorder = this.gameObject.GetComponentsInChildren<MySlider>();
-		foreach (MySlider sld in slidersDisorder)
+		MyKnob[] myKnobsDisorder = GetComponentsInChildren<MyKnob>();
+		foreach(var knob in myKnobsDisorder)
 		{
-			if (int.TryParse(sld.gameObject.name, out int id))
-				sliders[id] = sld;
+			if (int.TryParse(knob.gameObject.name, out int id))
+				myKnobs[id] = knob;
 			else
 				Debug.LogError("ErrorSliderID");
 		}
@@ -27,7 +27,7 @@ public class RBox : EntityBase
 		for (int i = 0; i < 6; i++)
 		{
 			total *= 10;
-			total += sliders[i].SliderPos_int;
+			total += myKnobs[i].KnobPos_int;
 		}
 		this.R_99999 = (float)total / (float)10;
 		this.R_99 = (float)(total % 100) / (float)10;
@@ -84,7 +84,7 @@ public class RBox : EntityBase
 		List<float> sliderPosList = new List<float>();
 		for (int i = 0; i < 6; i++)
 		{
-			sliderPosList.Add(sliders[i].SliderPos);
+			sliderPosList.Add(myKnobs[i].KnobPos);
 		}
 		return new RboxData(sliderPosList, transform.position, transform.rotation, ChildPortID);
 	}
@@ -105,7 +105,7 @@ public class RboxData : EntityData
 		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
 		for (int i = 0; i < 6; i++)
 		{
-			rbox.sliders[i].SliderPos = sliderPosList[i];
+			rbox.myKnobs[i].ChangeKnobRot(sliderPosList[i]);
 		}
 	}
 }
