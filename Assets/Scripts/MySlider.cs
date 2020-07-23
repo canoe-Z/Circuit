@@ -41,10 +41,8 @@ public class MySlider : MonoBehaviour
 				value = SliderPos_int * pre + pre / 2;
 			}
 
-			Vector3 localPos = transform.localPosition;
-			localPos.z = value;
+			transform.SetLocalPositionZ(value);
 			sliderPos = value;
-			transform.localPosition = localPos;
 
 			//更改位置后发送消息
 			SliderEvent?.Invoke();
@@ -77,15 +75,11 @@ public class MySlider : MonoBehaviour
 
 	void OnMouseDrag()
 	{
-		if (!MoveController.CanOperate) return;//不可操作时返回
+		if (!MoveController.CanOperate) return;
 
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			Vector3 localPos = transform.parent.InverseTransformPoint(hitPos);//转换成本地坐标
-			localPos.x = 0;
-			localPos.y = 0;
-			SliderPos = localPos.z;
-			//ChangeSliderPos(localPos.z);
+			SliderPos = transform.parent.InverseTransformPoint(hitPos).z;//转换成本地坐标
 			CircuitCalculator.CalculateByConnection();
 		}
 	}
