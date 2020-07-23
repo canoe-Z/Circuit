@@ -3888,7 +3888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   devide: -1
   canLoop: 0
-  angleRange: 360
+  angleRange: 337.5
   speedUpPerSecond: 0.001
 --- !u!1 &6426656180931007209
 GameObject:
@@ -4189,7 +4189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   devide: -1
   canLoop: 0
-  angleRange: 360
+  angleRange: 337.5
   speedUpPerSecond: 0.001
 --- !u!1 &8515420590144394193
 GameObject:
