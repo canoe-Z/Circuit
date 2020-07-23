@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Components;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
@@ -14,29 +15,34 @@ public class ThreeSource : EntityBase, ISource
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      //电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  //内阻数组
 
-	public List<MySlider> Sliders { get; set; } = new List<MySlider>();
+	public List<MyKnob> knobs;//编辑器去挂
+	public List<Text> texts;
 
 	public override void EntityAwake()
 	{
-		Sliders = transform.FindComponentsInChildren<MySlider>();
-		if (Sliders.Count != sliderNum) Debug.LogError("滑块个数不合法");
+		//编辑器去挂
+
+		/*sliders = transform.FindComponentsInChildren<MySlider>();
+		if (sliders.Count != sliderNum) Debug.LogError("滑块个数不合法");
 
 		// 用滑块在编辑器中的名称排序
-		Sliders.Sort((x, y) => { return x.name.CompareTo(y.name); });
+		sliders.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
-		foreach(MySlider slider in Sliders)
+		foreach(MySlider slider in sliders)
 		{
 			slider.SliderEvent += UpdateSlider;
 		}
 		
 		// 更新初值
-		UpdateSlider();
+		UpdateSlider();*/
 	}
 
-	void UpdateSlider()
+	void Update()
 	{
-		E[0] = Sliders[0].SliderPos * _E0MAX;
-		E[1] = Sliders[1].SliderPos * _E1MAX;
+		E[0] = knobs[0].KnobPos * _E0MAX;
+		E[1] = knobs[1].KnobPos * _E1MAX;
+		texts[0].text = E[0].ToString("00.00");
+		texts[1].text = E[1].ToString("00.00");
 	}
 
 	/// <summary>
@@ -145,7 +151,7 @@ public class ThreeSource : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SourceData(Sliders, transform.position, transform.rotation, ChildPortID);
+		return new SourceData(knobs, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -157,11 +163,11 @@ public class SourceData : EntityData
 {
 	private readonly List<float> sliderPosList = new List<float>();
 
-	public SourceData(List<MySlider> sliders, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	public SourceData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		foreach (MySlider slider in sliders)
+		foreach (MyKnob knob in knobs)
 		{
-			sliderPosList.Add(slider.SliderPos);
+			sliderPosList.Add(knob.KnobPos);
 		}
 	}
 
@@ -171,7 +177,7 @@ public class SourceData : EntityData
 		for (var i = 0; i < sliderPosList.Count; i++)
 		{
 			// 此处不再需要更新值，SliderPos的Set方法会发送更新值的消息给元件
-			source.Sliders[i].SliderPos = sliderPosList[i];
+			source.knobs[i].ChangeKnobRot(sliderPosList[i]);
 		}
 	}
 }
