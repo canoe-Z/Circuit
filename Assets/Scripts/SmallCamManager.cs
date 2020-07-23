@@ -5,7 +5,6 @@ public class SmallCamManager : MonoBehaviour
 	public static Camera MainCam { get; set; } = null;
 	private static readonly Camera[] smallCam = new Camera[4];
 
-	// Start is called before the first frame update
 	void Start()
     {
 		MainCam = Camera.main;
@@ -25,7 +24,6 @@ public class SmallCamManager : MonoBehaviour
 		MainCam.rect = new Rect(0, 0, 1, 1);
 	}
 
-    // Update is called once per frame
     void Update()
     {
 		bool IsShiftDown = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

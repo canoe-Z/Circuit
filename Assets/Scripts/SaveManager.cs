@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+
+public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
 
 /// <summary>
 /// 存档数据
@@ -41,7 +44,11 @@ public class SaveManager : MonoBehaviour
         FileStream saveFile = File.Create("Saves/save.binary");
         formatter.Serialize(saveFile, savedata);
         saveFile.Close();
-    }
+
+        // 调用UnityEngine自带截屏Api
+        ScreenCapture.CaptureScreenshot("Saves/save.png");
+		StartCoroutine(ScreenShotTex());
+	}
 
     void Update()
     {
@@ -81,6 +88,21 @@ public class SaveManager : MonoBehaviour
 
             CircuitCalculator.CalculateAll();
         }
+    }
+
+    /// <summary>
+    /// UnityEngine自带截屏Api，只能截全屏
+    /// </summary>
+    /// <param name="fileName">文件名</param>
+    /// <param name="callBack">截图完成回调</param>
+    /// <returns>协程</returns>
+    public IEnumerator ScreenShotTex(CallBack callBack = null)
+    {
+        yield return new WaitForEndOfFrame();//等到帧结束，不然会报错
+        Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();//截图返回Texture2D对象
+        byte[] bytes = tex.EncodeToPNG();//将纹理数据，转化成一个png图片
+        File.WriteAllBytes("Saves/save2.png", bytes);//写入数据
+        callBack?.Invoke();
     }
 
     /// <summary>

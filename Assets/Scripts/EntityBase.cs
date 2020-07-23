@@ -170,7 +170,7 @@ abstract public class EntityData
 }
 
 [System.Serializable]
-public class SimpleEntityData<T> : EntityData
+public class SimpleEntityData<T> : EntityData where T : Component
 {
 	public SimpleEntityData(Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList) { }
 
