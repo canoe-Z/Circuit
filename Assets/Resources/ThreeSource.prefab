@@ -3886,10 +3886,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: -1
-  canLoop: 0
-  angleRange: 337.5
-  speedUpPerSecond: 0.001
+  Devide: -1
+  CanLoop: 0
+  AngleRange: 335
+  SpeedUpPerSecond: 0.001
 --- !u!1 &6426656180931007209
 GameObject:
   m_ObjectHideFlags: 0
@@ -4187,10 +4187,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: -1
-  canLoop: 0
-  angleRange: 337.5
-  speedUpPerSecond: 0.001
+  Devide: -1
+  CanLoop: 0
+  AngleRange: 335
+  SpeedUpPerSecond: 0.001
 --- !u!1 &8515420590144394193
 GameObject:
   m_ObjectHideFlags: 0

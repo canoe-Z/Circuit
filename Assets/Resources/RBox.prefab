@@ -174,10 +174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: 10
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!135 &8040996723748936004
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -331,10 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: 10
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!1 &2161137984080019229
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,10 +569,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: -1
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!135 &1908264587609608586
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -792,10 +792,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: 10
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!1 &3481871751246481262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,10 +1154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: 10
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!1 &5588035283802256130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,10 +1311,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: 10
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: 10
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!1 &6751824764423583360
 GameObject:
   m_ObjectHideFlags: 0

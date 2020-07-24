@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3184503, g: 0.35714272, b: 0.3770067, a: 1}
+  m_IndirectSpecularColor: {r: 0.3180066, g: 0.35714516, b: 0.37688002, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7983,10 +7983,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  devide: -1
-  canLoop: 0
-  angleRange: 360
-  speedUpPerSecond: 0.001
+  Devide: -1
+  CanLoop: 0
+  AngleRange: 360
+  SpeedUpPerSecond: 0.001
 --- !u!54 &1722827132
 Rigidbody:
   m_ObjectHideFlags: 0
