@@ -85,6 +85,6 @@ public class SliderRData : EntityData
 	{
 		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
 		sliderR.RMax = rMax;
-		sliderR.MySlider.SliderPos = sliderPos;
+		sliderR.MySlider.ChangeSliderPos(sliderPos);
 	}
 }
