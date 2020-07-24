@@ -21,23 +21,23 @@ public class ThreeSource : EntityBase, ISource
 	public override void EntityAwake()
 	{
 		//编辑器去挂
-
-		/*sliders = transform.FindComponentsInChildren<MySlider>();
+		/*
+		sliders = transform.FindComponentsInChildren<MySlider>();
 		if (sliders.Count != sliderNum) Debug.LogError("滑块个数不合法");
 
 		// 用滑块在编辑器中的名称排序
 		sliders.Sort((x, y) => { return x.name.CompareTo(y.name); });
-
-		foreach(MySlider slider in sliders)
+		*/
+		foreach(MyKnob knob in knobs)
 		{
-			slider.SliderEvent += UpdateSlider;
+			knob.KnobEvent += UpdateKnob;
 		}
 		
 		// 更新初值
-		UpdateSlider();*/
+		UpdateKnob();
 	}
 
-	void Update()
+	void UpdateKnob()
 	{
 		E[0] = knobs[0].KnobPos * _E0MAX;
 		E[1] = knobs[1].KnobPos * _E1MAX;

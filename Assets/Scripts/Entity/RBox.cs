@@ -14,6 +14,7 @@ public class RBox : EntityBase
 		MyKnob[] myKnobsDisorder = GetComponentsInChildren<MyKnob>();
 		foreach(var knob in myKnobsDisorder)
 		{
+			knob.Devide = 10;
 			if (int.TryParse(knob.gameObject.name, out int id))
 				myKnobs[id] = knob;
 			else

@@ -26,7 +26,7 @@ public class MySlider : MonoBehaviour
 	/// <summary>
 	/// 保证小于Devide的整数
 	/// </summary>
-	public int SliderPos_int { get; set; } = 0;
+	public int SliderPos_int { get; private set; } = 0;
 
 	void OnMouseEnter()
 	{
