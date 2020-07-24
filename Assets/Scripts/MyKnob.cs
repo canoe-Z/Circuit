@@ -52,11 +52,13 @@ public class MyKnob : MonoBehaviour
 			if (Input.GetMouseButtonDown(0))
 			{
 				SetKnobRot(KnobPos_int + 1);
+				CircuitCalculator.CalculateByConnection();
 			}
 			// 右键减小
 			else if (Input.GetMouseButtonDown(1))
 			{
 				SetKnobRot(KnobPos_int - 1);
+				CircuitCalculator.CalculateByConnection();
 			}
 		}
 		// 连续情况
@@ -68,6 +70,7 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos + nowSpeedPerSec);
+				CircuitCalculator.CalculateByConnection();
 			}
 			// 右键减小
 			else if (Input.GetMouseButton(1))
@@ -75,6 +78,7 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos - nowSpeedPerSec);
+				CircuitCalculator.CalculateByConnection();
 			}
 			else
 			{
@@ -132,9 +136,8 @@ public class MyKnob : MonoBehaviour
 		// 旋转模型
 		transform.localEulerAngles = new Vector3(0, 0, newRot * AngleRange);
 
-		// 更改位置后发送消息通知元件，执行计算
+		// 更改位置后发送消息通知元件
 		KnobEvent?.Invoke();
-		CircuitCalculator.CalculateByConnection();
 	}
 
 	private void WriteKnobRot(int newRot_int)

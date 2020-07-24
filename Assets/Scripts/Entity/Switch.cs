@@ -12,7 +12,7 @@ public class Switch : EntityBase
 	{
 		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
-		mySlider.SliderPos = 0.5f;
+		mySlider.SetSliderPos(0.5f);
 		mySlider.SliderEvent += UpdateSlider;
 
 		int childNum = transform.childCount;
@@ -105,6 +105,6 @@ public class SwitchData : EntityData
 	override public void Load()
 	{
 		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
-		_switch.mySlider.ChangeSliderPos(sliderpos);
+		_switch.mySlider.SetSliderPos(sliderpos);
 	}
 }

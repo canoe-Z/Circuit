@@ -14,17 +14,17 @@ public class MySlider : MonoBehaviour
 	public event SliderEventHandler SliderEvent;
 
 	/// <summary>
-	/// 是否为离散的，-1为连续的
+	/// 是否为离散的，-1为连续的，其它正整数表示离散取值数
 	/// </summary>
 	public int Devide { get; set; } = -1;
 
 	/// <summary>
-	/// 0-1的数值
+	/// 滑块位置，0-1的数值
 	/// </summary>
-	public float SliderPos { get; set; } = 0;
+	public float SliderPos { get; private set; } = 0;
 
 	/// <summary>
-	/// 保证小于Devide的整数
+	/// 滑块离散位置，为小于Devide的整数
 	/// </summary>
 	public int SliderPos_int { get; private set; } = 0;
 
@@ -52,7 +52,7 @@ public class MySlider : MonoBehaviour
 
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			ChangeSliderPos(transform.parent.InverseTransformPoint(hitPos).z);
+			SetSliderPos(transform.parent.InverseTransformPoint(hitPos).z);
 			CircuitCalculator.CalculateByConnection();
 		}
 	}
@@ -60,23 +60,24 @@ public class MySlider : MonoBehaviour
 	/// <summary>
 	/// 更改Slider的位置，已经包含了“检查数据是否满足0-1”，特别耐c
 	/// </summary>
-	public void ChangeSliderPos(float newPos)
+	public void SetSliderPos(float newPos)
 	{
 		if (newPos > 1) newPos = 1;
 		else if (newPos < 0) newPos = 0;
 
 		if (Devide > 0)
 		{
-			float pre = 1f / Devide;//每份的长度
-			SliderPos_int = (int)(newPos * Devide);//不连续的整数
-			if (SliderPos_int == Devide) SliderPos_int = Devide - 1;//保证不能满
+			// 计算滑块的连续位置
+			float pre = 1f / Devide;								
+			SliderPos_int = (int)(newPos * Devide);					
+			if (SliderPos_int >= Devide) SliderPos_int = Devide - 1;
 			newPos = SliderPos_int * pre + pre / 2;
 		}
 
 		transform.SetLocalPositionZ(newPos);
 		SliderPos = newPos;
 
-		//更改位置后发送消息
+		// 更改位置后发送消息
 		SliderEvent?.Invoke();
 	}
 

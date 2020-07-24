@@ -15,7 +15,7 @@ public class SliderR : EntityBase
 	{
 		MySlider = gameObject.GetComponentInChildren<MySlider>();
 		// 注意滑变滑块的初始位置在最右边
-		MySlider.SliderPos = 1;
+		MySlider.SetSliderPos(1);
 		MySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 	}
@@ -85,6 +85,6 @@ public class SliderRData : EntityData
 	{
 		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
 		sliderR.RMax = rMax;
-		sliderR.MySlider.ChangeSliderPos(sliderPos);
+		sliderR.MySlider.SetSliderPos(sliderPos);
 	}
 }
