@@ -80,6 +80,9 @@ public class Wdw_Menu : MonoBehaviour
 	//打开菜单
 	void OpenMenu()
 	{
+		//默认界面是创建元件的界面
+		ToCreateMode();
+
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
 		MoveController.CanOperate = false;//不允许移动视角
