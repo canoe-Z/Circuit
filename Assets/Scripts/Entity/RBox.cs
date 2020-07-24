@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class RBox : EntityBase
 {
+	private const int knobNum = 6;
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
-	public MyKnob[] myKnobs = new MyKnob[6];
+	public List<MyKnob> Knobs;
 
 	public override void EntityAwake()
 	{
-		MyKnob[] myKnobsDisorder = GetComponentsInChildren<MyKnob>();
-		foreach(var knob in myKnobsDisorder)
+		Knobs = transform.FindComponentsInChildren<MyKnob>();
+		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
+
+		// 用旋钮在编辑器中的名称排序
+		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
+
+		foreach (MyKnob knob in Knobs)
 		{
-			knob.Devide = 10;
-			if (int.TryParse(knob.gameObject.name, out int id))
-				myKnobs[id] = knob;
-			else
-				Debug.LogError("ErrorSliderID");
+			knob.KnobEvent += UpdateKnob;
 		}
+
+		// 更新初值
+		UpdateKnob();
 	}
 
-	void Update()
+	void UpdateKnob()
 	{
 		int total = 0;
 		for (int i = 0; i < 6; i++)
 		{
 			total *= 10;
-			total += myKnobs[i].KnobPos_int;
+			total += Knobs[i].KnobPos_int;
 		}
 		this.R_99999 = (float)total / (float)10;
 		this.R_99 = (float)(total % 100) / (float)10;
@@ -85,7 +90,7 @@ public class RBox : EntityBase
 		List<float> sliderPosList = new List<float>();
 		for (int i = 0; i < 6; i++)
 		{
-			sliderPosList.Add(myKnobs[i].KnobPos);
+			sliderPosList.Add(Knobs[i].KnobPos);
 		}
 		return new RboxData(sliderPosList, transform.position, transform.rotation, ChildPortID);
 	}
@@ -106,7 +111,7 @@ public class RboxData : EntityData
 		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
 		for (int i = 0; i < 6; i++)
 		{
-			rbox.myKnobs[i].ChangeKnobRot(sliderPosList[i]);
+			rbox.Knobs[i].ChangeKnobRot(sliderPosList[i]);
 		}
 	}
 }

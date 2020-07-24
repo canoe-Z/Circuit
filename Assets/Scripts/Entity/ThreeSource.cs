@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ThreeSource : EntityBase, ISource
 {
 	private const int sourceNum = 3;										//含有的独立电源个数
-	private const int sliderNum = 2;										//含有的滑块个数
+	private const int knobNum = 2;											//含有的滑块个数
 	private const double _E0MAX = 15;										//电源0最大值
 	private const double _E1MAX = 15;										//电源1最大值
 
@@ -15,20 +15,24 @@ public class ThreeSource : EntityBase, ISource
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      //电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  //内阻数组
 
-	public List<MyKnob> knobs;//编辑器去挂
-	public List<Text> texts;
+	public List<MyKnob> Knobs;
+	public List<Text> Texts;
 
 	public override void EntityAwake()
 	{
-		//编辑器去挂
-		/*
-		sliders = transform.FindComponentsInChildren<MySlider>();
-		if (sliders.Count != sliderNum) Debug.LogError("滑块个数不合法");
+		Knobs = transform.FindComponentsInChildren<MyKnob>();
+		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
-		// 用滑块在编辑器中的名称排序
-		sliders.Sort((x, y) => { return x.name.CompareTo(y.name); });
-		*/
-		foreach(MyKnob knob in knobs)
+		// 用旋钮在编辑器中的名称排序
+		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
+
+		Texts = transform.FindComponentsInChildren<Text>();
+		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
+
+		// 用旋钮在编辑器中的名称排序
+		Texts.Sort((x, y) => { return x.name.CompareTo(y.name); });
+
+		foreach (MyKnob knob in Knobs)
 		{
 			knob.KnobEvent += UpdateKnob;
 		}
@@ -39,10 +43,10 @@ public class ThreeSource : EntityBase, ISource
 
 	void UpdateKnob()
 	{
-		E[0] = knobs[0].KnobPos * _E0MAX;
-		E[1] = knobs[1].KnobPos * _E1MAX;
-		texts[0].text = E[0].ToString("00.00");
-		texts[1].text = E[1].ToString("00.00");
+		E[0] = Knobs[0].KnobPos * _E0MAX;
+		E[1] = Knobs[1].KnobPos * _E1MAX;
+		Texts[0].text = E[0].ToString("00.00");
+		Texts[1].text = E[1].ToString("00.00");
 	}
 
 	/// <summary>
@@ -151,7 +155,7 @@ public class ThreeSource : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SourceData(knobs, transform.position, transform.rotation, ChildPortID);
+		return new SourceData(Knobs, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -177,7 +181,7 @@ public class SourceData : EntityData
 		for (var i = 0; i < sliderPosList.Count; i++)
 		{
 			// 此处不再需要更新值，SliderPos的Set方法会发送更新值的消息给元件
-			source.knobs[i].ChangeKnobRot(sliderPosList[i]);
+			source.Knobs[i].ChangeKnobRot(sliderPosList[i]);
 		}
 	}
 }
