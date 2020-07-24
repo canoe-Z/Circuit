@@ -21,34 +21,7 @@ public class MySlider : MonoBehaviour
 	/// <summary>
 	/// 0-1的数值
 	/// </summary>
-	private float sliderPos = 0;
-	public float SliderPos
-	{
-		get
-		{
-			return sliderPos;
-		}
-		set
-		{
-			if (value > 1) value = 1;
-			else if (value < 0) value = 0;
-
-			if (Devide > 0)
-			{
-				float pre = 1f / Devide;//每份的长度
-				SliderPos_int = (int)(value * Devide);//不连续的整数
-				if (SliderPos_int == Devide) SliderPos_int = Devide - 1;//保证不能满
-				value = SliderPos_int * pre + pre / 2;
-			}
-
-			transform.SetLocalPositionZ(value);
-			sliderPos = value;
-
-			//更改位置后发送消息
-			SliderEvent?.Invoke();
-		}
-	}
-	//public float SliderPos { get; set; } = 0;
+	public float SliderPos { get; set; } = 0;
 
 	/// <summary>
 	/// 保证小于Devide的整数
@@ -79,9 +52,32 @@ public class MySlider : MonoBehaviour
 
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			SliderPos = transform.parent.InverseTransformPoint(hitPos).z;//转换成本地坐标
+			ChangeSliderPos(transform.parent.InverseTransformPoint(hitPos).z);
 			CircuitCalculator.CalculateByConnection();
 		}
+	}
+
+	/// <summary>
+	/// 更改Slider的位置，已经包含了“检查数据是否满足0-1”，特别耐c
+	/// </summary>
+	public void ChangeSliderPos(float newPos)
+	{
+		if (newPos > 1) newPos = 1;
+		else if (newPos < 0) newPos = 0;
+
+		if (Devide > 0)
+		{
+			float pre = 1f / Devide;//每份的长度
+			SliderPos_int = (int)(newPos * Devide);//不连续的整数
+			if (SliderPos_int == Devide) SliderPos_int = Devide - 1;//保证不能满
+			newPos = SliderPos_int * pre + pre / 2;
+		}
+
+		transform.SetLocalPositionZ(newPos);
+		SliderPos = newPos;
+
+		//更改位置后发送消息
+		SliderEvent?.Invoke();
 	}
 
 	public static bool HitOnlyOne(out Vector3 hitpos)
