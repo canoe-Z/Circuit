@@ -1,19 +1,21 @@
 ﻿using SpiceSharp.Components;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
-	private const int sourceNum = 3;										//含有的独立电源个数
-	private const int knobNum = 2;											//含有的滑块个数
-	private const double _E0MAX = 15;										//电源0最大值
-	private const double _E1MAX = 15;										//电源1最大值
+	private const int sourceNum = 3;										// 含有的独立电源个数
+	private const int knobNum = 2;                                          // 含有的旋钮个数
+	private const int textNum = 2;                                          // 含有的Text个数
+	private const double _E0MAX = 15;										// 电源0最大值
+	private const double _E1MAX = 15;										// 电源1最大值
 
-	private readonly int[] G = new int[sourceNum];							//存放独立电源负极的端口ID
-	private readonly int[] V = new int[sourceNum];							//存放独立电源正极的端口ID
-	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      //电压数组
-	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  //内阻数组
+	private readonly int[] G = new int[sourceNum];							// 存放独立电源负极的端口ID
+	private readonly int[] V = new int[sourceNum];							// 存放独立电源正极的端口ID
+	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
+	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  // 内阻数组
 
 	public List<MyKnob> Knobs;
 	public List<Text> Texts;
@@ -22,20 +24,13 @@ public class ThreeSource : EntityBase, ISource
 	{
 		Knobs = transform.FindComponentsInChildren<MyKnob>();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-
-		// 用旋钮在编辑器中的名称排序
 		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
 		Texts = transform.FindComponentsInChildren<Text>();
-		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-
-		// 用旋钮在编辑器中的名称排序
+		if (Knobs.Count != textNum) Debug.LogError("旋钮个数不合法");
 		Texts.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
-		foreach (MyKnob knob in Knobs)
-		{
-			knob.KnobEvent += UpdateKnob;
-		}
+		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		
 		// 更新初值
 		UpdateKnob();
@@ -165,23 +160,20 @@ public class ThreeSource : EntityBase, ISource
 [System.Serializable]
 public class SourceData : EntityData
 {
-	private readonly List<float> sliderPosList = new List<float>();
+	private readonly List<float> knobPosList = new List<float>();
 
 	public SourceData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		foreach (MyKnob knob in knobs)
-		{
-			sliderPosList.Add(knob.KnobPos);
-		}
+		knobs.ForEach(x => knobPosList.Add(x.KnobPos));
 	}
 
 	override public void Load()
 	{
-		ThreeSource source = EntityCreator.CreateEntity<ThreeSource>(posfloat, anglefloat, IDList);
-		for (var i = 0; i < sliderPosList.Count; i++)
+		ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>(posfloat, anglefloat, IDList);
+		for (var i = 0; i < knobPosList.Count; i++)
 		{
-			// 此处不再需要更新值，SliderPos的Set方法会发送更新值的消息给元件
-			source.Knobs[i].ChangeKnobRot(sliderPosList[i]);
+			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件
+			threeSource.Knobs[i].SetKnobRot(knobPosList[i]);
 		}
 	}
 }

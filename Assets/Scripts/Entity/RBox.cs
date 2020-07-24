@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RBox : EntityBase
 {
-	private const int knobNum = 6;
+	private const int knobNum = 6;      // 含有的旋钮个数
 	public double R_99999 = 0;
 	public double R_99 = 0;
 	public double R_09 = 0;
@@ -14,14 +14,8 @@ public class RBox : EntityBase
 	{
 		Knobs = transform.FindComponentsInChildren<MyKnob>();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-
-		// 用旋钮在编辑器中的名称排序
 		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
-
-		foreach (MyKnob knob in Knobs)
-		{
-			knob.KnobEvent += UpdateKnob;
-		}
+		Knobs.ForEach(x => { x.Devide = 10; x.KnobEvent += UpdateKnob; });
 
 		// 更新初值
 		UpdateKnob();
@@ -30,14 +24,14 @@ public class RBox : EntityBase
 	void UpdateKnob()
 	{
 		int total = 0;
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < knobNum; i++)
 		{
 			total *= 10;
 			total += Knobs[i].KnobPos_int;
 		}
-		this.R_99999 = (float)total / (float)10;
-		this.R_99 = (float)(total % 100) / (float)10;
-		this.R_09 = (float)(total % 10) / (float)10;
+		R_99999 = total / (float)10;
+		R_99 = total % 100 / (float)10;
+		R_09 = total % 10 / (float)10;
 	}
 
 	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
@@ -87,31 +81,26 @@ public class RBox : EntityBase
 
 	public override EntityData Save()
 	{
-		List<float> sliderPosList = new List<float>();
-		for (int i = 0; i < 6; i++)
-		{
-			sliderPosList.Add(Knobs[i].KnobPos);
-		}
-		return new RboxData(sliderPosList, transform.position, transform.rotation, ChildPortID);
+		return new RboxData(Knobs, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
-// TODO:Rbox后期可能会改用旋钮，因此暂时不更新保存方法
 [System.Serializable]
 public class RboxData : EntityData
 {
-	private readonly List<float> sliderPosList;
-	public RboxData(List<float> sliderPosList, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	private readonly List<int> KnobRotIntList = new List<int>();
+	public RboxData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
-		this.sliderPosList = sliderPosList;
+		knobs.ForEach(x => KnobRotIntList.Add(x.KnobPos_int));
 	}
 
 	override public void Load()
 	{
 		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
-		for (int i = 0; i < 6; i++)
+		for (var i = 0; i < KnobRotIntList.Count; i++)
 		{
-			rbox.Knobs[i].ChangeKnobRot(sliderPosList[i]);
+			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件
+			rbox.Knobs[i].SetKnobRot(KnobRotIntList[i]);
 		}
 	}
 }
