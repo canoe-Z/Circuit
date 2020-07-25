@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,13 +22,11 @@ public class ThreeSource : EntityBase, ISource
 
 	public override void EntityAwake()
 	{
-		Knobs = transform.FindComponentsInChildren<MyKnob>();
+		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
-		Texts = transform.FindComponentsInChildren<Text>();
+		Texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != textNum) Debug.LogError("旋钮个数不合法");
-		Texts.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
 		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
 

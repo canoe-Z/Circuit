@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SpiceSharp.Components;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ public class RBox : EntityBase
 
 	public override void EntityAwake()
 	{
-		Knobs = transform.FindComponentsInChildren<MyKnob>();
+		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
+
 		Knobs.ForEach(x => { x.Devide = 10; x.KnobEvent += UpdateKnob; });
 
 		// 更新初值

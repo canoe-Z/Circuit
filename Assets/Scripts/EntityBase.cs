@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public delegate void EntityDestroyEventHandler();
 
 abstract public class EntityBase : MonoBehaviour
 {
-	public int PortNum { get; set; }                                    //本元件的端口数量
-	public CircuitPort[] ChildPorts { get; set; } = null;               //端口们的引用
-	public List<int> ChildPortID { get; set; } = new List<int>();
-	public bool IsIDSet { get; set; } = false;
+	public int PortNum { get; set; }                                        //本元件的端口数量
+	public List<CircuitPort> ChildPorts { get; set; }                       //端口们的引用
+	public List<int> ChildPortID { get; set; }
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
@@ -16,46 +17,46 @@ abstract public class EntityBase : MonoBehaviour
 
 	void Awake()
 	{
+		// 找刚体
 		rigidBody = GetComponent<Rigidbody>();
 		if (rigidBody == null)
 		{
 			Debug.LogError("没找到刚体");
 		}
+
+		// 找端口的引用
+		ChildPorts = FindCircuitPort();
+		PortNum = ChildPorts.Count;
+		ChildPortID = ChildPorts.Select(x => x.ID).ToList();
+
+		// 纳入Calculator管理
 		CircuitCalculator.Entities.AddLast(this);
-		FindCircuitPort();
+
+		// 执行子类的Awake()
 		EntityAwake();
 	}
 
-	void Start()
+	private List<CircuitPort> FindCircuitPort()
 	{
-		if (!IsIDSet)
+		List<CircuitPort> circuitPorts = new List<CircuitPort>();
+		CircuitPort[] disorderPorts = GetComponentsInChildren<CircuitPort>();
+		foreach (CircuitPort port in disorderPorts)
 		{
-			CircuitCalculator.PortNum += ChildPorts.Length;
-			IsIDSet = false;
+			port.Father = this;
+			EntityDestroy += port.DestroyPort;
+			port.LocalID = int.Parse(port.name);
+			port.ID = port.LocalID + CircuitCalculator.PortNum;
+			circuitPorts.Add(port);
 		}
-		else
-		{
-			Debug.Log("PortNum不增长");
-		}
-	}
+		CircuitCalculator.PortNum += circuitPorts.Count;
+		circuitPorts.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
-	public void FindCircuitPort()
-	{
-		CircuitPort[] disorderPorts = gameObject.GetComponentsInChildren<CircuitPort>();
-		PortNum = disorderPorts.Length;
-		ChildPorts = new CircuitPort[disorderPorts.Length];
-
-		// 对获取到的子端口排序
-		for (var i = 0; i < PortNum; i++)
+		foreach (CircuitPort port in circuitPorts)
 		{
-			// 名字转换成ID
-			int.TryParse(disorderPorts[i].name, out int id);
-			ChildPorts[id] = disorderPorts[i];
-			ChildPorts[id].ID = id + CircuitCalculator.PortNum;
-			ChildPorts[id].Father = this;
-			ChildPortID.Add(ChildPorts[id].ID);
+			if (circuitPorts.IndexOf(port) != port.LocalID) Debug.LogError("端口ID有误");
 		}
-		CircuitCalculator.PortNum += disorderPorts.Length;
+
+		return circuitPorts;
 	}
 
 	//物体控制
@@ -145,8 +146,20 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
+	public virtual bool IsConnected()
+	{
+		foreach (CircuitPort port in ChildPorts)
+		{
+			if (port.Connected == 1)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public abstract void EntityAwake();
-	public abstract bool IsConnected();
+	//public abstract bool IsConnected();
 	public abstract void LoadElement();
 	public abstract void SetElement();
 	public abstract EntityData Save();

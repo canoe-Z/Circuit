@@ -10,7 +10,8 @@ public class CircuitPort : MonoBehaviour , IUniqueIdentity
 	public double U { get; set; } = 0;					//电压探针（需要时更新）
 	public double I { get; set; } = 0;                  //流出接线柱的电流（需要时更新）
 	public int ID { get; set; }                         //接线柱全局ID
-	public int showid;
+	public int LocalID { get; set; }                    //接线柱本地ID
+
 	public EntityBase Father { get; set; }
 
 	public static event EnterEventHandler MouseEnter;
@@ -30,11 +31,6 @@ public class CircuitPort : MonoBehaviour , IUniqueIdentity
 	{
 		Father.EntityDestroy -= DestroyPort;
 		CircuitCalculator.Ports.Remove(this);
-	}
-
-	void Update()
-	{
-		showid = ID;
 	}
 
 	void OnMouseDown()

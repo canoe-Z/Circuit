@@ -30,7 +30,6 @@ public class EntityCreator : MonoBehaviour
 			(t as EntityBase).ChildPortID = IDlist;
 			(t as EntityBase).ChildPorts[i].ID = IDlist[i];
 		}
-		(t as EntityBase).IsIDSet = true;
 		return t;
 	}
 
@@ -43,7 +42,6 @@ public class EntityCreator : MonoBehaviour
 			(t as EntityBase).ChildPortID = IDlist;
 			(t as EntityBase).ChildPorts[i].ID = IDlist[i];
 		}
-		(t as EntityBase).IsIDSet = true;
 		return t;
 	}
 }

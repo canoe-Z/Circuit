@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class DigtalAmmeter : EntityBase, IAmmeter
