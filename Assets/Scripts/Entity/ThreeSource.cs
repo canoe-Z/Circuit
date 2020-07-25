@@ -30,8 +30,8 @@ public class ThreeSource : EntityBase, ISource
 		if (Knobs.Count != textNum) Debug.LogError("旋钮个数不合法");
 		Texts.Sort((x, y) => { return x.name.CompareTo(y.name); });
 
-		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
-		
+		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
+
 		// 更新初值
 		UpdateKnob();
 	}

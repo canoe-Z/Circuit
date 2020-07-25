@@ -5,10 +5,10 @@ using UnityEngine;
 public class RBox : EntityBase
 {
 	private const int knobNum = 6;      // 含有的旋钮个数
-	public double R_99999 = 0;
-	public double R_99 = 0;
-	public double R_09 = 0;
-	public List<MyKnob> Knobs;
+	private double R_99999 = 0;
+	private double R_99 = 0;
+	private double R_09 = 0;
+	public List<MyKnob> Knobs { get; set; }
 
 	public override void EntityAwake()
 	{

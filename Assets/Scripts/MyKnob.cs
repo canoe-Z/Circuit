@@ -12,22 +12,22 @@ public class MyKnob : MonoBehaviour
 	/// <summary>
 	/// 是否为离散的，-1为连续的，其它正整数表示离散取值数
 	/// </summary>
-	public int Devide = -1;
+	public int Devide { get; set; } = -1;
 
 	/// <summary>
 	/// 是否可以进行循环，仅离散有效
 	/// </summary>
-	public bool CanLoop = false;
+	public bool CanLoop { get; set; } = false;
 
 	/// <summary>
 	/// 旋转的限制角度
 	/// </summary>
-	public float AngleRange = 360;
+	public float AngleRange { get; set; } = 360;
 
 	/// <summary>
 	/// 连续旋转时，每秒从0-1的速度增量
 	/// </summary>
-	public float SpeedUpPerSecond = 0.001f;
+	public float SpeedUpPerSecond { get; set; } = 0.001f;
 
 	/// <summary>
 	/// 旋钮位置，0-1的数值
