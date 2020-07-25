@@ -9,24 +9,26 @@ public class MyKnob : MonoBehaviour
 	public delegate void KnobEventHandler();
 	public event KnobEventHandler KnobEvent;
 
-	int Devide = -1;// 是否为离散的，-1为连续的，其它正整数表示离散取值数
-	bool CanLoop = false;// 是否可以进行循环，仅离散有效
-	float AngleRange = 360;// 旋转的限制角度
-	float SpeedUpPerSecond = 0.001f;// 连续旋转时，每秒从0-1的速度增量
-	private void Start()
-	{
-		ThreeSource threeSource = GetComponentInParent<ThreeSource>();//三路电源
-		if (threeSource != null)
-		{
-			AngleRange = 337.5f;
-		}
-		RBox rBox = GetComponentInParent<RBox>();//电阻箱
-		if (rBox != null)
-		{
-			Devide = 10;
-		}
+	/// <summary>
+	/// 是否为离散的，-1为连续的，其它正整数表示离散取值数
+	/// </summary>
+	public int Devide = -1;
 
-	}
+	/// <summary>
+	/// 是否可以进行循环，仅离散有效
+	/// </summary>
+	public bool CanLoop = false;
+
+	/// <summary>
+	/// 旋转的限制角度
+	/// </summary>
+	public float AngleRange = 360;
+
+	/// <summary>
+	/// 连续旋转时，每秒从0-1的速度增量
+	/// </summary>
+	public float SpeedUpPerSecond = 0.001f;
+
 	/// <summary>
 	/// 旋钮位置，0-1的数值
 	/// </summary>
