@@ -326,7 +326,7 @@ public static partial class TransformExtensions
 		else
 		{
 			T[] Components = transform.GetComponentsInChildren<T>(includeInactive);
-			foreach(T t in Components)
+			foreach (T t in Components)
 			{
 				list.Add(t);
 			}
@@ -370,7 +370,6 @@ public static partial class TransformExtensions
 				}
 			}
 		}
-
 		return null;
 	}
 
@@ -392,6 +391,19 @@ public static partial class TransformExtensions
 				list.Add(comp);
 			}
 		}
+	}
 
+	public static T SafeGetComponent<T>(this Transform transform) where T : Component
+	{
+		T t = transform.GetComponent<T>();
+		if (t == null)
+		{
+			Debug.LogError("找不到挂载的脚本");
+			return null;
+		}
+		else
+		{
+			return t;
+		}
 	}
 }

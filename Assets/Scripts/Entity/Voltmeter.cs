@@ -16,7 +16,7 @@ public class Voltmeter : EntityBase
 
 	public override void EntityAwake()
 	{
-		FindPin();
+		pin = transform.GetChildByName("Pin").gameObject;
 	}
 
 	void Update()
@@ -34,19 +34,6 @@ public class Voltmeter : EntityBase
 		Vector3 pos = pin.transform.localPosition;
 		pos.z = pinPos;
 		pin.transform.localPosition = pos;
-	}
-
-	public void FindPin()
-	{
-		int childNum = transform.childCount;
-		for (int i = 0; i < childNum; i++)
-		{
-			if (transform.GetChild(i).name == "Pin")
-			{
-				pin = transform.GetChild(i).gameObject;
-				return;
-			}
-		}
 	}
 
 	//电路相关

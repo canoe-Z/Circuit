@@ -11,12 +11,13 @@ public class Ammeter : EntityBase, IAmmeter
 	public double R1 = 1;
 	public double R2 = 0.2;
 
-	GameObject pin = null;
-	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
+	private GameObject pin = null;
+	// 1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
+	private float pinPos = 0;
 
 	public override void EntityAwake()
 	{
-		FindPin();
+		pin = transform.GetChildByName("Pin").gameObject;
 	}
 
 	void Update()
@@ -34,21 +35,8 @@ public class Ammeter : EntityBase, IAmmeter
 		pos.z = pinPos;
 		pin.transform.localPosition = pos;
 	}
-	public void FindPin()
-	{
-		int childNum = transform.childCount;
-		for (int i = 0; i < childNum; i++)
-		{
-			if (transform.GetChild(i).name == "Pin")
-			{
-				pin = transform.GetChild(i).gameObject;
-				return;
-			}
-		}
-	}
 
-	//电路相关
-	public override bool IsConnected()//判断是否有一端连接，避免浮动节点
+	public override bool IsConnected()
 	{
 		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
 		{
@@ -59,35 +47,36 @@ public class Ammeter : EntityBase, IAmmeter
 			return false;
 		}
 	}
+
 	public override void LoadElement()
 	{
-		//获取端口ID并完成并查集连接
 		int GND = ChildPorts[0].ID;
 		int V0 = ChildPorts[1].ID;
 		int V1 = ChildPorts[2].ID;
 		int V2 = ChildPorts[3].ID;
+
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
 	public override void SetElement()//得到约束方程
 	{
-		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = ChildPorts[0].ID;
 		int V0 = ChildPorts[1].ID;
 		int V1 = ChildPorts[2].ID;
 		int V2 = ChildPorts[3].ID;
-		//指定三个电阻的ID
+
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
 		{
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
-		//获取端口ID并完成内部连接
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
@@ -102,7 +91,7 @@ public class Ammeter : EntityBase, IAmmeter
 
 	public override EntityData Save()
 	{
-		// 数字电流表属于简单元件
+		// 电流表属于简单元件
 		return new SimpleEntityData<Ammeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }
