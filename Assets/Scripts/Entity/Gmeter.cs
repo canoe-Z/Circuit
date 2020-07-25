@@ -55,18 +55,7 @@ public class Gmeter : EntityBase, IAmmeter
 		}
 	}
 
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		int LeftPortID, RightPortID;
 		LeftPortID = ChildPorts[0].ID;
@@ -74,7 +63,7 @@ public class Gmeter : EntityBase, IAmmeter
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;

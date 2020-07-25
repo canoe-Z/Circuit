@@ -13,26 +13,14 @@ public class Source : EntityBase, ISource
 
 	public override void EntityAwake() { }
 
-	override public bool IsConnected()
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		G = ChildPorts[0].ID;
 		V = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(G, V);
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		G = ChildPorts[0].ID;
@@ -70,7 +58,7 @@ public class SourceStandData : EntityData
 		this.value = value;
 	}
 
-	override public void Load()
+	public override void Load()
 	{
 		Source source = EntityCreator.CreateEntity<Source>(posfloat, anglefloat, IDList);
 		source.E = value;

@@ -8,9 +8,10 @@ using UnityEngine.UI;
 
 public class Solar : EntityBase, ISource
 {
-	readonly double IscMax = 0.06;
-	double Isc;
-	int GND, P;
+	private const double _IscMax = 0.06;
+	private double Isc;
+	private int G, V;
+
 	private MySlider slider;
 	private Text sloarText;
 
@@ -22,29 +23,19 @@ public class Solar : EntityBase, ISource
 
 	void Update()
 	{
-		float fm = 6 - 5 * slider.SliderPos;//会被平方的分母
-		float lightStrength = 1 / (fm * fm);//这东西最小值1/36，最大值1
-		Isc = lightStrength * IscMax;
-		//下面更新光照强度的数值
+		float fm = 6 - 5 * slider.SliderPos;	// 会被平方的分母
+		float lightStrength = 1 / (fm * fm);	// 这东西最小值1/36，最大值1
+		Isc = lightStrength * _IscMax;
+
+		//	更新光照强度的数值
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
-	override public bool IsConnected()
+	public override void LoadElement()
 	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	override public void LoadElement()
-	{
-		int GND = ChildPorts[0].ID;
-		int P = ChildPorts[1].ID;
-		CircuitCalculator.UF.Union(GND, P);
+		G = ChildPorts[0].ID;
+		V = ChildPorts[1].ID;
+		CircuitCalculator.UF.Union(G, V);
 	}
 
 	// 构建二极管模型
@@ -74,29 +65,28 @@ public class Solar : EntityBase, ISource
 		return dm;
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		GND = ChildPorts[0].ID;
+		G = ChildPorts[0].ID;
+		V = ChildPorts[1].ID;
 
-		Debug.LogWarning("短路电流为" + Isc);
-		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", GND.ToString(), Isc));
-		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), GND.ToString(), "S+", "1N4007"));
+		Debug.Log("短路电流为" + Isc);
+		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", G.ToString(), Isc));
+		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), G.ToString(), "S+", "1N4007"));
 		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", GND.ToString(), 10000));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R2"), P.ToString(), "S+", 0.5));
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", G.ToString(), 10000));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R2"), V.ToString(), "S+", 0.5));
 	}
 
 	public void GroundCheck()
 	{
 		if (IsConnected())
 		{
-			if (!CircuitCalculator.UF.Connected(GND, 0))
+			if (!CircuitCalculator.UF.Connected(G, 0))
 			{
-				CircuitCalculator.UF.Union(GND, 0);
-				CircuitCalculator.GNDLines.Add(new GNDLine(GND));
+				CircuitCalculator.UF.Union(G, 0);
+				CircuitCalculator.GNDLines.Add(new GNDLine(G));
 			}
 		}
 	}
@@ -112,7 +102,7 @@ public class SolarData : EntityData
 {
 	public SolarData(Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id) { }
 
-	override public void Load()
+	public override void Load()
 	{
 		EntityCreator.CreateEntity<Solar>(posfloat, anglefloat, IDList);
 	}

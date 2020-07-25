@@ -30,19 +30,7 @@ public class DigtalVoltmeter : EntityBase
 		}
 	}
 
-	override public bool IsConnected()
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		int GND = ChildPorts[0].ID;
 		int mV = ChildPorts[1].ID;
@@ -52,7 +40,7 @@ public class DigtalVoltmeter : EntityBase
 		CircuitCalculator.UF.Union(GND, V);
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = ChildPorts[0].ID;

@@ -159,7 +159,6 @@ abstract public class EntityBase : MonoBehaviour
 	}
 
 	public abstract void EntityAwake();
-	//public abstract bool IsConnected();
 	public abstract void LoadElement();
 	public abstract void SetElement();
 	public abstract EntityData Save();

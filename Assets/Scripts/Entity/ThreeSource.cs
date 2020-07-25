@@ -60,23 +60,6 @@ public class ThreeSource : EntityBase, ISource
 	}
 
 	/// <summary>
-	/// 判断电源的连接状态，有单个电源连接即返回真
-	/// </summary>
-	/// <returns></returns>
-	override public bool IsConnected()
-	{
-		bool _isConnected = false;
-		for (int j = 0; j < 3; j++)
-		{
-			if (IsConnected(j))
-			{
-				_isConnected = true;
-			}
-		}
-		return _isConnected;
-	}
-
-	/// <summary>
 	/// 预连接单个电源
 	/// </summary>
 	/// <param name="n"></param>

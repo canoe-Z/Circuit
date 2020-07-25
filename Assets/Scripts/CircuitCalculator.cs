@@ -60,12 +60,12 @@ public class CircuitCalculator : MonoBehaviour
 			port.Connected = 0;
 		}
 
-		// 通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
+		// 冗余检测：通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
 		foreach (CircuitLine line in Lines)
 		{
 			if (LineUF.Connected(line.StartID_Global, line.EndID_Global))
 			{
-				Debug.Log("导线被第一种问题禁用");
+				Debug.Log("导线因冗余被禁用");
 				line.IsActived = false;
 				DisabledLines.Add(line);
 			}
@@ -73,23 +73,34 @@ public class CircuitCalculator : MonoBehaviour
 			{
 				LineUF.Union(line.StartID_Global, line.EndID_Global);
 				UF.Union(line.StartID_Global, line.EndID_Global);
+
+				// 对于第一次检测有效的导线，激活有连接的元件
 				line.StartPort.Connected = 1;
 				line.EndPort.Connected = 1;
 			}
 		}
 
-		// 在并查集中加载有连接元件的内部连接
+		// 在并查集中加载激活元件的内部连接
+		// 注意：这里被激活的元件此后还可能被禁用，区分的目的仅是为了缩小并查集规模，这里也可以选择不判断激活状态，直接加载所有元件的内部连接
 		LoadElement();
 
-		// 对电源实行接地检测
+		// 对有连接的电源实行接地检测，只涉及并查集操作
 		foreach (ISource source in Sources)
 		{
 			source.GroundCheck();
 		}
 
+		// 连接接地线，只涉及并查集操作
 		ConnectGND();
 
-		//检查对地连通性，对于正确连通的导线则连接，对于不通的导线需要禁用
+		// 再次清空所有端口的连接状态
+		// 注意：此前的有效导线未经接地检测，不经此步骤，会导致孤立元件内部连接出不接地的导线，导致仿真错误
+		foreach (CircuitPort port in Ports)
+		{
+			port.Connected = 0;
+		}
+
+		// 接地检测：检查对地连通性，对于正确连通的导线则连接，更新连接状态，对于不通的导线需要禁用
 		int i = 0;
 		foreach (CircuitLine line in Lines)
 		{
@@ -97,13 +108,17 @@ public class CircuitCalculator : MonoBehaviour
 			{
 				if (UF.Connected(line.StartID_Global, 0))
 				{
+					// 对于两次检测均有效的导线，激活有连接的元件
+					line.StartPort.Connected = 1;
+					line.EndPort.Connected = 1;
+
 					EnabledLines.Add(line);
 					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID_Global.ToString(), line.EndID_Global.ToString(), 0));
 					EntityNum++;
 				}
 				else
 				{
-					Debug.Log("导线被第二种问题禁用");
+					Debug.Log("导线因不接地被禁用");
 					line.IsActived = false;
 					DisabledLines.Add(line);
 				}
@@ -221,7 +236,14 @@ public class CircuitCalculator : MonoBehaviour
 		catch
 		{
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
-			Debug.LogWarning("仿真失败，电路无通路");
+			if (SpiceEntities.Count == 0)
+			{
+				Debug.Log("尚未连接电路");
+			}
+			else
+			{
+				Debug.LogError("仿真错误！");
+			}
 		}
 
 		// 计算电流

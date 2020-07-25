@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 端口
 /// </summary>
 public class CircuitPort : MonoBehaviour , IUniqueIdentity
 {
-	public int Connected { get; set; } = 0;				//是否连接
+	public int Connected = 0;							//是否连接（含义丰富）
 	public double U { get; set; } = 0;					//电压探针（需要时更新）
 	public double I { get; set; } = 0;                  //流出接线柱的电流（需要时更新）
 	public int ID { get; set; }                         //接线柱全局ID

@@ -25,18 +25,6 @@ public class Resistance : EntityBase
 		if (resistanceText) resistanceText.text = str;
 	}
 
-	public override bool IsConnected()
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	public override void LoadElement()
 	{
 		int LeftPortID = ChildPorts[0].ID;

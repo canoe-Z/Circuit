@@ -36,20 +36,8 @@ public class Voltmeter : EntityBase
 		pin.transform.localPosition = pos;
 	}
 
-	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
-	override public void LoadElement()//添加元件
+	public override void LoadElement()//添加元件
 	{
 		int GND = ChildPorts[0].ID;
 		int V0 = ChildPorts[1].ID;
@@ -60,7 +48,7 @@ public class Voltmeter : EntityBase
 		CircuitCalculator.UF.Union(GND, V2);
 	}
 
-	override public void SetElement()//添加元件
+	public override void SetElement()//添加元件
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int GND = ChildPorts[0].ID;

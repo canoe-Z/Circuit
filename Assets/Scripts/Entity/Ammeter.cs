@@ -36,18 +36,6 @@ public class Ammeter : EntityBase, IAmmeter
 		pin.transform.localPosition = pos;
 	}
 
-	public override bool IsConnected()
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	public override void LoadElement()
 	{
 		int GND = ChildPorts[0].ID;

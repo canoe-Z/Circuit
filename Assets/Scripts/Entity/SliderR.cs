@@ -26,19 +26,7 @@ public class SliderR : EntityBase
 		RRight = RMax - RLeft;
 	}
 
-	override public bool IsConnected()
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		int TL = ChildPorts[0].ID;
 		int TR = ChildPorts[1].ID;
@@ -50,7 +38,7 @@ public class SliderR : EntityBase
 		CircuitCalculator.UF.Union(TL, TR);
 	}
 
-	override public void SetElement()
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int TL = ChildPorts[0].ID;

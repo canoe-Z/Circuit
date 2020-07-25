@@ -35,19 +35,7 @@ public class RBox : EntityBase
 		R_09 = total % 10 / (float)10;
 	}
 
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点
-	{
-		if (ChildPorts[0].Connected == 1 || ChildPorts[1].Connected == 1 || ChildPorts[2].Connected == 1 || ChildPorts[3].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		int G, R999, R99, R9;
 		G = ChildPorts[0].ID;
@@ -59,7 +47,7 @@ public class RBox : EntityBase
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
 	}
-	override public void SetElement()
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		int G, R999, R99, R9;

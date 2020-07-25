@@ -6,11 +6,10 @@ public class Switch : EntityBase
 {
 	public int state = 1;
 	public MySlider mySlider = null;
-	GameObject connector = null;
+	private GameObject connector = null;
 
 	public override void EntityAwake()
 	{
-		//滑块
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SetSliderPos(0.5f);
 		mySlider.SliderEvent += UpdateSlider;
@@ -38,8 +37,11 @@ public class Switch : EntityBase
 		connector.transform.LookAt(mySlider.gameObject.transform);
 	}
 
-	//电路相关
-	override public bool IsConnected()//判断是否有一端连接，避免浮动节点(对于开关中间必连）
+	// 开关一定要接中间才能激活
+	// 否则当左/右端口单独被激活时，其余的那个端口就会和中间建立实质的连接，而这可能是不接地的，会导致仿真错误
+	// 注意：将某个接线柱作为“中转”而不实际使用这个元件，也会导致元件被实际激活，如果元件不能保证内部连接的完备性，在极端状况下就可能出错
+	// 完备性：指元件内部任意两个端口永远连通，开关不满足完备性，所以需要特殊处理
+	public override bool IsConnected()
 	{
 		if (ChildPorts[1].Connected == 1)
 		{
@@ -51,7 +53,7 @@ public class Switch : EntityBase
 		}
 	}
 
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		//得到端口ID
 		int L, M, R;
@@ -68,7 +70,7 @@ public class Switch : EntityBase
 		}
 	}
 
-	override public void SetElement()//得到约束方程
+	public override void SetElement()//得到约束方程
 	{
 		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
