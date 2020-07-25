@@ -37,6 +37,7 @@ public class EntityCreator : MonoBehaviour
 	{
 		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
 		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<T>();
+		// 元件执行Awake()后
 		for (var i = 0; i < (t as EntityBase).PortNum; i++)
 		{
 			(t as EntityBase).ChildPortID = IDlist;

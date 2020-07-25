@@ -86,7 +86,8 @@ public class SaveManager : MonoBehaviour
                 linedata.Load();
             }
 
-            CircuitCalculator.CalculateAll();
+            // 下一帧计算，直接调用计算会在Start()之前执行计算，丢失引用
+            CircuitCalculator.NeedCalculate = true;
         }
     }
 

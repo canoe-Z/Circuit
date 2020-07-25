@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3184503, g: 0.35714272, b: 0.3770067, a: 1}
+  m_IndirectSpecularColor: {r: 0.3180066, g: 0.35714516, b: 0.37688002, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2840,7 +2840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &531551331
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3101,7 +3101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &542184881
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4137,7 +4137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &853540968
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5540,7 +5540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1075657586
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6236,7 +6236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1269900780
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6807,7 +6807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1366921788
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6966,7 +6966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1380511409
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7316,7 +7316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1448748186
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9123,7 +9123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &1749883098
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11047,7 +11047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
+  Connected: 0
 --- !u!54 &2092929955
 Rigidbody:
   m_ObjectHideFlags: 0

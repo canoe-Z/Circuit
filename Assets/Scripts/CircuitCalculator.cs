@@ -4,6 +4,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Circuits;
+using System.Collections;
 
 /// <summary>
 /// 电路计算
@@ -27,6 +28,36 @@ public class CircuitCalculator : MonoBehaviour
 	public static LinkedList<EntityBase> Entities { get; set; } = new LinkedList<EntityBase>();
 	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
 	public static LinkedList<CircuitLine> Lines { get; set; } = new LinkedList<CircuitLine>();
+
+	public static bool NeedCalculate = false;
+	public static bool NeedCalculateByConnection = false;
+
+	void Awake()
+	{
+		// 开启计算协程
+		StartCoroutine(CalculateUpdate());
+	}
+
+	IEnumerator CalculateUpdate()
+	{
+		while (true)
+		{
+			// 需要全算则不再部分算
+			if(NeedCalculate)
+			{
+				CalculateAll();
+				NeedCalculate = false;
+				NeedCalculateByConnection = false;
+			}
+			else if(NeedCalculateByConnection)
+			{
+				CalculateByConnection();
+				NeedCalculate = false;
+				NeedCalculateByConnection = false;
+			}
+			yield return null; //下一帧再次调用，yield return null的执行时机在Update()之后
+		}
+	}
 
 	/// <summary>
 	/// 清除所有计算记录和连接关系

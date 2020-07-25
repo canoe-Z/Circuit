@@ -38,7 +38,7 @@ public class ConnectionManager : MonoBehaviour
 		// 右键抬起时，删除完毕导线，开始计算
 		if (Input.GetMouseButtonUp(1))
 		{
-			CircuitCalculator.CalculateAll();
+			CircuitCalculator.NeedCalculate = true;
 		}
 	}
 
@@ -74,7 +74,7 @@ public class ConnectionManager : MonoBehaviour
 			{
 				ConnectRope(clickedPort, port);
 				clickedPort = null;
-				CircuitCalculator.CalculateAll();
+				CircuitCalculator.NeedCalculate = true;
 			}
 		}
 	}

@@ -52,13 +52,13 @@ public class MyKnob : MonoBehaviour
 			if (Input.GetMouseButtonDown(0))
 			{
 				SetKnobRot(KnobPos_int + 1);
-				CircuitCalculator.CalculateByConnection();
+				CircuitCalculator.NeedCalculateByConnection = true;
 			}
 			// 右键减小
 			else if (Input.GetMouseButtonDown(1))
 			{
 				SetKnobRot(KnobPos_int - 1);
-				CircuitCalculator.CalculateByConnection();
+				CircuitCalculator.NeedCalculateByConnection = true;
 			}
 		}
 		// 连续情况
@@ -70,7 +70,7 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos + nowSpeedPerSec);
-				CircuitCalculator.CalculateByConnection();
+				CircuitCalculator.NeedCalculateByConnection = true;
 			}
 			// 右键减小
 			else if (Input.GetMouseButton(1))
@@ -78,7 +78,7 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos - nowSpeedPerSec);
-				CircuitCalculator.CalculateByConnection();
+				CircuitCalculator.NeedCalculateByConnection = true;
 			}
 			else
 			{

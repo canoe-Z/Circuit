@@ -53,7 +53,7 @@ public class MySlider : MonoBehaviour
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
 			SetSliderPos(transform.parent.InverseTransformPoint(hitPos).z);
-			CircuitCalculator.CalculateByConnection();
+			CircuitCalculator.NeedCalculateByConnection = true;
 		}
 	}
 

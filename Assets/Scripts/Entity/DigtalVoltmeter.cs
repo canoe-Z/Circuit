@@ -5,10 +5,18 @@ public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
 	private Text digtalDigtalVoltmeter;
+	int GND, mV, V;
 
 	public override void EntityAwake()
 	{
 		digtalDigtalVoltmeter = transform.FindComponent_DFS<Text>("Text");
+	}
+
+	void Start()
+	{
+		GND = ChildPorts[0].ID;
+		mV = ChildPorts[1].ID;
+		V = ChildPorts[2].ID;
 	}
 
 	void Update()
@@ -32,10 +40,6 @@ public class DigtalVoltmeter : EntityBase
 
 	public override void LoadElement()
 	{
-		int GND = ChildPorts[0].ID;
-		int mV = ChildPorts[1].ID;
-		int V = ChildPorts[2].ID;
-
 		CircuitCalculator.UF.Union(GND, mV);
 		CircuitCalculator.UF.Union(GND, V);
 	}
@@ -43,9 +47,6 @@ public class DigtalVoltmeter : EntityBase
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].ID;
-		int mV = ChildPorts[1].ID;
-		int V = ChildPorts[2].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
