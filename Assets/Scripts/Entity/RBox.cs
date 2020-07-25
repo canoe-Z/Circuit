@@ -5,9 +5,10 @@ using UnityEngine;
 public class RBox : EntityBase
 {
 	private const int knobNum = 6;      // 含有的旋钮个数
-	public double R_99999 = 0;
-	public double R_99 = 0;
-	public double R_09 = 0;
+	double R_99999 = 0;
+	double R_99 = 0;
+	double R_09 = 0;
+	[HideInInspector]//编辑器隐藏
 	public List<MyKnob> Knobs;
 
 	public override void EntityAwake()
@@ -15,7 +16,7 @@ public class RBox : EntityBase
 		Knobs = transform.FindComponentsInChildren<MyKnob>();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 		Knobs.Sort((x, y) => { return x.name.CompareTo(y.name); });
-		Knobs.ForEach(x => { x.Devide = 10; x.KnobEvent += UpdateKnob; });
+		Knobs.ForEach(x => { x.KnobEvent += UpdateKnob; });
 
 		// 更新初值
 		UpdateKnob();
