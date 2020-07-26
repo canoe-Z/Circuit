@@ -5,6 +5,9 @@ using UnityEngine;
 
 public delegate void EntityDestroyEventHandler();
 
+/// <summary>
+/// 找端口，需要带有CircuitPort的端口，把自己重命名成序号
+/// </summary>
 abstract public class EntityBase : MonoBehaviour
 {
 	public int PortNum { get; set; }                                        //本元件的端口数量

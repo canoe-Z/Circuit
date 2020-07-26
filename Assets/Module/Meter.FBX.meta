@@ -1,82 +1,11 @@
 fileFormatVersion: 2
-guid: cdf962d0f147c0e478aa566bdd61d474
+guid: de07c196e963bac4e8dfdf4ed002324c
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Box001
-    100002: Cylinder001
-    100004: Cylinder002
-    100006: Cylinder003
-    100008: Cylinder004
-    100010: Cylinder005
-    100012: Cylinder006
-    100014: Cylinder007
-    100016: Cylinder008
-    100018: Line001
-    100020: Rectangle001
-    100022: "\u5BF9\u8C61001"
-    100024: "\u5BF9\u8C61002"
-    100026: //RootNode
-    400000: Box001
-    400002: Cylinder001
-    400004: Cylinder002
-    400006: Cylinder003
-    400008: Cylinder004
-    400010: Cylinder005
-    400012: Cylinder006
-    400014: Cylinder007
-    400016: Cylinder008
-    400018: Line001
-    400020: Rectangle001
-    400022: "\u5BF9\u8C61001"
-    400024: "\u5BF9\u8C61002"
-    400026: //RootNode
-    2100000: No Name
-    2100002: 01 - Default
-    2100004: 03 - Default
-    2100006: 07 - Default
-    2300000: Box001
-    2300002: Cylinder001
-    2300004: Cylinder002
-    2300006: Cylinder003
-    2300008: Cylinder004
-    2300010: Cylinder005
-    2300012: Cylinder006
-    2300014: Cylinder007
-    2300016: Cylinder008
-    2300018: Line001
-    2300020: Rectangle001
-    2300022: "\u5BF9\u8C61001"
-    2300024: "\u5BF9\u8C61002"
-    3300000: Box001
-    3300002: Cylinder001
-    3300004: Cylinder002
-    3300006: Cylinder003
-    3300008: Cylinder004
-    3300010: Cylinder005
-    3300012: Cylinder006
-    3300014: Cylinder007
-    3300016: Cylinder008
-    3300018: Line001
-    3300020: Rectangle001
-    3300022: "\u5BF9\u8C61001"
-    3300024: "\u5BF9\u8C61002"
-    4300000: Box001
-    4300002: "\u5BF9\u8C61001"
-    4300004: Line001
-    4300006: "\u5BF9\u8C61002"
-    4300008: Rectangle001
-    4300010: Cylinder001
-    4300012: Cylinder002
-    4300014: Cylinder003
-    4300016: Cylinder004
-    4300018: Cylinder005
-    4300020: Cylinder006
-    4300022: Cylinder007
-    4300024: Cylinder008
+  serializedVersion: 19301
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -102,32 +31,35 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 10
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -136,10 +68,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -149,13 +81,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 0.01
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
