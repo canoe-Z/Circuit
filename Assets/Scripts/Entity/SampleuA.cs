@@ -6,16 +6,28 @@ using UnityEngine;
 /// </summary>
 public class SampleuA : EntityBase, IAmmeter
 {
-    public double maxI0 = 0.05;//量程
+    public double maxI0 = 0.05;//量程，单位安培
 	public double r0 = 2;//内阻
 
-	MyPin myPin;
+	/// <summary>
+	/// 变成某一种微安表
+	/// </summary>
+	public void MyChangeToWhichType(int uA)
+	{
+		calculateFlag = true;
+		maxI0 = (double)uA / 1000000;
+		r0 = (double)100 / uA;//50微安时为2欧姆，成反比
+		myPin.MyChangePos(0);
+		myPin.MySetString("uA", uA);//
+	}
+	bool calculateFlag = false;//这东西被置为true时，在下一帧Update电路进行重新计算
+
+	MyPin myPin;//指针（显示数字的那种）
 	public override void EntityAwake()
 	{
 		//得到引用并且初始化
 		myPin = GetComponentInChildren<MyPin>();
-		myPin.MyChangePos(0);
-		myPin.MySetString("50uA", 50);//
+		MyChangeToWhichType(50);
 	}
 
 	public override void LoadElement()
@@ -45,11 +57,10 @@ public class SampleuA : EntityBase, IAmmeter
 	public void CalculateCurrent()
 	{
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / r0;
+		
+		myPin.MyChangePos((float)(ChildPorts[1].I / maxI0));
 
-		Debug.LogWarning("这个电流为0：" + ChildPorts[1].I);//这个东西始终为0
-		//myPin.MyChangePos((float)(ChildPorts[1].I / maxI0));
-
-		myPin.MyChangePos(0.55f);//改变指针位置，这里有bug
+		//myPin.MyChangePos(0.55f);//改变指针位置，这里有bug
 	}
 	
 	void Start()
@@ -59,5 +70,10 @@ public class SampleuA : EntityBase, IAmmeter
 	
     void Update()
     {
+		if (calculateFlag)
+		{
+			calculateFlag = false;
+			CircuitCalculator.CalculateAll();
+		}
 	}
 }

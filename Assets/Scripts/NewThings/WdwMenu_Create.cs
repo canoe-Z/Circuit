@@ -5,18 +5,25 @@ using UnityEngine.UI;
 
 public class WdwMenu_Create : MonoBehaviour
 {
-	public Button btnCopies_RBox;
-	public Button btnCopies_Switch;
+	public Button btn_RBox;
+	public Button btn_Switch;
+	public Button btn_DigV;
+	public Button btn_DigA;
 	public InputField iptNum_SliderR;
+	public Button btn_SliderR;
 	public InputField iptNum_R;
-	public Button btnCopiesSP_SliderR;
-	public Button btnCopiesSP_R;
+	public Button btn_R;
+	public Dropdown dpdType_uA;
+	public Button btn_uA;
 	void Start()
     {
-		btnCopies_RBox.onClick.AddListener(OnButtonCopy_RBox);
-		btnCopies_Switch.onClick.AddListener(OnButtonCopy_Switch);
-		btnCopiesSP_SliderR.onClick.AddListener(OnButtonCopySP_SliderR);
-		btnCopiesSP_R.onClick.AddListener(OnButtonCopySP_R);
+		btn_RBox.onClick.AddListener(OnButtonCopy_RBox);
+		btn_Switch.onClick.AddListener(OnButtonCopy_Switch);
+		btn_DigV.onClick.AddListener(OnButtonCopy_DigV);
+		btn_DigA.onClick.AddListener(OnButtonCopy_DigA);
+		btn_SliderR.onClick.AddListener(OnButtonCopySP_SliderR);
+		btn_R.onClick.AddListener(OnButtonCopySP_R);
+		btn_uA.onClick.AddListener(OnButtonCopySP_uA);
 	}
 
     // Update is called once per frame
@@ -67,9 +74,20 @@ public class WdwMenu_Create : MonoBehaviour
 		willBeSet = EntityCreator.CreateEntity<Switch>().gameObject;//复制物体//复制物体
 		NormalCreate();
 	}
+	void OnButtonCopy_DigV()
+	{
+		willBeSet = EntityCreator.CreateEntity<DigtalVoltmeter>().gameObject;//复制物体//复制物体
+		NormalCreate();
+	}
+	void OnButtonCopy_DigA()
+	{
+		willBeSet = EntityCreator.CreateEntity<DigtalAmmeter>().gameObject;//复制物体//复制物体
+		NormalCreate();
+	}
+
 	void OnButtonCopySP_SliderR()
 	{
-		string textStr = iptNum_R.text;
+		string textStr = iptNum_SliderR.text;
 		textStr = textStr.Replace("k", "000");
 		textStr = textStr.Replace("K", "000");
 		textStr = textStr.Replace("m", "000000");
@@ -81,7 +99,7 @@ public class WdwMenu_Create : MonoBehaviour
 			willBeSet = sliderR.gameObject;
 			if (sliderR)
 			{
-				sliderR.RMax = num;
+				sliderR.rMax = num;
 				NormalCreate();
 			}
 			else
@@ -89,6 +107,7 @@ public class WdwMenu_Create : MonoBehaviour
 				Debug.LogError("你家滑动变阻器没挂脚本");
 			}
 		}
+		else Debug.LogError(textStr);
 	}
 	void OnButtonCopySP_R()
 	{
@@ -112,6 +131,18 @@ public class WdwMenu_Create : MonoBehaviour
 				Debug.LogError("你家电阻没挂脚本");
 			}
 		}
+	}
+	void OnButtonCopySP_uA()
+	{
+		SampleuA sampleuA = EntityCreator.CreateEntity<SampleuA>();
+		willBeSet = sampleuA.gameObject;
+		switch (dpdType_uA.value)
+		{
+			case 0: sampleuA.MyChangeToWhichType(50); break;//50
+			case 1: sampleuA.MyChangeToWhichType(100); break;//100
+			case 2: sampleuA.MyChangeToWhichType(200); break;//200
+		}
+		NormalCreate();
 	}
 
 	//下面是功能函数

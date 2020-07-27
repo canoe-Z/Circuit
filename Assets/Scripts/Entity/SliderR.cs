@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SliderR : EntityBase
 {
-	public double RMax { get; set; } = 300;
+	public double rMax = 300;
 
-	double RLeft = 300;
-	double RRight = 0;
+	double rLeft = 300;
+	double rRight = 0;
 
 	public MySlider MySlider { get; set; }
 
@@ -22,8 +22,8 @@ public class SliderR : EntityBase
 
 	void UpdateSlider()
 	{
-		RLeft = RMax * MySlider.SliderPos;
-		RRight = RMax - RLeft;
+		rLeft = rMax * MySlider.SliderPos;
+		rRight = rMax - rLeft;
 	}
 
 	public override void LoadElement()
@@ -46,14 +46,14 @@ public class SliderR : EntityBase
 		int L = ChildPorts[2].ID;
 		int R = ChildPorts[3].ID;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), RLeft));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), RRight));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), rLeft));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), rRight));
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));
 	}
 
 	public override EntityData Save()
 	{
-		return new SliderRData(RMax, MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
+		return new SliderRData(rMax, MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -72,7 +72,7 @@ public class SliderRData : EntityData
 	override public void Load()
 	{
 		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
-		sliderR.RMax = rMax;
+		sliderR.rMax = rMax;
 		sliderR.MySlider.SetSliderPos(sliderPos);
 	}
 }
