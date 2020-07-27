@@ -31,6 +31,9 @@ public class SampleuA : EntityBase, IAmmeter
 		int GND = ChildPorts[0].ID;
 		int V0 = ChildPorts[1].ID;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), GND.ToString(), V0.ToString(), r0));
+
+		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 	}
 
 	public override EntityData Save()
