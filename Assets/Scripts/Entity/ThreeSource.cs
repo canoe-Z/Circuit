@@ -26,7 +26,7 @@ public class ThreeSource : EntityBase, ISource
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
 		Texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
-		if (Knobs.Count != textNum) Debug.LogError("旋钮个数不合法");
+		if (Knobs.Count != textNum) Debug.LogError("文本个数不合法");
 
 		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
 
