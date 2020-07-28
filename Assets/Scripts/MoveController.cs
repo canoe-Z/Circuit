@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MoveController : MonoBehaviour
 {
+	public static float myMoveSpeed = 1f;//移动速度的倍率
+	public static float myTurnSpeed = 1f;//转头速度的倍率
 	public static bool CanOperate { get; set; } = true;
 	public static bool CanTurn { get; set; } = true;
 	// 用于获取CapsLock的状态
@@ -39,6 +41,8 @@ public class MoveController : MonoBehaviour
 		//鼠标移动距离
 		float rh = Input.GetAxis("Mouse X");
 		float rv = Input.GetAxis("Mouse Y");
+		rh *= myTurnSpeed;
+		rv *= myTurnSpeed;
 		camRot.x -= rv * rotateSpeed;
 		camRot.y += rh * rotateSpeed;
 		if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
@@ -97,6 +101,8 @@ public class MoveController : MonoBehaviour
 	/// </summary>
 	public void Move()
 	{
+		if (!MoveController.CanTurn) return;//在菜单的时候禁止移动
+
 		float dFront = 0;
 		float dRight = 0;
 		float dUp = 0;
@@ -110,7 +116,8 @@ public class MoveController : MonoBehaviour
 		if (Up) dUp -= moveSpeed;
 		if (Down) dUp += moveSpeed;
 
-		Vector3 world = Camera.main.gameObject.transform.TransformDirection(new Vector3(dRight, dUp, dFront));
+		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * myMoveSpeed;
+		Vector3 world = Camera.main.gameObject.transform.TransformDirection(control);
 		characterController.Move(world);
 	}
 }

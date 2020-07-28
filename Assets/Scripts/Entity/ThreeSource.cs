@@ -12,7 +12,6 @@ public class ThreeSource : EntityBase, ISource
 	private const double _E0MAX = 15;                                       // 电源0最大值
 	private const double _E1MAX = 15;                                       // 电源1最大值
 	private const double _E2MAX = 15;                                       // 电源2最大值
-	private const double _E2MaxInTwoOfThree = 5;							// 电源2在双路可调模式下的电压值
 	private readonly int[] G = new int[sourceNum];							// 存放独立电源负极的端口ID
 	private readonly int[] V = new int[sourceNum];							// 存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
@@ -24,11 +23,11 @@ public class ThreeSource : EntityBase, ISource
 	public List<Text> Texts;
 	public enum SourceMode
 	{
-		one,
-		three,
-		twoOfThree
+		three = 0,
+		one = 1,
+		twoOfThree = 2
 	}
-	public SourceMode sourceMode = SourceMode.twoOfThree;
+	SourceMode sourceMode = SourceMode.three;
 
 	public override void EntityAwake()
 	{
@@ -40,6 +39,20 @@ public class ThreeSource : EntityBase, ISource
 
 		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
 
+		//根据画布的名字区分三种不同的电源
+		//0：三路可调，1：单路，2：双路可调
+		Canvas canvas = GetComponentInChildren<Canvas>();
+		if(int.TryParse(canvas.name,out int res))
+		{
+			if (res == 0) sourceMode = SourceMode.three;//现在进行强制类型转换可能会造成莫名其妙的bug
+			else if (res == 1) sourceMode = SourceMode.one;
+			else if (res == 2) sourceMode = SourceMode.twoOfThree;
+		}
+		else
+		{
+			Debug.LogError("转换失败");
+		}
+
 		// 更新初值
 		UpdateKnob();
 	}
@@ -50,21 +63,25 @@ public class ThreeSource : EntityBase, ISource
 		{
 			case SourceMode.one:
 				E[0] = Knobs[0].KnobPos * _E0MAX;
+				Texts[0].text = E[0].ToString("00.00");
 				break;
 			case SourceMode.three:
 				E[0] = Knobs[0].KnobPos * _E0MAX;
 				E[1] = Knobs[1].KnobPos * _E1MAX;
 				E[2] = Knobs[2].KnobPos * _E2MAX;
+				Texts[0].text = E[0].ToString("00.00");
+				Texts[1].text = E[1].ToString("00.00");
+				Texts[2].text = E[2].ToString("00.00");
 				break;
 			case SourceMode.twoOfThree:
 				E[0] = Knobs[0].KnobPos * _E0MAX;
 				E[1] = Knobs[1].KnobPos * _E1MAX;
-				E[2] = _E2MaxInTwoOfThree;
+				E[2] = 5;
+				Texts[0].text = E[0].ToString("00.00");
+				Texts[1].text = E[1].ToString("00.00");
+				Texts[2].text = "5";
 				break;
 		}
-		Texts[0].text = E[0].ToString("00.00");
-		Texts[1].text = E[1].ToString("00.00");
-		Texts[2].text = E[2].ToString("00.00");
 	}
 
 	/// <summary>

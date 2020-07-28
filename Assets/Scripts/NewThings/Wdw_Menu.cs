@@ -8,10 +8,12 @@ public class Wdw_Menu : MonoBehaviour
 	public GameObject mainThings;
 	public GameObject createThings;
 	public GameObject saveThings;
+	public GameObject settingsThings;
 	public Button exitGame;
 	public Button continueGame;
 	public Button btnToCreate;
 	public Button btnToSave;
+	public Button btnToSettings;
 	/// <summary>
 	/// 置为1时，强制关闭菜单
 	/// </summary>
@@ -27,6 +29,7 @@ public class Wdw_Menu : MonoBehaviour
 		continueGame.onClick.AddListener(OnContinueButton);
 		btnToCreate.onClick.AddListener(ToCreateMode);
 		btnToSave.onClick.AddListener(ToSaveMode);
+		btnToSettings.onClick.AddListener(ToSettingsMode);
 	}
 
 	void Update()
@@ -66,12 +69,20 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		createThings.SetActive(true);
 		saveThings.SetActive(false);
+		settingsThings.SetActive(false);
 	}
 	//变为存档的界面
 	void ToSaveMode()
 	{
 		createThings.SetActive(false);
 		saveThings.SetActive(true);
+		settingsThings.SetActive(false);
+	}
+	void ToSettingsMode()
+	{
+		createThings.SetActive(false);
+		saveThings.SetActive(false);
+		settingsThings.SetActive(true);
 	}
 
 
