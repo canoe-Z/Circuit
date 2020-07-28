@@ -7,18 +7,28 @@ using UnityEngine.UI;
 public class ThreeSource : EntityBase, ISource
 {
 	private const int sourceNum = 3;										// 含有的独立电源个数
-	private const int knobNum = 2;                                          // 含有的旋钮个数
-	private const int textNum = 2;                                          // 含有的Text个数
-	private const double _E0MAX = 15;										// 电源0最大值
-	private const double _E1MAX = 15;										// 电源1最大值
-
+	private const int knobNum = 3;                                          // 含有的旋钮个数
+	private const int textNum = 3;                                          // 含有的Text个数
+	private const double _E0MAX = 15;                                       // 电源0最大值
+	private const double _E1MAX = 15;                                       // 电源1最大值
+	private const double _E2MAX = 15;                                       // 电源2最大值
+	private const double _E2MaxInTwoOfThree = 5;							// 电源2在双路可调模式下的电压值
 	private readonly int[] G = new int[sourceNum];							// 存放独立电源负极的端口ID
 	private readonly int[] V = new int[sourceNum];							// 存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  // 内阻数组
 
+	[HideInInspector]//编辑器隐藏
 	public List<MyKnob> Knobs;
+	[HideInInspector]//编辑器隐藏
 	public List<Text> Texts;
+	public enum SourceMode
+	{
+		one,
+		three,
+		twoOfThree
+	}
+	public SourceMode sourceMode = SourceMode.twoOfThree;
 
 	public override void EntityAwake()
 	{
@@ -36,10 +46,25 @@ public class ThreeSource : EntityBase, ISource
 
 	void UpdateKnob()
 	{
-		E[0] = Knobs[0].KnobPos * _E0MAX;
-		E[1] = Knobs[1].KnobPos * _E1MAX;
+		switch (sourceMode)
+		{
+			case SourceMode.one:
+				E[0] = Knobs[0].KnobPos * _E0MAX;
+				break;
+			case SourceMode.three:
+				E[0] = Knobs[0].KnobPos * _E0MAX;
+				E[1] = Knobs[1].KnobPos * _E1MAX;
+				E[2] = Knobs[2].KnobPos * _E2MAX;
+				break;
+			case SourceMode.twoOfThree:
+				E[0] = Knobs[0].KnobPos * _E0MAX;
+				E[1] = Knobs[1].KnobPos * _E1MAX;
+				E[2] = _E2MaxInTwoOfThree;
+				break;
+		}
 		Texts[0].text = E[0].ToString("00.00");
 		Texts[1].text = E[1].ToString("00.00");
+		Texts[2].text = E[2].ToString("00.00");
 	}
 
 	/// <summary>
