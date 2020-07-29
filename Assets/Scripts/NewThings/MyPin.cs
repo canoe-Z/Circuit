@@ -6,7 +6,7 @@ public class MyPin : MonoBehaviour
 	/// <summary>
 	/// 期望接收的参数从0-1
 	/// </summary>
-	public void ChangePos(float position)
+	public void MyChangePos(float position)
 	{
 		if (position > 1.1f) position = 1.1f;
 		if (position < -0.9f) position = -0.1f;
@@ -17,7 +17,7 @@ public class MyPin : MonoBehaviour
 	/// <summary>
 	/// 设置显示在表盘的字符串、最大刻度值（整数），这个函数可以在任意时候调用
 	/// </summary>
-	public void SetString(string danWei, int maxKedu)
+	public void MySetString(string danWei, int maxKedu)
 	{
 		strDanwei = danWei;
 		intMaxKedu = maxKedu;

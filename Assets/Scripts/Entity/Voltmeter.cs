@@ -11,12 +11,12 @@ public class Voltmeter : EntityBase
 	public double R1 = 5000;
 	public double R2 = 15000;
 
-	GameObject pin = null;
-	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
+	MyPin myPin;
 
 	public override void EntityAwake()
 	{
-		pin = transform.GetChildByName("Pin").gameObject;
+		myPin = GetComponentInChildren<MyPin>();
+		myPin.MySetString("V", 150);
 	}
 
 	void Update()
@@ -27,13 +27,8 @@ public class Voltmeter : EntityBase
 		doublePin += (ChildPorts[1].U - GNDu) / MaxU0;
 		doublePin += (ChildPorts[2].U - GNDu) / MaxU1;
 		doublePin += (ChildPorts[3].U - GNDu) / MaxU2;
-		doublePin -= 0.5;
-		pinPos = (float)(doublePin * 0.9375);
-		if (pinPos > 0.5) pinPos = 0.5f;
-		else if (pinPos < -0.5) pinPos = -0.5f;
-		Vector3 pos = pin.transform.localPosition;
-		pos.z = pinPos;
-		pin.transform.localPosition = pos;
+
+		myPin.MyChangePos((float)doublePin);
 	}
 
 

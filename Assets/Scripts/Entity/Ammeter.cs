@@ -13,13 +13,12 @@ public class Ammeter : EntityBase, IAmmeter
 
 	public int GND, V0, V1, V2;
 
-	private GameObject pin = null;
-	// 1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
-	private float pinPos = 0;
+	private MyPin myPin;
 
 	public override void EntityAwake()
 	{
-		pin = transform.GetChildByName("Pin").gameObject;
+		myPin = GetComponentInChildren<MyPin>();
+		myPin.MySetString("A", 150);
 	}
 
 	void Update()
@@ -28,14 +27,8 @@ public class Ammeter : EntityBase, IAmmeter
 		doublePin += (ChildPorts[1].I) / MaxI0;
 		doublePin += (ChildPorts[2].I) / MaxI1;
 		doublePin += (ChildPorts[3].I) / MaxI2;
-		doublePin -= 0.5;
-		pinPos = (float)(doublePin * 0.9375);
-		if (pinPos > 0.5) pinPos = 0.5f;
-		else if (pinPos < -0.5) pinPos = -0.5f;
 
-		Vector3 pos = pin.transform.localPosition;
-		pos.z = pinPos;
-		pin.transform.localPosition = pos;
+		myPin.MyChangePos((float)doublePin);
 	}
 
 	void Start()

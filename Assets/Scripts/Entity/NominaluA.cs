@@ -22,8 +22,8 @@ public class NominaluA : EntityBase, IAmmeter
     {
         MaxI = (double)uA / 1000000;
         NominalR = (double)100 / uA;//50微安时为2欧姆，成反比
-        myPin.ChangePos(0);
-        myPin.SetString("uA", uA);
+        myPin.MyChangePos(0);
+        myPin.MySetString("uA", uA);
         CircuitCalculator.NeedCalculate = true;
     }
 
@@ -48,7 +48,7 @@ public class NominaluA : EntityBase, IAmmeter
 
     void Update()
     {
-        myPin.ChangePos((float)(ChildPorts[1].I / MaxI));
+        myPin.MyChangePos((float)(ChildPorts[1].I / MaxI));
     }
 
     public override void LoadElement()
