@@ -9,11 +9,13 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Switch;
 	public Button btn_DigV;
 	public Button btn_DigA;
-	public InputField iptNum;
+	public InputField iptNum_R;
+	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
 	public Button btn_R;
 	public Button btn_NominalR;
 	public Dropdown dpdType_uA;
+	public Dropdown dpdType_NominalR;
 	public Button btn_uA;
 	public Button btn_Solar;
 	void Start()
@@ -95,9 +97,9 @@ public class WdwMenu_Create : MonoBehaviour
 
 	void OnButtonSP_SliderR()
 	{
-		if (ParseRNum(iptNum.text, out double num))
+		if (ParseRNum(iptNum_SliderR.text, out double num))
 		{
-			iptNum.text = "";
+			iptNum_SliderR.text = "";
 			SliderR sliderR = EntityCreator.CreateEntity<SliderR>();//复制物体
 			willBeSet = sliderR.gameObject;
 			sliderR.rMax = num;
@@ -106,9 +108,9 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 	void OnButtonSP_R()
 	{
-		if (ParseRNum(iptNum.text, out double num))
+		if (ParseRNum(iptNum_R.text, out double num))
 		{
-			iptNum.text = "";
+			iptNum_R.text = "";
 			Resistance r = EntityCreator.CreateEntity<Resistance>();
 			willBeSet = r.gameObject;
 			r.Value = num;
@@ -117,14 +119,15 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 	void OnButtonSP_NominalR()
 	{
-		if (ParseRNum(iptNum.text, out double num))
+		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
+		willBeSet = nominalR.gameObject;
+		switch (dpdType_NominalR.value)
 		{
-			iptNum.text = "";
-			NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
-			willBeSet = nominalR.gameObject;
-			nominalR.NominalValue = num;
-			NormalCreate();
+			case 0: nominalR.NominalValue = 100; break;//100
+			case 1: nominalR.NominalValue = 1000000; break;//1M
+			case 2: nominalR.NominalValue = 0.1; break;//0.1
 		}
+		NormalCreate();
 	}
 	void OnButtonSP_uA()
 	{
@@ -139,6 +142,9 @@ public class WdwMenu_Create : MonoBehaviour
 		NormalCreate();
 	}
 
+
+	//
+	//
 	//下面是功能函数
 
 	//解析成为电阻阻值
