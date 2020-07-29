@@ -29,8 +29,8 @@ public class CircuitCalculator : MonoBehaviour
 	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
 	public static LinkedList<CircuitLine> Lines { get; set; } = new LinkedList<CircuitLine>();
 
-	public static bool NeedCalculate = false;
-	public static bool NeedCalculateByConnection = false;
+	public static bool NeedCalculate { get; set; } = false;
+	public static bool NeedCalculateByConnection { get; set; } = false;
 
 	void Awake()
 	{

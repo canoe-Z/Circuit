@@ -71,7 +71,9 @@ public class Ammeter : EntityBase, IAmmeter
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
 	}
-	public void CalculateCurrent()//计算自身电流
+
+	// 计算自身电流
+	public void CalculateCurrent()
 	{
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R0;
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;

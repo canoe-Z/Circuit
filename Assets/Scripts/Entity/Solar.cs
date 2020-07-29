@@ -12,20 +12,20 @@ public class Solar : EntityBase, ISource
     private double Isc;
     private int G, V;
 
-    public MySlider slider { get; set; }
+    public MySlider Slider { get; set; }
     private Text sloarText;
 
     public override void EntityAwake()
     {
-        slider = transform.FindComponent_DFS<MySlider>("Slider");
+        Slider = transform.FindComponent_DFS<MySlider>("Slider");
         sloarText = transform.FindComponent_DFS<Text>("Text");
-        slider.SliderEvent += UpdateSlider;
+        Slider.SliderEvent += UpdateSlider;
         UpdateSlider();
     }
 
     void UpdateSlider()
     {
-        float fm = 6 - 5 * slider.SliderPos;    // 会被平方的分母
+        float fm = 6 - 5 * Slider.SliderPos;    // 会被平方的分母
         float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
         Isc = lightStrength * _IscMax;
 
@@ -95,7 +95,7 @@ public class Solar : EntityBase, ISource
 
     public override EntityData Save()
     {
-        return new SolarData(slider.SliderPos, transform.position, transform.rotation, ChildPortID);
+        return new SolarData(Slider.SliderPos, transform.position, transform.rotation, ChildPortID);
     }
 }
 
@@ -112,7 +112,7 @@ public class SolarData : EntityData
     public override void Load()
     {
         Solar solar =EntityCreator.CreateEntity<Solar>(posfloat, anglefloat, IDList);
-        solar.slider.SetSliderPos(sliderPos);
+        solar.Slider.SetSliderPos(sliderPos);
     }
 }
 

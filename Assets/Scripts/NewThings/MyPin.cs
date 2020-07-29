@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class MyPin : MonoBehaviour
@@ -8,24 +6,23 @@ public class MyPin : MonoBehaviour
 	/// <summary>
 	/// 期望接收的参数从0-1
 	/// </summary>
-	public void MyChangePos(float position)
+	public void ChangePos(float position)
 	{
 		if (position > 1.1f) position = 1.1f;
 		if (position < -0.9f) position = -0.1f;
 		nowPos = position;
 		changeFlag = true;
 	}
+
 	/// <summary>
 	/// 设置显示在表盘的字符串、最大刻度值（整数），这个函数可以在任意时候调用
 	/// </summary>
-	public void MySetString(string danWei, int maxKedu)
+	public void SetString(string danWei, int maxKedu)
 	{
 		strDanwei = danWei;
 		intMaxKedu = maxKedu;
 		changeFlag = true;
 	}
-
-
 
 	bool changeFlag = true;//为了避免奇怪的Bug（主要是Awake和Start的顺序），使用这套系统
 	float nowPos = 0;//当前的位置，0-1
@@ -61,7 +58,6 @@ public class MyPin : MonoBehaviour
 			}
 		}
     }
-
 
     void Update()
     {
