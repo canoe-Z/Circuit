@@ -11,6 +11,8 @@ public class Ammeter : EntityBase, IAmmeter
 	public double R1 = 1;
 	public double R2 = 0.2;
 
+	public int GND, V0, V1, V2;
+
 	private GameObject pin = null;
 	// 1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	private float pinPos = 0;
@@ -36,24 +38,23 @@ public class Ammeter : EntityBase, IAmmeter
 		pin.transform.localPosition = pos;
 	}
 
+	void Start()
+    {
+		GND = ChildPorts[0].ID;
+		V0 = ChildPorts[1].ID;
+		V1 = ChildPorts[2].ID;
+		V2 = ChildPorts[3].ID;
+	}
+
 	public override void LoadElement()
 	{
-		int GND = ChildPorts[0].ID;
-		int V0 = ChildPorts[1].ID;
-		int V1 = ChildPorts[2].ID;
-		int V2 = ChildPorts[3].ID;
-
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
-	public override void SetElement()//得到约束方程
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].ID;
-		int V0 = ChildPorts[1].ID;
-		int V1 = ChildPorts[2].ID;
-		int V2 = ChildPorts[3].ID;
 
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
