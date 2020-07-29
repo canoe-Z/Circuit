@@ -9,21 +9,24 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Switch;
 	public Button btn_DigV;
 	public Button btn_DigA;
-	public InputField iptNum_SliderR;
+	public InputField iptNum;
 	public Button btn_SliderR;
-	public InputField iptNum_R;
 	public Button btn_R;
+	public Button btn_NominalR;
 	public Dropdown dpdType_uA;
 	public Button btn_uA;
+	public Button btn_Solar;
 	void Start()
     {
-		btn_RBox.onClick.AddListener(OnButtonCopy_RBox);
-		btn_Switch.onClick.AddListener(OnButtonCopy_Switch);
-		btn_DigV.onClick.AddListener(OnButtonCopy_DigV);
-		btn_DigA.onClick.AddListener(OnButtonCopy_DigA);
-		btn_SliderR.onClick.AddListener(OnButtonCopySP_SliderR);
-		btn_R.onClick.AddListener(OnButtonCopySP_R);
-		btn_uA.onClick.AddListener(OnButtonCopySP_uA);
+		btn_RBox.onClick.AddListener(OnButton_RBox);
+		btn_Solar.onClick.AddListener(OnButton_Solar);
+		btn_Switch.onClick.AddListener(OnButton_Switch);
+		btn_DigV.onClick.AddListener(OnButton_DigV);
+		btn_DigA.onClick.AddListener(OnButton_DigA);
+		btn_SliderR.onClick.AddListener(OnButtonSP_SliderR);
+		btn_R.onClick.AddListener(OnButtonSP_R);
+		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
+		btn_uA.onClick.AddListener(OnButtonSP_uA);
 	}
 
     // Update is called once per frame
@@ -64,75 +67,66 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 
 	//下面全都是按钮
-	void OnButtonCopy_RBox()
+	void OnButton_RBox()
 	{
 		willBeSet = EntityCreator.CreateEntity<RBox>().gameObject;//复制物体
 		NormalCreate();
 	}
-	void OnButtonCopy_Switch()
+	void OnButton_Switch()
 	{
 		willBeSet = EntityCreator.CreateEntity<Switch>().gameObject;//复制物体//复制物体
 		NormalCreate();
 	}
-	void OnButtonCopy_DigV()
+	void OnButton_DigV()
 	{
 		willBeSet = EntityCreator.CreateEntity<DigtalVoltmeter>().gameObject;//复制物体//复制物体
 		NormalCreate();
 	}
-	void OnButtonCopy_DigA()
+	void OnButton_DigA()
 	{
 		willBeSet = EntityCreator.CreateEntity<DigtalAmmeter>().gameObject;//复制物体//复制物体
 		NormalCreate();
 	}
-
-	void OnButtonCopySP_SliderR()
+	void OnButton_Solar()
 	{
-		string textStr = iptNum_SliderR.text;
-		textStr = textStr.Replace("k", "000");
-		textStr = textStr.Replace("K", "000");
-		textStr = textStr.Replace("m", "000000");
-		textStr = textStr.Replace("M", "000000");
-		if (double.TryParse(textStr, out double num))
+		willBeSet = EntityCreator.CreateEntity<Solar>().gameObject;//复制物体//复制物体
+		NormalCreate();
+	}
+
+	void OnButtonSP_SliderR()
+	{
+		if (ParseRNum(iptNum.text, out double num))
 		{
-			iptNum_SliderR.text = "";
+			iptNum.text = "";
 			SliderR sliderR = EntityCreator.CreateEntity<SliderR>();//复制物体
 			willBeSet = sliderR.gameObject;
-			if (sliderR)
-			{
-				sliderR.rMax = num;
-				NormalCreate();
-			}
-			else
-			{
-				Debug.LogError("你家滑动变阻器没挂脚本");
-			}
+			sliderR.rMax = num;
+			NormalCreate();
 		}
-		else Debug.LogError(textStr);
 	}
-	void OnButtonCopySP_R()
+	void OnButtonSP_R()
 	{
-		string textStr = iptNum_R.text;
-		textStr = textStr.Replace("k", "000");
-		textStr = textStr.Replace("K", "000");
-		textStr = textStr.Replace("m", "000000");
-		textStr = textStr.Replace("M", "000000");
-		if (double.TryParse(textStr, out double num))
+		if (ParseRNum(iptNum.text, out double num))
 		{
-			iptNum_R.text = "";
+			iptNum.text = "";
 			Resistance r = EntityCreator.CreateEntity<Resistance>();
 			willBeSet = r.gameObject;
-			if (r)
-			{
-				r.Value = num;
-				NormalCreate();
-			}
-			else
-			{
-				Debug.LogError("你家电阻没挂脚本");
-			}
+			r.Value = num;
+			NormalCreate();
 		}
 	}
-	void OnButtonCopySP_uA()
+	void OnButtonSP_NominalR()
+	{
+		if (ParseRNum(iptNum.text, out double num))
+		{
+			iptNum.text = "";
+			NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
+			willBeSet = nominalR.gameObject;
+			nominalR.NominalValue = num;
+			NormalCreate();
+		}
+	}
+	void OnButtonSP_uA()
 	{
 		NominaluA sampleuA = EntityCreator.CreateEntity<NominaluA>();
 		willBeSet = sampleuA.gameObject;
@@ -147,6 +141,22 @@ public class WdwMenu_Create : MonoBehaviour
 
 	//下面是功能函数
 
+	//解析成为电阻阻值
+	static bool ParseRNum(string toParse, out double num)
+	{
+		toParse = toParse.Replace("k", "000");
+		toParse = toParse.Replace("K", "000");
+		toParse = toParse.Replace("m", "000000");
+		toParse = toParse.Replace("M", "000000");
+		if (double.TryParse(toParse, out num))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
 	{

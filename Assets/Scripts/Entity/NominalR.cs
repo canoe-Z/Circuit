@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class NominalR : Resistance
 {
-	public bool RealValueSet = false;
+	public bool RealValueSet = false;//置为1时，在生成时不随机变化
 	public double NominalValue;
 
 	void Start()

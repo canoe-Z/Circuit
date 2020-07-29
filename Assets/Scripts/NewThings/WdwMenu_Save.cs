@@ -34,7 +34,7 @@ public class WdwMenu_Save : MonoBehaviour
 		nowIndex--;
 		if (nowIndex < 0)
 		{
-			nowIndex = 0;
+			nowIndex = totalNum - 1;
 		}
 		ChangeText();
 	}
@@ -43,7 +43,7 @@ public class WdwMenu_Save : MonoBehaviour
 		nowIndex++;
 		if (nowIndex >= totalNum)
 		{
-			nowIndex = totalNum - 1;
+			nowIndex = 0;
 		}
 		ChangeText();
 	}
