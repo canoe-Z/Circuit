@@ -8,6 +8,7 @@ public class NominalR : Resistance
 {
 	public bool RealValueSet = false;
 	public double NominalValue;
+
 	void Start()
 	{
 		if(!RealValueSet)

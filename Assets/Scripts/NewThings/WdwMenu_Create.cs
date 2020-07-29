@@ -134,7 +134,7 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 	void OnButtonCopySP_uA()
 	{
-		SampleuA sampleuA = EntityCreator.CreateEntity<SampleuA>();
+		NominaluA sampleuA = EntityCreator.CreateEntity<NominaluA>();
 		willBeSet = sampleuA.gameObject;
 		switch (dpdType_uA.value)
 		{
