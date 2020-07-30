@@ -68,8 +68,8 @@ public class MySlider : MonoBehaviour
 		if (Devide > 0)
 		{
 			// 计算滑块的连续位置
-			float pre = 1f / Devide;								
-			SliderPos_int = (int)(newPos * Devide);					
+			float pre = 1f / Devide;
+			SliderPos_int = (int)(newPos * Devide);
 			if (SliderPos_int >= Devide) SliderPos_int = Devide - 1;
 			newPos = SliderPos_int * pre + pre / 2;
 		}

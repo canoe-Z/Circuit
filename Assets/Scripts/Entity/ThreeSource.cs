@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
-	private const int sourceNum = 3;										// 含有的独立电源个数
+	private const int sourceNum = 3;                                        // 含有的独立电源个数
 	private const int knobNum = 3;                                          // 含有的旋钮个数
 	private const int textNum = 3;                                          // 含有的Text个数
 	private const double _E0MAX = 15;                                       // 电源0最大值
 	private const double _E1MAX = 15;                                       // 电源1最大值
 	private const double _E2MAX = 15;                                       // 电源2最大值
-	private readonly int[] G = new int[sourceNum];							// 存放独立电源负极的端口ID
-	private readonly int[] V = new int[sourceNum];							// 存放独立电源正极的端口ID
+	private readonly int[] G = new int[sourceNum];                          // 存放独立电源负极的端口ID
+	private readonly int[] V = new int[sourceNum];                          // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  // 内阻数组
 
@@ -42,7 +42,7 @@ public class ThreeSource : EntityBase, ISource
 		//根据画布的名字区分三种不同的电源
 		//0：三路可调，1：单路，2：双路可调
 		Canvas canvas = GetComponentInChildren<Canvas>();
-		if(int.TryParse(canvas.name,out int res))
+		if (int.TryParse(canvas.name, out int res))
 		{
 			if (res == 0) sourceMode = SourceMode.three;//现在进行强制类型转换可能会造成莫名其妙的bug
 			else if (res == 1) sourceMode = SourceMode.one;

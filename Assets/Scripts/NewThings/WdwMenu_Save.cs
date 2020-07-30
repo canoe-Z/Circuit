@@ -14,8 +14,8 @@ public class WdwMenu_Save : MonoBehaviour
 
 	int nowIndex = 0;
 	int totalNum = 10;//总的存档数量
-    void Start()
-    {
+	void Start()
+	{
 		btnLast.onClick.AddListener(ToLast);
 		btnNext.onClick.AddListener(ToNext);
 		btnSave.onClick.AddListener(Save);

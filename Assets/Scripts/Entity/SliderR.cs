@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class SliderR : EntityBase
 {
-	public double rMax = 300;
+	public double rMax;
 
-	double rLeft = 300;
-	double rRight = 0;
+	private double rLeft, rRight;
 
 	public MySlider MySlider { get; set; }
 

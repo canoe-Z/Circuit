@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 
 public class Ammeter : EntityBase, IAmmeter
 {
@@ -32,7 +31,7 @@ public class Ammeter : EntityBase, IAmmeter
 	}
 
 	void Start()
-    {
+	{
 		GND = ChildPorts[0].ID;
 		V0 = ChildPorts[1].ID;
 		V1 = ChildPorts[2].ID;

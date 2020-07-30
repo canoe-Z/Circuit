@@ -10,7 +10,7 @@ public class QuickOperate : MonoBehaviour
 	void Work()
 	{
 		MySlider[] mySliders = FindObjectsOfType<MySlider>();
-		foreach(var sl in mySliders)
+		foreach (var sl in mySliders)
 		{
 			Debug.Log(sl.transform.root.gameObject);
 		}
@@ -20,8 +20,8 @@ public class QuickOperate : MonoBehaviour
 
 
 	public bool boolStartWork = false;
-    void Update()
-    {
+	void Update()
+	{
 		if (boolStartWork)
 		{
 			boolStartWork = false;
@@ -29,5 +29,5 @@ public class QuickOperate : MonoBehaviour
 			Work();
 			Debug.Log("结束");
 		}
-    }
+	}
 }

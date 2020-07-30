@@ -182,7 +182,7 @@ public class DisplayController : MonoBehaviour
 			}
 			ShowTips(portTip, 0);
 		}
-		
+
 		// 其他（元件，导线，滑块等写入阶段1的）
 		else
 		{

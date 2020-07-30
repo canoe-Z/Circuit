@@ -5,8 +5,8 @@ public class ConnectionManager : MonoBehaviour
 	public static CircuitPort clickedPort = null;
 
 	// 导线颜色配置
-	public static Color[] colors = new Color[5]; 
-	
+	public static Color[] colors = new Color[5];
+
 	// Obi
 	private static ObiRopeBlueprint blueprint;
 	private static ObiSolver solver = null;
@@ -88,7 +88,7 @@ public class ConnectionManager : MonoBehaviour
 	{
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
 		// 关闭碰撞检测
-		rope.layer = 8; 
+		rope.layer = 8;
 		rope.AddComponent<MeshCollider>();
 		Material RopeMat = Resources.Load<Material>("Button");
 		rope.GetComponent<MeshRenderer>().material = RopeMat;

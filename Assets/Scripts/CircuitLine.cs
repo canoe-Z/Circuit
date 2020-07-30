@@ -5,13 +5,13 @@
 /// </summary>
 public class CircuitLine : MonoBehaviour
 {
-	public int StartID_Global { get; set; }    // 端口的全局ID
-	public int EndID_Global { get; set; }
+	public int StartID { get; set; }    // 端口的全局ID
+	public int EndID { get; set; }
 	public bool IsActived { get; set; }
 
 	// 对外暴露端口以注入电压
-	public CircuitPort StartPort;
-	public CircuitPort EndPort;
+	public CircuitPort StartPort { get; set; }
+	public CircuitPort EndPort { get; set; }
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
@@ -45,27 +45,22 @@ public class CircuitLine : MonoBehaviour
 	/// <summary>
 	/// 连接导线（记录ID）
 	/// </summary>
-	/// <param name="Ini">接线柱1</param>
-	/// <param name="Lst">接线柱2</param>
-	public void CreateLine(GameObject Ini, GameObject Lst)
+	/// <param name="port1">接线柱1</param>
+	/// <param name="port2">接线柱2</param>
+	public void CreateLine(GameObject port1, GameObject port2)
 	{
-		StartPort = Ini.GetComponent<CircuitPort>();
-		EndPort = Lst.GetComponent<CircuitPort>();
-		StartID_Global = Ini.GetComponent<CircuitPort>().ID;
-		EndID_Global = Lst.GetComponent<CircuitPort>().ID;
+		StartPort = port1.GetComponent<CircuitPort>();
+		EndPort = port2.GetComponent<CircuitPort>();
+
+		StartID = StartPort.ID;
+		EndID = EndPort.ID;
+
 		IsActived = true;
+
 		StartPort.Father.EntityDestroy += DestroyRope;
 		EndPort.Father.EntityDestroy += DestroyRope;
-		CircuitCalculator.Lines.AddLast(this);
-	}
 
-	/// <summary>
-	/// 删除连接关系
-	/// </summary>
-	public void DestroyLine()
-	{
-		// 从链表中移除
-		CircuitCalculator.Lines.Remove(this);
+		CircuitCalculator.Lines.AddLast(this);
 	}
 
 	/// <summary>
@@ -75,13 +70,13 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort.Father.EntityDestroy -= DestroyRope;
 		EndPort.Father.EntityDestroy -= DestroyRope;
-		DestroyLine();
+		CircuitCalculator.Lines.Remove(this);
 		Destroy(gameObject);
 	}
 
 	public LineData Save()
 	{
-		return new LineData(StartID_Global, EndID_Global);
+		return new LineData(StartID, EndID);
 	}
 }
 
@@ -90,10 +85,10 @@ public class LineData
 {
 	public int startID;
 	public int endID;
-	public LineData(int startID_Global, int endID_Global)
+	public LineData(int startID, int endID)
 	{
-		startID = startID_Global;
-		endID = endID_Global;
+		this.startID = startID;
+		this.endID = endID;
 	}
 	public void Load()
 	{

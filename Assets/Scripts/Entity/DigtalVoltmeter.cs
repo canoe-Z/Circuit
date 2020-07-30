@@ -5,7 +5,7 @@ public class DigtalVoltmeter : EntityBase
 {
 	public double R = 15000;
 	private Text digtalDigtalVoltmeter;
-	int GND, mV, V;
+	private int GND, mV, V;
 
 	public override void EntityAwake()
 	{
@@ -21,6 +21,7 @@ public class DigtalVoltmeter : EntityBase
 
 	void Update()
 	{
+		// 数显
 		double mV, V;
 		if (ChildPorts[1].Connected == 1)
 		{
@@ -57,7 +58,7 @@ public class DigtalVoltmeter : EntityBase
 
 	public override EntityData Save()
 	{
-		// 数字电压表属于简单元件
+		// 数字电压表属于简单元件（不需特殊值）
 		return new SimpleEntityData<DigtalVoltmeter>(transform.position, transform.rotation, ChildPortID);
 	}
 }

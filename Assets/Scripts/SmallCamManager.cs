@@ -6,7 +6,7 @@ public class SmallCamManager : MonoBehaviour
 	private static readonly Camera[] smallCam = new Camera[4];
 
 	void Start()
-    {
+	{
 		MainCam = Camera.main;
 		for (int i = 0; i < 4; i++)
 		{
@@ -24,8 +24,8 @@ public class SmallCamManager : MonoBehaviour
 		MainCam.rect = new Rect(0, 0, 1, 1);
 	}
 
-    void Update()
-    {
+	void Update()
+	{
 		bool IsShiftDown = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 		for (int i = 0; i < 4; i++)
 		{

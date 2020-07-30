@@ -19,7 +19,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_uA;
 	public Button btn_Solar;
 	void Start()
-    {
+	{
 		btn_RBox.onClick.AddListener(OnButton_RBox);
 		btn_Solar.onClick.AddListener(OnButton_Solar);
 		btn_Switch.onClick.AddListener(OnButton_Switch);
@@ -31,8 +31,8 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
 	}
 
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	void Update()
 	{
 		if (willBeSet)//如果带了一个物体
 		{

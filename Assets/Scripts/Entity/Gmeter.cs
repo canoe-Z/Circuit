@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 using UnityEngine;
 
 public class Gmeter : EntityBase, IAmmeter
@@ -9,6 +8,8 @@ public class Gmeter : EntityBase, IAmmeter
 	GameObject pin = null;
 	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	public MySlider mySlider = null;
+	private int LeftPortID, RightPortID;
+
 	public override void EntityAwake()
 	{
 		FindPin();
@@ -17,11 +18,17 @@ public class Gmeter : EntityBase, IAmmeter
 		mySlider.Devide = 5;
 	}
 
+	void Start()
+	{
+		LeftPortID = ChildPorts[0].ID;
+		RightPortID = ChildPorts[1].ID;
+	}
+
 	void Update()
 	{
 		//量程
-		this.MaxI = 0.1;
-		this.R = 10;
+		MaxI = 0.1;
+		R = 10;
 		for (int i = 0; i < mySlider.SliderPos_int; i++)
 		{
 			MaxI *= 0.01;
@@ -57,27 +64,20 @@ public class Gmeter : EntityBase, IAmmeter
 
 	public override void LoadElement()
 	{
-		int LeftPortID, RightPortID;
-		LeftPortID = ChildPorts[0].ID;
-		RightPortID = ChildPorts[1].ID;
 		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
 	}
 
 	public override void SetElement()
 	{
-		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		int LeftPortID, RightPortID;
-		LeftPortID = ChildPorts[0].ID;
-		RightPortID = ChildPorts[1].ID;
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
+
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		//电位计将其电流加入检测序列
-		CircuitCalculator.Ammeters.Add(this);
 	}
 
-	public void CalculateCurrent()//计算自身电流
+	public void CalculateCurrent()
 	{
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 	}

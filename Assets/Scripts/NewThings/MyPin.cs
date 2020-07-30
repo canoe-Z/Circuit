@@ -32,12 +32,12 @@ public class MyPin : MonoBehaviour
 	Transform thePin;//指针
 	Text[] txtKedu = new Text[6];
 	Text txtDanwei;
-    void Start()
-    {
+	void Start()
+	{
 		Text[] texts_notOrder = GetComponentsInChildren<Text>();
-		foreach(Text textPer in texts_notOrder)
+		foreach (Text textPer in texts_notOrder)
 		{
-			if(int.TryParse(textPer.name,out int num))
+			if (int.TryParse(textPer.name, out int num))
 			{
 				if (num < txtKedu.Length && num >= 0)
 				{
@@ -50,26 +50,26 @@ public class MyPin : MonoBehaviour
 			}
 		}
 		Transform[] transforms = GetComponentsInChildren<Transform>();
-		foreach(Transform tr in transforms)
+		foreach (Transform tr in transforms)
 		{
-			if(tr.name == "ThePin")
+			if (tr.name == "ThePin")
 			{
 				thePin = tr;
 			}
 		}
-    }
+	}
 
-    void Update()
-    {
+	void Update()
+	{
 		if (changeFlag)
 		{
 			changeFlag = false;
 			txtDanwei.text = strDanwei;
-			for(int i = 0; i < txtKedu.Length; i++)
+			for (int i = 0; i < txtKedu.Length; i++)
 			{
 				txtKedu[i].text = (i * intMaxKedu / (txtKedu.Length - 1)).ToString();
 			}
 			thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * nowPos);//转动
 		}
-    }
+	}
 }

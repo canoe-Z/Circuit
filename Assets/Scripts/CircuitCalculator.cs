@@ -43,13 +43,13 @@ public class CircuitCalculator : MonoBehaviour
 		while (true)
 		{
 			// 需要全算则不再部分算
-			if(NeedCalculate)
+			if (NeedCalculate)
 			{
 				CalculateAll();
 				NeedCalculate = false;
 				NeedCalculateByConnection = false;
 			}
-			else if(NeedCalculateByConnection)
+			else if (NeedCalculateByConnection)
 			{
 				CalculateByConnection();
 				NeedCalculate = false;
@@ -94,7 +94,7 @@ public class CircuitCalculator : MonoBehaviour
 		// 冗余检测：通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
 		foreach (CircuitLine line in Lines)
 		{
-			if (LineUF.Connected(line.StartID_Global, line.EndID_Global))
+			if (LineUF.Connected(line.StartID, line.EndID))
 			{
 				Debug.Log("导线因冗余被禁用");
 				line.IsActived = false;
@@ -102,8 +102,8 @@ public class CircuitCalculator : MonoBehaviour
 			}
 			else
 			{
-				LineUF.Union(line.StartID_Global, line.EndID_Global);
-				UF.Union(line.StartID_Global, line.EndID_Global);
+				LineUF.Union(line.StartID, line.EndID);
+				UF.Union(line.StartID, line.EndID);
 
 				// 对于第一次检测有效的导线，激活有连接的元件
 				line.StartPort.Connected = 1;
@@ -137,14 +137,14 @@ public class CircuitCalculator : MonoBehaviour
 		{
 			if (line.IsActived)
 			{
-				if (UF.Connected(line.StartID_Global, 0))
+				if (UF.Connected(line.StartID, 0))
 				{
 					// 对于两次检测均有效的导线，激活有连接的元件
 					line.StartPort.Connected = 1;
 					line.EndPort.Connected = 1;
 
 					EnabledLines.Add(line);
-					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID_Global.ToString(), line.EndID_Global.ToString(), 0));
+					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID.ToString(), line.EndID.ToString(), 0));
 					EntityNum++;
 				}
 				else
@@ -182,7 +182,7 @@ public class CircuitCalculator : MonoBehaviour
 		// 直接连接正常导线
 		for (var i = 0; i < EnabledLines.Count; i++)
 		{
-			SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), EnabledLines[i].StartID_Global.ToString(), EnabledLines[i].EndID_Global.ToString(), 0));
+			SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), EnabledLines[i].StartID.ToString(), EnabledLines[i].EndID.ToString(), 0));
 			EntityNum++;
 		}
 		SetElement();

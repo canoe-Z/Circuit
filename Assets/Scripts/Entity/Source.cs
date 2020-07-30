@@ -45,7 +45,7 @@ public class Source : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SourceStandData(E,transform.position, transform.rotation, ChildPortID);
+		return new SourceStandData(E, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -53,7 +53,7 @@ public class Source : EntityBase, ISource
 public class SourceStandData : EntityData
 {
 	private readonly double value;
-	public SourceStandData(double value, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id) 
+	public SourceStandData(double value, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
 	{
 		this.value = value;
 	}

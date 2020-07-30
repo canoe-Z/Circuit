@@ -39,7 +39,7 @@ public class MyKnob : MonoBehaviour
 	/// </summary>
 	public int KnobPos_int { get; private set; } = 0;
 
-	float nowSpeedPerSec = 0;	// 当前旋转速度
+	float nowSpeedPerSec = 0;   // 当前旋转速度
 
 	void OnMouseOver()
 	{

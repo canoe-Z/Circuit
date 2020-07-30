@@ -42,7 +42,7 @@ public class RBox : EntityBase
 		R9 = ChildPorts[1].ID;
 		R99 = ChildPorts[2].ID;
 		R999 = ChildPorts[3].ID;
-		
+
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
