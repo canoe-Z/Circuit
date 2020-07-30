@@ -5,19 +5,29 @@ using UnityEngine.UI;
 
 public class WdwMenu_Create : MonoBehaviour
 {
+
+	[Header("直接创建")]
 	public Button btn_RBox;
 	public Button btn_Switch;
 	public Button btn_DigV;
 	public Button btn_DigA;
-	public InputField iptNum_R;
+	public Button btn_Solar;
+	[Header("参数创建")]
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
+	public InputField iptNum_R;
 	public Button btn_R;
+	public Dropdown dpdType_NominalR;
 	public Button btn_NominalR;
 	public Dropdown dpdType_uA;
-	public Dropdown dpdType_NominalR;
 	public Button btn_uA;
-	public Button btn_Solar;
+	[Header("3路电源")]
+	public Button btn_StrangeSource;
+	public Canvas cnvStrange;
+	public InputField iptNum_V0;
+	public InputField iptNum_V1;
+	public InputField iptNum_V2;
+	public Button btn_Source;
 	void Start()
 	{
 		btn_RBox.onClick.AddListener(OnButton_RBox);
@@ -29,43 +39,38 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_R.onClick.AddListener(OnButtonSP_R);
 		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
+
+		btn_StrangeSource.onClick.AddListener(OnStrange_Source);
+		btn_Source.onClick.AddListener(OnButtonSP_Source);
 	}
 
-	// Update is called once per frame
-	void Update()
+	//创建
+	void OnButtonSP_Source()
 	{
-		if (willBeSet)//如果带了一个物体
+		if(double.TryParse(iptNum_V0.text,out double num0)&&
+			double.TryParse(iptNum_V1.text, out double num1)&& 
+			double.TryParse(iptNum_V2.text, out double num2))
 		{
-			RaycastHit info;
-			Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
-			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, 1 << 0))//0层碰撞
-			{
-				willBeSet.transform.position = info.point;
-			}
-			if (Input.GetMouseButtonDown(0))//左键放下物体
-			{
-				OpenColl(willBeSet);//打开碰撞体
-				willBeSet = null;
-				MoveController.CanOperate = true;//可以操作物体了
-			}
-			else if (Input.GetMouseButtonDown(1))
-			{
-				OpenColl(willBeSet);//打开碰撞体
-				EntityBase entityBase = willBeSet.GetComponent<EntityBase>();//销毁
-				entityBase.DestroyEntity();
-				willBeSet = null;
-				MoveController.CanOperate = true;//可以操作物体了
-			}
+			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>();
+			threeSource._E0MAX = num0;
+			threeSource._E1MAX = num1;
+			threeSource._E2MAX = num2;
+			willBeSet = threeSource.gameObject;//复制物体
+			NormalCreate();
+
+			cnvStrange.enabled = false;//创建之后关闭选项卡
+		}
+		else
+		{
+			iptNum_V0.text = "15";
+			iptNum_V1.text = "15";
+			iptNum_V2.text = "5";
 		}
 	}
-	GameObject willBeSet;//即将会被扔到桌子上的物体
-
-	//正常创建一个物体，减少重复代码的使用
-	void NormalCreate()
+	//打开/关闭菜单
+	void OnStrange_Source()
 	{
-		CloseColl(willBeSet);//关闭碰撞体
-		Wdw_Menu.shouldCloseMenu = true;//关闭菜单
-		MoveController.CanOperate = false;//禁止操作物体
+		cnvStrange.enabled = !cnvStrange.enabled;
 	}
 
 	//下面全都是按钮
@@ -142,6 +147,44 @@ public class WdwMenu_Create : MonoBehaviour
 		NormalCreate();
 	}
 
+
+	
+	//
+	void Update()
+	{
+		if (willBeSet)//如果带了一个物体
+		{
+			RaycastHit info;
+			Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
+			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, 1 << 0))//0层碰撞
+			{
+				willBeSet.transform.position = info.point;
+			}
+			if (Input.GetMouseButtonDown(0))//左键放下物体
+			{
+				OpenColl(willBeSet);//打开碰撞体
+				willBeSet = null;
+				MoveController.CanOperate = true;//可以操作物体了
+			}
+			else if (Input.GetMouseButtonDown(1))
+			{
+				OpenColl(willBeSet);//打开碰撞体
+				EntityBase entityBase = willBeSet.GetComponent<EntityBase>();//销毁
+				entityBase.DestroyEntity();
+				willBeSet = null;
+				MoveController.CanOperate = true;//可以操作物体了
+			}
+		}
+	}
+	GameObject willBeSet;//即将会被扔到桌子上的物体
+
+	//正常创建一个物体，减少重复代码的使用
+	void NormalCreate()
+	{
+		CloseColl(willBeSet);//关闭碰撞体
+		Wdw_Menu.shouldCloseMenu = true;//关闭菜单
+		MoveController.CanOperate = false;//禁止操作物体
+	}
 
 	//
 	//

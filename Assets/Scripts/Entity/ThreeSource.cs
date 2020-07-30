@@ -9,9 +9,9 @@ public class ThreeSource : EntityBase, ISource
 	private const int sourceNum = 3;                                        // 含有的独立电源个数
 	private const int knobNum = 3;                                          // 含有的旋钮个数
 	private const int textNum = 3;                                          // 含有的Text个数
-	private const double _E0MAX = 15;                                       // 电源0最大值
-	private const double _E1MAX = 15;                                       // 电源1最大值
-	private const double _E2MAX = 15;                                       // 电源2最大值
+	public double _E0MAX = 15;                                       // 电源0最大值
+	public double _E1MAX = 15;                                       // 电源1最大值
+	public double _E2MAX = 15;                                       // 电源2最大值
 	private readonly int[] G = new int[sourceNum];                          // 存放独立电源负极的端口ID
 	private readonly int[] V = new int[sourceNum];                          // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组

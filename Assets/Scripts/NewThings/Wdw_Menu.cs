@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class Wdw_Menu : MonoBehaviour
 {
-	public GameObject mainThings;
-	public GameObject createThings;
-	public GameObject saveThings;
-	public GameObject settingsThings;
+	public Canvas mainThings;
+	public Canvas createThings;
+	public Canvas saveThings;
+	public Canvas settingsThings;
 	public Button exitGame;
 	public Button continueGame;
 	public Button btnToCreate;
@@ -67,22 +67,22 @@ public class Wdw_Menu : MonoBehaviour
 	//变为创建元件的界面
 	void ToCreateMode()
 	{
-		createThings.SetActive(true);
-		saveThings.SetActive(false);
-		settingsThings.SetActive(false);
+		createThings.enabled = true;
+		saveThings.enabled = false;
+		settingsThings.enabled = false;
 	}
 	//变为存档的界面
 	void ToSaveMode()
 	{
-		createThings.SetActive(false);
-		saveThings.SetActive(true);
-		settingsThings.SetActive(false);
+		createThings.enabled = false;
+		saveThings.enabled = true;
+		settingsThings.enabled = false;
 	}
 	void ToSettingsMode()
 	{
-		createThings.SetActive(false);
-		saveThings.SetActive(false);
-		settingsThings.SetActive(true);
+		createThings.enabled = false;
+		saveThings.enabled = false;
+		settingsThings.enabled = true;
 	}
 
 
@@ -98,7 +98,7 @@ public class Wdw_Menu : MonoBehaviour
 		Cursor.visible = true;
 		MoveController.CanOperate = false;//不允许移动视角
 		MoveController.CanTurn = false;
-		mainThings.SetActive(true);
+		mainThings.enabled = true;
 	}
 	//关闭菜单
 	void CloseMenu()
@@ -107,6 +107,6 @@ public class Wdw_Menu : MonoBehaviour
 		Cursor.visible = false;
 		MoveController.CanOperate = true;//允许移动视角
 		MoveController.CanTurn = true;
-		mainThings.SetActive(false);
+		mainThings.enabled = false;
 	}
 }
