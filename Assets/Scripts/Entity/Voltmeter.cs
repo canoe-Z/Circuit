@@ -12,6 +12,7 @@ public class Voltmeter : EntityBase
 	public double R2 = 15000;
 
 	MyPin myPin;
+	private int GND, V0, V1, V2;
 
 	public override void EntityAwake()
 	{
@@ -19,6 +20,13 @@ public class Voltmeter : EntityBase
 		myPin.MySetString("V", 150);
 	}
 
+	void Start()
+	{
+		GND = ChildPorts[0].ID;
+		V0 = ChildPorts[1].ID;
+		V1 = ChildPorts[2].ID;
+		V2 = ChildPorts[3].ID;
+	}
 	void Update()
 	{
 		//计算指针偏移量
@@ -32,34 +40,27 @@ public class Voltmeter : EntityBase
 	}
 
 
-	public override void LoadElement()//添加元件
+	public override void LoadElement()
 	{
-		int GND = ChildPorts[0].ID;
-		int V0 = ChildPorts[1].ID;
-		int V1 = ChildPorts[2].ID;
-		int V2 = ChildPorts[3].ID;
 		CircuitCalculator.UF.Union(GND, V0);
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
 
-	public override void SetElement()//添加元件
+	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].ID;
-		int V0 = ChildPorts[1].ID;
-		int V1 = ChildPorts[2].ID;
-		int V2 = ChildPorts[3].ID;
-		//指定三个电阻的ID
+
 		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
 		{
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
-		//获取端口ID并完成内部连接
+
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);

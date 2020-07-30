@@ -51,6 +51,7 @@ public class DigtalVoltmeter : EntityBase
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
+
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);

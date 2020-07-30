@@ -13,18 +13,20 @@ public class Source : EntityBase, ISource
 
 	public override void EntityAwake() { }
 
-	public override void LoadElement()
+	void Start()
 	{
 		G = ChildPorts[0].ID;
 		V = ChildPorts[1].ID;
+	}
+
+	public override void LoadElement()
+	{
 		CircuitCalculator.UF.Union(G, V);
 	}
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		G = ChildPorts[0].ID;
-		V = ChildPorts[1].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(EntityID.ToString(), V.ToString(), string.Concat(EntityID.ToString(), "_rPort"), E));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r"), string.Concat(EntityID.ToString(), "_rPort"), G.ToString(), R));

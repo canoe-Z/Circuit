@@ -7,6 +7,7 @@ public class Switch : EntityBase
 	public int state = 1;
 	public MySlider mySlider = null;
 	private GameObject connector = null;
+	private int L, M, R;
 
 	public override void EntityAwake()
 	{
@@ -37,6 +38,13 @@ public class Switch : EntityBase
 		connector.transform.LookAt(mySlider.gameObject.transform);
 	}
 
+	void Start()
+	{
+		L = ChildPorts[0].ID;
+		M = ChildPorts[1].ID;
+		R = ChildPorts[2].ID;
+	}
+
 	// 开关一定要接中间才能激活
 	// 否则当左/右端口单独被激活时，其余的那个端口就会和中间建立实质的连接，而这可能是不接地的，会导致仿真错误
 	// 注意：将某个接线柱作为“中转”而不实际使用这个元件，也会导致元件被实际激活，如果元件不能保证内部连接的完备性，在极端状况下就可能出错
@@ -56,10 +64,6 @@ public class Switch : EntityBase
 	public override void LoadElement()
 	{
 		//得到端口ID
-		int L, M, R;
-		L = ChildPorts[0].ID;
-		M = ChildPorts[1].ID;
-		R = ChildPorts[2].ID;
 		if (state == 2)
 		{
 			CircuitCalculator.UF.Union(R, M);
@@ -72,13 +76,8 @@ public class Switch : EntityBase
 
 	public override void SetElement()//得到约束方程
 	{
-		//获取元件ID作为元件名称
 		int EntityID = CircuitCalculator.EntityNum;
-		//得到端口ID
-		int L, M, R;
-		L = ChildPorts[0].ID;
-		M = ChildPorts[1].ID;
-		R = ChildPorts[2].ID;
+
 		if (state == 2)
 		{
 			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", R), R.ToString(), M.ToString(), 0));

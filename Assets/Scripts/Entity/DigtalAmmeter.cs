@@ -5,6 +5,7 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 {
 	public double R = 0.001;
 	private Text digtalAmmeterText;
+	private int GND, mA, A;
 
 	public override void EntityAwake()
 	{
@@ -30,12 +31,15 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 		}
 	}
 
+	void Start()
+	{
+		GND = ChildPorts[0].ID;
+		mA = ChildPorts[1].ID;
+		A = ChildPorts[2].ID;
+	}
+
 	public override void LoadElement()
 	{
-		int GND = ChildPorts[0].ID;
-		int mA = ChildPorts[1].ID;
-		int A = ChildPorts[2].ID;
-
 		CircuitCalculator.UF.Union(GND, mA);
 		CircuitCalculator.UF.Union(GND, A);
 	}
@@ -43,9 +47,6 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int GND = ChildPorts[0].ID;
-		int mA = ChildPorts[1].ID;
-		int A = ChildPorts[2].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));

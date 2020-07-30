@@ -5,10 +5,9 @@ using UnityEngine;
 public class SliderR : EntityBase
 {
 	public double rMax;
-
 	private double rLeft, rRight;
-
 	public MySlider MySlider { get; set; }
+	private int TL, TR, L, R;
 
 	public override void EntityAwake()
 	{
@@ -25,13 +24,16 @@ public class SliderR : EntityBase
 		rRight = rMax - rLeft;
 	}
 
+	void Start()
+	{
+		TL = ChildPorts[0].ID;
+		TR = ChildPorts[1].ID;
+		L = ChildPorts[2].ID;
+		R = ChildPorts[3].ID;
+	}
+
 	public override void LoadElement()
 	{
-		int TL = ChildPorts[0].ID;
-		int TR = ChildPorts[1].ID;
-		int L = ChildPorts[2].ID;
-		int R = ChildPorts[3].ID;
-
 		CircuitCalculator.UF.Union(TL, L);
 		CircuitCalculator.UF.Union(TL, R);
 		CircuitCalculator.UF.Union(TL, TR);
@@ -40,10 +42,6 @@ public class SliderR : EntityBase
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int TL = ChildPorts[0].ID;
-		int TR = ChildPorts[1].ID;
-		int L = ChildPorts[2].ID;
-		int R = ChildPorts[3].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), rLeft));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), rRight));

@@ -33,10 +33,14 @@ public class Solar : EntityBase, ISource
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
-	public override void LoadElement()
+	void Start()
 	{
 		G = ChildPorts[0].ID;
 		V = ChildPorts[1].ID;
+	}
+
+	public override void LoadElement()
+	{
 		CircuitCalculator.UF.Union(G, V);
 	}
 

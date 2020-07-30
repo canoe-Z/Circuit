@@ -16,11 +16,8 @@ public class ThreeSource : EntityBase, ISource
 	private readonly int[] V = new int[sourceNum];                          // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
 	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  // 内阻数组
-
-	[HideInInspector]//编辑器隐藏
-	public List<MyKnob> Knobs;
-	[HideInInspector]//编辑器隐藏
-	public List<Text> Texts;
+	public List<MyKnob> Knobs { get; set; }
+	public List<Text> Texts { get; set; }
 	public enum SourceMode
 	{
 		three = 0,
