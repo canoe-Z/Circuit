@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DigtalAmmeter : EntityBase, IAmmeter
 {
-	public double R = 0.001;
+	private const double R = 0.001;
 	private Text digtalAmmeterText;
 	private int GND, mA, A;
 

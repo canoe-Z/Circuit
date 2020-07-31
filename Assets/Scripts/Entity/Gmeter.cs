@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Gmeter : EntityBase, IAmmeter
 {
-	double MaxI = 0.001;
-	double R = 10;
-	GameObject pin = null;
-	float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
+	private double MaxI = 0.001;
+	private double R = 10;
+	private GameObject pin = null;
+	private float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	public MySlider mySlider = null;
 	private int LeftPortID, RightPortID;
 

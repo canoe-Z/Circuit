@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DigtalVoltmeter : EntityBase
 {
-	public double R = 15000;
+	private const double R = 15000;
 	private Text digtalDigtalVoltmeter;
 	private int GND, mV, V;
 

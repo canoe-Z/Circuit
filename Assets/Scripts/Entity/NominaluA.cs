@@ -7,11 +7,11 @@ using UnityEngine;
 /// </summary>
 public class NominaluA : EntityBase, IAmmeter
 {
-	public double MaxI = 0.05;              //量程，单位安培
+	public double MaxI = 0.05;           //量程，单位安培
 	public bool RealValueSet = false;
-	public double NominalR = 2;             //内阻为标称值
+	public double NominalR = 2;          //内阻为标称值
 	public double RealR;
-	private MyPin myPin;                    //指针（显示数字的那种）
+	private MyPin myPin;							//指针（显示数字的那种）
 	private int GND, V0;
 
 	/// TODO:实际书上给出的量程和内阻并无明显关系

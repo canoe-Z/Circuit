@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Switch : EntityBase
 {
-	public int state = 1;
-	public MySlider mySlider = null;
+	private int state = 1;
+	[ReadOnly] public MySlider mySlider = null;
 	private GameObject connector = null;
 	private int L, M, R;
 

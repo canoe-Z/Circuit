@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class Resistance : EntityBase
 {
-	public double Value = 120;
-	public Text resistanceText;
+	[ReadOnly] public double Value = 120;
+	protected Text resistanceText;
 
 	public override void EntityAwake()
 	{

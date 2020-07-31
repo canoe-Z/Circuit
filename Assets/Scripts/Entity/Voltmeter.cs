@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Voltmeter : EntityBase
 {
-	public double MaxU0 = 1.5;
-	public double MaxU1 = 5;
-	public double MaxU2 = 15;
+	private const double MaxU0 = 1.5;
+	private const double MaxU1 = 5;
+	private const double MaxU2 = 15;
 
-	public double R0 = 1500;
-	public double R1 = 5000;
-	public double R2 = 15000;
+	private const double R0 = 1500;
+	private const double R1 = 5000;
+	private const double R2 = 15000;
 
 	MyPin myPin;
 	private int GND, V0, V1, V2;

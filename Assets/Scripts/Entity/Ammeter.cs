@@ -2,15 +2,16 @@
 
 public class Ammeter : EntityBase, IAmmeter
 {
-	public double MaxI0 = 0.05;
-	public double MaxI1 = 0.1;
-	public double MaxI2 = 0.5;
+	private const double MaxI0 = 0.05;
+	private const double MaxI1 = 0.1;
+	private const double MaxI2 = 0.5;
 
-	public double R0 = 2;
-	public double R1 = 1;
-	public double R2 = 0.2;
+	private const double R0 = 2;
+	private const double R1 = 1;
+	private const double R2 = 0.2;
 
-	public int GND, V0, V1, V2;
+	private int GND, V0, V1, V2;
+	private readonly string[] ResistorID = new string[3];
 
 	private MyPin myPin;
 
@@ -48,7 +49,6 @@ public class Ammeter : EntityBase, IAmmeter
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		string[] ResistorID = new string[3];
 		for (int i = 0; i < 3; i++)
 		{
 			ResistorID[i] = string.Concat(EntityID, "_", i);
