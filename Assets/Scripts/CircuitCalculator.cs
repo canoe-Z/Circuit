@@ -129,8 +129,8 @@ public class CircuitCalculator : MonoBehaviour
 		foreach (CircuitPort port in Ports)
 		{
 			port.Connected = 0;
-			//port.U = 0;
-			//port.I = 0;
+			port.U = 0;
+			port.I = 0;
 		}
 
 		// 接地检测：检查对地连通性，对于正确连通的导线则连接，更新连接状态，对于不通的导线需要禁用
