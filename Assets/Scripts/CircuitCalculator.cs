@@ -38,7 +38,7 @@ public class CircuitCalculator : MonoBehaviour
 		StartCoroutine(CalculateUpdate());
 	}
 
-	IEnumerator CalculateUpdate()
+	private IEnumerator CalculateUpdate()
 	{
 		while (true)
 		{
