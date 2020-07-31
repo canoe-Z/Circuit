@@ -6,49 +6,61 @@ using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
-	private const int sourceNum = 3;                                        // 含有的独立电源个数
-	private const int knobNum = 3;                                          // 含有的旋钮个数
-	private const int textNum = 3;                                          // 含有的Text个数
-	public double _E0MAX = 15;                                       // 电源0最大值
-	public double _E1MAX = 15;                                       // 电源1最大值
-	public double _E2MAX = 15;                                       // 电源2最大值
-	private readonly int[] G = new int[sourceNum];                          // 存放独立电源负极的端口ID
-	private readonly int[] V = new int[sourceNum];                          // 存放独立电源正极的端口ID
-	private readonly double[] E = new double[sourceNum] { 15, 15, 5 };      // 电压数组
-	private readonly double[] R = new double[sourceNum] { 0.1, 0.1, 0.1 };  // 内阻数组
+	private int sourceNum;										// 含有的独立电源个数
+	private int knobNum;										// 含有的旋钮个数
+	public double[] EMax { get; set; } = new double[3];			// 最大值，对于固定电源则为固定值
+
+	private readonly int[] G = new int[3];						// 存放独立电源负极的端口ID
+	private readonly int[] V = new int[3];                      // 存放独立电源正极的端口ID
+	private readonly double[] E = new double[3];                // 电压数组
+	private readonly double[] R = new double[3];                // 内阻数组
+
 	public List<MyKnob> Knobs { get; set; }
 	public List<Text> Texts { get; set; }
-	public enum SourceMode
-	{
-		three = 0,
-		one = 1,
-		twoOfThree = 2
-	}
-	SourceMode sourceMode = SourceMode.three;
 
 	public override void EntityAwake()
 	{
+		// 根据画布的名字区分三种不同的电源
+		// 0：三路可调，1：单路，2：双路可调
+		Canvas canvas = GetComponentInChildren<Canvas>();
+
+		if (int.TryParse(canvas.name, out int res))
+		{
+			if (res == 0)
+			{
+				sourceNum = 3;
+				knobNum = 3;
+			}
+			else if (res == 1)
+			{
+				sourceNum = 1;
+				knobNum = 1;
+			}
+			else if (res == 2)
+			{
+				sourceNum = 3;
+				knobNum = 2;
+			}
+		}
+		else
+		{
+			Debug.LogError("画布名称转换失败");
+		}
+
+		// 获取旋钮和文本的引用
 		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
 		Texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
-		if (Knobs.Count != textNum) Debug.LogError("文本个数不合法");
+		if (Texts.Count != sourceNum) Debug.LogError("文本个数不合法");
 
+		// 旋钮初始化
 		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
 
-		//根据画布的名字区分三种不同的电源
-		//0：三路可调，1：单路，2：双路可调
-		Canvas canvas = GetComponentInChildren<Canvas>();
-		if (int.TryParse(canvas.name, out int res))
-		{
-			if (res == 0) sourceMode = SourceMode.three;//现在进行强制类型转换可能会造成莫名其妙的bug
-			else if (res == 1) sourceMode = SourceMode.one;
-			else if (res == 2) sourceMode = SourceMode.twoOfThree;
-		}
-		else
-		{
-			Debug.LogError("转换失败");
-		}
+		//以下初始化
+		EMax[0] = 15;
+		EMax[1] = 15;
+		EMax[2] = 5;
 
 		// 更新初值
 		UpdateKnob();
@@ -56,28 +68,27 @@ public class ThreeSource : EntityBase, ISource
 
 	void UpdateKnob()
 	{
-		switch (sourceMode)
+		for (var i = 0; i < sourceNum; i++)
 		{
-			case SourceMode.one:
-				E[0] = Knobs[0].KnobPos * _E0MAX;
-				Texts[0].text = E[0].ToString("00.00");
-				break;
-			case SourceMode.three:
-				E[0] = Knobs[0].KnobPos * _E0MAX;
-				E[1] = Knobs[1].KnobPos * _E1MAX;
-				E[2] = Knobs[2].KnobPos * _E2MAX;
-				Texts[0].text = E[0].ToString("00.00");
-				Texts[1].text = E[1].ToString("00.00");
-				Texts[2].text = E[2].ToString("00.00");
-				break;
-			case SourceMode.twoOfThree:
-				E[0] = Knobs[0].KnobPos * _E0MAX;
-				E[1] = Knobs[1].KnobPos * _E1MAX;
-				E[2] = 5;
-				Texts[0].text = E[0].ToString("00.00");
-				Texts[1].text = E[1].ToString("00.00");
-				Texts[2].text = "5";
-				break;
+			if (i < knobNum)
+			{
+				E[i] = Knobs[i].KnobPos * EMax[i];
+				Texts[i].text = E[i].ToString("00.00");
+			}
+			else
+			{
+				E[i] = EMax[i];
+				Texts[i].text = ((int)E[i]).ToString();
+			}
+		}
+	}
+
+	void Start()
+	{
+		for (var i = 0; i < sourceNum; i++)
+		{
+			G[i] = ChildPorts[2 * i + 1].ID;
+			V[i] = ChildPorts[2 * i].ID;
 		}
 	}
 
@@ -104,8 +115,6 @@ public class ThreeSource : EntityBase, ISource
 	/// <param name="n"></param>
 	public void LoadElement(int n)
 	{
-		G[n] = ChildPorts[2 * n + 1].ID;
-		V[n] = ChildPorts[2 * n].ID;
 		CircuitCalculator.UF.Union(G[n], V[n]);
 	}
 
@@ -130,10 +139,11 @@ public class ThreeSource : EntityBase, ISource
 	public void SetElement(int n)
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		G[n] = ChildPorts[2 * n + 1].ID;
-		V[n] = ChildPorts[2 * n].ID;
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
+
+		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n]);
+		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n + 1]);
 	}
 
 	/// <summary>

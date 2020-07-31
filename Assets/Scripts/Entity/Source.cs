@@ -7,8 +7,8 @@ using UnityEngine;
 /// </summary>
 public class Source : EntityBase, ISource
 {
-	[ReadOnly] public double E = 1.5f;
-	[ReadOnly] public double R = 100;
+	public double E = 1.5f;
+	public double R = 100;
 	private int G, V;
 
 	public override void EntityAwake() { }

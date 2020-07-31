@@ -52,9 +52,9 @@ public class WdwMenu_Create : MonoBehaviour
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
 			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>();
-			threeSource._E0MAX = num0;
-			threeSource._E1MAX = num1;
-			threeSource._E2MAX = num2;
+			threeSource.EMax[0] = num0;
+			threeSource.EMax[1] = num1;
+			threeSource.EMax[2] = num2;
 			willBeSet = threeSource.gameObject;//复制物体
 			NormalCreate();
 

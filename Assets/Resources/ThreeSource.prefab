@@ -160,6 +160,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291621816052902
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -361,6 +366,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291621993245096
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1119,6 +1129,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291622619803171
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1687,6 +1702,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291622871256362
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1828,6 +1848,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291622930478754
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2038,9 +2063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcdd04a7e2572d649bc6ba03b23d423e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _E0MAX: 15
-  _E1MAX: 15
-  _E2MAX: 15
 --- !u!114 &411291623022276592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2629,6 +2651,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+  U: 0
+  I: 0
+  ID: 0
+  LocalID: 0
+  Father: {fileID: 0}
 --- !u!135 &411291623663775182
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3940,7 +3967,7 @@ GameObject:
   - component: {fileID: 5839923321371054056}
   - component: {fileID: 3039307862863512397}
   m_Layer: 5
-  m_Name: 3
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,7 +11,7 @@ using System.Collections;
 /// </summary>
 public class CircuitCalculator : MonoBehaviour
 {
-	public static int PortNum { get; set; } = 0;                                                // 端口总数，创建端口时++
+	public static int PortNum { get; set; } = 1;                                                // 端口总数，创建端口时++
 	public static int EntityNum { get; set; } = 0;                                              // 元件总数，创建元件时++
 	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                // SpiceSharp计算的元件
 	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         // SpiceSharp计算的端口
@@ -234,6 +234,7 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	private static void ConnectGND(List<GNDLine> GNDLines)
 	{
+		Debug.LogError(GNDLines.Count.ToString());
 		foreach (GNDLine i in GNDLines)
 		{
 			SpiceEntities.Add(new VoltageSource(string.Concat(i.GNDLineID.ToString(), "_GND"), i.PortToGND.ToString(), "0", 0));
