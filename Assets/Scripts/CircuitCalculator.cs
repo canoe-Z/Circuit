@@ -113,7 +113,7 @@ public class CircuitCalculator : MonoBehaviour
 
 		// 在并查集中加载激活元件的内部连接
 		// 注意：这里被激活的元件此后还可能被禁用，区分的目的仅是为了缩小并查集规模，这里也可以选择不判断激活状态，直接加载所有元件的内部连接
-		LoadElement();
+		LoadElement(Entities);
 
 		// 对有连接的电源实行接地检测，只涉及并查集操作
 		foreach (ISource source in Sources)
@@ -122,7 +122,7 @@ public class CircuitCalculator : MonoBehaviour
 		}
 
 		// 连接接地线，只涉及并查集操作
-		ConnectGND();
+		ConnectGND(GNDLines);
 
 		// 再次清空所有端口的连接状态
 		// 注意：此前的有效导线未经接地检测，不经此步骤，会导致孤立元件内部连接出不接地的导线，导致仿真错误
@@ -160,7 +160,7 @@ public class CircuitCalculator : MonoBehaviour
 		}
 
 		// 在SpiceSharp中加载元件
-		SetElement();
+		SetElement(Entities);
 		SpiceSharpCalculate();
 
 		// 仿真通过后恢复通过并查集禁用的导线
@@ -179,7 +179,7 @@ public class CircuitCalculator : MonoBehaviour
 		GNDLine.GlobalGNDLineID = 0;
 		SpicePorts.Clear();
 		SpiceEntities.Clear();
-		ConnectGND();
+		ConnectGND(GNDLines);
 
 		// 直接连接正常导线
 		for (var i = 0; i < EnabledLines.Count; i++)
@@ -187,16 +187,16 @@ public class CircuitCalculator : MonoBehaviour
 			SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), EnabledLines[i].StartID.ToString(), EnabledLines[i].EndID.ToString(), 0));
 			EntityNum++;
 		}
-		SetElement();
+		SetElement(Entities);
 		SpiceSharpCalculate();
 	}
 
 	/// <summary>
 	/// 通过并查集预连接，同时按照加载不同的接口
 	/// </summary>
-	private static void LoadElement()
+	private static void LoadElement(LinkedList<EntityBase> entities)
 	{
-		foreach (EntityBase entity in Entities)
+		foreach (EntityBase entity in entities)
 		{
 			if (entity.IsConnected())
 			{
@@ -216,10 +216,10 @@ public class CircuitCalculator : MonoBehaviour
 	/// <summary>
 	/// 正式连接（需要事先处理不接地连接）
 	/// </summary>
-	private static void SetElement()
+	private static void SetElement(LinkedList<EntityBase> entities)
 	{
 		EntityNum = 0;
-		foreach (EntityBase entity in Entities)
+		foreach (EntityBase entity in entities)
 		{
 			if (entity.IsConnected())
 			{
@@ -232,7 +232,7 @@ public class CircuitCalculator : MonoBehaviour
 	/// <summary>
 	/// 将需要接地的电源接地
 	/// </summary>
-	private static void ConnectGND()
+	private static void ConnectGND(List<GNDLine> GNDLines)
 	{
 		foreach (GNDLine i in GNDLines)
 		{
