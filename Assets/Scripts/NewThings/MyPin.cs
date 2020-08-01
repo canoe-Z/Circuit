@@ -49,6 +49,16 @@ public class MyPin : MonoBehaviour
 				txtDanwei = textPer;
 			}
 		}
+
+		//关闭电压表以及电流表的显示
+		if (GetComponentInParent<Ammeter>() || GetComponentInParent<Voltmeter>())
+		{
+			foreach(var t in txtKedu)
+			{
+				t.enabled = false;
+			}
+		}
+
 		Transform[] transforms = GetComponentsInChildren<Transform>();
 		foreach (Transform tr in transforms)
 		{
