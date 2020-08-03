@@ -21,6 +21,8 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_NominalR;
 	public Dropdown dpdType_uA;
 	public Button btn_uA;
+	public Dropdown dpdType_Src;
+	public Button btn_Src;
 	[Header("3路电源")]
 	public Button btn_StrangeSource;
 	public Canvas cnvStrange;
@@ -40,6 +42,7 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_R.onClick.AddListener(OnButtonSP_R);
 		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
+		btn_Src.onClick.AddListener(OnButtonSP_Src);
 
 		btn_StrangeSource.onClick.AddListener(OnStrange_Source);
 		btn_Source.onClick.AddListener(OnButtonSP_Source);
@@ -183,6 +186,23 @@ public class WdwMenu_Create : MonoBehaviour
 			case 0: sampleuA.MyChangeToWhichType(50); break;//50
 			case 1: sampleuA.MyChangeToWhichType(100); break;//100
 			case 2: sampleuA.MyChangeToWhichType(200); break;//200
+		}
+		NormalCreate();
+	}
+	void OnButtonSP_Src()
+	{
+		Source src = EntityCreator.CreateEntity<Source>();
+		willBeSet = src.gameObject;
+		switch (dpdType_Src.value)
+		{
+			case 0:
+				src.E=1.01865;
+				src.strToShow = "标准\n1.01865V";
+				break;//1.01865
+			case 1:
+				src.E = 1.54652;
+				src.strToShow = "待测电源";
+				break;//待测
 		}
 		NormalCreate();
 	}
