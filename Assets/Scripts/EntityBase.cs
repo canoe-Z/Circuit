@@ -2,8 +2,6 @@
 using System.Linq;
 using UnityEngine;
 
-public delegate void EntityDestroyEventHandler();
-
 /// <summary>
 /// 找端口，需要带有CircuitPort的端口，把自己重命名成序号
 /// </summary>
@@ -15,6 +13,8 @@ abstract public class EntityBase : MonoBehaviour
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
+
+	public delegate void EntityDestroyEventHandler();
 	public event EntityDestroyEventHandler EntityDestroy;
 
 	void Awake()
@@ -107,6 +107,10 @@ abstract public class EntityBase : MonoBehaviour
 
 	public void DestroyEntity()
 	{
+		if (this is ICalculatorUpdate updateEntity)
+		{
+			CircuitCalculator.CalculateEvent -= updateEntity.CalculatorUpdate;
+		}
 		EntityDestroy?.Invoke();
 		CircuitCalculator.Entities.Remove(this);
 		Destroy(gameObject);
@@ -197,6 +201,12 @@ public class SimpleEntityData<T> : EntityData where T : Component
 public interface ISource
 {
 	void GroundCheck();
+}
+
+
+public interface ICalculatorUpdate
+{
+	void CalculatorUpdate();
 }
 
 public interface IAmmeter

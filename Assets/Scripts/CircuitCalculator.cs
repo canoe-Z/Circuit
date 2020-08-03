@@ -23,7 +23,6 @@ public class CircuitCalculator : MonoBehaviour
 	public static List<GNDLine> GNDLines { get; set; } = new List<GNDLine>();                   // 接地导线
 
 	public static List<ISource> Sources { get; set; } = new List<ISource>();                    // 所有元件
-	public static List<IAmmeter> Ammeters { get; set; } = new List<IAmmeter>();                 // 所有端口
 
 	public static LinkedList<EntityBase> Entities { get; set; } = new LinkedList<EntityBase>();
 	public static LinkedList<CircuitPort> Ports { get; set; } = new LinkedList<CircuitPort>();
@@ -31,6 +30,9 @@ public class CircuitCalculator : MonoBehaviour
 
 	public static bool NeedCalculate { get; set; } = false;
 	public static bool NeedCalculateByConnection { get; set; } = false;
+
+	public delegate void CalculateEventHandler();
+	public static event CalculateEventHandler CalculateEvent;
 
 	void Awake()
 	{
@@ -46,12 +48,14 @@ public class CircuitCalculator : MonoBehaviour
 			if (NeedCalculate)
 			{
 				CalculateAll();
+				CalculateEvent?.Invoke();
 				NeedCalculate = false;
 				NeedCalculateByConnection = false;
 			}
 			else if (NeedCalculateByConnection)
 			{
 				CalculateByConnection();
+				CalculateEvent?.Invoke();
 				NeedCalculate = false;
 				NeedCalculateByConnection = false;
 			}
@@ -72,7 +76,6 @@ public class CircuitCalculator : MonoBehaviour
 		EnabledLines.Clear();
 		DisabledLines.Clear();
 		Sources.Clear();
-		Ammeters.Clear();
 		UF.Clear(10000);
 		LineUF.Clear(10000);
 	}
@@ -80,7 +83,7 @@ public class CircuitCalculator : MonoBehaviour
 	/// <summary>
 	/// 电路重新计算
 	/// </summary>
-	public static void CalculateAll()
+	private static void CalculateAll()
 	{
 		ClearAll();
 
@@ -173,7 +176,7 @@ public class CircuitCalculator : MonoBehaviour
 	/// <summary>
 	/// 在现有的连接关系上重新计算
 	/// </summary>
-	public static void CalculateByConnection()
+	private static void CalculateByConnection()
 	{
 		EntityNum = 0;
 		GNDLine.GlobalGNDLineID = 0;
@@ -202,13 +205,9 @@ public class CircuitCalculator : MonoBehaviour
 			{
 				entity.LoadElement();
 			}
-			if (entity is ISource)
+			if (entity is ISource source)
 			{
-				Sources.Add(entity as ISource);
-			}
-			if (entity is IAmmeter)
-			{
-				Ammeters.Add(entity as IAmmeter);
+				Sources.Add(source);
 			}
 		}
 	}
@@ -277,12 +276,6 @@ public class CircuitCalculator : MonoBehaviour
 			{
 				Debug.LogError("仿真错误！");
 			}
-		}
-
-		// 计算电流
-		foreach (IAmmeter i in Ammeters)
-		{
-			i.CalculateCurrent();
 		}
 	} // private static void SpiceSharpCalculate()
 }

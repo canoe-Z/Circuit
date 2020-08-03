@@ -20,20 +20,20 @@ public class Resistance : EntityBase
 		string str;
 
 		// 根据阻值确定显示方式
-		if (Value > 1000000)
+		if (Value >= 1e6)
 		{
-			str = (Value / 1000000).ToString() + "MΩ";
+			str = (Value / 1e6).ToString() + "MΩ";
 		}
-		else if (Value > 1000)
+		else if (Value >= 1e3)
 		{
-			str = (Value / 1000).ToString() + "kΩ";
+			str = (Value / 1e3).ToString() + "kΩ";
 		}
 		else
 		{
 			str = Value.ToString() + "Ω";
 		}
 
-		if (str.Length > maxSize)
+		if (str.Length >= maxSize)
 		{
 			resistanceText.fontSize = resistanceText.fontSize * 7 / str.Length;
 		}

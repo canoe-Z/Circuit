@@ -47,8 +47,8 @@ public class WdwMenu_Create : MonoBehaviour
 	//创建
 	void OnButtonSP_Source()
 	{
-		if(double.TryParse(iptNum_V0.text,out double num0)&&
-			double.TryParse(iptNum_V1.text, out double num1)&& 
+		if (double.TryParse(iptNum_V0.text, out double num0) &&
+			double.TryParse(iptNum_V1.text, out double num1) &&
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
 			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>();
@@ -105,9 +105,7 @@ public class WdwMenu_Create : MonoBehaviour
 		if (ParseRNum(iptNum_SliderR.text, out double num))
 		{
 			iptNum_SliderR.text = "";
-			SliderR sliderR = EntityCreator.CreateEntity<SliderR>();//复制物体
-			willBeSet = sliderR.gameObject;
-			sliderR.rMax = num;
+			willBeSet = SliderR.Create(num).gameObject;
 			NormalCreate();
 		}
 	}
@@ -124,14 +122,15 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 	void OnButtonSP_NominalR()
 	{
-		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
-		willBeSet = nominalR.gameObject;
+		NominalR nominalR;
 		switch (dpdType_NominalR.value)
 		{
-			case 0: nominalR.NominalValue = 100; break;//100
-			case 1: nominalR.NominalValue = 1000000; break;//1M
-			case 2: nominalR.NominalValue = 0.1; break;//0.1
+			case 0: nominalR = NominalR.Create(100, "待测"); break;
+			case 1: nominalR = NominalR.Create(1e6, "待测"); break;
+			case 2: nominalR = NominalR.Create(0.1, "待测"); break;
+			default: nominalR = null; break;
 		}
+		willBeSet = nominalR.gameObject;
 		NormalCreate();
 	}
 	void OnButtonSP_uA()
@@ -148,7 +147,7 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 
 
-	
+
 	//
 	void Update()
 	{

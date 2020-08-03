@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine;
 
-public class Voltmeter : EntityBase
+public class Voltmeter : EntityBase, ICalculatorUpdate
 {
 	private const double MaxU0 = 1.5;
 	private const double MaxU1 = 5;
@@ -17,17 +17,21 @@ public class Voltmeter : EntityBase
 	public override void EntityAwake()
 	{
 		myPin = GetComponentInChildren<MyPin>();
-		myPin.MySetString("V", 150);
+		myPin.PinAwake();
+		myPin.SetString("V", 150);
 	}
 
 	void Start()
 	{
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
 		GND = ChildPorts[0].ID;
 		V0 = ChildPorts[1].ID;
 		V1 = ChildPorts[2].ID;
 		V2 = ChildPorts[3].ID;
 	}
-	void Update()
+	public void CalculatorUpdate()
 	{
 		//计算指针偏移量
 		double GNDu = ChildPorts[0].U;
@@ -36,7 +40,7 @@ public class Voltmeter : EntityBase
 		doublePin += (ChildPorts[2].U - GNDu) / MaxU1;
 		doublePin += (ChildPorts[3].U - GNDu) / MaxU2;
 
-		myPin.MyChangePos((float)doublePin);
+		myPin.SetPos((float)doublePin);
 	}
 
 

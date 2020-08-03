@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine.UI;
 
-public class DigtalVoltmeter : EntityBase
+public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 {
 	private const double R = 15000;
 	private Text digtalDigtalVoltmeter;
@@ -14,23 +14,24 @@ public class DigtalVoltmeter : EntityBase
 
 	void Start()
 	{
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
 		GND = ChildPorts[0].ID;
 		mV = ChildPorts[1].ID;
 		V = ChildPorts[2].ID;
 	}
 
-	void Update()
+	public void CalculatorUpdate()
 	{
-		// 数显
-		double mV, V;
 		if (ChildPorts[1].Connected == 1)
 		{
-			mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
+			double mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
 			digtalDigtalVoltmeter.text = EntityText.GetText(mV, 999.99, 2);
 		}
 		else if (ChildPorts[2].Connected == 1)
 		{
-			V = ChildPorts[2].U - ChildPorts[0].U;
+			double V = ChildPorts[2].U - ChildPorts[0].U;
 			digtalDigtalVoltmeter.text = EntityText.GetText(V, 999.99, 2);
 		}
 		else

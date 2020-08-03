@@ -25,6 +25,7 @@ public class EntityCreator : MonoBehaviour
 	{
 		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
 		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), Quaternion.identity).GetComponent<T>();
+
 		SetEntityID(t, IDlist);
 		return t;
 	}
@@ -33,7 +34,7 @@ public class EntityCreator : MonoBehaviour
 	{
 		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
 		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<T>();
-		// 元件执行Awake()后
+
 		SetEntityID(t, IDlist);
 		return t;
 	}
@@ -69,6 +70,7 @@ public class EntityCreator : MonoBehaviour
 				break;
 		}
 		ThreeSource threeSource = Instantiate(SourceObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<ThreeSource>();
+
 		SetEntityID(threeSource, IDlist);
 		return threeSource;
 	}

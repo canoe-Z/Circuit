@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine;
 
-public class Gmeter : EntityBase, IAmmeter
+public class Gmeter : EntityBase, ICalculatorUpdate
 {
 	private double MaxI = 0.001;
 	private double R = 10;
@@ -20,11 +20,14 @@ public class Gmeter : EntityBase, IAmmeter
 
 	void Start()
 	{
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
 		LeftPortID = ChildPorts[0].ID;
 		RightPortID = ChildPorts[1].ID;
 	}
 
-	void Update()
+	public void CalculatorUpdate()
 	{
 		//量程
 		MaxI = 0.1;

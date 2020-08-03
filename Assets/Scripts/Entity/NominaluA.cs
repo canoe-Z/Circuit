@@ -11,7 +11,7 @@ public class NominaluA : EntityBase, IAmmeter
 	public bool RealValueSet = false;
 	public double NominalR = 2;          //内阻为标称值
 	public double RealR;
-	private MyPin myPin;							//指针（显示数字的那种）
+	private MyPin myPin;				 //指针（显示数字的那种）
 	private int GND, V0;
 
 	/// TODO:实际书上给出的量程和内阻并无明显关系
@@ -22,8 +22,8 @@ public class NominaluA : EntityBase, IAmmeter
 	{
 		MaxI = (double)uA / 1000000;
 		NominalR = (double)100 / uA;//50微安时为2欧姆，成反比
-		myPin.MyChangePos(0);
-		myPin.MySetString("uA", uA);
+		myPin.SetPos(0);
+		myPin.SetString("uA", uA);
 		CircuitCalculator.NeedCalculate = true;
 	}
 
@@ -31,11 +31,13 @@ public class NominaluA : EntityBase, IAmmeter
 	{
 		// 得到引用并且初始化
 		myPin = GetComponentInChildren<MyPin>();
+		myPin.PinAwake();
 		MyChangeToWhichType(50);
 	}
 
 	void Start()
 	{
+		
 		if (!RealValueSet)
 		{
 			RealR = Nominal.GetRealValue(NominalR);
@@ -48,7 +50,7 @@ public class NominaluA : EntityBase, IAmmeter
 
 	void Update()
 	{
-		myPin.MyChangePos((float)(ChildPorts[1].I / MaxI));
+		myPin.SetPos((float)(ChildPorts[1].I / MaxI));
 	}
 
 	public override void LoadElement()

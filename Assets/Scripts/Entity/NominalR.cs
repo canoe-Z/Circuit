@@ -9,6 +9,7 @@ public class NominalR : Resistance
 {
 	public bool RealValueSet = false;//置为1时，在生成时不随机变化
 	public double NominalValue;
+	public string Prefix;
 
 	void Start()
 	{
@@ -17,18 +18,35 @@ public class NominalR : Resistance
 			Value = Nominal.GetRealValue(NominalValue);
 			RealValueSet = true;
 		}
+
+		string str;
+
+		// 根据阻值确定显示方式
+		if (NominalValue >= 1e6 || Math.Abs(NominalValue - 1e6) < 0.001)
+		{
+			str = (NominalValue / 1e6).ToString() + "MΩ";
+		}
+		else if (NominalValue >= 1e3 || Math.Abs(NominalValue - 1e3) < 0.001)
+		{
+			str = (NominalValue / 1e3).ToString() + "kΩ";
+		}
+		else
+		{
+			str = NominalValue.ToString() + "Ω";
+		}
+
 		if (resistanceText)
 		{
-			if (Math.Abs(NominalValue - 1e6) < 0.001)
-			{
-				resistanceText.text = "待测\n1MΩ";
-
-			}
-			else
-			{
-				resistanceText.text = "待测\n" + NominalValue.ToString() + "Ω";
-			}
+			resistanceText.text = Prefix + "\n" + str;
 		}
+	}
+
+	public static NominalR Create(double nominalValue, string prefix)
+	{
+		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
+		nominalR.NominalValue = nominalValue;
+		nominalR.Prefix = prefix;
+		return nominalR;
 	}
 
 	public override EntityData Save()

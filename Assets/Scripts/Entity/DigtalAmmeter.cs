@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine.UI;
 
-public class DigtalAmmeter : EntityBase, IAmmeter
+public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
 	private const double R = 0.001;
 	private Text digtalAmmeterText;
@@ -12,30 +12,36 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
 	}
 
-	void Update()
+	void Start()
 	{
-		double mA, A;
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
+		GND = ChildPorts[0].ID;
+		mA = ChildPorts[1].ID;
+		A = ChildPorts[2].ID;
+	}
+
+	public void CalculatorUpdate()
+	{
+		// 计算自身电流
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
+		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
+
 		if (ChildPorts[1].Connected == 1)
 		{
-			mA = ChildPorts[1].I * 1000;
+			double mA = ChildPorts[1].I * 1000;
 			digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
 		}
 		else if (ChildPorts[2].Connected == 1)
 		{
-			A = ChildPorts[2].I;
+			double A = ChildPorts[2].I;
 			digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
 		}
 		else
 		{
 			digtalAmmeterText.text = EntityText.GetText(0, 2);
 		}
-	}
-
-	void Start()
-	{
-		GND = ChildPorts[0].ID;
-		mA = ChildPorts[1].ID;
-		A = ChildPorts[2].ID;
 	}
 
 	public override void LoadElement()
@@ -53,13 +59,6 @@ public class DigtalAmmeter : EntityBase, IAmmeter
 		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
-	}
-
-	// 数字电流表实现IAmmeter接口，可计算自身电流
-	public void CalculateCurrent()
-	{
-		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
-		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
 	}
 
 	public override EntityData Save()

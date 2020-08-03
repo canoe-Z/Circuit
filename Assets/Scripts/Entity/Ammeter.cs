@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Components;
 
-public class Ammeter : EntityBase, IAmmeter
+public class Ammeter : EntityBase, ICalculatorUpdate
 {
 	private const double MaxI0 = 0.05;
 	private const double MaxI1 = 0.1;
@@ -18,25 +18,34 @@ public class Ammeter : EntityBase, IAmmeter
 	public override void EntityAwake()
 	{
 		myPin = GetComponentInChildren<MyPin>();
-		myPin.MySetString("A", 150);
+		myPin.PinAwake();
+		myPin.SetString("A", 150);
 	}
 
-	void Update()
+	void Start()
 	{
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
+		GND = ChildPorts[0].ID;
+		V0 = ChildPorts[1].ID;
+		V1 = ChildPorts[2].ID;
+		V2 = ChildPorts[3].ID;
+	}
+
+	public void CalculatorUpdate()
+	{
+		// 计算自身电流
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R0;
+		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;
+		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
+
 		double doublePin = 0;
 		doublePin += (ChildPorts[1].I) / MaxI0;
 		doublePin += (ChildPorts[2].I) / MaxI1;
 		doublePin += (ChildPorts[3].I) / MaxI2;
 
-		myPin.MyChangePos((float)doublePin);
-	}
-
-	void Start()
-	{
-		GND = ChildPorts[0].ID;
-		V0 = ChildPorts[1].ID;
-		V1 = ChildPorts[2].ID;
-		V2 = ChildPorts[3].ID;
+		myPin.SetPos((float)doublePin);
 	}
 
 	public override void LoadElement()
@@ -62,14 +71,6 @@ public class Ammeter : EntityBase, IAmmeter
 		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
-	}
-
-	// 计算自身电流
-	public void CalculateCurrent()
-	{
-		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R0;
-		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;
-		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
 	}
 
 	public override EntityData Save()

@@ -52,6 +52,13 @@ public class SliderR : EntityBase
 	{
 		return new SliderRData(rMax, MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
+
+	public static SliderR Create(double rMax)
+	{
+		SliderR sliderR = EntityCreator.CreateEntity<SliderR>();
+		sliderR.rMax = rMax;
+		return sliderR;
+	}
 }
 
 [System.Serializable]
