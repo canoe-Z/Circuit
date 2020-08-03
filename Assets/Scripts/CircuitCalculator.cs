@@ -234,7 +234,6 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	private static void ConnectGND(List<GNDLine> GNDLines)
 	{
-		Debug.LogError(GNDLines.Count.ToString());
 		foreach (GNDLine i in GNDLines)
 		{
 			SpiceEntities.Add(new VoltageSource(string.Concat(i.GNDLineID.ToString(), "_GND"), i.PortToGND.ToString(), "0", 0));

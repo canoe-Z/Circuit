@@ -25,11 +25,7 @@ public class EntityCreator : MonoBehaviour
 	{
 		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
 		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), Quaternion.identity).GetComponent<T>();
-		for (var i = 0; i < (t as EntityBase).PortNum; i++)
-		{
-			(t as EntityBase).ChildPortID = IDlist;
-			(t as EntityBase).ChildPorts[i].ID = IDlist[i];
-		}
+		SetEntityID(t, IDlist);
 		return t;
 	}
 
@@ -38,11 +34,42 @@ public class EntityCreator : MonoBehaviour
 		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
 		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<T>();
 		// 元件执行Awake()后
-		for (var i = 0; i < (t as EntityBase).PortNum; i++)
-		{
-			(t as EntityBase).ChildPortID = IDlist;
-			(t as EntityBase).ChildPorts[i].ID = IDlist[i];
-		}
+		SetEntityID(t, IDlist);
 		return t;
+	}
+
+	public static void SetEntityID<T>(T t,List<int> IDlist) where T : Component
+	{
+		if (t is EntityBase entity)
+		{
+			for (var i = 0; i < entity.PortNum; i++)
+			{
+				entity.ChildPortID = IDlist;
+				entity.ChildPorts[i].ID = IDlist[i];
+			}
+		}
+	}
+
+	public static ThreeSource CreateThreeSource(ThreeSource.SourceMode sourceMode,Float3 pos, Float4 angle, List<int> IDlist)
+	{
+		GameObject SourceObject;
+		switch (sourceMode)
+		{
+			case ThreeSource.SourceMode.one:
+				SourceObject = (GameObject)Resources.Load("ThreeSource1");
+				break;
+			case ThreeSource.SourceMode.three:
+				SourceObject = (GameObject)Resources.Load("ThreeSource");
+				break;
+			case ThreeSource.SourceMode.twoOfThree:
+				SourceObject = (GameObject)Resources.Load("ThreeSource2");
+				break;
+			default:
+				SourceObject = null;
+				break;
+		}
+		ThreeSource threeSource = Instantiate(SourceObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<ThreeSource>();
+		SetEntityID(threeSource, IDlist);
+		return threeSource;
 	}
 }
