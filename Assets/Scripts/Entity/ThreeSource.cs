@@ -6,17 +6,20 @@ using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
-	private int sourceNum;										// 含有的独立电源个数
-	private int knobNum;										// 含有的旋钮个数
-	public double[] EMax { get; set; } = new double[3];			// 最大值，对于固定电源则为固定值
+	public int sourceNum;                                      // 含有的独立电源个数
+	private int knobNum;                                        // 含有的旋钮个数
+	public double[] EMax { get; set; } = new double[3];         // 最大值，对于固定电源则为固定值
 
-	private readonly int[] G = new int[3];						// 存放独立电源负极的端口ID
+	private readonly int[] G = new int[3];                      // 存放独立电源负极的端口ID
 	private readonly int[] V = new int[3];                      // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[3];                // 电压数组
 	private readonly double[] R = new double[3];                // 内阻数组
 
 	public List<MyKnob> Knobs { get; set; }
 	public List<Text> Texts { get; set; }
+
+	public enum SourceMode { three, one, twoOfThree }
+	private SourceMode sourceMode;
 
 	public override void EntityAwake()
 	{
@@ -28,16 +31,19 @@ public class ThreeSource : EntityBase, ISource
 		{
 			if (res == 0)
 			{
+				sourceMode = SourceMode.three;
 				sourceNum = 3;
 				knobNum = 3;
 			}
 			else if (res == 1)
 			{
+				sourceMode = SourceMode.one;
 				sourceNum = 1;
 				knobNum = 1;
 			}
 			else if (res == 2)
 			{
+				sourceMode = SourceMode.twoOfThree;
 				sourceNum = 3;
 				knobNum = 2;
 			}
@@ -61,13 +67,23 @@ public class ThreeSource : EntityBase, ISource
 		EMax[0] = 15;
 		EMax[1] = 15;
 		EMax[2] = 5;
+	}
 
-		// 更新初值
+	void Start()
+	{
+		// 更新初值写在Start()中，便于实例化之后写入电压
 		UpdateKnob();
+
+		for (var i = 0; i < sourceNum; i++)
+		{
+			G[i] = ChildPorts[2 * i + 1].ID;
+			V[i] = ChildPorts[2 * i].ID;
+		}
 	}
 
 	void UpdateKnob()
 	{
+		Debug.LogError("更新");
 		for (var i = 0; i < sourceNum; i++)
 		{
 			if (i < knobNum)
@@ -80,15 +96,6 @@ public class ThreeSource : EntityBase, ISource
 				E[i] = EMax[i];
 				Texts[i].text = ((int)E[i]).ToString();
 			}
-		}
-	}
-
-	void Start()
-	{
-		for (var i = 0; i < sourceNum; i++)
-		{
-			G[i] = ChildPorts[2 * i + 1].ID;
-			V[i] = ChildPorts[2 * i].ID;
 		}
 	}
 
@@ -180,7 +187,7 @@ public class ThreeSource : EntityBase, ISource
 
 	public override EntityData Save()
 	{
-		return new SourceData(Knobs, transform.position, transform.rotation, ChildPortID);
+		return new SourceData(sourceMode, EMax, Knobs, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -190,16 +197,24 @@ public class ThreeSource : EntityBase, ISource
 [System.Serializable]
 public class SourceData : EntityData
 {
+	private readonly ThreeSource.SourceMode sourceMode;
 	private readonly List<float> knobPosList = new List<float>();
+	private readonly List<double> _EMaxList;
 
-	public SourceData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	public SourceData(ThreeSource.SourceMode sourceMode, double[] _EMax, List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
+		this.sourceMode = sourceMode;
+		_EMaxList = _EMax.ToList();
 		knobs.ForEach(x => knobPosList.Add(x.KnobPos));
 	}
 
 	override public void Load()
 	{
 		ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>(posfloat, anglefloat, IDList);
+		for(var i=0;i< threeSource.sourceNum; i++)
+		{
+			threeSource.EMax[i] = _EMaxList[i];
+		}
 		for (var i = 0; i < knobPosList.Count; i++)
 		{
 			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件

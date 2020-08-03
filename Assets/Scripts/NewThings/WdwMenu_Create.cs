@@ -55,6 +55,7 @@ public class WdwMenu_Create : MonoBehaviour
 			threeSource.EMax[0] = num0;
 			threeSource.EMax[1] = num1;
 			threeSource.EMax[2] = num2;
+			Debug.LogError("FENGEXIAN");
 			willBeSet = threeSource.gameObject;//复制物体
 			NormalCreate();
 
