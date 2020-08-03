@@ -4884,7 +4884,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u5F85\u6D4B\u7535\u963B"
+  m_Text: "\u666E\u901A\u7535\u963B"
 --- !u!222 &688063662
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12667,7 +12667,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 150}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2049177449
 MonoBehaviour:

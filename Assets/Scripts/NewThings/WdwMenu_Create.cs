@@ -168,7 +168,7 @@ public class WdwMenu_Create : MonoBehaviour
 			case 0: nominalR = NominalR.Create(100, "待测"); break;
 			case 1: nominalR = NominalR.Create(1e6, "待测"); break;
 			case 2: nominalR = NominalR.Create(0.1, "待测"); break;
-			case 4: nominalR = NominalR.Create(120, "标称"); break;
+			case 3: nominalR = NominalR.Create(120, "标称"); break;
 			default: nominalR = null; break;
 		}
 		willBeSet = nominalR.gameObject;
