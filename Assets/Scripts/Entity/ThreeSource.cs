@@ -209,18 +209,15 @@ public class SourceData : EntityData
 
 	public override void Load()
 	{
-		Debug.LogError(IDList.Count.ToString());
 		ThreeSource threeSource = EntityCreator.CreateThreeSource(sourceMode, posfloat, anglefloat, IDList);
 
 		for (var i = 0; i < threeSource.SourceNum; i++)
 		{
-			Debug.LogError("1");
 			threeSource.EMax[i] = _EMaxList[i];
 		}
 
 		for (var i = 0; i < knobPosList.Count; i++)
 		{
-			Debug.LogError("2");
 			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件
 			threeSource.Knobs[i].SetKnobRot(knobPosList[i]);
 		}
