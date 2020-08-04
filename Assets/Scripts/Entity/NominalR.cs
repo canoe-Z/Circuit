@@ -8,8 +8,8 @@ using UnityEngine;
 public class NominalR : Resistance
 {
 	public bool RealValueSet = false;//置为1时，在生成时不随机变化
-	public double NominalValue;
-	public string Prefix;
+	public double NominalValue;//假的值
+	public string Prefix;//显示在数字前面的字符串
 
 	void Start()
 	{
@@ -40,7 +40,7 @@ public class NominalR : Resistance
 			resistanceText.text = Prefix + "\n" + str;
 		}
 	}
-
+	
 	public static NominalR Create(double nominalValue, string prefix)
 	{
 		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();

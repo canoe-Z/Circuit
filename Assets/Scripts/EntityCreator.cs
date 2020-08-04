@@ -39,7 +39,7 @@ public class EntityCreator : MonoBehaviour
 		return t;
 	}
 
-	public static void SetEntityID<T>(T t,List<int> IDlist) where T : Component
+	static void SetEntityID<T>(T t,List<int> IDlist) where T : Component
 	{
 		if (t is EntityBase entity)
 		{
@@ -50,8 +50,10 @@ public class EntityCreator : MonoBehaviour
 			}
 		}
 	}
-
-	public static ThreeSource CreateThreeSource(ThreeSource.SourceMode sourceMode,Float3 pos, Float4 angle, List<int> IDlist)
+	/// <summary>
+	/// 创建一个电源
+	/// </summary>
+	public static ThreeSource CreateThreeSource(ThreeSource.SourceMode sourceMode, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
 	{
 		GameObject SourceObject;
 		switch (sourceMode)
@@ -69,9 +71,12 @@ public class EntityCreator : MonoBehaviour
 				SourceObject = null;
 				break;
 		}
+		if (pos == null) pos = new Float3(0, 0, 0);
+		if (angle == null) angle = new Float4(0, 0, 0, 1);
 		ThreeSource threeSource = Instantiate(SourceObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<ThreeSource>();
 
-		SetEntityID(threeSource, IDlist);
+		if (IDlist != null)
+			SetEntityID(threeSource, IDlist);
 		return threeSource;
 	}
 }

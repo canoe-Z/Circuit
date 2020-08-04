@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Components;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 单个独立电源，准确使用时可用于标准电源等场景，派生出标称类，用于待测电源和干电池
@@ -9,9 +10,19 @@ public class Source : EntityBase, ISource
 {
 	public double E = 1.5f;
 	public double R = 100;
+	public string strToShow = "忘记设置了";
+
 	private int G, V;
 
-	public override void EntityAwake() { }
+	Text text;
+	public override void EntityAwake()
+	{
+		text = GetComponentInChildren<Text>();
+	}
+	void Update()
+	{
+		text.text = strToShow;
+	}
 
 	void Start()
 	{

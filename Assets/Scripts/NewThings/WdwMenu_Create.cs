@@ -21,6 +21,8 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_NominalR;
 	public Dropdown dpdType_uA;
 	public Button btn_uA;
+	public Dropdown dpdType_Src;
+	public Button btn_Src;
 	[Header("3路电源")]
 	public Button btn_StrangeSource;
 	public Canvas cnvStrange;
@@ -28,6 +30,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public InputField iptNum_V1;
 	public InputField iptNum_V2;
 	public Button btn_Source;
+	public Dropdown dpdSourceType;
 	void Start()
 	{
 		btn_RBox.onClick.AddListener(OnButton_RBox);
@@ -39,19 +42,23 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_R.onClick.AddListener(OnButtonSP_R);
 		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
+		btn_Src.onClick.AddListener(OnButtonSP_Src);
 
 		btn_StrangeSource.onClick.AddListener(OnStrange_Source);
 		btn_Source.onClick.AddListener(OnButtonSP_Source);
+		dpdSourceType.onValueChanged.AddListener(OnDropDown_Source);
+		OnDropDown_Source(dpdSourceType.value);//更新
 	}
 
-	//创建
+	//创建三路电源
+	ThreeSource.SourceMode willType = ThreeSource.SourceMode.three;
 	void OnButtonSP_Source()
 	{
 		if (double.TryParse(iptNum_V0.text, out double num0) &&
 			double.TryParse(iptNum_V1.text, out double num1) &&
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
-			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>();
+			ThreeSource threeSource = EntityCreator.CreateThreeSource(willType);
 			threeSource.EMax[0] = num0;
 			threeSource.EMax[1] = num1;
 			threeSource.EMax[2] = num2;
@@ -62,9 +69,9 @@ public class WdwMenu_Create : MonoBehaviour
 		}
 		else
 		{
-			iptNum_V0.text = "15";
-			iptNum_V1.text = "15";
-			iptNum_V2.text = "5";
+			if (iptNum_V0.text == "") iptNum_V0.text = "15";
+			if (iptNum_V1.text == "") iptNum_V1.text = "15";
+			if (iptNum_V2.text == "") iptNum_V2.text = "5";
 		}
 	}
 	//打开/关闭菜单
@@ -72,6 +79,42 @@ public class WdwMenu_Create : MonoBehaviour
 	{
 		cnvStrange.enabled = !cnvStrange.enabled;
 	}
+	//切换电源模式
+	void OnDropDown_Source(int value)
+	{
+		switch (value)
+		{
+			case 0:
+				willType = ThreeSource.SourceMode.one;
+				iptNum_V0.text = "";
+				iptNum_V0.gameObject.SetActive(true);
+				iptNum_V1.text = "15";
+				iptNum_V1.gameObject.SetActive(false);
+				iptNum_V2.text = "5";
+				iptNum_V2.gameObject.SetActive(false);
+				break;
+			case 1:
+				willType = ThreeSource.SourceMode.twoOfThree;
+				iptNum_V0.text = "";
+				iptNum_V0.gameObject.SetActive(true);
+				iptNum_V1.text = "";
+				iptNum_V1.gameObject.SetActive(true);
+				iptNum_V2.text = "5";
+				iptNum_V2.gameObject.SetActive(false);
+				break;
+			case 2:
+				willType = ThreeSource.SourceMode.three;
+				iptNum_V0.text = "";
+				iptNum_V0.gameObject.SetActive(true);
+				iptNum_V1.text = "";
+				iptNum_V1.gameObject.SetActive(true);
+				iptNum_V2.text = "";
+				iptNum_V2.gameObject.SetActive(true);
+				break;
+		}
+	}
+
+
 
 	//下面全都是按钮
 	void OnButton_RBox()
@@ -128,6 +171,7 @@ public class WdwMenu_Create : MonoBehaviour
 			case 0: nominalR = NominalR.Create(100, "待测"); break;
 			case 1: nominalR = NominalR.Create(1e6, "待测"); break;
 			case 2: nominalR = NominalR.Create(0.1, "待测"); break;
+			case 3: nominalR = NominalR.Create(120, "标称"); break;
 			default: nominalR = null; break;
 		}
 		willBeSet = nominalR.gameObject;
@@ -142,6 +186,23 @@ public class WdwMenu_Create : MonoBehaviour
 			case 0: sampleuA.MyChangeToWhichType(50); break;//50
 			case 1: sampleuA.MyChangeToWhichType(100); break;//100
 			case 2: sampleuA.MyChangeToWhichType(200); break;//200
+		}
+		NormalCreate();
+	}
+	void OnButtonSP_Src()
+	{
+		Source src = EntityCreator.CreateEntity<Source>();
+		willBeSet = src.gameObject;
+		switch (dpdType_Src.value)
+		{
+			case 0:
+				src.E=1.01865;
+				src.strToShow = "标准\n1.01865V";
+				break;//1.01865
+			case 1:
+				src.E = 1.54652;
+				src.strToShow = "待测电源";
+				break;//待测
 		}
 		NormalCreate();
 	}
