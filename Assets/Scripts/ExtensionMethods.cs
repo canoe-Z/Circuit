@@ -7,6 +7,11 @@ public class Float3
 	public float x, y, z;
 	public static Float3 zero = new Float3(0, 0, 0);
 
+	public Vector3 ToVector3()
+	{
+		return new Vector3(x, y, z);
+	}
+
 	public Float3(float x, float y, float z)
 	{
 		this.x = x;
@@ -19,7 +24,12 @@ public class Float3
 public class Float4
 {
 	public float x, y, z, w;
-	public static Float4 zero = new Float4(0, 0, 0, 0);
+	public static Float4 identity = new Float4(0, 0, 0, 1);
+
+	public Quaternion ToQuaternion()
+	{
+		return new Quaternion(x, y, z, w);
+	}
 
 	public Float4(float x, float y, float z, float w)
 	{
@@ -35,7 +45,6 @@ public static class Vector3Extensions
 	public static Float3 ToFloat3(this Vector3 vector)
 	{
 		return new Float3(vector.x, vector.y, vector.z);
-
 	}
 }
 

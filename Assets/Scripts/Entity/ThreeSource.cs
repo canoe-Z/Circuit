@@ -209,7 +209,7 @@ public class SourceData : EntityData
 
 	public override void Load()
 	{
-		ThreeSource threeSource = EntityCreator.CreateThreeSource(sourceMode, posfloat, anglefloat, IDList);
+		ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>(posfloat, anglefloat, IDList, sourceMode: sourceMode);
 
 		for (var i = 0; i < threeSource.SourceNum; i++)
 		{

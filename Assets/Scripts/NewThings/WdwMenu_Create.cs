@@ -58,7 +58,7 @@ public class WdwMenu_Create : MonoBehaviour
 			double.TryParse(iptNum_V1.text, out double num1) &&
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
-			ThreeSource threeSource = EntityCreator.CreateThreeSource(willType);
+			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>(sourceMode: willType);
 			threeSource.EMax[0] = num0;
 			threeSource.EMax[1] = num1;
 			threeSource.EMax[2] = num2;
@@ -196,7 +196,7 @@ public class WdwMenu_Create : MonoBehaviour
 		switch (dpdType_Src.value)
 		{
 			case 0:
-				src.E=1.01865;
+				src.E = 1.01865;
 				src.strToShow = "标准\n1.01865V";
 				break;//1.01865
 			case 1:

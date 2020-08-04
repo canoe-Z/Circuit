@@ -1,45 +1,59 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static ThreeSource;
 
+/// <summary>
+/// 实例化元件，只负责位置和ID的设定
+/// </summary>
 public class EntityCreator : MonoBehaviour
 {
-	public static T CreateEntity<T>() where T : Component
+	/// <summary>
+	/// 创建元件
+	/// </summary>
+	/// <typeparam name="T">类型</typeparam>
+	/// <param name="pos">位置</param>
+	/// <param name="angle">角度</param>
+	/// <param name="IDlist">ID</param>
+	/// <returns></returns>
+	public static T CreateEntity<T>(Float3 pos = null, Float4 angle = null, List<int> IDlist = null, SourceMode sourceMode = SourceMode.three) where T : Component
 	{
-		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
-		return Instantiate(TGameObject, Vector3.zero, Quaternion.identity).GetComponent<T>();
-	}
+		pos = pos ?? Float3.zero;
+		angle = angle ?? Float4.identity;
 
-	public static T CreateEntity<T>(Vector3 pos) where T : Component
-	{
-		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
-		return Instantiate(TGameObject, pos, Quaternion.identity).GetComponent<T>();
-	}
+		// 加载预制体
+		GameObject TGameObject;
 
-	public static T CreateEntity<T>(Float3 pos) where T : Component
-	{
-		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
-		return Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), Quaternion.identity).GetComponent<T>();
-	}
+		// 对于可调电源需要预先设定模式
+		if (typeof(T).ToString() == "ThreeSource")
+		{
+			switch (sourceMode)
+			{
+				case SourceMode.one:
+					TGameObject = (GameObject)Resources.Load("ThreeSource1");
+					break;
+				case SourceMode.three:
+					TGameObject = (GameObject)Resources.Load("ThreeSource");
+					break;
+				case SourceMode.twoOfThree:
+					TGameObject = (GameObject)Resources.Load("ThreeSource2");
+					break;
+				default:
+					TGameObject = null;
+					break;
+			}
+		}
+		else
+		{
+			TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
+		}
+		T t = Instantiate(TGameObject, pos.ToVector3(), angle.ToQuaternion()).GetComponent<T>();
 
-	public static T CreateEntity<T>(Float3 pos, List<int> IDlist) where T : Component
-	{
-		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
-		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), Quaternion.identity).GetComponent<T>();
-
-		SetEntityID(t, IDlist);
+		// 注入ID
+		if (IDlist != null) SetEntityID(t, IDlist);
 		return t;
 	}
 
-	public static T CreateEntity<T>(Float3 pos, Float4 angle, List<int> IDlist) where T : Component
-	{
-		GameObject TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
-		T t = Instantiate(TGameObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<T>();
-
-		SetEntityID(t, IDlist);
-		return t;
-	}
-
-	static void SetEntityID<T>(T t,List<int> IDlist) where T : Component
+	private static void SetEntityID<T>(T t, List<int> IDlist) where T : Component
 	{
 		if (t is EntityBase entity)
 		{
@@ -49,34 +63,5 @@ public class EntityCreator : MonoBehaviour
 				entity.ChildPorts[i].ID = IDlist[i];
 			}
 		}
-	}
-	/// <summary>
-	/// 创建一个电源
-	/// </summary>
-	public static ThreeSource CreateThreeSource(ThreeSource.SourceMode sourceMode, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
-	{
-		GameObject SourceObject;
-		switch (sourceMode)
-		{
-			case ThreeSource.SourceMode.one:
-				SourceObject = (GameObject)Resources.Load("ThreeSource1");
-				break;
-			case ThreeSource.SourceMode.three:
-				SourceObject = (GameObject)Resources.Load("ThreeSource");
-				break;
-			case ThreeSource.SourceMode.twoOfThree:
-				SourceObject = (GameObject)Resources.Load("ThreeSource2");
-				break;
-			default:
-				SourceObject = null;
-				break;
-		}
-		if (pos == null) pos = new Float3(0, 0, 0);
-		if (angle == null) angle = new Float4(0, 0, 0, 1);
-		ThreeSource threeSource = Instantiate(SourceObject, new Vector3(pos.x, pos.y, pos.z), new Quaternion(angle.x, angle.y, angle.z, angle.w)).GetComponent<ThreeSource>();
-
-		if (IDlist != null)
-			SetEntityID(threeSource, IDlist);
-		return threeSource;
 	}
 }
