@@ -16,9 +16,10 @@ public class RBox : EntityBase
 		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
+		// 滑块和旋钮为一类初始化过程
+		// 对于新添加，执行初始化
+		// 对于读档，
 		Knobs.ForEach(x => { x.Devide = 10; x.KnobEvent += UpdateKnob; });
-
-		// 更新初值
 		UpdateKnob();
 	}
 

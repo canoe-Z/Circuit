@@ -24,6 +24,7 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，以防内阻量程改变
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
