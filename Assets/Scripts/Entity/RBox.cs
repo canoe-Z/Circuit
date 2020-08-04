@@ -15,11 +15,13 @@ public class RBox : EntityBase
 	{
 		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
+		Knobs.ForEach(x => x.Devide = 10);
+	}
 
-		// 滑块和旋钮为一类初始化过程
-		// 对于新添加，执行初始化
-		// 对于读档，
-		Knobs.ForEach(x => { x.Devide = 10; x.KnobEvent += UpdateKnob; });
+	void Start()
+	{
+		// 第一次执行UpdateKnob()初始化，此后UpdateKnob()受旋钮事件控制
+		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 	}
 
@@ -89,7 +91,7 @@ public class RboxData : EntityData
 		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
 		for (var i = 0; i < KnobRotIntList.Count; i++)
 		{
-			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件
+			// 此处不再需要更新值，在Start()中统一更新
 			rbox.Knobs[i].SetKnobRot(KnobRotIntList[i]);
 		}
 	}

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ThreeSource : EntityBase, ISource
 {
-	public int SourceNum;                                       // 含有的独立电源个数
+	public int SourceNum { get; set; }                          // 含有的独立电源个数
 	private int knobNum;                                        // 含有的旋钮个数
 	public double[] EMax { get; set; } = new double[3];         // 最大值，对于固定电源则为固定值
 
@@ -60,18 +60,14 @@ public class ThreeSource : EntityBase, ISource
 		Texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
 		if (Texts.Count != SourceNum) Debug.LogError("文本个数不合法");
 
-		// 旋钮初始化
-		Knobs.ForEach(x => { x.AngleRange = 337.5f; x.KnobEvent += UpdateKnob; });
-
-		//以下初始化
-		EMax[0] = 15;
-		EMax[1] = 15;
-		EMax[2] = 5;
+		// 限制旋钮旋转极限角度
+		Knobs.ForEach(x => x.AngleRange = 337.5f);
 	}
 
 	void Start()
 	{
-		// 更新初值写在Start()中，便于实例化之后写入电压
+		// 第一次执行初始化，此后受事件控制
+		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
 		for (var i = 0; i < SourceNum; i++)
@@ -218,7 +214,7 @@ public class SourceData : EntityData
 
 		for (var i = 0; i < knobPosList.Count; i++)
 		{
-			// 此处不再需要更新值，ChangeKnobRot方法会发送更新值的消息给元件
+			// 此处不再需要更新值，在Start()中统一更新
 			threeSource.Knobs[i].SetKnobRot(knobPosList[i]);
 		}
 	}

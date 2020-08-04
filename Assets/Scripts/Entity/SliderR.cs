@@ -12,24 +12,27 @@ public class SliderR : EntityBase
 	public override void EntityAwake()
 	{
 		MySlider = gameObject.GetComponentInChildren<MySlider>();
+
 		// 注意滑变滑块的初始位置在最右边
 		MySlider.SetSliderPos(1);
+	}
+
+	void Start()
+	{
+		// 第一次执行初始化，此后受事件控制
 		MySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
+
+		TL = ChildPorts[0].ID;
+		TR = ChildPorts[1].ID;
+		L = ChildPorts[2].ID;
+		R = ChildPorts[3].ID;
 	}
 
 	void UpdateSlider()
 	{
 		rLeft = rMax * MySlider.SliderPos;
 		rRight = rMax - rLeft;
-	}
-
-	void Start()
-	{
-		TL = ChildPorts[0].ID;
-		TR = ChildPorts[1].ID;
-		L = ChildPorts[2].ID;
-		R = ChildPorts[3].ID;
 	}
 
 	public override void LoadElement()
@@ -77,6 +80,8 @@ public class SliderRData : EntityData
 	{
 		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
 		sliderR.rMax = rMax;
+
+		// 此处不再需要更新值，在Start()中统一更新
 		sliderR.MySlider.SetSliderPos(sliderPos);
 	}
 }

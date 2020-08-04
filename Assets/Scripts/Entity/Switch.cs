@@ -13,8 +13,7 @@ public class Switch : EntityBase
 	{
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SetSliderPos(0.5f);
-		mySlider.SliderEvent += UpdateSlider;
-
+		
 		int childNum = transform.childCount;
 		for (int i = 0; i < childNum; i++)
 		{
@@ -25,24 +24,25 @@ public class Switch : EntityBase
 			}
 		}
 		Debug.LogError("开关儿子没有拉杆");
+	}
 
+	void Start()
+	{
+		mySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
+
+		L = ChildPorts[0].ID;
+		M = ChildPorts[1].ID;
+		R = ChildPorts[2].ID;
 	}
 
 	// 开关的状态有三种
 	void UpdateSlider()
 	{
-		if (mySlider.SliderPos > 0.8f) state = 2; //R
-		else if (mySlider.SliderPos < 0.2f) state = 0; //L
-		else state = 1; //M
+		if (mySlider.SliderPos > 0.8f) state = 2;			//R，右接线柱接通
+		else if (mySlider.SliderPos < 0.2f) state = 0;		//L，左接线柱接通
+		else state = 1;										//M，不接通
 		connector.transform.LookAt(mySlider.gameObject.transform);
-	}
-
-	void Start()
-	{
-		L = ChildPorts[0].ID;
-		M = ChildPorts[1].ID;
-		R = ChildPorts[2].ID;
 	}
 
 	// 开关一定要接中间才能激活
@@ -106,6 +106,8 @@ public class SwitchData : EntityData
 	override public void Load()
 	{
 		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
+
+		// 此处不再需要更新值，在Start()中统一更新
 		_switch.mySlider.SetSliderPos(sliderpos);
 	}
 }

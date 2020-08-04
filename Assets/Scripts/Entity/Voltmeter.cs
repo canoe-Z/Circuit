@@ -17,12 +17,15 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 	public override void EntityAwake()
 	{
 		myPin = GetComponentInChildren<MyPin>();
+
+		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
 		myPin.PinAwake();
 		myPin.SetString("V", 150);
 	}
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 

@@ -14,6 +14,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 

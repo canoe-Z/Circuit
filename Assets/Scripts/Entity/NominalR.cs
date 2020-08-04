@@ -40,8 +40,8 @@ public class NominalR : Resistance
 			resistanceText.text = Prefix + "\n" + str;
 		}
 	}
-	
-	public static NominalR Create(double nominalValue, string prefix)
+
+	public static NominalR Create(double nominalValue, string prefix = "")
 	{
 		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
 		nominalR.NominalValue = nominalValue;

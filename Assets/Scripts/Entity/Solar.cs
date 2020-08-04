@@ -19,8 +19,16 @@ public class Solar : EntityBase, ISource
 	{
 		Slider = transform.FindComponent_DFS<MySlider>("Slider");
 		sloarText = transform.FindComponent_DFS<Text>("Text");
+	}
+
+	void Start()
+	{
+		// 第一次执行初始化，此后受事件控制
 		Slider.SliderEvent += UpdateSlider;
 		UpdateSlider();
+
+		G = ChildPorts[0].ID;
+		V = ChildPorts[1].ID;
 	}
 
 	void UpdateSlider()
@@ -31,12 +39,6 @@ public class Solar : EntityBase, ISource
 
 		//	更新光照强度的数值
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
-	}
-
-	void Start()
-	{
-		G = ChildPorts[0].ID;
-		V = ChildPorts[1].ID;
 	}
 
 	public override void LoadElement()
@@ -116,6 +118,8 @@ public class SolarData : EntityData
 	public override void Load()
 	{
 		Solar solar = EntityCreator.CreateEntity<Solar>(posfloat, anglefloat, IDList);
+
+		// 此处不再需要更新值，在Start()中统一更新
 		solar.Slider.SetSliderPos(sliderPos);
 	}
 }
