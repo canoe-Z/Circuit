@@ -99,6 +99,19 @@ public class Wdw_Menu : MonoBehaviour
 		MoveController.CanOperate = false;//不允许移动视角
 		MoveController.CanTurn = false;
 		mainThings.enabled = true;
+
+		//清空输入框和下拉菜单
+		InputField[] inputFields = createThings.gameObject.GetComponentsInChildren<InputField>();
+		foreach(var ifds in inputFields)
+		{
+			ifds.text = "";
+		}
+		Dropdown[] dropdowns = createThings.gameObject.GetComponentsInChildren<Dropdown>();
+		foreach(var dds in dropdowns)
+		{
+			dds.value = 0;
+		}
+
 	}
 	//关闭菜单
 	void CloseMenu()
