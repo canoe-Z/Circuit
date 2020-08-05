@@ -1,9 +1,10 @@
 ﻿using SpiceSharp.Components;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 {
-	private const double R = 15000;
+	private readonly double R = 15000;
 	private Text digtalDigtalVoltmeter;
 	private int GND, mV, V;
 
@@ -25,12 +26,12 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 
 	public void CalculatorUpdate()
 	{
-		if (ChildPorts[1].Connected == 1)
+		if (ChildPorts[1].IsConnected)
 		{
 			double mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
 			digtalDigtalVoltmeter.text = EntityText.GetText(mV, 999.99, 2);
 		}
-		else if (ChildPorts[2].Connected == 1)
+		else if (ChildPorts[2].IsConnected)
 		{
 			double V = ChildPorts[2].U - ChildPorts[0].U;
 			digtalDigtalVoltmeter.text = EntityText.GetText(V, 999.99, 2);
@@ -41,11 +42,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	public override void LoadElement()
-	{
-		CircuitCalculator.UF.Union(GND, mV);
-		CircuitCalculator.UF.Union(GND, V);
-	}
+	public override void LoadElement() => CircuitCalculator.UF.ListUnion(new List<(int, int)> { (GND, mV), (GND, V) });
 
 	public override void SetElement()
 	{
@@ -54,15 +51,10 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
 
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save()
-	{
-		// 数字电压表属于简单元件（不需特殊值）
-		return new SimpleEntityData<DigtalVoltmeter>(transform.position, transform.rotation, ChildPortID);
-	}
+	// 数字电压表属于简单元件（不需特殊值）
+	public override EntityData Save() => new SimpleEntityData<DigtalVoltmeter>(transform.position, transform.rotation, ChildPortID);
 }
 

@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -7,50 +8,31 @@ using UnityEngine;
 /// </summary>
 public class NominaluA : EntityBase, IAmmeter
 {
-	public double MaxI = 0.05;           //量程，单位安培
-	public bool RealValueSet = false;
-	public double NominalR = 2;          //内阻为标称值
-	public double RealR;
-	private MyPin myPin;				 //指针（显示数字的那种）
+	private int maxuI;              //量程，单位微安
+	private double nominalR;       //内阻为标称值
+	private double realR;
+	private MyPin myPin;           //指针（显示数字的那种）
 	private int GND, V0;
-
-	/// TODO:实际书上给出的量程和内阻并无明显关系
-	/// <summary>
-	/// 变成某一种微安表，单位微安
-	/// </summary>
-	public void MyChangeToWhichType(int uA)
-	{
-		MaxI = (double)uA / 1000000;
-		NominalR = (double)100 / uA;//50微安时为2欧姆，成反比
-		myPin.SetPos(0);
-		myPin.SetString("uA", uA);
-		CircuitCalculator.NeedCalculate = true;
-	}
 
 	public override void EntityAwake()
 	{
 		// 得到引用并且初始化
 		myPin = GetComponentInChildren<MyPin>();
 		myPin.PinAwake();
-		MyChangeToWhichType(50);
+		myPin.SetPos(0);
+		myPin.SetString("uA", maxuI);
 	}
 
 	void Start()
 	{
-		
-		if (!RealValueSet)
-		{
-			RealR = Nominal.GetRealValue(NominalR);
-			RealValueSet = true;
-		}
-
 		GND = ChildPorts[0].ID;
 		V0 = ChildPorts[1].ID;
 	}
 
 	void Update()
 	{
-		myPin.SetPos((float)(ChildPorts[1].I / MaxI));
+		double maxI = maxuI / 1e6;
+		myPin.SetPos((float)(ChildPorts[1].I / maxI));
 	}
 
 	public override void LoadElement()
@@ -61,23 +43,30 @@ public class NominaluA : EntityBase, IAmmeter
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), GND.ToString(), V0.ToString(), NominalR));
-
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), GND.ToString(), V0.ToString(), nominalR));
+		CircuitCalculator.SpicePorts.Concat(ChildPorts);
 	}
 
 	// 计算自身电流
 	public void CalculateCurrent()
 	{
-		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / NominalR;
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / nominalR;
+	}
+
+	public static GameObject Create(int maxuI, double nominalR,
+	double? realR = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
+	{
+		NominaluA nominaluA = BaseCreate<NominaluA>(pos, angle, IDlist);
+		nominaluA.nominalR = nominalR;
+		nominaluA.maxuI = maxuI;
+		if (realR != null) nominaluA.realR = Nominal.GetRealValue(realR.Value);
+		return nominaluA.gameObject;
 	}
 
 	public override EntityData Save()
 	{
 		///TODO：微安表并非简单元件
-		return new NominaluAData(NominalR, RealR, MaxI, transform.position, transform.rotation, ChildPortID);
+		return new NominaluAData(maxuI, nominalR, realR, transform.position, transform.rotation, ChildPortID);
 	}
 }
 
@@ -86,22 +75,14 @@ public class NominaluAData : EntityData
 {
 	private readonly double nominalR;
 	private readonly double realR;
-	private readonly double maxI;
+	private readonly int maxuI;
 
-	public NominaluAData(double nominalR, double realR, double maxI, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	public NominaluAData(int maxuI, double nominalR, double realR, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		this.nominalR = nominalR;
 		this.realR = realR;
-		this.maxI = maxI;
+		this.maxuI = maxuI;
 	}
 
-	override public void Load()
-	{
-		NominaluA nominaluA = EntityCreator.CreateEntity<NominaluA>(posfloat, anglefloat, IDList);
-		// 读档要沿用原本生成的真实值
-		nominaluA.RealValueSet = true;
-		nominaluA.MaxI = maxI;
-		nominaluA.NominalR = nominalR;
-		nominaluA.RealR = realR;
-	}
+	override public void Load() => NominaluA.Create(maxuI, nominalR, realR, pos, angle, IDList);
 }

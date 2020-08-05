@@ -1,15 +1,14 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 
 public class Voltmeter : EntityBase, ICalculatorUpdate
 {
-	private const double MaxU0 = 1.5;
-	private const double MaxU1 = 5;
-	private const double MaxU2 = 15;
+	private readonly double MaxU0 = 1.5;
+	private readonly double MaxU1 = 5;
+	private readonly double MaxU2 = 15;
 
-	private const double R0 = 1500;
-	private const double R1 = 5000;
-	private const double R2 = 15000;
+	private readonly double R0 = 1500;
+	private readonly double R1 = 5000;
+	private readonly double R2 = 15000;
 
 	MyPin myPin;
 	private int GND, V0, V1, V2;
@@ -68,14 +67,8 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
 
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save()
-	{
-		return new SimpleEntityData<Voltmeter>(transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new SimpleEntityData<Voltmeter>(transform.position, transform.rotation, ChildPortID);
 }

@@ -7,71 +7,67 @@ using UnityEngine;
 /// </summary>
 public class NominalR : Resistance
 {
-	public bool RealValueSet = false;//置为1时，在生成时不随机变化
-	public double NominalValue;//假的值
-	public string Prefix;//显示在数字前面的字符串
+	private double nominalValue;	//标称值
+	private string prefix;			//前缀
 
 	void Start()
 	{
-		if (!RealValueSet)
-		{
-			Value = Nominal.GetRealValue(NominalValue);
-			RealValueSet = true;
-		}
-
 		string str;
 
-		// 根据阻值确定显示方式
-		if (NominalValue >= 1e6 || Math.Abs(NominalValue - 1e6) < 0.001)
+		// 根据标称阻值确定显示方式
+		if (nominalValue >= 1e6 || Math.Abs(nominalValue - 1e6) < 0.001)
 		{
-			str = (NominalValue / 1e6).ToString() + "MΩ";
+			str = (nominalValue / 1e6).ToString() + "MΩ";
 		}
-		else if (NominalValue >= 1e3 || Math.Abs(NominalValue - 1e3) < 0.001)
+		else if (nominalValue >= 1e3 || Math.Abs(nominalValue - 1e3) < 0.001)
 		{
-			str = (NominalValue / 1e3).ToString() + "kΩ";
+			str = (nominalValue / 1e3).ToString() + "kΩ";
 		}
 		else
 		{
-			str = NominalValue.ToString() + "Ω";
+			str = nominalValue.ToString() + "Ω";
 		}
 
-		if (resistanceText)
+		resistanceText.text = prefix + "\n" + str;
+	}
+
+	public static GameObject Create(double nominalValue, string prefix, 
+		double? realValue = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
+	{
+		NominalR nominalR = BaseCreate<NominalR>(pos, angle, IDlist);
+
+		nominalR.nominalValue = nominalValue;
+		nominalR.prefix = prefix;
+
+		// 创建时生成新随机值，读档时写入旧值
+		if (realValue != null)
 		{
-			resistanceText.text = Prefix + "\n" + str;
+			nominalR.rValue = realValue.Value;
 		}
+		else
+		{
+			nominalR.rValue = Nominal.GetRealValue(nominalValue);
+		}
+
+		return nominalR.gameObject;
 	}
 
-	public static NominalR Create(double nominalValue, string prefix = "")
-	{
-		NominalR nominalR = EntityCreator.CreateEntity<NominalR>();
-		nominalR.NominalValue = nominalValue;
-		nominalR.Prefix = prefix;
-		return nominalR;
-	}
-
-	public override EntityData Save()
-	{
-		return new NominalRData(NominalValue, Value, transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new NominalRData(nominalValue, rValue, prefix, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
 public class NominalRData : ResistanceData
 {
 	private readonly double nominalValue;
-	private readonly double realValue;
-	public NominalRData(double nominalValue, double realValue, Vector3 pos, Quaternion angle, List<int> id) : base(realValue, pos, angle, id)
+	private readonly double? realValue;
+	private readonly string prefix;
+
+	public NominalRData(double nominalValue, double? realValue, string prefix, Vector3 pos, Quaternion angle, List<int> id) : base(realValue, pos, angle, id)
 	{
 		this.nominalValue = nominalValue;
 		this.realValue = realValue;
+		this.prefix = prefix;
 	}
 
-	override public void Load()
-	{
-		NominalR resistance = EntityCreator.CreateEntity<NominalR>(posfloat, anglefloat, IDList);
-		// 读档要沿用原本生成的真实值
-		resistance.RealValueSet = true;
-		resistance.NominalValue = nominalValue;
-		resistance.Value = realValue;
-	}
+	public override void Load() => NominalR.Create(nominalValue, prefix, realValue, pos, angle, IDList);
 }

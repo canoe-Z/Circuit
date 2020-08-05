@@ -61,8 +61,8 @@ abstract public class EntityBase : MonoBehaviour
 		return circuitPorts;
 	}
 
-	//物体控制
-	public void OnMouseDrag()
+	// 元件移动
+	void OnMouseDrag()
 	{
 		if (!MoveController.CanOperate) return;
 		if (HitCheck("Table", out Vector3 hitPos))
@@ -152,36 +152,59 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	public virtual bool IsConnected()
-	{
-		foreach (CircuitPort port in ChildPorts)
-		{
-			if (port.Connected == 1)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	public virtual bool IsConnected() => ChildPorts.Select(x => x.IsConnected).Contains(true);
 
 	public abstract void EntityAwake();
 	public abstract void LoadElement();
 	public abstract void SetElement();
 	public abstract EntityData Save();
+
+	protected static T BaseCreate<T>(Float3 pos, Float4 angle, List<int> IDlist) where T : Component
+	{
+		pos = pos ?? Float3.zero;
+		angle = angle ?? Float4.identity;
+
+		// 加载预制体
+		GameObject TGameObject;
+		TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
+
+		T t = Instantiate(TGameObject, pos.ToVector3(), angle.ToQuaternion()).GetComponent<T>();
+
+		// 注入ID
+		if (IDlist != null) SetEntityID(t, IDlist);
+		return t;
+	}
+
+	protected static void SetEntityID<T>(T t, List<int> IDlist) where T : Component
+	{
+		if (t is EntityBase entity)
+		{
+			for (var i = 0; i < entity.PortNum; i++)
+			{
+				entity.ChildPortID = IDlist;
+				entity.ChildPorts[i].ID = IDlist[i];
+			}
+		}
+	}
+
+	public static GameObject SimpleCreate<T>(Float3 pos = null, Float4 angle = null, List<int> IDlist = null) where T : Component
+	{
+		return BaseCreate<T>(pos, angle, IDlist).gameObject;
+	}
 }
 
 [System.Serializable]
 abstract public class EntityData
 {
-	public readonly List<int> IDList;
-	public readonly Float3 posfloat;
-	public readonly Float4 anglefloat;
+	protected readonly List<int> IDList;
+	protected readonly Float3 pos;
+	protected readonly Float4 angle;
 
-	public EntityData(Vector3 pos, Quaternion angle, List<int> IDList)
+	protected EntityData(Vector3 pos, Quaternion angle, List<int> IDList)
 	{
 		this.IDList = IDList;
-		posfloat = pos.ToFloat3();
-		anglefloat = angle.ToFloat4();
+		this.pos = pos.ToFloat3();
+		this.angle = angle.ToFloat4();
 	}
 
 	public abstract void Load();
@@ -192,10 +215,7 @@ public class SimpleEntityData<T> : EntityData where T : Component
 {
 	public SimpleEntityData(Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList) { }
 
-	public override void Load()
-	{
-		EntityCreator.CreateEntity<T>(posfloat, anglefloat, IDList);
-	}
+	public override void Load() => EntityBase.SimpleCreate<T>(pos, angle, IDList);
 }
 
 public interface ISource

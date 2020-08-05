@@ -33,11 +33,11 @@ public class WdwMenu_Create : MonoBehaviour
 	public Dropdown dpdSourceType;
 	void Start()
 	{
-		btn_RBox.onClick.AddListener(OnButton_RBox);
-		btn_Solar.onClick.AddListener(OnButton_Solar);
-		btn_Switch.onClick.AddListener(OnButton_Switch);
-		btn_DigV.onClick.AddListener(OnButton_DigV);
-		btn_DigA.onClick.AddListener(OnButton_DigA);
+		btn_RBox.onClick.AddListener(OnButton_Simple<RBox>);
+		btn_Solar.onClick.AddListener(OnButton_Simple<Solar>);
+		btn_Switch.onClick.AddListener(OnButton_Simple<Switch>);
+		btn_DigV.onClick.AddListener(OnButton_Simple<DigtalVoltmeter>);
+		btn_DigA.onClick.AddListener(OnButton_Simple<DigtalAmmeter>);
 		btn_SliderR.onClick.AddListener(OnButtonSP_SliderR);
 		btn_R.onClick.AddListener(OnButtonSP_R);
 		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
@@ -58,13 +58,8 @@ public class WdwMenu_Create : MonoBehaviour
 			double.TryParse(iptNum_V1.text, out double num1) &&
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
-			ThreeSource threeSource = EntityCreator.CreateEntity<ThreeSource>(sourceMode: willType);
-			threeSource.EMax[0] = num0;
-			threeSource.EMax[1] = num1;
-			threeSource.EMax[2] = num2;
-			willBeSet = threeSource.gameObject;//复制物体
+			willBeSet = ThreeSource.Create(willType, new List<double> { num0, num1, num2 }).gameObject;
 			NormalCreate();
-
 			cnvStrange.enabled = false;//创建之后关闭选项卡
 		}
 		else
@@ -114,32 +109,10 @@ public class WdwMenu_Create : MonoBehaviour
 		}
 	}
 
-
-
 	//下面全都是按钮
-	void OnButton_RBox()
+	void OnButton_Simple<T>() where T : EntityBase
 	{
-		willBeSet = EntityCreator.CreateEntity<RBox>().gameObject;//复制物体
-		NormalCreate();
-	}
-	void OnButton_Switch()
-	{
-		willBeSet = EntityCreator.CreateEntity<Switch>().gameObject;//复制物体//复制物体
-		NormalCreate();
-	}
-	void OnButton_DigV()
-	{
-		willBeSet = EntityCreator.CreateEntity<DigtalVoltmeter>().gameObject;//复制物体//复制物体
-		NormalCreate();
-	}
-	void OnButton_DigA()
-	{
-		willBeSet = EntityCreator.CreateEntity<DigtalAmmeter>().gameObject;//复制物体//复制物体
-		NormalCreate();
-	}
-	void OnButton_Solar()
-	{
-		willBeSet = EntityCreator.CreateEntity<Solar>().gameObject;//复制物体//复制物体
+		willBeSet = EntityBase.SimpleCreate<T>().gameObject;//复制物体
 		NormalCreate();
 	}
 
@@ -152,45 +125,43 @@ public class WdwMenu_Create : MonoBehaviour
 			NormalCreate();
 		}
 	}
+
 	void OnButtonSP_R()
 	{
 		if (ParseRNum(iptNum_R.text, out double num))
 		{
 			iptNum_R.text = "";
-			Resistance r = EntityCreator.CreateEntity<Resistance>();
-			willBeSet = r.gameObject;
-			r.Value = num;
+			willBeSet = Resistance.Create(num).gameObject;
 			NormalCreate();
 		}
 	}
+
 	void OnButtonSP_NominalR()
 	{
-		NominalR nominalR;
 		switch (dpdType_NominalR.value)
 		{
-			case 0: nominalR = NominalR.Create(100, "待测"); break;
-			case 1: nominalR = NominalR.Create(1e6, "待测"); break;
-			case 2: nominalR = NominalR.Create(0.1, "待测"); break;
-			case 3: nominalR = NominalR.Create(120, "标称"); break;
-			default: nominalR = null; break;
+			case 0: willBeSet = NominalR.Create(100, "待测"); break;
+			case 1: willBeSet = NominalR.Create(1e6, "待测"); break;
+			case 2: willBeSet = NominalR.Create(0.1, "待测"); break;
+			case 3: willBeSet = NominalR.Create(120, "标称"); break;
 		}
-		willBeSet = nominalR.gameObject;
 		NormalCreate();
 	}
+
 	void OnButtonSP_uA()
 	{
-		NominaluA sampleuA = EntityCreator.CreateEntity<NominaluA>();
-		willBeSet = sampleuA.gameObject;
 		switch (dpdType_uA.value)
 		{
-			case 0: sampleuA.MyChangeToWhichType(50); break;//50
-			case 1: sampleuA.MyChangeToWhichType(100); break;//100
-			case 2: sampleuA.MyChangeToWhichType(200); break;//200
+			case 0: willBeSet = NominaluA.Create(50, 2); break;//50
+			case 1: willBeSet = NominaluA.Create(100, 1); break;//100
+			case 2: willBeSet = NominaluA.Create(200, 0.5); break;//200
 		}
 		NormalCreate();
 	}
 	void OnButtonSP_Src()
 	{
+		//TODO
+		/*
 		Source src = EntityCreator.CreateEntity<Source>();
 		willBeSet = src.gameObject;
 		switch (dpdType_Src.value)
@@ -205,11 +176,9 @@ public class WdwMenu_Create : MonoBehaviour
 				break;//待测
 		}
 		NormalCreate();
+		*/
 	}
 
-
-
-	//
 	void Update()
 	{
 		if (willBeSet)//如果带了一个物体

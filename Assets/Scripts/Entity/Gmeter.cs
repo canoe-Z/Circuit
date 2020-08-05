@@ -7,7 +7,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 	private double R = 10;
 	private GameObject pin = null;
 	private float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
-	public MySlider mySlider = null;
+	private MySlider mySlider = null;
 	private int LeftPortID, RightPortID;
 
 	public override void EntityAwake()
@@ -76,8 +76,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
 
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
 	public void CalculateCurrent()

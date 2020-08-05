@@ -5,7 +5,7 @@ using UnityEngine;
 public class Switch : EntityBase
 {
 	private int state = 1;
-	[ReadOnly] public MySlider mySlider = null;
+	private MySlider mySlider = null;
 	private GameObject connector = null;
 	private int L, M, R;
 
@@ -49,17 +49,7 @@ public class Switch : EntityBase
 	// 否则当左/右端口单独被激活时，其余的那个端口就会和中间建立实质的连接，而这可能是不接地的，会导致仿真错误
 	// 注意：将某个接线柱作为“中转”而不实际使用这个元件，也会导致元件被实际激活，如果元件不能保证内部连接的完备性，在极端状况下就可能出错
 	// 完备性：指元件内部任意两个端口永远连通，开关不满足完备性，所以需要特殊处理
-	public override bool IsConnected()
-	{
-		if (ChildPorts[1].Connected == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	public override bool IsConnected() => ChildPorts[1].IsConnected;
 
 	public override void LoadElement()
 	{
@@ -88,26 +78,24 @@ public class Switch : EntityBase
 		}
 	}
 
-	public override EntityData Save()
+	public static GameObject Create(float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
-		return new SwitchData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
+		Switch _switch = BaseCreate<Switch>(pos, angle, IDList);
+		if (sliderPos != null) _switch.mySlider.SetSliderPos(sliderPos.Value);
+		return _switch.gameObject;
 	}
+
+	public override EntityData Save() => new SwitchData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
 public class SwitchData : EntityData
 {
-	private readonly float sliderpos;
-	public SwitchData(float sliderpos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	private readonly float sliderPos;
+	public SwitchData(float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		this.sliderpos = sliderpos;
+		this.sliderPos = sliderPos;
 	}
 
-	override public void Load()
-	{
-		Switch _switch = EntityCreator.CreateEntity<Switch>(posfloat, anglefloat, IDList);
-
-		// 此处不再需要更新值，在Start()中统一更新
-		_switch.mySlider.SetSliderPos(sliderpos);
-	}
+	public override void Load() => Switch.Create(sliderPos, pos, angle, IDList);
 }

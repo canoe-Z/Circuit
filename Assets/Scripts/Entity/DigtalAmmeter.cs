@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
-	private const double R = 0.001;
+	private readonly double R = 0.001;
 	private Text digtalAmmeterText;
 	private int GND, mA, A;
 
@@ -29,12 +29,12 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
 
-		if (ChildPorts[1].Connected == 1)
+		if (ChildPorts[1].IsConnected)
 		{
 			double mA = ChildPorts[1].I * 1000;
 			digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
 		}
-		else if (ChildPorts[2].Connected == 1)
+		else if (ChildPorts[2].IsConnected)
 		{
 			double A = ChildPorts[2].I;
 			digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
@@ -57,14 +57,10 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
+
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save()
-	{
-		// 数字电流表属于简单元件
-		return new SimpleEntityData<DigtalAmmeter>(transform.position, transform.rotation, ChildPortID);
-	}
+	// 数字电流表属于简单元件
+	public override EntityData Save() => new SimpleEntityData<DigtalAmmeter>(transform.position, transform.rotation, ChildPortID);
 }

@@ -8,8 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public class Source : EntityBase, ISource
 {
-	public double E = 1.5f;
-	public double R = 100;
+	private double E = 1.5f;
+	private double R = 100;
 	public string strToShow = "忘记设置了";
 
 	private int G, V;
@@ -56,6 +56,13 @@ public class Source : EntityBase, ISource
 		}
 	}
 
+	public static Source Create(double E, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	{
+		Source source = BaseCreate<Source>(pos, angle, IDList);
+		source.E = E;
+		return source;
+	}
+
 	public override EntityData Save()
 	{
 		return new SourceStandData(E, transform.position, transform.rotation, ChildPortID);
@@ -66,14 +73,10 @@ public class Source : EntityBase, ISource
 public class SourceStandData : EntityData
 {
 	private readonly double value;
-	public SourceStandData(double value, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	public SourceStandData(double value, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		this.value = value;
 	}
 
-	public override void Load()
-	{
-		Source source = EntityCreator.CreateEntity<Source>(posfloat, anglefloat, IDList);
-		source.E = value;
-	}
+	public override void Load() => Source.Create(value, pos, angle, IDList);
 }

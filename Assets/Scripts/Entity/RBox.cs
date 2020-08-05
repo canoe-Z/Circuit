@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class RBox : EntityBase
 {
-	private const int knobNum = 6;      // 含有的旋钮个数
-	private double R_99999;
-	private double R_99;
-	private double R_09;
+	private const int knobNum = 6;              // 含有的旋钮个数
+	private double R_99999, R_99, R_09;         // 不同挡位下的内阻
+	private int G, R999, R99, R9;
+
 	public List<MyKnob> Knobs { get; set; }
 
 	public override void EntityAwake()
@@ -20,9 +20,14 @@ public class RBox : EntityBase
 
 	void Start()
 	{
-		// 第一次执行UpdateKnob()初始化，此后UpdateKnob()受旋钮事件控制
+		// 第一次执行初始化，此后受事件控制
 		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
+
+		G = ChildPorts[0].ID;
+		R9 = ChildPorts[1].ID;
+		R99 = ChildPorts[2].ID;
+		R999 = ChildPorts[3].ID;
 	}
 
 	void UpdateKnob()
@@ -40,24 +45,14 @@ public class RBox : EntityBase
 
 	public override void LoadElement()
 	{
-		int G, R999, R99, R9;
-		G = ChildPorts[0].ID;
-		R9 = ChildPorts[1].ID;
-		R99 = ChildPorts[2].ID;
-		R999 = ChildPorts[3].ID;
-
 		CircuitCalculator.UF.Union(G, R9);
 		CircuitCalculator.UF.Union(G, R99);
 		CircuitCalculator.UF.Union(G, R999);
 	}
+
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		int G, R999, R99, R9;
-		G = ChildPorts[0].ID;
-		R9 = ChildPorts[1].ID;
-		R99 = ChildPorts[2].ID;
-		R999 = ChildPorts[3].ID;
 
 		// 指定三个电阻的ID
 		string[] ResistorID = new string[3];
@@ -71,28 +66,31 @@ public class RBox : EntityBase
 		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
 	}
 
-	public override EntityData Save()
+	// 电阻箱添加时按简单元件处理
+	public static GameObject Create(List<int> knobRotIntList = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
-		return new RboxData(Knobs, transform.position, transform.rotation, ChildPortID);
+		RBox rBox = BaseCreate<RBox>(pos, angle, IDList);
+		if (knobRotIntList != null)
+		{
+			for (var i = 0; i < knobRotIntList.Count; i++)
+			{
+				rBox.Knobs[i].SetKnobRot(knobRotIntList[i]);
+			}
+		}
+		return rBox.gameObject;
 	}
+
+	public override EntityData Save() => new RboxData(Knobs, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
 public class RboxData : EntityData
 {
 	private readonly List<int> KnobRotIntList = new List<int>();
-	public RboxData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	public RboxData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		knobs.ForEach(x => KnobRotIntList.Add(x.KnobPos_int));
 	}
 
-	override public void Load()
-	{
-		RBox rbox = EntityCreator.CreateEntity<RBox>(posfloat, anglefloat, IDList);
-		for (var i = 0; i < KnobRotIntList.Count; i++)
-		{
-			// 此处不再需要更新值，在Start()中统一更新
-			rbox.Knobs[i].SetKnobRot(KnobRotIntList[i]);
-		}
-	}
+	override public void Load() => RBox.Create(KnobRotIntList, pos, angle, IDList);
 }

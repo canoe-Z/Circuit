@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class SliderR : EntityBase
 {
-	public double rMax;
+	private double rMax;
 	private double rLeft, rRight;
-	public MySlider MySlider { get; set; }
+	private MySlider mySlider;
 	private int TL, TR, L, R;
 
 	public override void EntityAwake()
 	{
-		MySlider = gameObject.GetComponentInChildren<MySlider>();
+		mySlider = gameObject.GetComponentInChildren<MySlider>();
 
 		// 注意滑变滑块的初始位置在最右边
-		MySlider.SetSliderPos(1);
+		mySlider.SetSliderPos(1);
 	}
 
 	void Start()
 	{
 		// 第一次执行初始化，此后受事件控制
-		MySlider.SliderEvent += UpdateSlider;
+		mySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 
 		TL = ChildPorts[0].ID;
@@ -31,7 +31,7 @@ public class SliderR : EntityBase
 
 	void UpdateSlider()
 	{
-		rLeft = rMax * MySlider.SliderPos;
+		rLeft = rMax * mySlider.SliderPos;
 		rRight = rMax - rLeft;
 	}
 
@@ -53,14 +53,15 @@ public class SliderR : EntityBase
 
 	public override EntityData Save()
 	{
-		return new SliderRData(rMax, MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
+		return new SliderRData(rMax, mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 	}
 
-	public static SliderR Create(double rMax)
+	public static GameObject Create(double rMax, float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
-		SliderR sliderR = EntityCreator.CreateEntity<SliderR>();
+		SliderR sliderR = BaseCreate<SliderR>(pos, angle, IDList);
 		sliderR.rMax = rMax;
-		return sliderR;
+		if (sliderPos != null) sliderR.mySlider.SetSliderPos(sliderPos.Value);
+		return sliderR.gameObject;
 	}
 }
 
@@ -70,18 +71,11 @@ public class SliderRData : EntityData
 	private readonly double rMax;
 	private readonly float sliderPos;
 
-	public SliderRData(double rMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	public SliderRData(double rMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		this.rMax = rMax;
 		this.sliderPos = sliderPos;
 	}
 
-	override public void Load()
-	{
-		SliderR sliderR = EntityCreator.CreateEntity<SliderR>(posfloat, anglefloat, IDList);
-		sliderR.rMax = rMax;
-
-		// 此处不再需要更新值，在Start()中统一更新
-		sliderR.MySlider.SetSliderPos(sliderPos);
-	}
+	override public void Load() => SliderR.Create(rMax, sliderPos, pos, angle, IDList);
 }

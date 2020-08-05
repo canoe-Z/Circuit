@@ -2,16 +2,16 @@
 
 public class Ammeter : EntityBase, ICalculatorUpdate
 {
-	private const double MaxI0 = 0.05;
-	private const double MaxI1 = 0.1;
-	private const double MaxI2 = 0.5;
+	private readonly double MaxI0 = 0.05;
+	private readonly double MaxI1 = 0.1;
+	private readonly double MaxI2 = 0.5;
 
-	private const double R0 = 2;
-	private const double R1 = 1;
-	private const double R2 = 0.2;
+	private readonly double R0 = 2;
+	private readonly double R1 = 1;
+	private readonly double R2 = 0.2;
 
 	private int GND, V0, V1, V2;
-	private readonly string[] ResistorID = new string[3];
+	private readonly string[] ResistanceString = new string[3];
 
 	private MyPin myPin;
 
@@ -57,28 +57,23 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(GND, V1);
 		CircuitCalculator.UF.Union(GND, V2);
 	}
+
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		for (int i = 0; i < 3; i++)
+		for (var i = 0; i < 3; i++)
 		{
-			ResistorID[i] = string.Concat(EntityID, "_", i);
+			ResistanceString[i] = string.Concat(EntityID, "_", i);
 		}
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[0], GND.ToString(), V0.ToString(), R0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[1], GND.ToString(), V1.ToString(), R1));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[2], GND.ToString(), V2.ToString(), R2));
 
-		CircuitCalculator.SpicePorts.Add(ChildPorts[0]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[1]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[2]);
-		CircuitCalculator.SpicePorts.Add(ChildPorts[3]);
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save()
-	{
-		// 电流表属于简单元件
-		return new SimpleEntityData<Ammeter>(transform.position, transform.rotation, ChildPortID);
-	}
+	// 电流表属于简单元件
+	public override EntityData Save() => new SimpleEntityData<Ammeter>(transform.position, transform.rotation, ChildPortID);
 }

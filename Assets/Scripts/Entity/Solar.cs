@@ -12,19 +12,19 @@ public class Solar : EntityBase, ISource
 	private double Isc;
 	private int G, V;
 
-	public MySlider Slider { get; set; }
+	public MySlider MySlider { get; set; }
 	private Text sloarText;
 
 	public override void EntityAwake()
 	{
-		Slider = transform.FindComponent_DFS<MySlider>("Slider");
+		MySlider = transform.FindComponent_DFS<MySlider>("Slider");
 		sloarText = transform.FindComponent_DFS<Text>("Text");
 	}
 
 	void Start()
 	{
 		// 第一次执行初始化，此后受事件控制
-		Slider.SliderEvent += UpdateSlider;
+		MySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 
 		G = ChildPorts[0].ID;
@@ -33,7 +33,7 @@ public class Solar : EntityBase, ISource
 
 	void UpdateSlider()
 	{
-		float fm = 6 - 5 * Slider.SliderPos;    // 会被平方的分母
+		float fm = 6 - 5 * MySlider.SliderPos;    // 会被平方的分母
 		float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
 		Isc = lightStrength * _IscMax;
 
@@ -99,10 +99,14 @@ public class Solar : EntityBase, ISource
 		}
 	}
 
-	public override EntityData Save()
+	public static GameObject Create(float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
 	{
-		return new SolarData(Slider.SliderPos, transform.position, transform.rotation, ChildPortID);
+		Solar solar = BaseCreate<Solar>(pos, angle, IDlist);
+		if (sliderPos != null) solar.MySlider.SetSliderPos(sliderPos.Value);
+		return solar.gameObject;
 	}
+
+	public override EntityData Save() => new SolarData(MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
@@ -110,17 +114,10 @@ public class SolarData : EntityData
 {
 	private readonly float sliderPos;
 
-	public SolarData(float sliderPos, Vector3 pos, Quaternion angle, List<int> id) : base(pos, angle, id)
+	public SolarData(float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		this.sliderPos = sliderPos;
 	}
 
-	public override void Load()
-	{
-		Solar solar = EntityCreator.CreateEntity<Solar>(posfloat, anglefloat, IDList);
-
-		// 此处不再需要更新值，在Start()中统一更新
-		solar.Slider.SetSliderPos(sliderPos);
-	}
+	public override void Load() => Solar.Create(sliderPos, pos, angle, IDList);
 }
-

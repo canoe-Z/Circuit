@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class CircuitPort : MonoBehaviour, IUniqueIdentity
 {
-	[ReadOnly] public int Connected = 0;                    //是否连接（含义丰富）
+	[ReadOnly] public bool IsConnected = false;                    //是否连接（含义丰富）
 	[ReadOnly] public double U = 0;                         //电压探针（需要时更新）
 	[ReadOnly] public double I = 0;                         //流出接线柱的电流（需要时更新）
 

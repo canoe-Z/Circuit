@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Resistance : EntityBase
 {
-	[ReadOnly] public double Value = 120;
+	protected double rValue = 120;
 	protected Text resistanceText;
 
 	public override void EntityAwake()
@@ -20,17 +20,17 @@ public class Resistance : EntityBase
 		string str;
 
 		// 根据阻值确定显示方式
-		if (Value >= 1e6)
+		if (rValue >= 1e6)
 		{
-			str = (Value / 1e6).ToString() + "MΩ";
+			str = (rValue / 1e6).ToString() + "MΩ";
 		}
-		else if (Value >= 1e3)
+		else if (rValue >= 1e3)
 		{
-			str = (Value / 1e3).ToString() + "kΩ";
+			str = (rValue / 1e3).ToString() + "kΩ";
 		}
 		else
 		{
-			str = Value.ToString() + "Ω";
+			str = rValue.ToString() + "Ω";
 		}
 
 		if (str.Length >= maxSize)
@@ -54,27 +54,28 @@ public class Resistance : EntityBase
 		int LeftPortID = ChildPorts[0].ID;
 		int RightPortID = ChildPorts[1].ID;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), Value));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), rValue));
 	}
 
-	public override EntityData Save()
+	public static GameObject Create(double? rValue, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
-		return new ResistanceData(Value, transform.position, transform.rotation, ChildPortID);
+		Resistance resistance = BaseCreate<Resistance>(pos, angle, IDList);
+		if (rValue != null) resistance.rValue = rValue.Value;
+		return resistance.gameObject;
 	}
+
+	public override EntityData Save() => new ResistanceData(rValue, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
 public class ResistanceData : EntityData
 {
-	private readonly double value;
-	public ResistanceData(double value, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	private readonly double? rValue;
+
+	public ResistanceData(double? rValue, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		this.value = value;
+		this.rValue = rValue;
 	}
 
-	override public void Load()
-	{
-		Resistance resistance = EntityCreator.CreateEntity<Resistance>(posfloat, anglefloat, IDList);
-		resistance.Value = value;
-	}
+	override public void Load() => Resistance.Create(rValue, pos, angle, IDList);
 }

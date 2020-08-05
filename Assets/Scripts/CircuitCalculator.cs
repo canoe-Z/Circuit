@@ -91,7 +91,7 @@ public class CircuitCalculator : MonoBehaviour
 		// 首先需要清空所有端口的连接状态
 		foreach (CircuitPort port in Ports)
 		{
-			port.Connected = 0;
+			port.IsConnected = false;
 		}
 
 		// 冗余检测：通过并查集判断，对于有效的导线，更新端口连接状态，对于冗余导线则要禁用
@@ -109,8 +109,8 @@ public class CircuitCalculator : MonoBehaviour
 				UF.Union(line.StartID, line.EndID);
 
 				// 对于第一次检测有效的导线，激活有连接的元件
-				line.StartPort.Connected = 1;
-				line.EndPort.Connected = 1;
+				line.StartPort.IsConnected = true;
+				line.EndPort.IsConnected = true;
 			}
 		}
 
@@ -131,7 +131,7 @@ public class CircuitCalculator : MonoBehaviour
 		// 注意：此前的有效导线未经接地检测，不经此步骤，会导致孤立元件内部连接出不接地的导线，导致仿真错误
 		foreach (CircuitPort port in Ports)
 		{
-			port.Connected = 0;
+			port.IsConnected = false;
 			port.U = 0;
 			port.I = 0;
 		}
@@ -145,8 +145,8 @@ public class CircuitCalculator : MonoBehaviour
 				if (UF.Connected(line.StartID, 0))
 				{
 					// 对于两次检测均有效的导线，激活有连接的元件
-					line.StartPort.Connected = 1;
-					line.EndPort.Connected = 1;
+					line.StartPort.IsConnected = true;
+					line.EndPort.IsConnected = true;
 
 					EnabledLines.Add(line);
 					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID.ToString(), line.EndID.ToString(), 0));
@@ -274,6 +274,7 @@ public class CircuitCalculator : MonoBehaviour
 			}
 			else
 			{
+				Debug.LogError(SpiceEntities.Count.ToString());
 				Debug.LogError("仿真错误！");
 			}
 		}
@@ -360,4 +361,6 @@ public class WeightedQuickUnionUF
 			sz[pRoot] = sz[qRoot];
 		}
 	}
+
+	public void ListUnion(List<(int, int)> list) => list.ForEach(x => Union(x.Item1, x.Item2));
 } // public class WeightedQuickUnionUF
