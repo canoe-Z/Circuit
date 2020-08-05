@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Components;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -44,7 +43,7 @@ public class NominaluA : EntityBase, IAmmeter
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), GND.ToString(), V0.ToString(), nominalR));
-		CircuitCalculator.SpicePorts.Concat(ChildPorts);
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
 	// 计算自身电流
