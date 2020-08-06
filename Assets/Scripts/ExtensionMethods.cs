@@ -200,7 +200,7 @@ public static partial class TransformExtensions
 	}
 
 	/// <summary>
-	/// 根据名字在子对象中查找组件
+	/// 查找指定名称子对象的指定脚本，不能查找孙节点
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="trans"></param>
@@ -318,7 +318,7 @@ public static partial class TransformExtensions
 	}
 
 	/// <summary>
-	/// 可以递归地查找所有子节点的某个T类型的组件
+	/// 递归查找所有子节点的某个T类型的组件
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	/// <param name="transform"></param>
@@ -341,23 +341,6 @@ public static partial class TransformExtensions
 			}
 		}
 		return list;
-	}
-
-	public static T GetComponentsInParent<T>(this Transform transform) where T : Component
-	{
-		if (transform == null)
-		{
-			return null;
-		}
-		if (transform.GetComponent<T>() != null)
-		{
-			return transform.GetComponent<T>();
-		}
-		if (transform.parent != null)
-		{
-			return transform.parent.GetComponentInParent<T>();
-		}
-		return null;
 	}
 
 	public static Transform GetChildByName(this Transform transform, string name, bool includeInactive = true)

@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 滑动变阻器
+/// </summary>
 public class SliderR : EntityBase
 {
-	private double rMax;
-	private double rLeft, rRight;
+	private double RMax;
+	private double RLeft, RRight;
 	private MySlider mySlider;
 	private int PortID_TL, PortID_TR, PortID_L, PortID_R;
 
 	public override void EntityAwake()
 	{
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
-
 		// 注意滑变滑块的初始位置在最右边
 		mySlider.SetSliderPos(1);
 	}
@@ -31,8 +33,8 @@ public class SliderR : EntityBase
 
 	void UpdateSlider()
 	{
-		rLeft = rMax * mySlider.SliderPos;
-		rRight = rMax - rLeft;
+		RLeft = RMax * mySlider.SliderPos;
+		RRight = RMax - RLeft;
 	}
 
 	public override void LoadElement()
@@ -42,24 +44,19 @@ public class SliderR : EntityBase
 		CircuitCalculator.UF.Union(PortID_TL, PortID_TR);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), PortID_TL.ToString(), PortID_L.ToString(), rLeft));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), PortID_TL.ToString(), PortID_R.ToString(), rRight));
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), PortID_TL.ToString(), PortID_TR.ToString(), 0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_L"), PortID_TL.ToString(), PortID_L.ToString(), RLeft));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R"), PortID_TL.ToString(), PortID_R.ToString(), RRight));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID, "_T"), PortID_TL.ToString(), PortID_TR.ToString(), 0));
 	}
 
-	public override EntityData Save()
-	{
-		return new SliderRData(rMax, mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new SliderRData(RMax, mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 
 	public static GameObject Create(double rMax, float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
 		SliderR sliderR = BaseCreate<SliderR>(pos, angle, IDList);
-		sliderR.rMax = rMax;
+		sliderR.RMax = rMax;
 		if (sliderPos != null) sliderR.mySlider.SetSliderPos(sliderPos.Value);
 		return sliderR.gameObject;
 	}
@@ -68,14 +65,14 @@ public class SliderR : EntityBase
 [System.Serializable]
 public class SliderRData : EntityData
 {
-	private readonly double rMax;
+	private readonly double RMax;
 	private readonly float sliderPos;
 
-	public SliderRData(double rMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	public SliderRData(double RMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		this.rMax = rMax;
+		this.RMax = RMax;
 		this.sliderPos = sliderPos;
 	}
 
-	override public void Load() => SliderR.Create(rMax, sliderPos, pos, angle, IDList);
+	public override void Load() => SliderR.Create(RMax, sliderPos, pos, angle, IDList);
 }

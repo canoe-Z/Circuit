@@ -2,28 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 单刀双掷开关
+/// </summary>
 public class Switch : EntityBase
 {
 	private int state = 1;
-	private MySlider mySlider = null;
-	private GameObject connector = null;
+	private MySlider mySlider;
+	private GameObject connector;
 	private int PortID_L, PortID_M, PortID_R;
 
 	public override void EntityAwake()
 	{
 		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.SetSliderPos(0.5f);
-		
-		int childNum = transform.childCount;
-		for (int i = 0; i < childNum; i++)
-		{
-			if (transform.GetChild(i).name == "Connector")
-			{
-				connector = transform.GetChild(i).gameObject;
-				return;
-			}
-		}
-		Debug.LogError("开关儿子没有拉杆");
+		connector = transform.GetChildByName("Connector").gameObject;
 	}
 
 	void Start()
@@ -39,9 +32,9 @@ public class Switch : EntityBase
 	// 开关的状态有三种
 	void UpdateSlider()
 	{
-		if (mySlider.SliderPos > 0.8f) state = 2;			//R，右接线柱接通
-		else if (mySlider.SliderPos < 0.2f) state = 0;		//L，左接线柱接通
-		else state = 1;										//M，不接通
+		if (mySlider.SliderPos > 0.8f) state = 2;           //R，右接线柱接通
+		else if (mySlider.SliderPos < 0.2f) state = 0;      //L，左接线柱接通
+		else state = 1;                                     //M，不接通
 		connector.transform.LookAt(mySlider.gameObject.transform);
 	}
 
@@ -64,17 +57,15 @@ public class Switch : EntityBase
 		}
 	}
 
-	public override void SetElement()//得到约束方程
+	public override void SetElement(int entityID)//得到约束方程
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
 		if (state == 2)
 		{
-			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", PortID_R), PortID_R.ToString(), PortID_M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID.ToString(), "_", PortID_R), PortID_R.ToString(), PortID_M.ToString(), 0));
 		}
 		else if (state == 0)
 		{
-			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", PortID_L), PortID_L.ToString(), PortID_M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID.ToString(), "_", PortID_L), PortID_L.ToString(), PortID_M.ToString(), 0));
 		}
 	}
 

@@ -6,25 +6,27 @@ using SpiceSharp.Components;
 using SpiceSharp.Circuits;
 using UnityEngine.UI;
 
+/// <summary>
+/// 太阳能电池
+/// </summary>
 public class Solar : EntityBase, ISource
 {
-	private const double _IscMax = 0.06;
+	private const double IscMax = 0.06; // 最大短路电流
 	private double Isc;
-	private int PortID_G, PortID_V;
-
-	public MySlider MySlider { get; set; }
+	private MySlider mySlider;
 	private Text sloarText;
+	private int PortID_G, PortID_V;
 
 	public override void EntityAwake()
 	{
-		MySlider = transform.FindComponent_DFS<MySlider>("Slider");
+		mySlider = transform.FindComponent_DFS<MySlider>("Slider");
 		sloarText = transform.FindComponent_DFS<Text>("Text");
 	}
 
 	void Start()
 	{
 		// 第一次执行初始化，此后受事件控制
-		MySlider.SliderEvent += UpdateSlider;
+		mySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 
 		PortID_G = ChildPorts[0].ID;
@@ -33,11 +35,11 @@ public class Solar : EntityBase, ISource
 
 	void UpdateSlider()
 	{
-		float fm = 6 - 5 * MySlider.SliderPos;    // 会被平方的分母
+		float fm = 6 - 5 * mySlider.SliderPos;  // 会被平方的分母
 		float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
-		Isc = lightStrength * _IscMax;
+		Isc = lightStrength * IscMax;
 
-		//	更新光照强度的数值
+		// 更新光照强度的数值
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
@@ -73,18 +75,17 @@ public class Solar : EntityBase, ISource
 		return dm;
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
 		PortID_G = ChildPorts[0].ID;
 		PortID_V = ChildPorts[1].ID;
 
 		Debug.Log("短路电流为" + Isc);
-		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(EntityID, "_S"), "S+", PortID_G.ToString(), Isc));
-		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(EntityID, "_D"), PortID_G.ToString(), "S+", "1N4007"));
+		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(entityID, "_S"), "S+", PortID_G.ToString(), Isc));
+		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"), PortID_G.ToString(), "S+", "1N4007"));
 		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R1"), "S+", PortID_G.ToString(), 10000));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R2"), PortID_V.ToString(), "S+", 0.5));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R1"), "S+", PortID_G.ToString(), 10000));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R2"), PortID_V.ToString(), "S+", 0.5));
 	}
 
 	public void GroundCheck()
@@ -102,11 +103,11 @@ public class Solar : EntityBase, ISource
 	public static GameObject Create(float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
 	{
 		Solar solar = BaseCreate<Solar>(pos, angle, IDlist);
-		if (sliderPos != null) solar.MySlider.SetSliderPos(sliderPos.Value);
+		if (sliderPos != null) solar.mySlider.SetSliderPos(sliderPos.Value);
 		return solar.gameObject;
 	}
 
-	public override EntityData Save() => new SolarData(MySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SolarData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]

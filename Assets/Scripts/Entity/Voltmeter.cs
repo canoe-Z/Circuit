@@ -1,5 +1,8 @@
 ﻿using SpiceSharp.Components;
 
+/// <summary>
+/// 三量程电压表
+/// </summary>
 public class Voltmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double MaxU0 = 1.5;
@@ -19,6 +22,7 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 
 		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
 		myPin.PinAwake();
+		myPin.CloseText();
 		myPin.SetString("V", 150);
 	}
 
@@ -53,19 +57,11 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(PortID_GND, PortID_V2);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		string[] ResistorID = new string[3];
-		for (int i = 0; i < 3; i++)
-		{
-			ResistorID[i] = string.Concat(EntityID, "_", i);
-		}
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], PortID_GND.ToString(), PortID_V0.ToString(), R0));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], PortID_GND.ToString(), PortID_V1.ToString(), R1));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], PortID_GND.ToString(), PortID_V2.ToString(), R2));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 0), PortID_GND.ToString(), PortID_V0.ToString(), R0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 1), PortID_GND.ToString(), PortID_V1.ToString(), R1));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 2), PortID_GND.ToString(), PortID_V2.ToString(), R2));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

@@ -5,11 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ThreeSource;
 
+/// <summary>
+/// 三模三路电源
+/// </summary>
 public class ThreeSource : EntityBase, ISource
 {
-	private int sourceNum;										// 含有的独立电源个数
+	private int sourceNum;                                      // 含有的独立电源个数
 	private int knobNum;                                        // 含有的旋钮个数
-	private double[] _EMax = new double[3];						// 最大值，对于固定电源则为固定值
+	private readonly double[] EMax = new double[3];             // 最大值，对于固定电源则为固定值
 	private readonly int[] G = new int[3];                      // 存放独立电源负极的端口ID
 	private readonly int[] V = new int[3];                      // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[3];                // 电压数组
@@ -83,12 +86,12 @@ public class ThreeSource : EntityBase, ISource
 		{
 			if (i < knobNum)
 			{
-				E[i] = knobs[i].KnobPos * _EMax[i];
+				E[i] = knobs[i].KnobPos * EMax[i];
 				texts[i].text = E[i].ToString("00.00");
 			}
 			else
 			{
-				E[i] = _EMax[i];
+				E[i] = EMax[i];
 				texts[i].text = ((int)E[i]).ToString();
 			}
 		}
@@ -110,14 +113,11 @@ public class ThreeSource : EntityBase, ISource
 	/// <summary>
 	/// 预连接连接状态为真的独立电源
 	/// </summary>
-	override public void LoadElement()
+	public override void LoadElement()
 	{
 		for (int j = 0; j < sourceNum; j++)
 		{
-			if (IsConnected(j))
-			{
-				LoadElement(j);
-			}
+			if (IsConnected(j)) LoadElement(j);
 		}
 	}
 
@@ -125,11 +125,10 @@ public class ThreeSource : EntityBase, ISource
 	/// 加载单个独立电源
 	/// </summary>
 	/// <param name="n"></param>
-	public void SetElement(int n)
+	public void SetElement(int n, int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_", n), V[n].ToString(), string.Concat(EntityID, "_rPort", n), E[n]));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r", n), string.Concat(EntityID, "_rPort", n), G[n].ToString(), R[n]));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID, "_", n), V[n].ToString(), string.Concat(entityID, "_rPort", n), E[n]));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID.ToString(), "_r", n), string.Concat(entityID, "_rPort", n), G[n].ToString(), R[n]));
 
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n + 1]);
@@ -138,14 +137,11 @@ public class ThreeSource : EntityBase, ISource
 	/// <summary>
 	/// 加载连接状态为真的独立电源
 	/// </summary>
-	override public void SetElement()
+	public override void SetElement(int entityID)
 	{
 		for (int j = 0; j < sourceNum; j++)
 		{
-			if (IsConnected(j))
-			{
-				SetElement(j);
-			}
+			if (IsConnected(j)) SetElement(j, entityID);
 		}
 	}
 
@@ -191,7 +187,7 @@ public class ThreeSource : EntityBase, ISource
 		{
 			for (var i = 0; i < threeSource.sourceNum; i++)
 			{
-				threeSource._EMax[i] = _EMaxList[i];
+				threeSource.EMax[i] = _EMaxList[i];
 			}
 		}
 
@@ -207,7 +203,7 @@ public class ThreeSource : EntityBase, ISource
 		return threeSource.gameObject;
 	}
 
-	public override EntityData Save() => new SourceData(sourceMode, _EMax, knobs, transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SourceData(sourceMode, EMax, knobs, transform.position, transform.rotation, ChildPortID);
 }
 
 /// <summary>
@@ -218,14 +214,14 @@ public class SourceData : EntityData
 {
 	private readonly SourceMode sourceMode;
 	private readonly List<float> knobPosList = new List<float>();
-	private readonly List<double> _EMaxList;
+	private readonly List<double> EMaxList;
 
-	public SourceData(SourceMode sourceMode, double[] _EMax, List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	public SourceData(SourceMode sourceMode, double[] EMax, List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
 		this.sourceMode = sourceMode;
-		_EMaxList = _EMax.ToList();
+		EMaxList = EMax.ToList();
 		knobs.ForEach(x => knobPosList.Add(x.KnobPos));
 	}
 
-	public override void Load() => Create(sourceMode, _EMaxList, knobPosList, pos, angle, IDList);
+	public override void Load() => Create(sourceMode, EMaxList, knobPosList, pos, angle, IDList);
 }

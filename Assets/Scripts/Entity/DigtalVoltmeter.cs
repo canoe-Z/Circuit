@@ -44,12 +44,10 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 
 	public override void LoadElement() => CircuitCalculator.UF.ListUnion(new List<(int, int)> { (PortID_GND, PortID_mV), (PortID_GND, PortID_V) });
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), PortID_GND.ToString(), PortID_mV.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), PortID_GND.ToString(), PortID_V.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mV"), PortID_GND.ToString(), PortID_mV.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_V"), PortID_GND.ToString(), PortID_V.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

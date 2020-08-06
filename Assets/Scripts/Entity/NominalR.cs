@@ -7,14 +7,14 @@ using UnityEngine;
 /// </summary>
 public class NominalR : Resistance
 {
-	private double nominalValue;	//标称值
-	private string prefix;			//前缀
+	private double nominalValue;    //标称值
+	private string prefix;          //前缀
 
 	void Start()
 	{
 		string str;
 
-		// 根据标称阻值确定显示方式
+		// 根据标称值确定阻值的显示方式
 		if (nominalValue >= 1e6 || Math.Abs(nominalValue - 1e6) < 0.001)
 		{
 			str = (nominalValue / 1e6).ToString() + "MΩ";
@@ -28,10 +28,14 @@ public class NominalR : Resistance
 			str = nominalValue.ToString() + "Ω";
 		}
 
+		// 最终显示结果为前缀+阻值
 		resistanceText.text = prefix + "\n" + str;
+
+		PortID_Left = ChildPorts[0].ID;
+		PortID_Right = ChildPorts[1].ID;
 	}
 
-	public static GameObject Create(double nominalValue, string prefix, 
+	public static GameObject Create(double nominalValue, string prefix,
 		double? realValue = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
 	{
 		NominalR nominalR = BaseCreate<NominalR>(pos, angle, IDlist);
@@ -42,17 +46,17 @@ public class NominalR : Resistance
 		// 创建时生成新随机值，读档时写入旧值
 		if (realValue != null)
 		{
-			nominalR.rValue = realValue.Value;
+			nominalR.RValue = realValue.Value;
 		}
 		else
 		{
-			nominalR.rValue = Nominal.GetRealValue(nominalValue);
+			nominalR.RValue = Nominal.GetRealValue(nominalValue);
 		}
 
 		return nominalR.gameObject;
 	}
 
-	public override EntityData Save() => new NominalRData(nominalValue, rValue, prefix, transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new NominalRData(nominalValue, RValue, prefix, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]

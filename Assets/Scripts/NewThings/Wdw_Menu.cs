@@ -102,12 +102,12 @@ public class Wdw_Menu : MonoBehaviour
 
 		//清空输入框和下拉菜单
 		InputField[] inputFields = createThings.gameObject.GetComponentsInChildren<InputField>();
-		foreach(var ifds in inputFields)
+		foreach (var ifds in inputFields)
 		{
 			ifds.text = "";
 		}
 		Dropdown[] dropdowns = createThings.gameObject.GetComponentsInChildren<Dropdown>();
-		foreach(var dds in dropdowns)
+		foreach (var dds in dropdowns)
 		{
 			dds.value = 0;
 		}

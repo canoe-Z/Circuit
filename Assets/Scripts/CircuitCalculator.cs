@@ -68,7 +68,6 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	public static void ClearAll()
 	{
-		EntityNum = 0;
 		GNDLines.Clear();
 		GNDLine.GlobalGNDLineID = 0;
 		SpicePorts.Clear();
@@ -119,10 +118,7 @@ public class CircuitCalculator : MonoBehaviour
 		LoadElement(Entities);
 
 		// 对有连接的电源实行接地检测，只涉及并查集操作
-		foreach (ISource source in Sources)
-		{
-			source.GroundCheck();
-		}
+		Sources.ForEach(x => x.GroundCheck());
 
 		// 连接接地线，只涉及并查集操作
 		ConnectGND(GNDLines);
@@ -167,10 +163,7 @@ public class CircuitCalculator : MonoBehaviour
 		SpiceSharpCalculate();
 
 		// 仿真通过后恢复通过并查集禁用的导线
-		foreach (CircuitLine disabledLine in DisabledLines)
-		{
-			disabledLine.IsActived = true;
-		}
+		DisabledLines.ForEach(x => x.IsActived = true);
 	} // public static void CalculateAll()
 
 	/// <summary>
@@ -178,7 +171,6 @@ public class CircuitCalculator : MonoBehaviour
 	/// </summary>
 	private static void CalculateByConnection()
 	{
-		EntityNum = 0;
 		GNDLine.GlobalGNDLineID = 0;
 		SpicePorts.Clear();
 		SpiceEntities.Clear();
@@ -222,7 +214,7 @@ public class CircuitCalculator : MonoBehaviour
 		{
 			if (entity.IsConnected())
 			{
-				entity.SetElement();
+				entity.SetElement(EntityNum);
 				EntityNum++;
 			}
 		}
@@ -337,10 +329,7 @@ public class WeightedQuickUnionUF
 		return i;
 	}
 
-	public bool Connected(int p, int q)
-	{
-		return Find(p) == Find(q);
-	}
+	public bool Connected(int p, int q) => Find(p) == Find(q);
 
 	public void Union(int p, int q)
 	{

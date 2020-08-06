@@ -1,12 +1,15 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine.UI;
 
+/// <summary>
+/// 数字电流表
+/// </summary>
 public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double R = 0.001;
 	private Text digtalAmmeterText;
 	private int PortID_GND, PortID_mA, PortID_A;
-	
+
 	public override void EntityAwake()
 	{
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
@@ -51,12 +54,10 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(PortID_GND, PortID_A);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

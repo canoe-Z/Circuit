@@ -1,6 +1,9 @@
 ﻿using SpiceSharp.Components;
 using UnityEngine;
 
+/// <summary>
+/// 电流计
+/// </summary>
 public class Gmeter : EntityBase, ICalculatorUpdate
 {
 	private double MaxI = 0.001;
@@ -70,11 +73,9 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

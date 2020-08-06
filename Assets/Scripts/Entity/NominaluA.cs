@@ -7,10 +7,10 @@ using UnityEngine;
 /// </summary>
 public class NominaluA : EntityBase, ICalculatorUpdate
 {
-	private int maxuI;             //量程，单位微安
-	private double nominalR;       //内阻为标称值
-	private double realR;
-	private MyPin myPin;           //指针（显示数字的那种）
+	private int maxuI;                  //量程，单位微安
+	private double nominalR;            //内阻标称值
+	private double realR;               //内阻真实值
+	private MyPin myPin;                //指针（显示数字的那种）
 	private int PortID_GND, PortID_V0;
 
 	public override void EntityAwake()
@@ -46,10 +46,9 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(PortID_GND, PortID_V0);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), nominalR));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), nominalR));
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
@@ -57,17 +56,15 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 	double? realR = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
 	{
 		NominaluA nominaluA = BaseCreate<NominaluA>(pos, angle, IDlist);
+
 		nominaluA.nominalR = nominalR;
 		nominaluA.maxuI = maxuI;
 		if (realR != null) nominaluA.realR = Nominal.GetRealValue(realR.Value);
+
 		return nominaluA.gameObject;
 	}
 
-	public override EntityData Save()
-	{
-		///TODO：微安表并非简单元件
-		return new NominaluAData(maxuI, nominalR, realR, transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new NominaluAData(maxuI, nominalR, realR, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
@@ -84,5 +81,5 @@ public class NominaluAData : EntityData
 		this.maxuI = maxuI;
 	}
 
-	override public void Load() => NominaluA.Create(maxuI, nominalR, realR, pos, angle, IDList);
+	public override void Load() => NominaluA.Create(maxuI, nominalR, realR, pos, angle, IDList);
 }

@@ -20,6 +20,7 @@ public class NominalSource : Source
 		double? realE = null, double? realR = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
 		NominalSource nominalSource = BaseCreate<NominalSource>(pos, angle, IDList);
+
 		nominalSource.nominalE = nominalE;
 		nominalSource.nominalR = nominalR;
 		nominalSource.strShow = strShow;

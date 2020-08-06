@@ -156,7 +156,7 @@ abstract public class EntityBase : MonoBehaviour
 
 	public abstract void EntityAwake();
 	public abstract void LoadElement();
-	public abstract void SetElement();
+	public abstract void SetElement(int entityID);
 	public abstract EntityData Save();
 
 	protected static T BaseCreate<T>(Float3 pos, Float4 angle, List<int> IDlist, string entityName = null) where T : Component

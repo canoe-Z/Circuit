@@ -3,25 +3,27 @@ using System.Linq;
 using SpiceSharp.Components;
 using UnityEngine;
 
+/// <summary>
+/// 电阻箱
+/// </summary>
 public class RBox : EntityBase
 {
-	private const int knobNum = 6;              // 含有的旋钮个数
-	private double R_99999, R_99, R_9;         // 不同挡位下的内阻
+	private readonly int knobNum = 6;                           // 含有的旋钮个数
+	private double R_99999, R_99, R_9;                          // 不同挡位下的内阻
 	private int PortID_G, PortID_R999, PortID_R99, PortID_R9;
-
-	public List<MyKnob> Knobs { get; set; }
+	private List<MyKnob> knobs;
 
 	public override void EntityAwake()
 	{
-		Knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
-		if (Knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-		Knobs.ForEach(x => x.Devide = 10);
+		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
+		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
+		knobs.ForEach(x => x.Devide = 10);
 	}
 
 	void Start()
 	{
 		// 第一次执行初始化，此后受事件控制
-		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
+		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
 		PortID_G = ChildPorts[0].ID;
@@ -30,13 +32,13 @@ public class RBox : EntityBase
 		PortID_R999 = ChildPorts[3].ID;
 	}
 
-	void UpdateKnob()
+	private void UpdateKnob()
 	{
 		int total = 0;
 		for (int i = 0; i < knobNum; i++)
 		{
 			total *= 10;
-			total += Knobs[i].KnobPos_int;
+			total += knobs[i].KnobPos_int;
 		}
 		R_99999 = total / (float)10;
 		R_99 = total % 100 / (float)10;
@@ -50,37 +52,30 @@ public class RBox : EntityBase
 		CircuitCalculator.UF.Union(PortID_G, PortID_R999);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		// 指定三个电阻的ID
-		string[] ResistorID = new string[3];
-		for (int i = 0; i < 3; i++)
-		{
-			ResistorID[i] = string.Concat(EntityID, "_", i);
-		}
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], PortID_G.ToString(), PortID_R999.ToString(), R_99999));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], PortID_G.ToString(), PortID_R99.ToString(), R_99));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], PortID_G.ToString(), PortID_R9.ToString(), R_9));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 0), PortID_G.ToString(), PortID_R999.ToString(), R_99999));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 1), PortID_G.ToString(), PortID_R99.ToString(), R_99));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 2), PortID_G.ToString(), PortID_R9.ToString(), R_9));
 	}
 
 	// 电阻箱添加时按简单元件处理
 	public static GameObject Create(List<int> knobRotIntList = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
 		RBox rBox = BaseCreate<RBox>(pos, angle, IDList);
+
 		if (knobRotIntList != null)
 		{
 			for (var i = 0; i < knobRotIntList.Count; i++)
 			{
-				rBox.Knobs[i].SetKnobRot(knobRotIntList[i]);
+				rBox.knobs[i].SetKnobRot(knobRotIntList[i]);
 			}
 		}
+
 		return rBox.gameObject;
 	}
 
-	public override EntityData Save() => new RboxData(Knobs, transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new RboxData(knobs, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
@@ -92,5 +87,5 @@ public class RboxData : EntityData
 		knobs.ForEach(x => KnobRotIntList.Add(x.KnobPos_int));
 	}
 
-	override public void Load() => RBox.Create(KnobRotIntList, pos, angle, IDList);
+	public override void Load() => RBox.Create(KnobRotIntList, pos, angle, IDList);
 }

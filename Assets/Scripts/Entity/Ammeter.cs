@@ -1,5 +1,9 @@
-﻿using SpiceSharp.Components;
+﻿using Boo.Lang;
+using SpiceSharp.Components;
 
+/// <summary>
+/// 三量程电流表
+/// </summary>
 public class Ammeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double MaxI0 = 0.05;
@@ -11,8 +15,6 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 	private readonly double R2 = 0.2;
 
 	private int PortID_GND, PortID_V0, PortID_V1, PortID_V2;
-	private readonly string[] ResistanceString = new string[3];
-
 	private MyPin myPin;
 
 	public override void EntityAwake()
@@ -20,7 +22,9 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		myPin = GetComponentInChildren<MyPin>();
 
 		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
+		// 必须手动初始化Pin来保证Pin的初始化顺序
 		myPin.PinAwake();
+		myPin.CloseText();
 		myPin.SetString("A", 150);
 	}
 
@@ -58,18 +62,11 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.UF.Union(PortID_GND, PortID_V2);
 	}
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		for (var i = 0; i < 3; i++)
-		{
-			ResistanceString[i] = string.Concat(EntityID, "_", i);
-		}
-
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[0], PortID_GND.ToString(), PortID_V0.ToString(), R0));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[1], PortID_GND.ToString(), PortID_V1.ToString(), R1));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistanceString[2], PortID_GND.ToString(), PortID_V2.ToString(), R2));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 0), PortID_GND.ToString(), PortID_V0.ToString(), R0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 1), PortID_GND.ToString(), PortID_V1.ToString(), R1));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 2), PortID_GND.ToString(), PortID_V2.ToString(), R2));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

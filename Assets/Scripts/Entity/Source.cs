@@ -27,12 +27,10 @@ public class Source : EntityBase, ISource
 
 	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_G, PortID_V);
 
-	public override void SetElement()
+	public override void SetElement(int entityID)
 	{
-		int EntityID = CircuitCalculator.EntityNum;
-
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(EntityID.ToString(), PortID_V.ToString(), string.Concat(EntityID.ToString(), "_rPort"), E));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r"), string.Concat(EntityID.ToString(), "_rPort"), PortID_G.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(entityID.ToString(), PortID_V.ToString(), string.Concat(entityID.ToString(), "_rPort"), E));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID.ToString(), "_r"), string.Concat(entityID.ToString(), "_rPort"), PortID_G.ToString(), R));
 		//默认不接地，连接到电路中使用，如果电路中没有形成对0的通路，将其接地
 	}
 
