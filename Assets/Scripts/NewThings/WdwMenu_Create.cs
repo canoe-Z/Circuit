@@ -160,23 +160,16 @@ public class WdwMenu_Create : MonoBehaviour
 	}
 	void OnButtonSP_Src()
 	{
-		//TODO
-		/*
-		Source src = EntityCreator.CreateEntity<Source>();
-		willBeSet = src.gameObject;
 		switch (dpdType_Src.value)
 		{
 			case 0:
-				src.E = 1.01865;
-				src.strToShow = "标准\n1.01865V";
+				willBeSet = Source.Create(1.01865, 100);
 				break;//1.01865
 			case 1:
-				src.E = 1.54652;
-				src.strToShow = "待测电源";
+				willBeSet = NominalSource.Create(1.54652, 100, "待测电源");
 				break;//待测
 		}
 		NormalCreate();
-		*/
 	}
 
 	void Update()

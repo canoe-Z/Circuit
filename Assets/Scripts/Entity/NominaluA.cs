@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class NominaluA : EntityBase, IAmmeter
 {
-	private int maxuI;              //量程，单位微安
+	private int maxuI;             //量程，单位微安
 	private double nominalR;       //内阻为标称值
 	private double realR;
 	private MyPin myPin;           //指针（显示数字的那种）

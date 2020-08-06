@@ -8,39 +8,31 @@ using UnityEngine.UI;
 /// </summary>
 public class Source : EntityBase, ISource
 {
-	private double E = 1.5f;
-	private double R = 100;
-	public string strToShow = "忘记设置了";
+	protected double E, R;
+	protected int PortID_G, PortID_V;
 
-	private int G, V;
-
-	Text text;
+	protected Text sourceText;
 	public override void EntityAwake()
 	{
-		text = GetComponentInChildren<Text>();
-	}
-	void Update()
-	{
-		text.text = strToShow;
+		sourceText = GetComponentInChildren<Text>();
 	}
 
 	void Start()
 	{
-		G = ChildPorts[0].ID;
-		V = ChildPorts[1].ID;
+		sourceText.text = E.ToString() + "V";
+
+		PortID_G = ChildPorts[0].ID;
+		PortID_V = ChildPorts[1].ID;
 	}
 
-	public override void LoadElement()
-	{
-		CircuitCalculator.UF.Union(G, V);
-	}
+	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_G, PortID_V);
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(EntityID.ToString(), V.ToString(), string.Concat(EntityID.ToString(), "_rPort"), E));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r"), string.Concat(EntityID.ToString(), "_rPort"), G.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(EntityID.ToString(), PortID_V.ToString(), string.Concat(EntityID.ToString(), "_rPort"), E));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID.ToString(), "_r"), string.Concat(EntityID.ToString(), "_rPort"), PortID_G.ToString(), R));
 		//默认不接地，连接到电路中使用，如果电路中没有形成对0的通路，将其接地
 	}
 
@@ -48,35 +40,34 @@ public class Source : EntityBase, ISource
 	{
 		if (IsConnected())
 		{
-			if (!CircuitCalculator.UF.Connected(G, 0))
+			if (!CircuitCalculator.UF.Connected(PortID_G, 0))
 			{
-				CircuitCalculator.UF.Union(G, 0);
-				CircuitCalculator.GNDLines.Add(new GNDLine(G));
+				CircuitCalculator.UF.Union(PortID_G, 0);
+				CircuitCalculator.GNDLines.Add(new GNDLine(PortID_G));
 			}
 		}
 	}
 
-	public static Source Create(double E, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public static GameObject Create(double E, double R, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
 		Source source = BaseCreate<Source>(pos, angle, IDList);
 		source.E = E;
-		return source;
+		source.R = R;
+		return source.gameObject;
 	}
 
-	public override EntityData Save()
-	{
-		return new SourceStandData(E, transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new SourceStandData(E, R, transform.position, transform.rotation, ChildPortID);
 }
 
 [System.Serializable]
 public class SourceStandData : EntityData
 {
-	private readonly double value;
-	public SourceStandData(double value, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	private readonly double E, R;
+	public SourceStandData(double E, double R, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
 	{
-		this.value = value;
+		this.E = E;
+		this.R = R;
 	}
 
-	public override void Load() => Source.Create(value, pos, angle, IDList);
+	public override void Load() => Source.Create(E, R, pos, angle, IDList);
 }
