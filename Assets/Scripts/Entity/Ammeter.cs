@@ -1,5 +1,4 @@
-﻿using Boo.Lang;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 
 /// <summary>
 /// 三量程电流表

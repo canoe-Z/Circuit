@@ -70,11 +70,13 @@ public class CircuitCalculator : MonoBehaviour
 	{
 		GNDLines.Clear();
 		GNDLine.GlobalGNDLineID = 0;
+
 		SpicePorts.Clear();
 		SpiceEntities.Clear();
 		EnabledLines.Clear();
 		DisabledLines.Clear();
 		Sources.Clear();
+
 		UF.Clear(10000);
 		LineUF.Clear(10000);
 	}
@@ -133,8 +135,7 @@ public class CircuitCalculator : MonoBehaviour
 		}
 
 		// 接地检测：检查对地连通性，对于正确连通的导线则连接，更新连接状态，对于不通的导线需要禁用
-		int i = 0;
-		foreach (CircuitLine line in Lines)
+		foreach (var (line, index) in Lines.WithIndex())
 		{
 			if (line.IsActived)
 			{
@@ -145,7 +146,7 @@ public class CircuitCalculator : MonoBehaviour
 					line.EndPort.IsConnected = true;
 
 					EnabledLines.Add(line);
-					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", i), line.StartID.ToString(), line.EndID.ToString(), 0));
+					SpiceEntities.Add(new VoltageSource(string.Concat("Line", "_", index), line.StartID.ToString(), line.EndID.ToString(), 0));
 					EntityNum++;
 				}
 				else
@@ -154,13 +155,12 @@ public class CircuitCalculator : MonoBehaviour
 					line.IsActived = false;
 					DisabledLines.Add(line);
 				}
-				i++;
 			}
 		}
 
 		// 在SpiceSharp中加载元件
 		SetElement(Entities);
-		SpiceSharpCalculate();
+		SpiceSharpCalculate(SpiceEntities);
 
 		// 仿真通过后恢复通过并查集禁用的导线
 		DisabledLines.ForEach(x => x.IsActived = true);
@@ -174,6 +174,7 @@ public class CircuitCalculator : MonoBehaviour
 		GNDLine.GlobalGNDLineID = 0;
 		SpicePorts.Clear();
 		SpiceEntities.Clear();
+
 		ConnectGND(GNDLines);
 
 		// 直接连接正常导线
@@ -183,7 +184,7 @@ public class CircuitCalculator : MonoBehaviour
 			EntityNum++;
 		}
 		SetElement(Entities);
-		SpiceSharpCalculate();
+		SpiceSharpCalculate(SpiceEntities);
 	}
 
 	/// <summary>
@@ -231,14 +232,13 @@ public class CircuitCalculator : MonoBehaviour
 		}
 	}
 
-
 	/// <summary>
 	/// 调用SpiceSharp进行计算
 	/// </summary>
-	private static void SpiceSharpCalculate()
+	private static void SpiceSharpCalculate(List<Entity> spiceEntities)
 	{
 		// 创建电路
-		var ckt = new Circuit(SpiceEntities);
+		var ckt = new Circuit(spiceEntities);
 
 		// 直流工作点分析并写入端口电压值
 		var op = new OP("op");
@@ -260,13 +260,13 @@ public class CircuitCalculator : MonoBehaviour
 		catch
 		{
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
-			if (SpiceEntities.Count == 0)
+			if (spiceEntities.Count == 0)
 			{
 				Debug.Log("尚未连接电路");
 			}
 			else
 			{
-				Debug.LogError(SpiceEntities.Count.ToString());
+				Debug.LogError(spiceEntities.Count.ToString());
 				Debug.LogError("仿真错误！");
 			}
 		}
