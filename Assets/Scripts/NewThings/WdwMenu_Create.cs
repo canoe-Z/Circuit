@@ -11,6 +11,8 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Switch;
 	public Button btn_DigV;
 	public Button btn_DigA;
+	public Button btn_Vmeter;
+	public Button btn_Ameter;
 	public Button btn_Solar;
 	[Header("参数创建")]
 	public InputField iptNum_SliderR;
@@ -37,7 +39,9 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_Solar.onClick.AddListener(OnButton_Simple<Solar>);
 		btn_Switch.onClick.AddListener(OnButton_Simple<Switch>);
 		btn_DigV.onClick.AddListener(OnButton_Simple<DigtalVoltmeter>);
+		btn_Vmeter.onClick.AddListener(OnButton_Simple<Voltmeter>);
 		btn_DigA.onClick.AddListener(OnButton_Simple<DigtalAmmeter>);
+		btn_Ameter.onClick.AddListener(OnButton_Simple<Ammeter>);
 		btn_SliderR.onClick.AddListener(OnButtonSP_SliderR);
 		btn_R.onClick.AddListener(OnButtonSP_R);
 		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
