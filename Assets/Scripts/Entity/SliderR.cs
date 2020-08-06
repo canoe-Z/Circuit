@@ -7,7 +7,7 @@ public class SliderR : EntityBase
 	private double rMax;
 	private double rLeft, rRight;
 	private MySlider mySlider;
-	private int TL, TR, L, R;
+	private int PortID_TL, PortID_TR, PortID_L, PortID_R;
 
 	public override void EntityAwake()
 	{
@@ -23,10 +23,10 @@ public class SliderR : EntityBase
 		mySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 
-		TL = ChildPorts[0].ID;
-		TR = ChildPorts[1].ID;
-		L = ChildPorts[2].ID;
-		R = ChildPorts[3].ID;
+		PortID_TL = ChildPorts[0].ID;
+		PortID_TR = ChildPorts[1].ID;
+		PortID_L = ChildPorts[2].ID;
+		PortID_R = ChildPorts[3].ID;
 	}
 
 	void UpdateSlider()
@@ -37,18 +37,18 @@ public class SliderR : EntityBase
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(TL, L);
-		CircuitCalculator.UF.Union(TL, R);
-		CircuitCalculator.UF.Union(TL, TR);
+		CircuitCalculator.UF.Union(PortID_TL, PortID_L);
+		CircuitCalculator.UF.Union(PortID_TL, PortID_R);
+		CircuitCalculator.UF.Union(PortID_TL, PortID_TR);
 	}
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), TL.ToString(), L.ToString(), rLeft));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), TL.ToString(), R.ToString(), rRight));
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), TL.ToString(), TR.ToString(), 0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_L"), PortID_TL.ToString(), PortID_L.ToString(), rLeft));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_R"), PortID_TL.ToString(), PortID_R.ToString(), rRight));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID, "_T"), PortID_TL.ToString(), PortID_TR.ToString(), 0));
 	}
 
 	public override EntityData Save()

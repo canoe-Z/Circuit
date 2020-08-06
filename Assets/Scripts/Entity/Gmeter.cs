@@ -8,7 +8,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 	private GameObject pin = null;
 	private float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
 	private MySlider mySlider = null;
-	private int LeftPortID, RightPortID;
+	private int PortID_Left, PortID_Right;
 
 	public override void EntityAwake()
 	{
@@ -23,8 +23,8 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
-		LeftPortID = ChildPorts[0].ID;
-		RightPortID = ChildPorts[1].ID;
+		PortID_Left = ChildPorts[0].ID;
+		PortID_Right = ChildPorts[1].ID;
 	}
 
 	public void CalculatorUpdate()
@@ -67,14 +67,14 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(LeftPortID, RightPortID);
+		CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
 	}
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), LeftPortID.ToString(), RightPortID.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

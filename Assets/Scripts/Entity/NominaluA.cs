@@ -11,7 +11,7 @@ public class NominaluA : EntityBase, IAmmeter
 	private double nominalR;       //内阻为标称值
 	private double realR;
 	private MyPin myPin;           //指针（显示数字的那种）
-	private int GND, V0;
+	private int PortID_GND, PortID_V0;
 
 	public override void EntityAwake()
 	{
@@ -24,8 +24,8 @@ public class NominaluA : EntityBase, IAmmeter
 
 	void Start()
 	{
-		GND = ChildPorts[0].ID;
-		V0 = ChildPorts[1].ID;
+		PortID_GND = ChildPorts[0].ID;
+		PortID_V0 = ChildPorts[1].ID;
 	}
 
 	void Update()
@@ -36,13 +36,13 @@ public class NominaluA : EntityBase, IAmmeter
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(GND, V0);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_V0);
 	}
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
-		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), GND.ToString(), V0.ToString(), nominalR));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), nominalR));
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 

@@ -10,8 +10,8 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 	private readonly double R1 = 5000;
 	private readonly double R2 = 15000;
 
-	MyPin myPin;
-	private int GND, V0, V1, V2;
+	private MyPin myPin;
+	private int PortID_GND, PortID_V0, PortID_V1, PortID_V2;
 
 	public override void EntityAwake()
 	{
@@ -28,10 +28,10 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
-		GND = ChildPorts[0].ID;
-		V0 = ChildPorts[1].ID;
-		V1 = ChildPorts[2].ID;
-		V2 = ChildPorts[3].ID;
+		PortID_GND = ChildPorts[0].ID;
+		PortID_V0 = ChildPorts[1].ID;
+		PortID_V1 = ChildPorts[2].ID;
+		PortID_V2 = ChildPorts[3].ID;
 	}
 	public void CalculatorUpdate()
 	{
@@ -48,9 +48,9 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(GND, V0);
-		CircuitCalculator.UF.Union(GND, V1);
-		CircuitCalculator.UF.Union(GND, V2);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_V0);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_V1);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_V2);
 	}
 
 	public override void SetElement()
@@ -63,9 +63,9 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], GND.ToString(), V0.ToString(), R0));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], GND.ToString(), V1.ToString(), R1));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], GND.ToString(), V2.ToString(), R2));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], PortID_GND.ToString(), PortID_V0.ToString(), R0));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], PortID_GND.ToString(), PortID_V1.ToString(), R1));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], PortID_GND.ToString(), PortID_V2.ToString(), R2));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

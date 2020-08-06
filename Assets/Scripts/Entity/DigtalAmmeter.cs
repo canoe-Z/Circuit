@@ -5,8 +5,8 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double R = 0.001;
 	private Text digtalAmmeterText;
-	private int GND, mA, A;
-
+	private int PortID_GND, PortID_mA, PortID_A;
+	
 	public override void EntityAwake()
 	{
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
@@ -18,9 +18,9 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
-		GND = ChildPorts[0].ID;
-		mA = ChildPorts[1].ID;
-		A = ChildPorts[2].ID;
+		PortID_GND = ChildPorts[0].ID;
+		PortID_mA = ChildPorts[1].ID;
+		PortID_A = ChildPorts[2].ID;
 	}
 
 	public void CalculatorUpdate()
@@ -47,16 +47,16 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(GND, mA);
-		CircuitCalculator.UF.Union(GND, A);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
+		CircuitCalculator.UF.Union(PortID_GND, PortID_A);
 	}
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), GND.ToString(), mA.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), GND.ToString(), A.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}

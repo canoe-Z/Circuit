@@ -7,7 +7,7 @@ public class Switch : EntityBase
 	private int state = 1;
 	private MySlider mySlider = null;
 	private GameObject connector = null;
-	private int L, M, R;
+	private int PortID_L, PortID_M, PortID_R;
 
 	public override void EntityAwake()
 	{
@@ -31,9 +31,9 @@ public class Switch : EntityBase
 		mySlider.SliderEvent += UpdateSlider;
 		UpdateSlider();
 
-		L = ChildPorts[0].ID;
-		M = ChildPorts[1].ID;
-		R = ChildPorts[2].ID;
+		PortID_L = ChildPorts[0].ID;
+		PortID_M = ChildPorts[1].ID;
+		PortID_R = ChildPorts[2].ID;
 	}
 
 	// 开关的状态有三种
@@ -56,11 +56,11 @@ public class Switch : EntityBase
 		//得到端口ID
 		if (state == 2)
 		{
-			CircuitCalculator.UF.Union(R, M);
+			CircuitCalculator.UF.Union(PortID_R, PortID_M);
 		}
 		else if (state == 0)
 		{
-			CircuitCalculator.UF.Union(L, M);
+			CircuitCalculator.UF.Union(PortID_L, PortID_M);
 		}
 	}
 
@@ -70,11 +70,11 @@ public class Switch : EntityBase
 
 		if (state == 2)
 		{
-			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", R), R.ToString(), M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", PortID_R), PortID_R.ToString(), PortID_M.ToString(), 0));
 		}
 		else if (state == 0)
 		{
-			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", L), L.ToString(), M.ToString(), 0));
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(EntityID.ToString(), "_", PortID_L), PortID_L.ToString(), PortID_M.ToString(), 0));
 		}
 	}
 

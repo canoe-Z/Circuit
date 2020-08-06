@@ -6,8 +6,8 @@ using UnityEngine;
 public class RBox : EntityBase
 {
 	private const int knobNum = 6;              // 含有的旋钮个数
-	private double R_99999, R_99, R_09;         // 不同挡位下的内阻
-	private int G, R999, R99, R9;
+	private double R_99999, R_99, R_9;         // 不同挡位下的内阻
+	private int PortID_G, PortID_R999, PortID_R99, PortID_R9;
 
 	public List<MyKnob> Knobs { get; set; }
 
@@ -24,10 +24,10 @@ public class RBox : EntityBase
 		Knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
-		G = ChildPorts[0].ID;
-		R9 = ChildPorts[1].ID;
-		R99 = ChildPorts[2].ID;
-		R999 = ChildPorts[3].ID;
+		PortID_G = ChildPorts[0].ID;
+		PortID_R9 = ChildPorts[1].ID;
+		PortID_R99 = ChildPorts[2].ID;
+		PortID_R999 = ChildPorts[3].ID;
 	}
 
 	void UpdateKnob()
@@ -40,14 +40,14 @@ public class RBox : EntityBase
 		}
 		R_99999 = total / (float)10;
 		R_99 = total % 100 / (float)10;
-		R_09 = total % 10 / (float)10;
+		R_9 = total % 10 / (float)10;
 	}
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(G, R9);
-		CircuitCalculator.UF.Union(G, R99);
-		CircuitCalculator.UF.Union(G, R999);
+		CircuitCalculator.UF.Union(PortID_G, PortID_R9);
+		CircuitCalculator.UF.Union(PortID_G, PortID_R99);
+		CircuitCalculator.UF.Union(PortID_G, PortID_R999);
 	}
 
 	public override void SetElement()
@@ -61,9 +61,9 @@ public class RBox : EntityBase
 			ResistorID[i] = string.Concat(EntityID, "_", i);
 		}
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], G.ToString(), R999.ToString(), R_99999));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], G.ToString(), R99.ToString(), R_99));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], G.ToString(), R9.ToString(), R_09));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[0], PortID_G.ToString(), PortID_R999.ToString(), R_99999));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[1], PortID_G.ToString(), PortID_R99.ToString(), R_99));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(ResistorID[2], PortID_G.ToString(), PortID_R9.ToString(), R_9));
 	}
 
 	// 电阻箱添加时按简单元件处理

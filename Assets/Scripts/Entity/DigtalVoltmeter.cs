@@ -6,7 +6,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double R = 15000;
 	private Text digtalDigtalVoltmeter;
-	private int GND, mV, V;
+	private int PortID_GND, PortID_mV, PortID_V;
 
 	public override void EntityAwake()
 	{
@@ -19,9 +19,9 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
-		GND = ChildPorts[0].ID;
-		mV = ChildPorts[1].ID;
-		V = ChildPorts[2].ID;
+		PortID_GND = ChildPorts[0].ID;
+		PortID_mV = ChildPorts[1].ID;
+		PortID_V = ChildPorts[2].ID;
 	}
 
 	public void CalculatorUpdate()
@@ -42,14 +42,14 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	public override void LoadElement() => CircuitCalculator.UF.ListUnion(new List<(int, int)> { (GND, mV), (GND, V) });
+	public override void LoadElement() => CircuitCalculator.UF.ListUnion(new List<(int, int)> { (PortID_GND, PortID_mV), (PortID_GND, PortID_V) });
 
 	public override void SetElement()
 	{
 		int EntityID = CircuitCalculator.EntityNum;
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), GND.ToString(), mV.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), GND.ToString(), V.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_mV"), PortID_GND.ToString(), PortID_mV.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(EntityID, "_V"), PortID_GND.ToString(), PortID_V.ToString(), R));
 
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
