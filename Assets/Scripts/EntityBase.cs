@@ -159,14 +159,15 @@ abstract public class EntityBase : MonoBehaviour
 	public abstract void SetElement();
 	public abstract EntityData Save();
 
-	protected static T BaseCreate<T>(Float3 pos, Float4 angle, List<int> IDlist) where T : Component
+	protected static T BaseCreate<T>(Float3 pos, Float4 angle, List<int> IDlist, string entityName = null) where T : Component
 	{
 		pos = pos ?? Float3.zero;
 		angle = angle ?? Float4.identity;
 
 		// 加载预制体
 		GameObject TGameObject;
-		TGameObject = (GameObject)Resources.Load(typeof(T).ToString());
+		entityName = entityName ?? typeof(T).ToString();
+		TGameObject = (GameObject)Resources.Load(entityName);
 
 		T t = Instantiate(TGameObject, pos.ToVector3(), angle.ToQuaternion()).GetComponent<T>();
 

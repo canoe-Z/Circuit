@@ -167,40 +167,25 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
-	private static ThreeSource ThreeSourceInstantiate(SourceMode sourceMode, Float3 pos, Float4 angle, List<int> IDlist)
-	{
-		pos = pos ?? Float3.zero;
-		angle = angle ?? Float4.identity;
-
-		// 加载预制体
-		GameObject SourceObject;
-		switch (sourceMode)
-		{
-			case SourceMode.one:
-				SourceObject = (GameObject)Resources.Load("ThreeSource1");
-				break;
-			case SourceMode.three:
-				SourceObject = (GameObject)Resources.Load("ThreeSource");
-				break;
-			case SourceMode.twoOfThree:
-				SourceObject = (GameObject)Resources.Load("ThreeSource2");
-				break;
-			default:
-				SourceObject = null;
-				break;
-		}
-
-		ThreeSource threeSource = Instantiate(SourceObject, pos.ToVector3(), angle.ToQuaternion()).GetComponent<ThreeSource>();
-
-		// 注入ID
-		if (IDlist != null) SetEntityID(threeSource, IDlist);
-		return threeSource;
-	}
-
 	public static GameObject Create(SourceMode sourceMode = SourceMode.three,
 		List<double> _EMaxList = null, List<float> knobPosList = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
 	{
-		ThreeSource threeSource = ThreeSourceInstantiate(sourceMode, pos, angle, IDList);
+		ThreeSource threeSource;
+		switch (sourceMode)
+		{
+			case SourceMode.one:
+				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource1");
+				break;
+			case SourceMode.three:
+				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource");
+				break;
+			case SourceMode.twoOfThree:
+				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource2");
+				break;
+			default:
+				threeSource = null;
+				break;
+		}
 
 		if (_EMaxList != null)
 		{
