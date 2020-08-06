@@ -229,8 +229,3 @@ public interface ICalculatorUpdate
 {
 	void CalculatorUpdate();
 }
-
-public interface IAmmeter
-{
-	void CalculateCurrent();
-}

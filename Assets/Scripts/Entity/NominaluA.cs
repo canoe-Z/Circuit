@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 微安表，有各种量程和内阻的规格，内阻为标称
 /// </summary>
-public class NominaluA : EntityBase, IAmmeter
+public class NominaluA : EntityBase, ICalculatorUpdate
 {
 	private int maxuI;             //量程，单位微安
 	private double nominalR;       //内阻为标称值
@@ -24,12 +24,19 @@ public class NominaluA : EntityBase, IAmmeter
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
+
 		PortID_GND = ChildPorts[0].ID;
 		PortID_V0 = ChildPorts[1].ID;
 	}
 
-	void Update()
+	public void CalculatorUpdate()
 	{
+		// 计算自身电流
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / nominalR;
+
 		double maxI = maxuI / 1e6;
 		myPin.SetPos((float)(ChildPorts[1].I / maxI));
 	}
@@ -44,12 +51,6 @@ public class NominaluA : EntityBase, IAmmeter
 		int EntityID = CircuitCalculator.EntityNum;
 		CircuitCalculator.SpiceEntities.Add(new Resistor(EntityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), nominalR));
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
-	}
-
-	// 计算自身电流
-	public void CalculateCurrent()
-	{
-		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / nominalR;
 	}
 
 	public static GameObject Create(int maxuI, double nominalR,
