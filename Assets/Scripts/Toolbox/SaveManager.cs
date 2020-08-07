@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Obi;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ public class SaveData
 	// 所有数据存储在List中
 	public List<EntityData> EntityDataList { get; set; } = new List<EntityData>();
 	public List<LineData> LineDataList { get; set; } = new List<LineData>();
+	public int ColorID;
 
 	//TODO:保存摄像机位置，小窗状态
 	//TODO:保存导线颜色配置
@@ -41,6 +43,7 @@ public class SaveManager : MonoBehaviour
 		{
 			savedata.LineDataList.Add(line.Save());
 		}
+		savedata.ColorID = DisplayController.ColorID;
 
 		if (!Directory.Exists("Saves"))
 			Directory.CreateDirectory("Saves");
@@ -90,6 +93,7 @@ public class SaveManager : MonoBehaviour
 			{
 				linedata.Load();
 			}
+			DisplayController.ColorID = datafromfile.ColorID;
 
 			// 下一帧计算，直接调用计算会在Start()之前执行计算，丢失引用
 			CircuitCalculator.NeedCalculate = true;
