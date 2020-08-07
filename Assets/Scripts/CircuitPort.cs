@@ -6,15 +6,14 @@ using UnityEngine;
 /// </summary>
 public class CircuitPort : MonoBehaviour, IUniqueIdentity
 {
-	[ReadOnly] public bool IsConnected = false;                    //是否连接（含义丰富）
-	[ReadOnly] public double U = 0;                         //电压探针（需要时更新）
-	[ReadOnly] public double I = 0;                         //流出接线柱的电流（需要时更新）
+	public bool IsConnected { get; set; } = false;				//是否连接（含义丰富）
+	public double U { get; set; } = 0;							//电压探针（需要时更新）
+	public double I { get; set; } = 0;							//流出接线柱的电流（需要时更新）
 
-	[ReadOnly] public int ID;                               //接线柱全局ID
-	int IUniqueIdentity.ID => ID;
+	public int ID { get; set; }									//接线柱全局ID
 
-	[ReadOnly] public int LocalID;                          //接线柱本地ID
-	[ReadOnly] public EntityBase Father;
+	public int LocalID;											//接线柱本地ID
+	public EntityBase Father;
 
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
