@@ -1,45 +1,47 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SmallCamManager : MonoBehaviour
 {
 	public static Camera MainCam { get; set; } = null;
-	private static readonly Camera[] smallCam = new Camera[4];
+	public static readonly Camera[] smallCams = new Camera[4];
 
 	void Start()
 	{
 		MainCam = Camera.main;
 		for (int i = 0; i < 4; i++)
 		{
-			smallCam[i] = Instantiate(Camera.main);
-			smallCam[i].name = "smallCam" + i;
-			smallCam[i].depth = 1;
-			smallCam[i].enabled = false;
-			Destroy(smallCam[i].gameObject.GetComponent<CharacterController>());
+			smallCams[i] = Instantiate(Camera.main);
+			smallCams[i].name = "smallCam" + i;
+			smallCams[i].depth = 1;
+			smallCams[i].enabled = false;
+			Destroy(smallCams[i].gameObject.GetComponent<CharacterController>());
 		}
-		smallCam[0].rect = new Rect(0, 0.6f, 0.4f, 0.4f);
-		smallCam[1].rect = new Rect(0.6f, 0.6f, 0.4f, 0.4f);
-		smallCam[2].rect = new Rect(0f, 0, 0.4f, 0.4f);
-		smallCam[3].rect = new Rect(0.6f, 0, 0.4f, 0.4f);
-		// 全屏显示
+
+		// 初始化显示位置
+		smallCams[0].rect = new Rect(0, 0.6f, 0.4f, 0.4f);
+		smallCams[1].rect = new Rect(0.6f, 0.6f, 0.4f, 0.4f);
+		smallCams[2].rect = new Rect(0f, 0, 0.4f, 0.4f);
+		smallCams[3].rect = new Rect(0.6f, 0, 0.4f, 0.4f);
 		MainCam.rect = new Rect(0, 0, 1, 1);
 	}
 
 	void Update()
 	{
 		bool IsShiftDown = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-		for (int i = 0; i < 4; i++)
+		for (var i = 0; i < 4; i++)
 		{
-			if (smallCam[i].enabled)
+			if (smallCams[i].enabled)
 			{
 				if (Input.GetKeyDown(KeyCode.Alpha1 + i))
 				{
 					if (IsShiftDown)
 					{
-						smallCam[i].enabled = false;
+						smallCams[i].enabled = false;
 					}
 					else
 					{
-						Exchange(smallCam[i], MainCam);
+						Exchange(smallCams[i], MainCam);
 					}
 				}
 			}
@@ -49,12 +51,36 @@ public class SmallCamManager : MonoBehaviour
 				{
 					if (IsShiftDown)
 					{
-						smallCam[i].enabled = true;
-						SetAs(smallCam[i], MainCam);
+						smallCams[i].enabled = true;
+						SetAs(smallCams[i], MainCam);
 					}
 				}
 			}
 		}
+	}
+
+	public static CameraData Save()
+	{
+		List<Camera> cameraList = new List<Camera>();
+		cameraList.AddRange(smallCams);
+		cameraList.Add(MainCam);
+		return new CameraData(cameraList);
+	}
+
+	public static void Load(List<Float3> camPosList, List<Float4> camAngleList, List<bool> isCamEnableList)
+	{
+		for (var i = 0; i < 4; i++)
+		{
+			LoadCamera(smallCams[i], camPosList[i], camAngleList[i], isCamEnableList[i]);
+		}
+		LoadCamera(MainCam, camPosList[4], camAngleList[4], isCamEnableList[4]);
+	}
+
+	private static void LoadCamera(Camera camera, Float3 pos, Float4 angle, bool enabled)
+	{
+		camera.transform.position = pos.ToVector3();
+		camera.transform.rotation = angle.ToQuaternion();
+		camera.enabled = enabled;
 	}
 
 	/// <summary>
@@ -83,4 +109,26 @@ public class SmallCamManager : MonoBehaviour
 		one.transform.SetPositionAndRotation(pos2, rot2);
 		two.transform.SetPositionAndRotation(pos1, rot1);
 	}
+
+
+}
+
+[System.Serializable]
+public class CameraData
+{
+	public List<Float3> camPosList = new List<Float3>();
+	public List<Float4> camAngleList = new List<Float4>();
+	public List<bool> isCamEnableList = new List<bool>();
+
+	public CameraData(List<Camera> cameras)
+	{
+		foreach (Camera camera in cameras)
+		{
+			camPosList.Add(camera.transform.position.ToFloat3());
+			camAngleList.Add(camera.transform.rotation.ToFloat4());
+			isCamEnableList.Add(camera.enabled);
+		}
+	}
+
+	public void Load() => SmallCamManager.Load(camPosList, camAngleList, isCamEnableList);
 }

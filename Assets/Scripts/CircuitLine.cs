@@ -85,13 +85,15 @@ public class CircuitLine : MonoBehaviour
 [System.Serializable]
 public class LineData
 {
-	public int startID;
-	public int endID;
+	private readonly int startID;
+	private readonly int endID;
+
 	public LineData(int startID, int endID)
 	{
 		this.startID = startID;
 		this.endID = endID;
 	}
+
 	public void Load()
 	{
 		ConnectionManager.ConnectRope(SaveManager.GetItemById(startID, CircuitCalculator.Ports), SaveManager.GetItemById(endID, CircuitCalculator.Ports));

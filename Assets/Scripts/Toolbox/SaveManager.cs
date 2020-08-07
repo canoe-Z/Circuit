@@ -6,8 +6,6 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-
-
 /// <summary>
 /// 存档数据
 /// </summary>
@@ -15,13 +13,44 @@ using UnityEngine;
 public class SaveData
 {
 	// 所有数据存储在List中
-	public List<EntityData> EntityDataList { get; set; } = new List<EntityData>();
-	public List<LineData> LineDataList { get; set; } = new List<LineData>();
-	public int ColorID;
+	private readonly List<EntityData> entityDataList  = new List<EntityData>();
+	private readonly List<LineData> lineDataList  = new List<LineData>();
+	private int colorID;
+	private CameraData cameraData;
 
-	//TODO:保存摄像机位置，小窗状态
-	//TODO:保存导线颜色配置
-	//TODO:保存用户设定
+	private SaveData() { }
+
+	public static SaveData Create()
+	{
+		SaveData savedata = new SaveData();
+		foreach (EntityBase entity in CircuitCalculator.Entities)
+		{
+			savedata.entityDataList.Add(entity.Save());
+		}
+
+		foreach (CircuitLine line in CircuitCalculator.Lines)
+		{
+			savedata.lineDataList.Add(line.Save());
+		}
+		savedata.colorID = DisplayController.ColorID;
+		savedata.cameraData = SmallCamManager.Save();
+		return savedata;
+	}
+
+	public void Load()
+	{
+		foreach (EntityData entitydata in entityDataList)
+		{
+			entitydata.Load();
+		}
+
+		foreach (LineData linedata in lineDataList)
+		{
+			linedata.Load();
+		}
+		DisplayController.ColorID = colorID;
+		cameraData.Load();
+	}
 }
 
 /// <summary>
@@ -30,23 +59,25 @@ public class SaveData
 public class SaveManager : MonoBehaviour
 {
 	public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.F5))
+		{
+			Save();
+		}
+
+		if (Input.GetKeyDown(KeyCode.F9))
+		{
+			Load();
+		}
+	}
+
 	public void Save()
 	{
-		SaveData savedata = new SaveData();
+		SaveData savedata = SaveData.Create();
 
-		foreach (EntityBase entity in CircuitCalculator.Entities)
-		{
-			savedata.EntityDataList.Add(entity.Save());
-		}
-
-		foreach (CircuitLine line in CircuitCalculator.Lines)
-		{
-			savedata.LineDataList.Add(line.Save());
-		}
-		savedata.ColorID = DisplayController.ColorID;
-
-		if (!Directory.Exists("Saves"))
-			Directory.CreateDirectory("Saves");
+		if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
 
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream saveFile = File.Create("Saves/save.binary");
@@ -58,47 +89,31 @@ public class SaveManager : MonoBehaviour
 		StartCoroutine(ScreenShotTex());
 	}
 
-	void Update()
+	private void Load()
 	{
-		if (Input.GetKeyDown(KeyCode.F5))
+		// 删除场景内所有元件，通过委托调用也将删除所有端口和导线
+		var node = CircuitCalculator.Entities.First;
+		while (node != null)
 		{
-			Save();
+			var next = node.Next;
+			node.Value.DestroyEntity();
+			node = next;
 		}
 
-		if (Input.GetKeyDown(KeyCode.F9))
-		{
-			// 删除场景内所有元件，通过委托调用也将删除所有端口和导线
-			var node = CircuitCalculator.Entities.First;
-			while (node != null)
-			{
-				var next = node.Next;
-				node.Value.DestroyEntity();
-				node = next;
-			}
-
-			if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
+		if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
 
 
-			BinaryFormatter formatter = new BinaryFormatter();
-			FileStream saveFile = File.Open("Saves/save.binary", FileMode.Open);
-			SaveData datafromfile = (SaveData)formatter.Deserialize(saveFile);
-			saveFile.Close();
+		BinaryFormatter formatter = new BinaryFormatter();
+		FileStream saveFile = File.Open("Saves/save.binary", FileMode.Open);
+		SaveData datafromfile = (SaveData)formatter.Deserialize(saveFile);
+		saveFile.Close();
 
-			foreach (EntityData entitydata in datafromfile.EntityDataList)
-			{
-				entitydata.Load();
-			}
+		datafromfile.Load();
 
-			foreach (LineData linedata in datafromfile.LineDataList)
-			{
-				linedata.Load();
-			}
-			DisplayController.ColorID = datafromfile.ColorID;
-
-			// 下一帧计算，直接调用计算会在Start()之前执行计算，丢失引用
-			CircuitCalculator.NeedCalculate = true;
-		}
+		// 下一帧计算，直接调用计算会在Start()之前执行计算，丢失引用
+		CircuitCalculator.NeedCalculate = true;
 	}
+
 
 	/// <summary>
 	/// UnityEngine自带截屏Api，只能截全屏
