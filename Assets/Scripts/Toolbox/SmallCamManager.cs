@@ -4,7 +4,7 @@ using UnityEngine;
 public class SmallCamManager : MonoBehaviour
 {
 	public static Camera MainCam { get; set; } = null;
-	public static readonly Camera[] smallCams = new Camera[4];
+	private static readonly Camera[] smallCams = new Camera[4];
 
 	void Start()
 	{
@@ -116,9 +116,9 @@ public class SmallCamManager : MonoBehaviour
 [System.Serializable]
 public class CameraData
 {
-	public List<Float3> camPosList = new List<Float3>();
-	public List<Float4> camAngleList = new List<Float4>();
-	public List<bool> isCamEnableList = new List<bool>();
+	private List<Float3> camPosList = new List<Float3>();
+	private List<Float4> camAngleList = new List<Float4>();
+	private List<bool> isCamEnableList = new List<bool>();
 
 	public CameraData(List<Camera> cameras)
 	{

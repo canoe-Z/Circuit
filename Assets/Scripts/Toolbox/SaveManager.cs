@@ -1,5 +1,4 @@
-﻿using Obi;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -168,27 +167,4 @@ public class SaveManager : MonoBehaviour
 public interface IUniqueIdentity
 {
 	int ID { get; }
-}
-
-/// <summary>
-/// 脚本内有需要保存的数据，则应实现ISave接口
-/// </summary>
-public interface ISave
-{
-	/// <summary>
-	/// 保存
-	/// </summary>
-	/// <returns>实现ILoad接口的数据</returns>
-	ILoad Save();
-}
-
-/// <summary>
-/// 被保存的数据实现ILoad接口
-/// </summary>
-public interface ILoad
-{
-	/// <summary>
-	/// 读档
-	/// </summary>
-	void Load();
 }
