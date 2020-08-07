@@ -57,6 +57,7 @@ public class CircuitLine : MonoBehaviour
 
 		IsActived = true;
 
+		// 删除元件时，删除端口上关联的导线
 		StartPort.Father.EntityDestroy += DestroyRope;
 		EndPort.Father.EntityDestroy += DestroyRope;
 
@@ -71,15 +72,16 @@ public class CircuitLine : MonoBehaviour
 		StartPort.Father.EntityDestroy -= DestroyRope;
 		EndPort.Father.EntityDestroy -= DestroyRope;
 		CircuitCalculator.Lines.Remove(this);
+		CircuitCalculator.NeedCalculate = true;
 		Destroy(gameObject);
 	}
 
-	public LineData Save()
-	{
-		return new LineData(StartID, EndID);
-	}
+	public LineData Save() => new LineData(StartID, EndID);
 }
 
+/// <summary>
+/// 导线存档数据
+/// </summary>
 [System.Serializable]
 public class LineData
 {

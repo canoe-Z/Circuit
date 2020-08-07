@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
+
 
 /// <summary>
 /// 存档数据
@@ -16,6 +16,10 @@ public class SaveData
 	// 所有数据存储在List中
 	public List<EntityData> EntityDataList { get; set; } = new List<EntityData>();
 	public List<LineData> LineDataList { get; set; } = new List<LineData>();
+
+	//TODO:保存摄像机位置，小窗状态
+	//TODO:保存导线颜色配置
+	//TODO:保存用户设定
 }
 
 /// <summary>
@@ -23,6 +27,7 @@ public class SaveData
 /// </summary>
 public class SaveManager : MonoBehaviour
 {
+	public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
 	public void Save()
 	{
 		SaveData savedata = new SaveData();

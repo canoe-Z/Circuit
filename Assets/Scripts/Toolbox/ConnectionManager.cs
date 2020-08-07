@@ -26,19 +26,12 @@ public class ConnectionManager : MonoBehaviour
 		colors[4] = Color.green;
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
 		// 右键清除连接状态
 		if (Input.GetMouseButtonDown(1))
 		{
 			clickedPort = null;
-		}
-
-		// 右键抬起时，删除完毕导线，开始计算
-		if (Input.GetMouseButtonUp(1))
-		{
-			CircuitCalculator.NeedCalculate = true;
 		}
 	}
 

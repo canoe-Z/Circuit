@@ -113,6 +113,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 		EntityDestroy?.Invoke();
 		CircuitCalculator.Entities.Remove(this);
+		CircuitCalculator.NeedCalculate = true;
 		Destroy(gameObject);
 	}
 

@@ -3,6 +3,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 刻度盘
+/// 需要手动初始化
+/// </summary>
 public class MyPin : MonoBehaviour
 {
 	private float pos = 0;                              //当前的位置，0-1

@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 含有标称值的元件或将用到的方法
+/// 通过标称值获取真实值
 /// </summary>
 public static class Nominal
 {
-	public static double GetRealValue(double nominalValue)
+	public static double GetRealValue(double nominalValue, float range = 0.05f)
 	{
-		return nominalValue * (1 + Random.Range(-0.05f, 0.05f));
-	}
-
-	public static double GetRealValueLargeError(double nominalValue)
-	{
-		return nominalValue * (1 + Random.Range(-0.1f, 0.1f));
+		return nominalValue * (1 + Random.Range(-range, range));
 	}
 }

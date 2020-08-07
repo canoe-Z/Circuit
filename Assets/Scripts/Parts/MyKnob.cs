@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
+/// 旋钮
 /// 挂在包含有碰撞体和刚体的物体上，令localEular.z变动范围为0-(-360)
 /// </summary>
 public class MyKnob : MonoBehaviour

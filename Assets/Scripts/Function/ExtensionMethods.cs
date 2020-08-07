@@ -2,6 +2,9 @@
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// 代替Vector3以序列化
+/// </summary>
 [System.Serializable]
 public class Float3
 {
@@ -21,6 +24,9 @@ public class Float3
 	}
 }
 
+/// <summary>
+/// 代替Quaternion以序列化
+/// </summary>
 [System.Serializable]
 public class Float4
 {
@@ -41,6 +47,9 @@ public class Float4
 	}
 }
 
+/// <summary>
+/// Vector3拓展方法
+/// </summary>
 public static class Vector3Extensions
 {
 	public static Float3 ToFloat3(this Vector3 vector)
@@ -49,6 +58,9 @@ public static class Vector3Extensions
 	}
 }
 
+/// <summary>
+/// Quaternion拓展方法
+/// </summary>
 public static class QuaternionExtensions
 {
 	public static Float4 ToFloat4(this Quaternion quaternion)
@@ -57,6 +69,9 @@ public static class QuaternionExtensions
 	}
 }
 
+/// <summary>
+/// Transform拓展方法
+/// </summary>
 public static partial class TransformExtensions
 {
 	/// <summary>

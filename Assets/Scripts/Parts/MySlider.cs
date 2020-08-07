@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
+/// 滑块
 /// 挂在包含有碰撞体和刚体的物体上，令localPosition.z变动范围为0-1
 /// </summary>
 public class MySlider : MonoBehaviour

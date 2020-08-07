@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 端口
@@ -25,6 +24,7 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 
 	void Start()
 	{
+		// 删除元件时，删除其端口
 		Father.EntityDestroy += DestroyPort;
 	}
 

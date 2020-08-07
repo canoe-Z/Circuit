@@ -1,4 +1,7 @@
-﻿public static class EntityText
+﻿/// <summary>
+/// 用于数显元件的字符串处理
+/// </summary>
+public static class EntityText
 {
 	public static string GetText(double value)
 	{
