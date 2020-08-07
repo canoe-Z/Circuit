@@ -40,16 +40,21 @@ public class MyPin : MonoBehaviour
 	}
 
 	public void CloseText() => ScaleTexts.ForEach(x => x.enabled = false);
+	/// <summary>
+	/// 接收0-1的值，最左端到最右端
+	/// </summary>
 	public void SetPos(float newPos)
 	{
 		if (newPos > 1.1f) newPos = 1.1f;
-		if (newPos < -0.9f) newPos = -0.1f;
+		if (newPos < -0.1f) newPos = -0.1f;
 		pos = newPos;
 
 		// 指针转动
 		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * pos);
 	}
-
+	/// <summary>
+	/// 参数：显示在中间的单位、显示的最大刻度
+	/// </summary>
 	public void SetString(string unit, int scaleMax)
 	{
 		unitSymbol = unit;

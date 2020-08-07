@@ -6,16 +6,22 @@ using UnityEngine;
 /// </summary>
 public class Gmeter : EntityBase, ICalculatorUpdate
 {
-	private double MaxI = 0.001;
-	private double R = 10;
-	private GameObject pin = null;
-	private float pinPos = 0;//1单位1分米1600像素，750像素=0.46875，1500像素=0.9375，800爆表0.5
-	private MySlider mySlider = null;
-	private int PortID_Left, PortID_Right;
+	double MaxI = 0.001;
+	double R = 10;
+	MySlider mySlider = null;
+	MyPin myPin;
+	int PortID_Left, PortID_Right;
 
 	public override void EntityAwake()
 	{
-		FindPin();
+		myPin = GetComponentInChildren<MyPin>();
+
+		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
+		// 必须手动初始化Pin来保证Pin的初始化顺序
+		myPin.PinAwake();
+		myPin.CloseText();
+		myPin.SetString("G", 150);
+		
 		//滑块
 		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
 		mySlider.Devide = 5;
@@ -42,31 +48,11 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		}
 
 		//示数
-		double doublePin = (ChildPorts[0].I) / MaxI;
-		//doublePin -= 0.5;
-		pinPos = (float)(doublePin * 0.9375);
-		if (pinPos > 0.5) pinPos = 0.5f;
-		else if (pinPos < -0.5) pinPos = -0.5f;
-
-		Vector3 pos = pin.transform.localPosition;
-		pos.z = pinPos;
-		pin.transform.localPosition = pos;
-
+		double doublePin = ChildPorts[0].I / MaxI;
+		doublePin = 0;
+		myPin.SetPos((float)doublePin + 0.5f);
 	}
-
-	//电路相关
-	public void FindPin()
-	{
-		int childNum = transform.childCount;
-		for (int i = 0; i < childNum; i++)
-		{
-			if (transform.GetChild(i).name == "Pin")
-			{
-				pin = transform.GetChild(i).gameObject;
-				return;
-			}
-		}
-	}
+	
 
 	public override void LoadElement()
 	{
