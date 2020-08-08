@@ -1,16 +1,15 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 
 /// <summary>
 /// 电流计
 /// </summary>
 public class Gmeter : EntityBase, ICalculatorUpdate
 {
-	double MaxI = 0.001;
-	double R = 10;
-	MySlider mySlider = null;
-	MyPin myPin;
-	int PortID_Left, PortID_Right;
+	private double MaxI;
+	private double R;
+	private MySlider mySlider;
+	private MyPin myPin;
+	private int PortID_Left, PortID_Right;
 
 	public override void EntityAwake()
 	{
@@ -22,13 +21,14 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		myPin.CloseText();
 		myPin.SetString("G", 150);
 		
-		//滑块
-		mySlider = this.gameObject.GetComponentInChildren<MySlider>();
+		// 滑块
+		mySlider = gameObject.GetComponentInChildren<MySlider>();
 		mySlider.Devide = 5;
 	}
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
 
@@ -38,7 +38,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 	public void CalculatorUpdate()
 	{
-		//量程
+		// 量程
 		MaxI = 0.1;
 		R = 10;
 		for (int i = 0; i < mySlider.SliderPos_int; i++)
@@ -47,17 +47,14 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 			R *= 2;
 		}
 
-		//示数
+		// 示数
+		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		double doublePin = ChildPorts[0].I / MaxI;
-		doublePin = 0;
 		myPin.SetPos((float)doublePin + 0.5f);
 	}
-	
 
-	public override void LoadElement()
-	{
-		CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
-	}
+
+	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
 
 	public override void SetElement(int entityID)
 	{
@@ -66,13 +63,5 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public void CalculateCurrent()
-	{
-		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
-	}
-
-	public override EntityData Save()
-	{
-		return new SimpleEntityData<Gmeter>(transform.position, transform.rotation, ChildPortID);
-	}
+	public override EntityData Save() => new SimpleEntityData<Gmeter>(transform.position, transform.rotation, ChildPortID);
 }
