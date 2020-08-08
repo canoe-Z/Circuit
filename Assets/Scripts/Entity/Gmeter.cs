@@ -7,7 +7,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 {
 	private double MaxI;
 	private double R;
-	private MySlider mySlider;
+	private MyKnob myKnob;
 	private MyPin myPin;
 	private int PortID_Left, PortID_Right;
 
@@ -21,9 +21,8 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		myPin.CloseText();
 		myPin.SetString("G", 150);
 		
-		// 滑块
-		mySlider = gameObject.GetComponentInChildren<MySlider>();
-		mySlider.Devide = 5;
+		myKnob = GetComponentInChildren<MyKnob>();
+		myKnob.Devide = 5;
 	}
 
 	void Start()
@@ -41,7 +40,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		// 量程
 		MaxI = 0.1;
 		R = 10;
-		for (int i = 0; i < mySlider.SliderPos_int; i++)
+		for (int i = 0; i < myKnob.KnobPos_int; i++)
 		{
 			MaxI *= 0.01;
 			R *= 2;
