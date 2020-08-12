@@ -3,8 +3,8 @@ using UnityEngine;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Circuits;
 using System.Collections;
+using SpiceSharp.Entities;
 
 /// <summary>
 /// 电路计算

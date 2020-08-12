@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using UnityEngine;
 using SpiceSharp.Components;
-using SpiceSharp.Circuits;
+using SpiceSharp.Entities;
 using UnityEngine.UI;
 
 /// <summary>
