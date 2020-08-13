@@ -246,16 +246,18 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			foreach (var mat in rend.materials)
 			{
+				if (mat.color.a > 0.999f)
 				{//变为Fade
 					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
 					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
 					mat.SetInt("_ZWrite", 0);
 					mat.EnableKeyword("_ALPHABLEND_ON");
 					mat.renderQueue = 3000;
+					//恢复颜色
+					Color color = mat.color;
+					color.a = 0.5f;
+					mat.color = color;
 				}
-				Color color = mat.color;
-				color.a = 0.5f;
-				mat.color = color;
 			}
 		}
 	}
@@ -272,16 +274,18 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			foreach (var mat in rend.materials)
 			{
+				if (Mathf.Abs(mat.color.a - 0.5f) < 0.001f)
 				{//恢复Opaque
 					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
 					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
 					mat.SetInt("_ZWrite", 1);
 					mat.DisableKeyword("_ALPHABLEND_ON");
 					mat.renderQueue = -1;
+					//变颜色
+					Color color = mat.color;
+					color.a = 1f;
+					mat.color = color;
 				}
-				Color color = mat.color;
-				color.a = 1f;
-				mat.color = color;
 			}
 		}
 

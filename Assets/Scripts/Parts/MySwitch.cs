@@ -9,11 +9,21 @@ public class MySwitch : MonoBehaviour
 	public bool MyIsOn { get; private set; } = false;
 	const float angleRange = 15;
 
-
+	GameObject Sw;
 	Renderer[] renderers;
+	Vector3 basicPos;
 	private void Start()
 	{
-		renderers = GetComponentsInChildren<Renderer>();
+		Transform[] transforms = GetComponentsInChildren<Transform>();
+		foreach (var tr in transforms)
+		{
+			if (tr.name == "Sw")
+			{
+				Sw = tr.gameObject;
+			}
+		}
+		basicPos = Sw.transform.localEulerAngles;
+		renderers = Sw.GetComponentsInChildren<Renderer>();
 		Renew();
 	}
 
@@ -33,12 +43,12 @@ public class MySwitch : MonoBehaviour
 		if (MyIsOn)
 		{
 			ChangeMat(Color.green);
-			transform.localEulerAngles = new Vector3(0, 0, angleRange);
+			Sw.transform.localEulerAngles = basicPos + new Vector3(angleRange, 0, 0);
 		}
 		else
 		{
 			ChangeMat(Color.red);
-			transform.localEulerAngles = new Vector3(0, 0, -angleRange);
+			Sw.transform.localEulerAngles = basicPos + new Vector3(-angleRange, 0, 0);
 		}
 	}
 	void ChangeMat(Color color)
