@@ -10,7 +10,6 @@ public class Source : EntityBase, ISource
 {
 	protected double E, R;
 	protected int PortID_G, PortID_V;
-
 	protected Text sourceText;
 	public override void EntityAwake()
 	{

@@ -18,6 +18,11 @@ public class ThreeSource : EntityBase, ISource
 	private readonly double[] E = new double[3];                // 电压数组
 	private readonly double[] R = new double[3];                // 内阻数组
 
+	private MySwitch mySwitch;
+	//TODO 关机：保存三个电压值和旋钮位置，将电压和旋钮位置置零
+	//开机：恢复电压值和旋钮位置
+	private bool isOnTest = false;
+	private SourcePowerData PowerData;
 	private List<MyKnob> knobs;
 	private List<Text> texts;
 
@@ -80,7 +85,7 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
-	void UpdateKnob()
+	private void UpdateKnob()
 	{
 		for (var i = 0; i < sourceNum; i++)
 		{
@@ -93,6 +98,40 @@ public class ThreeSource : EntityBase, ISource
 			{
 				E[i] = EMax[i];
 				texts[i].text = ((int)E[i]).ToString();
+			}
+		}
+	}
+
+	public void PowerOn() => PowerData.Load();
+
+	private void PowerOff()
+	{
+		PowerData = new SourcePowerData(this);
+	}
+
+	private class SourcePowerData
+	{
+		private readonly ThreeSource threeSource;
+		private readonly List<float> knobPosList = new List<float>();
+		private readonly List<double> EMaxList;
+
+		internal SourcePowerData(ThreeSource threeSource)
+		{
+			this.threeSource = threeSource;
+			EMaxList = threeSource.EMax.ToList();
+			threeSource.knobs.ForEach(x => knobPosList.Add(x.KnobPos));
+		}
+
+		internal void Load()
+		{
+			for (var i = 0; i < threeSource.sourceNum; i++)
+			{
+				threeSource.EMax[i] = EMaxList[i];
+			}
+
+			for (var i = 0; i < knobPosList.Count; i++)
+			{
+				threeSource.knobs[i].SetKnobRot(knobPosList[i]);
 			}
 		}
 	}
@@ -225,3 +264,7 @@ public class SourceData : EntityData
 
 	public override void Load() => Create(sourceMode, EMaxList, knobPosList, pos, angle, IDList);
 }
+
+/// <summary>
+/// 存档数据
+/// </summary>
