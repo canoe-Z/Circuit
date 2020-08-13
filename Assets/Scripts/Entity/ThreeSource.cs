@@ -109,6 +109,12 @@ public class ThreeSource : EntityBase, ISource
 		PowerData = new SourcePowerData(this);
 	}
 
+	[System.Serializable]
+	public static class Ttest
+	{
+
+	}
+
 	private class SourcePowerData
 	{
 		private readonly ThreeSource threeSource;
