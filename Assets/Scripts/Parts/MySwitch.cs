@@ -6,13 +6,18 @@
 /// </summary>
 public class MySwitch : MonoBehaviour
 {
-	public bool MyIsOn { get; private set; } = false;
-	const float angleRange = 15;
+	// 开关状态变化事件
+	public delegate void SwitchEventHandler(bool isOn);
+	public event SwitchEventHandler SwitchEvent;
 
-	GameObject Sw;
-	Renderer[] renderers;
-	Vector3 basicPos;
-	private void Start()
+	public bool IsOn { get; set; } = false;
+	private readonly float angleRange = 15;
+
+	private GameObject Sw;
+	private Renderer[] renderers;
+	private Vector3 basicPos;
+
+	void Start()
 	{
 		Transform[] transforms = GetComponentsInChildren<Transform>();
 		foreach (var tr in transforms)
@@ -24,7 +29,7 @@ public class MySwitch : MonoBehaviour
 		}
 		basicPos = Sw.transform.localEulerAngles;
 		renderers = Sw.GetComponentsInChildren<Renderer>();
-		Renew();
+		ChangeState(IsOn);
 	}
 
 	void OnMouseOver()
@@ -32,15 +37,16 @@ public class MySwitch : MonoBehaviour
 		if (!MoveController.CanOperate) return;
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
-			MyIsOn = !MyIsOn;
-			Renew();
+			IsOn = !IsOn;
+			ChangeState(IsOn);
+			SwitchEvent?.Invoke(IsOn);
 			CircuitCalculator.NeedCalculateByConnection = true;
 		}
 	}
 
-	void Renew()
+	void ChangeState(bool isOn)
 	{
-		if (MyIsOn)
+		if (isOn)
 		{
 			ChangeMat(Color.green);
 			Sw.transform.localEulerAngles = basicPos + new Vector3(angleRange, 0, 0);
@@ -51,6 +57,7 @@ public class MySwitch : MonoBehaviour
 			Sw.transform.localEulerAngles = basicPos + new Vector3(-angleRange, 0, 0);
 		}
 	}
+
 	void ChangeMat(Color color)
 	{
 		foreach(var m in renderers)

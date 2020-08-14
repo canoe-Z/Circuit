@@ -19,10 +19,7 @@ public class ThreeSource : EntityBase, ISource
 	private readonly double[] R = new double[3];                // 内阻数组
 
 	private MySwitch mySwitch;
-	//TODO 关机：保存三个电压值和旋钮位置，将电压和旋钮位置置零
-	//开机：恢复电压值和旋钮位置
-	private bool isOnTest = false;
-	private SourcePowerData PowerData;
+	private SourcePowerData PowerData = null;
 	private List<MyKnob> knobs;
 	private List<Text> texts;
 
@@ -61,12 +58,16 @@ public class ThreeSource : EntityBase, ISource
 			Debug.LogError("画布名称转换失败");
 		}
 
-		// 获取旋钮和文本的引用
+		// 获取开关，旋钮和文本的引用
+		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
+
 		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
 		texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
 		if (texts.Count != sourceNum) Debug.LogError("文本个数不合法");
+
+		mySwitch.IsOn = true;
 
 		// 限制旋钮旋转极限角度
 		knobs.ForEach(x => x.AngleRange = 337.5f);
@@ -75,6 +76,7 @@ public class ThreeSource : EntityBase, ISource
 	void Start()
 	{
 		// 第一次执行初始化，此后受事件控制
+		mySwitch.SwitchEvent += ChangePower;
 		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
@@ -85,8 +87,35 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
+	private void ChangePower(bool isOn)
+	{
+		if(isOn)
+		{
+			if(PowerData==null)
+			{
+				return;
+			}
+			else
+			{
+				PowerData.Load();
+				UpdateKnob();
+			}
+		}
+		else
+		{
+			PowerData = new SourcePowerData(this);
+
+			for (var i = 0; i < sourceNum; i++)
+			{
+				E[i] = 0;
+				texts[i].text = E[i].ToString("00.00");
+			}
+		}
+	}
+
 	private void UpdateKnob()
 	{
+		if (!mySwitch.IsOn) return;
 		for (var i = 0; i < sourceNum; i++)
 		{
 			if (i < knobNum)
@@ -100,19 +129,6 @@ public class ThreeSource : EntityBase, ISource
 				texts[i].text = ((int)E[i]).ToString();
 			}
 		}
-	}
-
-	public void PowerOn() => PowerData.Load();
-
-	private void PowerOff()
-	{
-		PowerData = new SourcePowerData(this);
-	}
-
-	[System.Serializable]
-	public static class Ttest
-	{
-
 	}
 
 	private class SourcePowerData
@@ -133,11 +149,6 @@ public class ThreeSource : EntityBase, ISource
 			for (var i = 0; i < threeSource.sourceNum; i++)
 			{
 				threeSource.EMax[i] = EMaxList[i];
-			}
-
-			for (var i = 0; i < knobPosList.Count; i++)
-			{
-				threeSource.knobs[i].SetKnobRot(knobPosList[i]);
 			}
 		}
 	}
