@@ -19,7 +19,6 @@ public class ThreeSource : EntityBase, ISource
 	private readonly double[] R = new double[3];                // 内阻数组
 
 	private MySwitch mySwitch;
-	private SourcePowerData PowerData = null;
 	private List<MyKnob> knobs;
 	private List<Text> texts;
 
@@ -67,6 +66,7 @@ public class ThreeSource : EntityBase, ISource
 		texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
 		if (texts.Count != sourceNum) Debug.LogError("文本个数不合法");
 
+		// 默认启动时开机
 		mySwitch.IsOn = true;
 
 		// 限制旋钮旋转极限角度
@@ -87,34 +87,12 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
-	private void ChangePower(bool isOn)
-	{
-		if(isOn)
-		{
-			if(PowerData==null)
-			{
-				return;
-			}
-			else
-			{
-				PowerData.Load();
-				UpdateKnob();
-			}
-		}
-		else
-		{
-			PowerData = new SourcePowerData(this);
-
-			for (var i = 0; i < sourceNum; i++)
-			{
-				E[i] = 0;
-				texts[i].text = E[i].ToString("00.00");
-			}
-		}
-	}
-
+	/// <summary>
+	/// 根据旋钮当前位置更新电压与显示
+	/// </summary>
 	private void UpdateKnob()
 	{
+		// 关机时旋钮可以调整，但是不更新电源
 		if (!mySwitch.IsOn) return;
 		for (var i = 0; i < sourceNum; i++)
 		{
@@ -131,24 +109,25 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
-	private class SourcePowerData
+	/// <summary>
+	/// 根据MySwtich状态开启/关闭
+	/// </summary>
+	private void ChangePower()
 	{
-		private readonly ThreeSource threeSource;
-		private readonly List<float> knobPosList = new List<float>();
-		private readonly List<double> EMaxList;
-
-		internal SourcePowerData(ThreeSource threeSource)
+		// 开机
+		if (mySwitch.IsOn)
 		{
-			this.threeSource = threeSource;
-			EMaxList = threeSource.EMax.ToList();
-			threeSource.knobs.ForEach(x => knobPosList.Add(x.KnobPos));
+			// 根据旋钮位置更新电源状态
+			UpdateKnob();
 		}
-
-		internal void Load()
+		// 关机
+		else
 		{
-			for (var i = 0; i < threeSource.sourceNum; i++)
+			// 电压置零，显示置零，旋钮位置不变
+			for (var i = 0; i < sourceNum; i++)
 			{
-				threeSource.EMax[i] = EMaxList[i];
+				E[i] = 0;
+				texts[i].text = E[i].ToString("00.00");
 			}
 		}
 	}
@@ -281,7 +260,3 @@ public class SourceData : EntityData
 
 	public override void Load() => Create(sourceMode, EMaxList, knobPosList, pos, angle, IDList);
 }
-
-/// <summary>
-/// 存档数据
-/// </summary>

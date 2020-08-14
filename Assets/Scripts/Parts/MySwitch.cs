@@ -7,29 +7,26 @@
 public class MySwitch : MonoBehaviour
 {
 	// 开关状态变化事件
-	public delegate void SwitchEventHandler(bool isOn);
+	public delegate void SwitchEventHandler();
 	public event SwitchEventHandler SwitchEvent;
 
-	public bool IsOn { get; set; } = false;
+	/// <summary>
+	/// 开关状态
+	/// </summary>
+	public bool IsOn { get; set; } = true;
+
 	private readonly float angleRange = 15;
 
-	private GameObject Sw;
+	private Transform Sw;
 	private Renderer[] renderers;
 	private Vector3 basicPos;
 
 	void Start()
 	{
-		Transform[] transforms = GetComponentsInChildren<Transform>();
-		foreach (var tr in transforms)
-		{
-			if (tr.name == "Sw")
-			{
-				Sw = tr.gameObject;
-			}
-		}
+		Sw = transform.FindComponent_DFS<Transform>("Sw");
 		basicPos = Sw.transform.localEulerAngles;
 		renderers = Sw.GetComponentsInChildren<Renderer>();
-		ChangeState(IsOn);
+		ChangeState();
 	}
 
 	void OnMouseOver()
@@ -38,15 +35,18 @@ public class MySwitch : MonoBehaviour
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
 			IsOn = !IsOn;
-			ChangeState(IsOn);
-			SwitchEvent?.Invoke(IsOn);
+			ChangeState();
+			SwitchEvent?.Invoke();
 			CircuitCalculator.NeedCalculateByConnection = true;
 		}
 	}
 
-	void ChangeState(bool isOn)
+	/// <summary>
+	/// 根据开关状态修改颜色和位置
+	/// </summary>
+	void ChangeState()
 	{
-		if (isOn)
+		if (IsOn)
 		{
 			ChangeMat(Color.green);
 			Sw.transform.localEulerAngles = basicPos + new Vector3(angleRange, 0, 0);
@@ -58,6 +58,10 @@ public class MySwitch : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 修改颜色
+	/// </summary>
+	/// <param name="color">颜色</param>
 	void ChangeMat(Color color)
 	{
 		foreach(var m in renderers)
