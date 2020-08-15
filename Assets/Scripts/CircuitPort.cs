@@ -5,13 +5,13 @@
 /// </summary>
 public class CircuitPort : MonoBehaviour, IUniqueIdentity
 {
-	public bool IsConnected { get; set; } = false;				//是否连接（含义丰富）
-	public double U { get; set; } = 0;							//电压探针（需要时更新）
-	public double I { get; set; } = 0;							//流出接线柱的电流（需要时更新）
+	public bool IsConnected { get; set; } = false;              //是否连接（含义丰富）
+	public double U { get; set; } = 0;                          //电压探针（需要时更新）
+	public double I { get; set; } = 0;                          //流出接线柱的电流（需要时更新）
 
-	public int ID { get; set; }									//接线柱全局ID
+	public int ID { get; set; }                                 //接线柱全局ID
 
-	public int LocalID;											//接线柱本地ID
+	public int LocalID;                                         //接线柱本地ID
 	public EntityBase Father;
 
 	public static event EnterEventHandler MouseEnter;

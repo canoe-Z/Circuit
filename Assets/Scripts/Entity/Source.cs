@@ -47,14 +47,14 @@ public class Source : EntityBase, ISource
 
 	public static GameObject Create(double E, double R)
 	{
-		return Set(BaseCreate<Source>(), E, R).gameObject;
+		return BaseCreate<Source>().Set(E, R).gameObject;
 	}
 
-	public static Source Set(Source source, double E, double R)
+	public Source Set(double E, double R)
 	{
-		source.E = E;
-		source.R = R;
-		return source;
+		this.E = E;
+		this.R = R;
+		return this;
 	}
 
 	public override EntityData Save() => new SourceStandData(this);
@@ -70,6 +70,6 @@ public class Source : EntityBase, ISource
 			R = source.R;
 		}
 
-		public override void Load() => Set(BaseCreate<Source>(baseData), E, R);
+		public override void Load() => BaseCreate<Source>(baseData).Set(E, R);
 	}
 }

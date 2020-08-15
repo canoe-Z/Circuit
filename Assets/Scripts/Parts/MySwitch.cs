@@ -64,7 +64,7 @@ public class MySwitch : MonoBehaviour
 	/// <param name="color">颜色</param>
 	void ChangeMat(Color color)
 	{
-		foreach(var m in renderers)
+		foreach (var m in renderers)
 		{
 			m.material.color = color;
 		}

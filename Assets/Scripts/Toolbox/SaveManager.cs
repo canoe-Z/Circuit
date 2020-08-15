@@ -12,8 +12,8 @@ using UnityEngine;
 public class SaveData
 {
 	// 所有数据存储在List中
-	private readonly List<EntityData> entityDataList  = new List<EntityData>();
-	private readonly List<LineData> lineDataList  = new List<LineData>();
+	private readonly List<EntityData> entityDataList = new List<EntityData>();
+	private readonly List<LineData> lineDataList = new List<LineData>();
 	private int colorID;
 	private CameraData cameraData;
 

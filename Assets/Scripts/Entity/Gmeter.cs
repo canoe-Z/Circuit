@@ -20,7 +20,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		myPin.PinAwake();
 		myPin.CloseText();
 		myPin.SetString("G", 150);
-		
+
 		myKnob = GetComponentInChildren<MyKnob>();
 		myKnob.Devide = 5;
 	}

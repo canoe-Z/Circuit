@@ -53,13 +53,13 @@ public class SliderR : EntityBase
 
 	public static GameObject Create(double RMax)
 	{
-		return Set(BaseCreate<SliderR>(), RMax).gameObject;
+		return BaseCreate<SliderR>().Set(RMax).gameObject;
 	}
 
-	public static SliderR Set(SliderR sliderR, double RMax)
+	public SliderR Set(double RMax)
 	{
-		sliderR.RMax = RMax;
-		return sliderR;
+		this.RMax = RMax;
+		return this;
 	}
 
 	public override EntityData Save() => new SliderRData(this);
@@ -79,7 +79,7 @@ public class SliderR : EntityBase
 
 		public override void Load()
 		{
-			SliderR sliderR = Set(BaseCreate<SliderR>(baseData), RMax);
+			SliderR sliderR = BaseCreate<SliderR>(baseData).Set(RMax);
 			sliderR.mySlider.SetSliderPos(sliderPos);
 		}
 	}

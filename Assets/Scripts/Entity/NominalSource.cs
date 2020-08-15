@@ -19,7 +19,7 @@ public class NominalSource : Source
 
 	public static GameObject Create(double nominalE, double nominalR, string strShow)
 	{
-		NominalSource nominalSource = Set(BaseCreate<NominalSource>(), nominalE, nominalR, strShow);
+		NominalSource nominalSource = BaseCreate<NominalSource>().Set(nominalE, nominalR, strShow);
 
 		// 创建时生成新随机值
 		nominalSource.E = Nominal.GetRealValue(nominalE);
@@ -28,12 +28,12 @@ public class NominalSource : Source
 		return nominalSource.gameObject;
 	}
 
-	private static NominalSource Set(NominalSource nominalSource, double nominalE, double nominalR, string strShow)
+	private NominalSource Set(double nominalE, double nominalR, string strShow)
 	{
-		nominalSource.nominalE = nominalE;
-		nominalSource.nominalR = nominalR;
-		nominalSource.strShow = strShow;
-		return nominalSource;
+		this.nominalE = nominalE;
+		this.nominalR = nominalR;
+		this.strShow = strShow;
+		return this;
 	}
 
 	public override EntityData Save() => new NominalSourceData(this);
@@ -52,7 +52,7 @@ public class NominalSource : Source
 
 		public override void Load()
 		{
-			NominalSource nominalSource = Set(BaseCreate<NominalSource>(baseData), nominalE, nominalR, strShow);
+			NominalSource nominalSource = BaseCreate<NominalSource>(baseData).Set(nominalE, nominalR, strShow);
 			nominalSource.E = E;
 			nominalSource.R = R;
 		}

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -37,18 +36,18 @@ public class NominalR : Resistance
 
 	public static GameObject Create(double nominalValue, string prefix)
 	{
-		NominalR nominalR = Set(BaseCreate<NominalR>(), nominalValue, prefix);
+		NominalR nominalR = BaseCreate<NominalR>().Set(nominalValue, prefix);
 
 		// 创建时生成新随机值
 		nominalR.RValue = Nominal.GetRealValue(nominalValue);
 		return nominalR.gameObject;
 	}
 
-	private static NominalR Set(NominalR nominalR, double nominalValue, string prefix)
+	private NominalR Set(double nominalValue, string prefix)
 	{
-		nominalR.nominalValue = nominalValue;
-		nominalR.prefix = prefix;
-		return nominalR;
+		this.nominalValue = nominalValue;
+		this.prefix = prefix;
+		return this;
 	}
 
 	public override EntityData Save() => new NominalRData(this);
@@ -67,7 +66,7 @@ public class NominalR : Resistance
 
 		public override void Load()
 		{
-			NominalR nominalR = Set(BaseCreate<NominalR>(baseData), nominalValue, prefix);
+			NominalR nominalR = BaseCreate<NominalR>(baseData).Set(nominalValue, prefix);
 
 			// 读档时读取旧随机值
 			nominalR.RValue = RValue;

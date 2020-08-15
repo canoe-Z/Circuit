@@ -54,16 +54,16 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 
 	public static GameObject Create(int maxuI, double nominalR)
 	{
-		NominaluA nominaluA = Set(BaseCreate<NominaluA>(), maxuI, nominalR);
+		NominaluA nominaluA = BaseCreate<NominaluA>().Set(maxuI, nominalR);
 		nominaluA.realR = Nominal.GetRealValue(nominalR);
 		return nominaluA.gameObject;
 	}
 
-	private static NominaluA Set(NominaluA nominaluA, int maxuI, double nominalR)
+	private NominaluA Set(int maxuI, double nominalR)
 	{
-		nominaluA.nominalR = nominalR;
-		nominaluA.maxuI = maxuI;
-		return nominaluA;
+		this.nominalR = nominalR;
+		this.maxuI = maxuI;
+		return this;
 	}
 
 	public override EntityData Save() => new NominaluAData(this);
@@ -85,9 +85,8 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 
 		public override void Load()
 		{
-			NominaluA nominaluA = Set(BaseCreate<NominaluA>(baseData), maxuI, nominalR);
+			NominaluA nominaluA = BaseCreate<NominaluA>(baseData).Set(maxuI, nominalR);
 			nominaluA.realR = realR;
 		}
 	}
 }
-

@@ -57,13 +57,13 @@ public class Resistance : EntityBase
 
 	public static GameObject Create(double RValue)
 	{
-		return Set(BaseCreate<Resistance>(), RValue).gameObject;
+		return BaseCreate<Resistance>().Set(RValue).gameObject;
 	}
 
-	public static Resistance Set(Resistance resistance,double RValue)
+	public Resistance Set(double RValue)
 	{
-		resistance.RValue = RValue;
-		return resistance;
+		this.RValue = RValue;
+		return this;
 	}
 
 	public override EntityData Save() => new ResistanceData(this);
@@ -79,7 +79,7 @@ public class Resistance : EntityBase
 			RValue = resistance.RValue;
 		}
 
-		public override void Load() => Set(BaseCreate<Resistance>(baseData), RValue);
+		public override void Load() => BaseCreate<Resistance>(baseData).Set(RValue);
 	}
 }
 

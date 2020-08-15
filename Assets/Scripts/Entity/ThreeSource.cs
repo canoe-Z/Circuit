@@ -214,16 +214,16 @@ public class ThreeSource : EntityBase, ISource
 
 	public static GameObject Create(SourceMode sourceMode, List<double> EMaxList)
 	{
-		return Set(BaseCreate<ThreeSource>(prefabName: GetPrefabName(sourceMode)), EMaxList).gameObject;
+		return BaseCreate<ThreeSource>(prefabName: GetPrefabName(sourceMode)).Set(EMaxList).gameObject;
 	}
 
-	private static ThreeSource Set(ThreeSource threeSource, List<double> EMaxList)
+	private ThreeSource Set(List<double> EMaxList)
 	{
-		for (var i = 0; i < threeSource.sourceNum; i++)
+		for (var i = 0; i < sourceNum; i++)
 		{
-			threeSource.EMax[i] = EMaxList[i];
+			EMax[i] = EMaxList[i];
 		}
-		return threeSource;
+		return this;
 	}
 
 	public override EntityData Save() => new SourceData(this);
@@ -250,7 +250,7 @@ public class ThreeSource : EntityBase, ISource
 
 		public override void Load()
 		{
-			ThreeSource threeSource = Set(BaseCreate<ThreeSource>(baseData, GetPrefabName(sourceMode)), EMaxList);
+			ThreeSource threeSource = BaseCreate<ThreeSource>(baseData, GetPrefabName(sourceMode)).Set(EMaxList);
 
 			threeSource.mySwitch.IsOn = isOn;
 			for (var i = 0; i < knobPosList.Count; i++)

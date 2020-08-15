@@ -160,7 +160,7 @@ abstract public class EntityBase : MonoBehaviour
 	public abstract void SetElement(int entityID);
 	public abstract EntityData Save();
 
-	public static T BaseCreate<T>(EntityBaseData? baseData=null, string prefabName = null) where T : Component
+	public static T BaseCreate<T>(EntityBaseData? baseData = null, string prefabName = null) where T : Component
 	{
 		// 加载预制体
 		GameObject TGameObject;
@@ -178,7 +178,7 @@ abstract public class EntityBase : MonoBehaviour
 			// 注入ID
 			SetEntityID(t, baseData.Value.IDList);
 		}
-		
+
 		return t;
 	}
 
