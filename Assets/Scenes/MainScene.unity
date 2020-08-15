@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3184503, g: 0.35714272, b: 0.3770067, a: 1}
+  m_IndirectSpecularColor: {r: 0.3180066, g: 0.35714516, b: 0.37688002, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1853,6 +1853,7 @@ GameObject:
   - component: {fileID: 253484466}
   - component: {fileID: 253484465}
   - component: {fileID: 253484464}
+  - component: {fileID: 253484467}
   m_Layer: 5
   m_Name: iptNum_SliderR
   m_TagString: Untagged
@@ -1936,7 +1937,18 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 253484467}
+        m_MethodName: InputChecker
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
@@ -1981,6 +1993,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 253484462}
   m_CullTransparentMesh: 0
+--- !u!114 &253484467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253484462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9ee3ebd9040d846ba7f7a20ecd3fd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 253484464}
 --- !u!1 &257993117
 GameObject:
   m_ObjectHideFlags: 0
@@ -4747,6 +4772,7 @@ GameObject:
   - component: {fileID: 646263109}
   - component: {fileID: 646263108}
   - component: {fileID: 646263107}
+  - component: {fileID: 646263110}
   m_Layer: 5
   m_Name: iptNum_R
   m_TagString: Untagged
@@ -4830,7 +4856,18 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 646263110}
+        m_MethodName: InputChecker
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
@@ -4875,6 +4912,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 646263105}
   m_CullTransparentMesh: 0
+--- !u!114 &646263110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 646263105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9ee3ebd9040d846ba7f7a20ecd3fd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 646263107}
 --- !u!1 &688063659
 GameObject:
   m_ObjectHideFlags: 0
