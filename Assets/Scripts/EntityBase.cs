@@ -151,7 +151,7 @@ abstract public class EntityBase : MonoBehaviour
 	{
 		RaycastHit info;
 		Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
-		if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, (1 << 11)))//11层碰撞
+		if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, 1 << 11))//11层碰撞
 		{
 			hitPos = info.point;
 			return true;
@@ -165,20 +165,23 @@ abstract public class EntityBase : MonoBehaviour
 
 	//速度限制
 	Rigidbody rigidBody;
-	bool limitOtherTwo = true;
+	bool isOnTable = true;
 	const float speedLimit = 1f;
 	const float speedLimit_Y = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
 	{
+		//奇怪的东西
+		deltaPos *= 0.9f;
+
 		Vector3 speed = rigidBody.velocity;
 		//备份Y
 		float spdY = speed.y;
 		speed.y = 0;
-		//竖直方向速度限制
-		if (spdY > speedLimit_Y) spdY = speedLimit_Y;
 		//两个方向的速度限制
-		if (limitOtherTwo)
+		if (isOnTable)
 		{
+			//竖直方向速度限制
+			if (spdY > speedLimit_Y) spdY = speedLimit_Y;
 			if (speed.magnitude > speedLimit)
 			{
 				speed = speed.normalized * speedLimit;
@@ -189,13 +192,13 @@ abstract public class EntityBase : MonoBehaviour
 		rigidBody.velocity = speed;
 
 		//bool值
-		limitOtherTwo = false;
+		isOnTable = false;
 	}
 	private void OnTriggerStay(Collider other)
 	{
 		if (other.attachedRigidbody.gameObject.layer == 12)
 		{
-			limitOtherTwo = true;
+			isOnTable = true;
 		}
 	}
 
