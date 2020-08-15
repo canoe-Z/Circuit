@@ -80,6 +80,8 @@ public class ConnectionManager : MonoBehaviour
 	public static void ConnectRope(CircuitPort port1, CircuitPort port2)
 	{
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
+		ObiParticlePicker picker = rope.AddComponent<ObiParticlePicker>();
+		picker.solver = GetSolver();
 		// 关闭碰撞检测
 		rope.layer = 8;
 		rope.AddComponent<MeshCollider>();
