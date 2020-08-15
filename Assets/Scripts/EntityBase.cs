@@ -165,15 +165,40 @@ abstract public class EntityBase : MonoBehaviour
 
 	//速度限制
 	Rigidbody rigidBody;
-	readonly float speedLimit = 1f;
+	bool limitOtherTwo = true;
+	const float speedLimit = 1f;
+	const float speedLimit_Y = 1f;
 	private void FixedUpdate()//与物理引擎保持帧同步
 	{
-		if (rigidBody.velocity.magnitude > speedLimit)
+		Vector3 speed = rigidBody.velocity;
+		//备份Y
+		float spdY = speed.y;
+		speed.y = 0;
+		//竖直方向速度限制
+		if (spdY > speedLimit_Y) spdY = speedLimit_Y;
+		//两个方向的速度限制
+		if (limitOtherTwo)
 		{
-			rigidBody.velocity = rigidBody.velocity.normalized * speedLimit;
+			if (speed.magnitude > speedLimit)
+			{
+				speed = speed.normalized * speedLimit;
+			}
+		}
+		//还原Y
+		speed.y = spdY;
+		rigidBody.velocity = speed;
 
+		//bool值
+		limitOtherTwo = false;
+	}
+	private void OnTriggerStay(Collider other)
+	{
+		if (other.attachedRigidbody.gameObject.layer == 12)
+		{
+			limitOtherTwo = true;
 		}
 	}
+
 
 	public virtual bool IsConnected() => ChildPorts.Select(x => x.IsConnected).Contains(true);
 
