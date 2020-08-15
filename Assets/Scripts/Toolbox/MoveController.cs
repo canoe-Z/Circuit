@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SpiceSharp.Simulations;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class MoveController : MonoBehaviour
@@ -29,6 +30,7 @@ public class MoveController : MonoBehaviour
 		SetMoveSpeed();
 		Rotate();
 		Move();
+		RopeUpdate();
 	}
 
 	/// <summary>
@@ -101,7 +103,7 @@ public class MoveController : MonoBehaviour
 	/// </summary>
 	public void Move()
 	{
-		if (!MoveController.CanTurn) return;//在菜单的时候禁止移动
+		if (!CanTurn) return;//在菜单的时候禁止移动
 
 		float dFront = 0;
 		float dRight = 0;
@@ -119,5 +121,33 @@ public class MoveController : MonoBehaviour
 		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * myMoveSpeed;
 		Vector3 world = Camera.main.gameObject.transform.TransformDirection(control);
 		characterController.Move(world);
+	}
+
+	void RopeUpdate()
+	{
+		if (!CanOperate) return;
+
+		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+		{
+			// 鼠标操作时更新所有导线的碰撞体
+			foreach(CircuitLine line in CircuitCalculator.Lines)
+			{
+				line.GetComponent<MeshCollider>().sharedMesh = line.GetComponent<MeshFilter>().sharedMesh;
+				line.GetComponent<MeshCollider>().convex = true;
+			}
+
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out RaycastHit hitInfo))
+			{
+				GameObject hitObject = hitInfo.collider.gameObject;
+				if (hitObject.name == "Rope")
+				{
+					if (Input.GetMouseButtonDown(1))
+					{
+						hitObject.GetComponent<CircuitLine>().DestroyRope();
+					}
+				}
+			}
+		}
 	}
 }
