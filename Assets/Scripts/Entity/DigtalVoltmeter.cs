@@ -75,6 +75,6 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	}
 
 	// 数字电压表属于简单元件（不需特殊值）
-	public override EntityData Save() => new SimpleEntityData<DigtalVoltmeter>(transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SimpleEntityData<DigtalVoltmeter>(this);
 }
 

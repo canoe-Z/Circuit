@@ -51,28 +51,36 @@ public class SliderR : EntityBase
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID, "_T"), PortID_TL.ToString(), PortID_TR.ToString(), 0));
 	}
 
-	public override EntityData Save() => new SliderRData(RMax, mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
-
-	public static GameObject Create(double rMax, float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public static GameObject Create(double RMax)
 	{
-		SliderR sliderR = BaseCreate<SliderR>(pos, angle, IDList);
-		sliderR.RMax = rMax;
-		if (sliderPos != null) sliderR.mySlider.SetSliderPos(sliderPos.Value);
-		return sliderR.gameObject;
-	}
-}
-
-[System.Serializable]
-public class SliderRData : EntityData
-{
-	private readonly double RMax;
-	private readonly float sliderPos;
-
-	public SliderRData(double RMax, float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
-	{
-		this.RMax = RMax;
-		this.sliderPos = sliderPos;
+		return Set(BaseCreate<SliderR>(), RMax).gameObject;
 	}
 
-	public override void Load() => SliderR.Create(RMax, sliderPos, pos, angle, IDList);
+	public static SliderR Set(SliderR sliderR, double RMax)
+	{
+		sliderR.RMax = RMax;
+		return sliderR;
+	}
+
+	public override EntityData Save() => new SliderRData(this);
+
+	[System.Serializable]
+	public class SliderRData : EntityData
+	{
+		private readonly double RMax;
+		private readonly float sliderPos;
+
+		public SliderRData(SliderR sliderR)
+		{
+			baseData = new EntityBaseData(sliderR);
+			RMax = sliderR.RMax;
+			sliderPos = sliderR.mySlider.SliderPos;
+		}
+
+		public override void Load()
+		{
+			SliderR sliderR = Set(BaseCreate<SliderR>(baseData), RMax);
+			sliderR.mySlider.SetSliderPos(sliderPos);
+		}
+	}
 }

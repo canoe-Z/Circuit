@@ -52,34 +52,42 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public static GameObject Create(int maxuI, double nominalR,
-	double? realR = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
+	public static GameObject Create(int maxuI, double nominalR)
 	{
-		NominaluA nominaluA = BaseCreate<NominaluA>(pos, angle, IDlist);
-
-		nominaluA.nominalR = nominalR;
-		nominaluA.maxuI = maxuI;
-		if (realR != null) nominaluA.realR = Nominal.GetRealValue(realR.Value);
-
+		NominaluA nominaluA = Set(BaseCreate<NominaluA>(), maxuI, nominalR);
+		nominaluA.realR = Nominal.GetRealValue(nominalR);
 		return nominaluA.gameObject;
 	}
 
-	public override EntityData Save() => new NominaluAData(maxuI, nominalR, realR, transform.position, transform.rotation, ChildPortID);
-}
-
-[System.Serializable]
-public class NominaluAData : EntityData
-{
-	private readonly double nominalR;
-	private readonly double realR;
-	private readonly int maxuI;
-
-	public NominaluAData(int maxuI, double nominalR, double realR, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	private static NominaluA Set(NominaluA nominaluA, int maxuI, double nominalR)
 	{
-		this.nominalR = nominalR;
-		this.realR = realR;
-		this.maxuI = maxuI;
+		nominaluA.nominalR = nominalR;
+		nominaluA.maxuI = maxuI;
+		return nominaluA;
 	}
 
-	public override void Load() => NominaluA.Create(maxuI, nominalR, realR, pos, angle, IDList);
+	public override EntityData Save() => new NominaluAData(this);
+
+	[System.Serializable]
+	public class NominaluAData : EntityData
+	{
+		private readonly double nominalR;
+		private readonly double realR;
+		private readonly int maxuI;
+
+		public NominaluAData(NominaluA nominaluA)
+		{
+			baseData = new EntityBaseData(nominaluA);
+			nominalR = nominaluA.nominalR;
+			realR = nominaluA.realR;
+			maxuI = nominaluA.maxuI;
+		}
+
+		public override void Load()
+		{
+			NominaluA nominaluA = Set(BaseCreate<NominaluA>(baseData), maxuI, nominalR);
+			nominaluA.realR = realR;
+		}
+	}
 }
+

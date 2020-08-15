@@ -62,5 +62,5 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save() => new SimpleEntityData<Gmeter>(transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SimpleEntityData<Gmeter>(this);
 }

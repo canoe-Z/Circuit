@@ -66,5 +66,5 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save() => new SimpleEntityData<Voltmeter>(transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SimpleEntityData<Voltmeter>(this);
 }

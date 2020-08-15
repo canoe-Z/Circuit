@@ -117,7 +117,7 @@ public class WdwMenu_Create : MonoBehaviour
 	//下面全都是按钮
 	void OnButton_Simple<T>() where T : EntityBase
 	{
-		willBeSet = EntityBase.SimpleCreate<T>().gameObject;//复制物体
+		willBeSet = EntityBase.BaseCreate<T>().gameObject;//复制物体
 		NormalCreate();
 	}
 

@@ -45,26 +45,31 @@ public class Source : EntityBase, ISource
 		}
 	}
 
-	public static GameObject Create(double E, double R, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public static GameObject Create(double E, double R)
 	{
-		Source source = BaseCreate<Source>(pos, angle, IDList);
+		return Set(BaseCreate<Source>(), E, R).gameObject;
+	}
+
+	public static Source Set(Source source, double E, double R)
+	{
 		source.E = E;
 		source.R = R;
-		return source.gameObject;
+		return source;
 	}
 
-	public override EntityData Save() => new SourceStandData(E, R, transform.position, transform.rotation, ChildPortID);
-}
+	public override EntityData Save() => new SourceStandData(this);
 
-[System.Serializable]
-public class SourceStandData : EntityData
-{
-	private readonly double E, R;
-	public SourceStandData(double E, double R, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	[System.Serializable]
+	protected class SourceStandData : EntityData
 	{
-		this.E = E;
-		this.R = R;
-	}
+		protected double E, R;
+		public SourceStandData(Source source)
+		{
+			baseData = new EntityBaseData(source);
+			E = source.E;
+			R = source.R;
+		}
 
-	public override void Load() => Source.Create(E, R, pos, angle, IDList);
+		public override void Load() => Set(BaseCreate<Source>(baseData), E, R);
+	}
 }

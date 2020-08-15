@@ -59,33 +59,27 @@ public class RBox : EntityBase
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_", 2), PortID_G.ToString(), PortID_R9.ToString(), R_9));
 	}
 
-	// 电阻箱添加时按简单元件处理
-	public static GameObject Create(List<int> knobRotIntList = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
-	{
-		RBox rBox = BaseCreate<RBox>(pos, angle, IDList);
+	public override EntityData Save() => new RboxData(this);
 
-		if (knobRotIntList != null)
+	[System.Serializable]
+	public class RboxData : EntityData
+	{
+		private readonly List<int> knobRotIntList = new List<int>();
+
+		public RboxData(RBox RBox)
 		{
-			for (var i = 0; i < knobRotIntList.Count; i++)
-			{
-				rBox.knobs[i].SetKnobRot(knobRotIntList[i]);
-			}
+			baseData = new EntityBaseData(RBox);
+			RBox.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
 		}
 
-		return rBox.gameObject;
+		public override void Load()
+		{
+			RBox RBox = BaseCreate<RBox>(baseData);
+			for (var i = 0; i < knobRotIntList.Count; i++)
+			{
+				RBox.knobs[i].SetKnobRot(knobRotIntList[i]);
+			}
+		}
 	}
-
-	public override EntityData Save() => new RboxData(knobs, transform.position, transform.rotation, ChildPortID);
 }
 
-[System.Serializable]
-public class RboxData : EntityData
-{
-	private readonly List<int> KnobRotIntList = new List<int>();
-	public RboxData(List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
-	{
-		knobs.ForEach(x => KnobRotIntList.Add(x.KnobPos_int));
-	}
-
-	public override void Load() => RBox.Create(KnobRotIntList, pos, angle, IDList);
-}

@@ -69,24 +69,22 @@ public class Switch : EntityBase
 		}
 	}
 
-	public static GameObject Create(float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public override EntityData Save() => new SwitchData(this);
+
+	[System.Serializable]
+	public class SwitchData : EntityData
 	{
-		Switch _switch = BaseCreate<Switch>(pos, angle, IDList);
-		if (sliderPos != null) _switch.mySlider.SetSliderPos(sliderPos.Value);
-		return _switch.gameObject;
+		private readonly float sliderPos;
+		public SwitchData(Switch _switch)
+		{
+			baseData = new EntityBaseData(_switch);
+			sliderPos = _switch.mySlider.SliderPos;
+		}
+
+		public override void Load()
+		{
+			Switch _switch = BaseCreate<Switch>(baseData);
+			_switch.mySlider.SetSliderPos(sliderPos);
+		}
 	}
-
-	public override EntityData Save() => new SwitchData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
-}
-
-[System.Serializable]
-public class SwitchData : EntityData
-{
-	private readonly float sliderPos;
-	public SwitchData(float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
-	{
-		this.sliderPos = sliderPos;
-	}
-
-	public override void Load() => Switch.Create(sliderPos, pos, angle, IDList);
 }

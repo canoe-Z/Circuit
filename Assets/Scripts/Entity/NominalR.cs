@@ -35,43 +35,43 @@ public class NominalR : Resistance
 		PortID_Right = ChildPorts[1].ID;
 	}
 
-	public static GameObject Create(double nominalValue, string prefix,
-		double? realValue = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
+	public static GameObject Create(double nominalValue, string prefix)
 	{
-		NominalR nominalR = BaseCreate<NominalR>(pos, angle, IDlist);
+		NominalR nominalR = Set(BaseCreate<NominalR>(), nominalValue, prefix);
 
-		nominalR.nominalValue = nominalValue;
-		nominalR.prefix = prefix;
-
-		// 创建时生成新随机值，读档时写入旧值
-		if (realValue != null)
-		{
-			nominalR.RValue = realValue.Value;
-		}
-		else
-		{
-			nominalR.RValue = Nominal.GetRealValue(nominalValue);
-		}
-
+		// 创建时生成新随机值
+		nominalR.RValue = Nominal.GetRealValue(nominalValue);
 		return nominalR.gameObject;
 	}
 
-	public override EntityData Save() => new NominalRData(nominalValue, RValue, prefix, transform.position, transform.rotation, ChildPortID);
-}
-
-[System.Serializable]
-public class NominalRData : ResistanceData
-{
-	private readonly double nominalValue;
-	private readonly double? realValue;
-	private readonly string prefix;
-
-	public NominalRData(double nominalValue, double? realValue, string prefix, Vector3 pos, Quaternion angle, List<int> id) : base(realValue, pos, angle, id)
+	private static NominalR Set(NominalR nominalR, double nominalValue, string prefix)
 	{
-		this.nominalValue = nominalValue;
-		this.realValue = realValue;
-		this.prefix = prefix;
+		nominalR.nominalValue = nominalValue;
+		nominalR.prefix = prefix;
+		return nominalR;
 	}
 
-	public override void Load() => NominalR.Create(nominalValue, prefix, realValue, pos, angle, IDList);
+	public override EntityData Save() => new NominalRData(this);
+
+	[System.Serializable]
+	private class NominalRData : ResistanceData
+	{
+		private readonly double nominalValue;
+		private readonly string prefix;
+
+		public NominalRData(NominalR nominalR) : base(nominalR)
+		{
+			nominalValue = nominalR.nominalValue;
+			prefix = nominalR.prefix;
+		}
+
+		public override void Load()
+		{
+			NominalR nominalR = Set(BaseCreate<NominalR>(baseData), nominalValue, prefix);
+
+			// 读档时读取旧随机值
+			nominalR.RValue = RValue;
+		}
+	}
 }
+

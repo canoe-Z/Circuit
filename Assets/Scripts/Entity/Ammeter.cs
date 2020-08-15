@@ -71,5 +71,5 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 	}
 
 	// 电流表属于简单元件
-	public override EntityData Save() => new SimpleEntityData<Ammeter>(transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SimpleEntityData<Ammeter>(this);
 }

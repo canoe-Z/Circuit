@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static ThreeSource;
 
 /// <summary>
 /// 三模三路电源
@@ -66,7 +65,7 @@ public class ThreeSource : EntityBase, ISource
 		texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
 		if (texts.Count != sourceNum) Debug.LogError("文本个数不合法");
 
-		// 默认启动时开机
+		// 默认启动时开机，读档可覆盖该设置
 		mySwitch.IsOn = true;
 
 		// 限制旋钮旋转极限角度
@@ -78,7 +77,7 @@ public class ThreeSource : EntityBase, ISource
 		// 第一次执行初始化，此后受事件控制
 		mySwitch.SwitchEvent += ChangePower;
 		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
-		UpdateKnob();
+		ChangePower();
 
 		for (var i = 0; i < sourceNum; i++)
 		{
@@ -198,65 +197,69 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 
-	public static GameObject Create(SourceMode sourceMode = SourceMode.three,
-		List<double> _EMaxList = null, List<float> knobPosList = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public static string GetPrefabName(SourceMode sourceMode)
 	{
-		ThreeSource threeSource;
 		switch (sourceMode)
 		{
 			case SourceMode.one:
-				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource1");
-				break;
+				return "ThreeSource1";
 			case SourceMode.three:
-				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource");
-				break;
+				return "ThreeSource";
 			case SourceMode.twoOfThree:
-				threeSource = BaseCreate<ThreeSource>(pos, angle, IDList, "ThreeSource2");
-				break;
+				return "ThreeSource2";
 			default:
-				threeSource = null;
-				break;
+				return null;
+		}
+	}
+
+	public static GameObject Create(SourceMode sourceMode, List<double> EMaxList)
+	{
+		return Set(BaseCreate<ThreeSource>(prefabName: GetPrefabName(sourceMode)), EMaxList).gameObject;
+	}
+
+	private static ThreeSource Set(ThreeSource threeSource, List<double> EMaxList)
+	{
+		for (var i = 0; i < threeSource.sourceNum; i++)
+		{
+			threeSource.EMax[i] = EMaxList[i];
+		}
+		return threeSource;
+	}
+
+	public override EntityData Save() => new SourceData(this);
+
+	/// <summary>
+	/// 存档数据
+	/// </summary>
+	[System.Serializable]
+	public class SourceData : EntityData
+	{
+		private readonly SourceMode sourceMode;
+		private readonly List<double> EMaxList;
+		private readonly bool isOn;
+		private readonly List<float> knobPosList = new List<float>();
+
+		public SourceData(ThreeSource threeSource)
+		{
+			sourceMode = threeSource.sourceMode;
+			baseData = new EntityBaseData(threeSource);
+			EMaxList = threeSource.EMax.ToList();
+			isOn = threeSource.mySwitch.IsOn;
+			threeSource.knobs.ForEach(x => knobPosList.Add(x.KnobPos));
 		}
 
-		if (_EMaxList != null)
+		public override void Load()
 		{
-			for (var i = 0; i < threeSource.sourceNum; i++)
-			{
-				threeSource.EMax[i] = _EMaxList[i];
-			}
-		}
+			ThreeSource threeSource = Set(BaseCreate<ThreeSource>(baseData, GetPrefabName(sourceMode)), EMaxList);
 
-		if (knobPosList != null)
-		{
+			threeSource.mySwitch.IsOn = isOn;
 			for (var i = 0; i < knobPosList.Count; i++)
 			{
 				// 此处不再需要更新值，在Start()中统一更新
 				threeSource.knobs[i].SetKnobRot(knobPosList[i]);
 			}
 		}
-
-		return threeSource.gameObject;
 	}
-
-	public override EntityData Save() => new SourceData(sourceMode, EMax, knobs, transform.position, transform.rotation, ChildPortID);
 }
 
-/// <summary>
-/// 存档数据
-/// </summary>
-[System.Serializable]
-public class SourceData : EntityData
-{
-	private readonly SourceMode sourceMode;
-	private readonly List<float> knobPosList = new List<float>();
-	private readonly List<double> EMaxList;
 
-	public SourceData(SourceMode sourceMode, double[] EMax, List<MyKnob> knobs, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
-	{
-		this.sourceMode = sourceMode;
-		EMaxList = EMax.ToList();
-		knobs.ForEach(x => knobPosList.Add(x.KnobPos));
-	}
-
-	public override void Load() => Create(sourceMode, EMaxList, knobPosList, pos, angle, IDList);
-}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static Source;
 
 /// <summary>
 /// 待测电源
@@ -16,55 +17,44 @@ public class NominalSource : Source
 		PortID_V = ChildPorts[1].ID;
 	}
 
-	public static GameObject Create(double nominalE, double nominalR, string strShow,
-		double? realE = null, double? realR = null, Float3 pos = null, Float4 angle = null, List<int> IDList = null)
+	public static GameObject Create(double nominalE, double nominalR, string strShow)
 	{
-		NominalSource nominalSource = BaseCreate<NominalSource>(pos, angle, IDList);
+		NominalSource nominalSource = Set(BaseCreate<NominalSource>(), nominalE, nominalR, strShow);
 
-		nominalSource.nominalE = nominalE;
-		nominalSource.nominalR = nominalR;
-		nominalSource.strShow = strShow;
-
-		// 创建时生成新随机值，读档时写入旧值
-		if (realE != null)
-		{
-			nominalSource.E = realE.Value;
-		}
-		else
-		{
-			nominalSource.E = Nominal.GetRealValue(nominalE);
-		}
-
-		// 创建时生成新随机值，读档时写入旧值
-		if (realR != null)
-		{
-			nominalSource.R = realR.Value;
-		}
-		else
-		{
-			nominalSource.R = Nominal.GetRealValue(nominalR);
-		}
+		// 创建时生成新随机值
+		nominalSource.E = Nominal.GetRealValue(nominalE);
+		nominalSource.R = Nominal.GetRealValue(nominalR);
 
 		return nominalSource.gameObject;
 	}
 
-	public override EntityData Save() => new NominalSourceData(nominalE, nominalR, strShow, E, R, transform.position, transform.rotation, ChildPortID);
-}
-
-[System.Serializable]
-public class NominalSourceData : EntityData
-{
-	private readonly double realE, realR, nominalE, nominalR;
-	private readonly string strShow;
-	public NominalSourceData(double nominalE, double nominalR, string strShow,
-		double realE, double realR, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
+	private static NominalSource Set(NominalSource nominalSource, double nominalE, double nominalR, string strShow)
 	{
-		this.realE = realE;
-		this.realR = realR;
-		this.nominalE = nominalE;
-		this.nominalR = nominalR;
-		this.strShow = strShow;
+		nominalSource.nominalE = nominalE;
+		nominalSource.nominalR = nominalR;
+		nominalSource.strShow = strShow;
+		return nominalSource;
 	}
 
-	public override void Load() => NominalSource.Create(nominalE, nominalR, strShow, realE, realR, pos, angle, IDList);
+	public override EntityData Save() => new NominalSourceData(this);
+
+	[System.Serializable]
+	private class NominalSourceData : SourceStandData
+	{
+		private readonly double nominalE, nominalR;
+		private readonly string strShow;
+		public NominalSourceData(NominalSource nominalSource) : base(nominalSource)
+		{
+			nominalE = nominalSource.nominalE;
+			nominalR = nominalSource.nominalR;
+			strShow = nominalSource.strShow;
+		}
+
+		public override void Load()
+		{
+			NominalSource nominalSource = Set(BaseCreate<NominalSource>(baseData), nominalE, nominalR, strShow);
+			nominalSource.E = E;
+			nominalSource.R = R;
+		}
+	}
 }

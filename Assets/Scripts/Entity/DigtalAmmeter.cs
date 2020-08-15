@@ -63,5 +63,5 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	}
 
 	// 数字电流表属于简单元件
-	public override EntityData Save() => new SimpleEntityData<DigtalAmmeter>(transform.position, transform.rotation, ChildPortID);
+	public override EntityData Save() => new SimpleEntityData<DigtalAmmeter>(this);
 }

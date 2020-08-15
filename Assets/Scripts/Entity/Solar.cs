@@ -100,25 +100,23 @@ public class Solar : EntityBase, ISource
 		}
 	}
 
-	public static GameObject Create(float? sliderPos = null, Float3 pos = null, Float4 angle = null, List<int> IDlist = null)
+	public override EntityData Save() => new SolarData(this);
+
+	[System.Serializable]
+	public class SolarData : EntityData
 	{
-		Solar solar = BaseCreate<Solar>(pos, angle, IDlist);
-		if (sliderPos != null) solar.mySlider.SetSliderPos(sliderPos.Value);
-		return solar.gameObject;
+		private readonly float sliderPos;
+
+		public SolarData(Solar solar)
+		{
+			baseData = new EntityBaseData(solar);
+			sliderPos = solar.mySlider.SliderPos;
+		}
+
+		public override void Load()
+		{
+			Solar solar = BaseCreate<Solar>(baseData);
+			solar.mySlider.SetSliderPos(sliderPos);
+		}
 	}
-
-	public override EntityData Save() => new SolarData(mySlider.SliderPos, transform.position, transform.rotation, ChildPortID);
-}
-
-[System.Serializable]
-public class SolarData : EntityData
-{
-	private readonly float sliderPos;
-
-	public SolarData(float sliderPos, Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList)
-	{
-		this.sliderPos = sliderPos;
-	}
-
-	public override void Load() => Solar.Create(sliderPos, pos, angle, IDList);
 }

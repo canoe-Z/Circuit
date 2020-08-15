@@ -160,20 +160,25 @@ abstract public class EntityBase : MonoBehaviour
 	public abstract void SetElement(int entityID);
 	public abstract EntityData Save();
 
-	protected static T BaseCreate<T>(Float3 pos, Float4 angle, List<int> IDlist, string entityName = null) where T : Component
+	public static T BaseCreate<T>(EntityBaseData? baseData=null, string prefabName = null) where T : Component
 	{
-		pos = pos ?? Float3.zero;
-		angle = angle ?? Float4.identity;
-
 		// 加载预制体
 		GameObject TGameObject;
-		entityName = entityName ?? typeof(T).ToString();
-		TGameObject = (GameObject)Resources.Load(entityName);
+		prefabName = prefabName ?? typeof(T).ToString();
+		TGameObject = (GameObject)Resources.Load(prefabName);
 
-		T t = Instantiate(TGameObject, pos.ToVector3(), angle.ToQuaternion()).GetComponent<T>();
-
-		// 注入ID
-		if (IDlist != null) SetEntityID(t, IDlist);
+		T t;
+		if (baseData == null)
+		{
+			t = Instantiate(TGameObject, Vector3.zero, Quaternion.identity).GetComponent<T>();
+		}
+		else
+		{
+			t = Instantiate(TGameObject, baseData.Value.pos.ToVector3(), baseData.Value.angle.ToQuaternion()).GetComponent<T>();
+			// 注入ID
+			SetEntityID(t, baseData.Value.IDList);
+		}
+		
 		return t;
 	}
 
@@ -188,43 +193,47 @@ abstract public class EntityBase : MonoBehaviour
 			}
 		}
 	}
+}
 
-	public static GameObject SimpleCreate<T>(Float3 pos = null, Float4 angle = null, List<int> IDlist = null) where T : Component
+[System.Serializable]
+public struct EntityBaseData
+{
+	public readonly Float3 pos;
+	public readonly Float4 angle;
+	public readonly List<int> IDList;
+
+	public EntityBaseData(EntityBase entity)
 	{
-		return BaseCreate<T>(pos, angle, IDlist).gameObject;
+		IDList = entity.ChildPortID;
+		pos = entity.transform.position.ToFloat3();
+		angle = entity.transform.rotation.ToFloat4();
 	}
 }
 
 [System.Serializable]
 abstract public class EntityData
 {
-	protected readonly List<int> IDList;
-	protected readonly Float3 pos;
-	protected readonly Float4 angle;
-
-	protected EntityData(Vector3 pos, Quaternion angle, List<int> IDList)
-	{
-		this.IDList = IDList;
-		this.pos = pos.ToFloat3();
-		this.angle = angle.ToFloat4();
-	}
+	protected EntityBaseData baseData;
 
 	public abstract void Load();
 }
 
+
 [System.Serializable]
 public class SimpleEntityData<T> : EntityData where T : Component
 {
-	public SimpleEntityData(Vector3 pos, Quaternion angle, List<int> IDList) : base(pos, angle, IDList) { }
+	public SimpleEntityData(EntityBase simpleEntity)
+	{
+		baseData = new EntityBaseData(simpleEntity);
+	}
 
-	public override void Load() => EntityBase.SimpleCreate<T>(pos, angle, IDList);
+	public override void Load() => EntityBase.BaseCreate<T>(baseData);
 }
 
 public interface ISource
 {
 	void GroundCheck();
 }
-
 
 public interface ICalculatorUpdate
 {
