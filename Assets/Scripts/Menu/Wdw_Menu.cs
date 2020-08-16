@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Wdw_Menu : MonoBehaviour
@@ -97,7 +95,7 @@ public class Wdw_Menu : MonoBehaviour
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
 		MoveController.CanOperate = false;//不允许移动视角
-		MoveController.CanTurn = false;
+		MoveController.CanControll = false;
 		mainThings.enabled = true;
 
 		//清空输入框和下拉菜单
@@ -119,7 +117,7 @@ public class Wdw_Menu : MonoBehaviour
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
 		MoveController.CanOperate = true;//允许移动视角
-		MoveController.CanTurn = true;
+		MoveController.CanControll = true;
 		mainThings.enabled = false;
 	}
 }

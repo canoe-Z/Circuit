@@ -10,6 +10,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 
 	void Awake()
 	{
+		// 启动时自动读取上一次的设置
 		if (File.Exists("Saves/settings.binary"))
 		{
 			BinaryFormatter formatter = new BinaryFormatter();
@@ -17,33 +18,26 @@ public class Wdw_Menu_Settings : MonoBehaviour
 			SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
 			saveFile.Close();
 
-			sldMove.value = datafromfile.MyMoveSpeed;
-			sldTurn.value = datafromfile.MyTurnSpeed;
+			datafromfile.Load(this);
 		}
+		else
+		{
+			sldMove.value = 1f;
+			sldTurn.value = 1f;
+		}
+
+		MoveController.MoveRatio = sldMove.value;
+		MoveController.TurnRatio = sldTurn.value;
+
+		sldMove.onValueChanged.AddListener(ChangeMoveRatio);
+		sldTurn.onValueChanged.AddListener(ChangeTurnRatio);
 	}
 
-	void Start()
-	{
-		MoveController.myMoveSpeed = sldMove.value;
-		MoveController.myTurnSpeed = sldTurn.value;
-		sldMove.onValueChanged.AddListener(ChangeMove);
-		sldTurn.onValueChanged.AddListener(ChangeTurn);
-	}
+	private void ChangeMoveRatio(float value)=> MoveController.MoveRatio = value;
 
-	void OnApplicationQuit()
-	{
-		Save(new SettingsData(this));
-	}
+	private void ChangeTurnRatio(float value) => MoveController.TurnRatio = value;
 
-	void ChangeMove(float value)
-	{
-		MoveController.myMoveSpeed = value;
-	}
-
-	void ChangeTurn(float value)
-	{
-		MoveController.myTurnSpeed = value;
-	}
+	void OnApplicationQuit() => Save(new SettingsData(this));
 
 	private void Save(SettingsData settingsData)
 	{
@@ -55,16 +49,24 @@ public class Wdw_Menu_Settings : MonoBehaviour
 		formatter.Serialize(saveFile, settingsData);
 		saveFile.Close();
 	}
-}
 
-[System.Serializable]
-public class SettingsData
-{
-	public float MyMoveSpeed, MyTurnSpeed;
-
-	public SettingsData(Wdw_Menu_Settings menu_Settings)
+	[System.Serializable]
+	private class SettingsData
 	{
-		MyMoveSpeed = menu_Settings.sldMove.value;
-		MyTurnSpeed = menu_Settings.sldTurn.value;
+		private readonly float moveRatio;
+		private readonly float turnRatio;
+
+		public SettingsData(Wdw_Menu_Settings menu_Settings)
+		{
+			moveRatio = menu_Settings.sldMove.value;
+			turnRatio = menu_Settings.sldTurn.value;
+		}
+
+		public void Load(Wdw_Menu_Settings menu_Settings)
+		{
+			menu_Settings.sldMove.value = moveRatio;
+			menu_Settings.sldTurn.value = turnRatio;
+		}
 	}
 }
+

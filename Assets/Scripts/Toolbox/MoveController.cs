@@ -6,91 +6,43 @@ using UnityEngine;
 /// </summary>
 public class MoveController : MonoBehaviour
 {
-	public static float myMoveSpeed = 1f;//移动速度的倍率
-	public static float myTurnSpeed = 1f;//转头速度的倍率
-	public static bool CanOperate { get; set; } = true;
-	public static bool CanTurn { get; set; } = true;
+	public static float MoveRatio { get; set; } = 1f;		// 移动速度倍率
+	public static float TurnRatio { get; set; } = 1f;		// 转头速度倍率
+
+	public static bool CanOperate { get; set; } = true;		// 可以操纵元件
+	public static bool CanControll { get; set; } = true;	// 可以操纵角色
+
 	// 用于获取CapsLock的状态
 	[DllImport("user32.dll")]
 	private static extern short GetKeyState(int keyCode);
 	private CharacterController characterController;
+
 	private readonly float rotateSpeed = 1;
-	private readonly float defaultMoveSpeed = 0.1f;
-	private float moveSpeed;
+	private readonly float moveSpeed = 0.1f;
+
 	private bool W, A, S, D, Up, Down;
 
 	void Start()
 	{
-		Cursor.lockState = CursorLockMode.Locked;//锁定中央
+		// 锁定光标并隐藏
+		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
 		characterController = Camera.main.GetComponent<CharacterController>();
 	}
 
 	void Update()
 	{
 		GetKeyState();
-		SetMoveSpeed();
-		Rotate();
-		Move();
+		Rotate(rotateSpeed);
+		Move(moveSpeed);
 		RopeUpdate();
-	}
-
-	/// <summary>
-	/// 视角旋转，应每帧调用
-	/// </summary>
-	public void Rotate()
-	{
-		if (!MoveController.CanTurn) return;//在菜单的时候禁止转头
-		Vector3 camRot = Camera.main.transform.eulerAngles;
-		//鼠标移动距离
-		float rh = Input.GetAxis("Mouse X");
-		float rv = Input.GetAxis("Mouse Y");
-		rh *= myTurnSpeed;
-		rv *= myTurnSpeed;
-		camRot.x -= rv * rotateSpeed;
-		camRot.y += rh * rotateSpeed;
-		if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
-		if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
-		if (camRot.x < -89) camRot.x = -89;
-		Camera.main.transform.eulerAngles = camRot;
-	}
-
-	/// <summary>
-	/// 设置移动速度
-	/// </summary>
-	/// <param name="givenMoveSpeed">给定的移动速度</param>
-	public void SetMoveSpeed(float givenMoveSpeed)
-	{
-		moveSpeed = givenMoveSpeed;
-		SlowMove();
-
-	}
-
-	/// <summary>
-	/// 使用默认的移动速度
-	/// </summary>
-	public void SetMoveSpeed()
-	{
-		moveSpeed = defaultMoveSpeed;
-		SlowMove();
-	}
-
-	/// <summary>
-	/// 大写锁定打开时，移动速度变为十分之一
-	/// </summary>
-	public void SlowMove()
-	{
-		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
-		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
-		{
-			moveSpeed /= 10;
-		}
 	}
 
 	/// <summary>
 	/// 判断按键状态
 	/// </summary>
-	public void GetKeyState()
+	private void GetKeyState()
 	{
 		W = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
 		D = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
@@ -101,31 +53,72 @@ public class MoveController : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 视角移动，应每帧调用
+	/// 视角旋转
 	/// </summary>
-	public void Move()
+	private void Rotate(float speed)
 	{
-		if (!CanTurn) return;//在菜单的时候禁止移动
+		// 在菜单的时候禁止转头
+		if (!CanControll) return;
+		Vector3 camRot = Camera.main.transform.eulerAngles;
+
+		// 鼠标移动距离
+		float rh = Input.GetAxis("Mouse X");
+		float rv = Input.GetAxis("Mouse Y");
+
+		// 大写锁定打开时，转头速度乘以0.8
+		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
+		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
+		{
+			speed *= 0.8f;
+		}
+
+		camRot.x -= rv * speed * TurnRatio;
+		camRot.y += rh * speed * TurnRatio;
+
+		if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
+		if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
+		if (camRot.x < -89) camRot.x = -89;
+
+		Camera.main.transform.eulerAngles = camRot;
+	}
+
+	/// <summary>
+	/// 视角移动
+	/// </summary>
+	private void Move(float speed)
+	{
+		// 在菜单的时候禁止移动
+		if (!CanControll) return;
 
 		float dFront = 0;
 		float dRight = 0;
 		float dUp = 0;
 
-		if (W) dFront += moveSpeed;
-		if (D) dRight += moveSpeed;
+		// 大写锁定打开时，移动速度变为十分之一
+		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
+		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
+		{
+			speed /= 10;
+		}
 
-		if (S) dFront -= moveSpeed;
-		if (A) dRight -= moveSpeed;
+		if (W) dFront += speed;
+		if (D) dRight += speed;
 
-		if (Up) dUp -= moveSpeed;
-		if (Down) dUp += moveSpeed;
+		if (S) dFront -= speed;
+		if (A) dRight -= speed;
 
-		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * myMoveSpeed;
+		if (Up) dUp -= speed;
+		if (Down) dUp += speed;
+
+		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * MoveRatio;
 		Vector3 world = Camera.main.gameObject.transform.TransformDirection(control);
 		characterController.Move(world);
 	}
 
-	void RopeUpdate()
+	/// <summary>
+	/// 绳子操作
+	/// </summary>
+	private void RopeUpdate()
 	{
 		if (!CanOperate) return;
 
@@ -144,6 +137,7 @@ public class MoveController : MonoBehaviour
 				GameObject hitObject = hitInfo.collider.gameObject;
 				if (hitObject.name == "Rope")
 				{
+					// 右键删除
 					if (Input.GetMouseButtonDown(1))
 					{
 						hitObject.GetComponent<CircuitLine>().DestroyRope();
