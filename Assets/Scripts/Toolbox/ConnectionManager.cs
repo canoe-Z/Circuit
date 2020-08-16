@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using Obi;
+
+/// <summary>
+/// 绳子与导线连接
+/// </summary>
 public class ConnectionManager : MonoBehaviour
 {
 	public static CircuitPort clickedPort = null;

@@ -1,12 +1,12 @@
-﻿using Obi;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
-/// 3D界面连个导线：先创建空物体，然后挂这个脚本，最后调用连接函数就行了，电路层面：读取两个ID
+/// 导线
 /// </summary>
 public class CircuitLine : MonoBehaviour
 {
-	public int StartID { get; set; }    // 端口的全局ID
+	// 端口的全局ID
+	public int StartID { get; set; }
 	public int EndID { get; set; }
 	public bool IsActived { get; set; }
 
@@ -29,7 +29,7 @@ public class CircuitLine : MonoBehaviour
 		MouseExit?.Invoke(this);
 	}
 
-	
+
 	/// <summary>
 	/// 连接导线（记录ID）
 	/// </summary>
@@ -59,8 +59,11 @@ public class CircuitLine : MonoBehaviour
 	{
 		StartPort.Father.EntityDestroy -= DestroyRope;
 		EndPort.Father.EntityDestroy -= DestroyRope;
+
 		CircuitCalculator.Lines.Remove(this);
+
 		CircuitCalculator.NeedCalculate = true;
+
 		Destroy(gameObject);
 	}
 

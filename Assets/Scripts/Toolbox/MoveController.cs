@@ -1,7 +1,9 @@
-﻿using SpiceSharp.Simulations;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>
+/// 鼠标操控
+/// </summary>
 public class MoveController : MonoBehaviour
 {
 	public static float myMoveSpeed = 1f;//移动速度的倍率
@@ -130,7 +132,7 @@ public class MoveController : MonoBehaviour
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
 			// 鼠标操作时更新所有导线的碰撞体
-			foreach(CircuitLine line in CircuitCalculator.Lines)
+			foreach (CircuitLine line in CircuitCalculator.Lines)
 			{
 				line.GetComponent<MeshCollider>().sharedMesh = line.GetComponent<MeshFilter>().sharedMesh;
 				line.GetComponent<MeshCollider>().convex = true;

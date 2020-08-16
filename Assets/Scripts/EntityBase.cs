@@ -14,24 +14,21 @@ abstract public class EntityBase : MonoBehaviour
 	public static event EnterEventHandler MouseEnter;
 	public static event ExitEventHandler MouseExit;
 
+	// 元件删除事件
 	public delegate void EntityDestroyEventHandler();
 	public event EntityDestroyEventHandler EntityDestroy;
 
 	void Awake()
 	{
-		// 找刚体
-		rigidBody = GetComponent<Rigidbody>();
-		if (rigidBody == null)
-		{
-			Debug.LogError("没找到刚体");
-		}
+		// 获取刚体引用
+		rigidBody = transform.SafeGetComponent<Rigidbody>();
 
-		// 找端口的引用
+		// 获取端口引用
 		ChildPorts = FindCircuitPort();
 		PortNum = ChildPorts.Count;
 		ChildPortID = ChildPorts.Select(x => x.ID).ToList();
 
-		// 纳入Calculator管理
+		// 元件纳入Calculator管理
 		CircuitCalculator.Entities.AddLast(this);
 
 		// 执行子类的Awake()
@@ -60,7 +57,7 @@ abstract public class EntityBase : MonoBehaviour
 
 		return circuitPorts;
 	}
-	
+
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanOperate) return;
@@ -95,8 +92,10 @@ abstract public class EntityBase : MonoBehaviour
 			}
 		}
 	}
+
 	Vector3 deltaPos;
 	bool isMoving = false;
+
 	void OnMouseOver()
 	{
 		if (!MoveController.CanOperate) return;
@@ -111,16 +110,16 @@ abstract public class EntityBase : MonoBehaviour
 			}
 			else
 			{
-				deltaPos = new Vector3(0, 0, 0);
+				deltaPos = Vector3.zero;
 			}
 		}
-
 
 		// 按鼠标中键摆正元件
 		if (Input.GetMouseButtonDown(2))
 		{
-			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+			gameObject.transform.eulerAngles = Vector3.zero;
 		}
+
 		//按右键删除
 		if (Input.GetMouseButtonDown(1))
 		{
@@ -144,14 +143,14 @@ abstract public class EntityBase : MonoBehaviour
 	{
 		MouseExit?.Invoke(this);
 	}
+
 	/// <summary>
 	/// 得到打击到桌子的点
 	/// </summary>
 	private static bool HitCheck(out Vector3 hitPos)
 	{
-		RaycastHit info;
 		Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
-		if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, 1 << 11))//11层碰撞
+		if (Physics.Raycast(camTr.position, camTr.forward, out RaycastHit info, 2000, 1 << 11))//11层碰撞
 		{
 			hitPos = info.point;
 			return true;
@@ -168,7 +167,8 @@ abstract public class EntityBase : MonoBehaviour
 	bool isOnTable = true;
 	const float speedLimit = 1f;
 	const float speedLimit_Y = 1f;
-	private void FixedUpdate()//与物理引擎保持帧同步
+
+	void FixedUpdate()//与物理引擎保持帧同步
 	{
 		//奇怪的东西
 		deltaPos *= 0.9f;
@@ -194,7 +194,8 @@ abstract public class EntityBase : MonoBehaviour
 		//bool值
 		isOnTable = false;
 	}
-	private void OnTriggerStay(Collider other)
+
+	void OnTriggerStay(Collider other)
 	{
 		if (other.attachedRigidbody.gameObject.layer == 12)
 		{
@@ -202,12 +203,14 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-
 	public virtual bool IsConnected() => ChildPorts.Select(x => x.IsConnected).Contains(true);
 
 	public abstract void EntityAwake();
+
 	public abstract void LoadElement();
+
 	public abstract void SetElement(int entityID);
+
 	public abstract EntityData Save();
 
 	public static T BaseCreate<T>(EntityBaseData? baseData = null, string prefabName = null) where T : Component

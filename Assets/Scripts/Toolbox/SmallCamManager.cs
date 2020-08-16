@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 摄像机控制
+/// </summary>
 public class SmallCamManager : MonoBehaviour
 {
 	public static Camera MainCam { get; set; } = null;

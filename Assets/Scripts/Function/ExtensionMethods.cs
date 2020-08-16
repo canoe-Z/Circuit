@@ -406,7 +406,7 @@ public static partial class TransformExtensions
 		T t = transform.GetComponent<T>();
 		if (t == null)
 		{
-			Debug.LogError("找不到挂载的脚本");
+			Debug.LogError("找不到指定脚本" + typeof(T).ToString());
 			return null;
 		}
 		else

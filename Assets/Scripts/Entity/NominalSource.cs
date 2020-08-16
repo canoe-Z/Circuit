@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using static Source;
+﻿using UnityEngine;
 
 /// <summary>
 /// 待测电源
@@ -9,6 +7,7 @@ public class NominalSource : Source
 {
 	private double nominalE, nominalR;
 	private string strShow;
+
 	void Start()
 	{
 		sourceText.text = strShow;
