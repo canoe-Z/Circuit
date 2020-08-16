@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class InputR : MonoBehaviour
+public class InputChecker : MonoBehaviour
 {
 	public InputField inputField;
 	private bool hasScale = false;
 	private bool isWrongInput = false;
 
-	public void InputChecker()
+	public void InputR()
 	{
 		char[] charArray = inputField.text.ToCharArray();
 
