@@ -121,10 +121,8 @@ public class Wdw_Menu : MonoBehaviour
 
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
-
 		MoveController.CanOperate = false;
 		MoveController.CanControll = false;
-
 		mainThings.enabled = true;
 
 		//清空输入框和下拉菜单
@@ -145,6 +143,8 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
+		MoveController.CanOperate = true;
+		MoveController.CanControll = true;
 		mainThings.enabled = false;
 	}
 }
