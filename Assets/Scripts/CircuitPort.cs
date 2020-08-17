@@ -12,9 +12,6 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	public int LocalID { get; set; }                            // 接线柱本地ID
 	public EntityBase Father { get; set; }
 
-	public static event EnterEventHandler MouseEnter;
-	public static event ExitEventHandler MouseExit;
-
 	void Awake()
 	{
 		CircuitCalculator.Ports.AddLast(this);
@@ -41,14 +38,12 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanOperate) return;
-		MouseEnter?.Invoke(this);
 		transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 
 	void OnMouseExit()
 	{
 		if (!MoveController.CanOperate) return;
-		MouseExit?.Invoke(this);
 		transform.localScale = new Vector3(1, 1, 1);
 	}
 }

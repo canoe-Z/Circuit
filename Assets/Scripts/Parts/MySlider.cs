@@ -6,10 +6,6 @@
 /// </summary>
 public class MySlider : MonoBehaviour
 {
-	// 鼠标响应事件，用于控制Tip显示
-	public static event EnterEventHandler MouseEnter;
-	public static event ExitEventHandler MouseExit;
-
 	// 滑块位置变化事件
 	public delegate void SliderEventHandler();
 	public event SliderEventHandler SliderEvent;
@@ -28,24 +24,6 @@ public class MySlider : MonoBehaviour
 	/// 滑块离散位置，为小于Devide的整数
 	/// </summary>
 	public int SliderPos_int { get; private set; } = 0;
-
-	void OnMouseEnter()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseEnter?.Invoke(this);
-	}
-
-	void OnMouseOver()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseEnter?.Invoke(this);
-	}
-
-	void OnMouseExit()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseExit?.Invoke(this);
-	}
 
 	void OnMouseDrag()
 	{

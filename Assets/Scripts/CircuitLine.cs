@@ -14,22 +14,6 @@ public class CircuitLine : MonoBehaviour
 	public CircuitPort StartPort { get; set; }
 	public CircuitPort EndPort { get; set; }
 
-	public static event EnterEventHandler MouseEnter;
-	public static event ExitEventHandler MouseExit;
-
-	void OnMouseEnter()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseEnter?.Invoke(this);
-	}
-
-	void OnMouseExit()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseExit?.Invoke(this);
-	}
-
-
 	/// <summary>
 	/// 连接导线（记录ID）
 	/// </summary>

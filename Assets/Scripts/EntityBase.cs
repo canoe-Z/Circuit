@@ -11,9 +11,6 @@ abstract public class EntityBase : MonoBehaviour
 	public List<CircuitPort> ChildPorts { get; set; }                       //端口们的引用
 	public List<int> ChildPortID { get; set; }
 
-	public static event EnterEventHandler MouseEnter;
-	public static event ExitEventHandler MouseExit;
-
 	// 元件删除事件
 	public delegate void EntityDestroyEventHandler();
 	public event EntityDestroyEventHandler EntityDestroy;
@@ -56,12 +53,6 @@ abstract public class EntityBase : MonoBehaviour
 		}
 
 		return circuitPorts;
-	}
-
-	void OnMouseEnter()
-	{
-		if (!MoveController.CanOperate) return;
-		MouseEnter?.Invoke(this);
 	}
 
 	void Update()
@@ -137,11 +128,6 @@ abstract public class EntityBase : MonoBehaviour
 		CircuitCalculator.Entities.Remove(this);
 		CircuitCalculator.NeedCalculate = true;
 		Destroy(gameObject);
-	}
-
-	void OnMouseExit()
-	{
-		MouseExit?.Invoke(this);
 	}
 
 	/// <summary>
