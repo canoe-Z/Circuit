@@ -176,7 +176,17 @@ public class WdwMenu_Create : MonoBehaviour
 		}
 		NormalCreate();
 	}
-
+	
+	private void FixedUpdate()
+	{
+		if (transparentRenderers != null)//模型闪烁
+		{
+			foreach (var tr in transparentRenderers)
+			{
+				tr.enabled = !tr.enabled;
+			}
+		}
+	}
 	void Update()
 	{
 		if (willBeSet)//如果带了一个物体
@@ -234,6 +244,7 @@ public class WdwMenu_Create : MonoBehaviour
 			return false;
 		}
 	}
+	static Renderer[] transparentRenderers = null;
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
 	{
@@ -242,25 +253,7 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = false;
 		}
-		Renderer[] renderers = operate.GetComponentsInChildren<Renderer>();
-		foreach (var rend in renderers)
-		{
-			foreach (var mat in rend.materials)
-			{
-				if (mat.color.a > 0.999f)
-				{//变为Fade
-					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-					mat.SetInt("_ZWrite", 0);
-					mat.EnableKeyword("_ALPHABLEND_ON");
-					mat.renderQueue = 3000;
-					//恢复颜色
-					Color color = mat.color;
-					color.a = 0.5f;
-					mat.color = color;
-				}
-			}
-		}
+		transparentRenderers = operate.GetComponentsInChildren<Renderer>();
 	}
 	//打开这东西的碰撞体
 	static void OpenColl(GameObject operate)
@@ -270,25 +263,10 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = true;
 		}
-		Renderer[] renderers = operate.GetComponentsInChildren<Renderer>();
-		foreach (var rend in renderers)
+		foreach (var rend in transparentRenderers)
 		{
-			foreach (var mat in rend.materials)
-			{
-				if (Mathf.Abs(mat.color.a - 0.5f) < 0.001f)
-				{//恢复Opaque
-					mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-					mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-					mat.SetInt("_ZWrite", 1);
-					mat.DisableKeyword("_ALPHABLEND_ON");
-					mat.renderQueue = -1;
-					//变颜色
-					Color color = mat.color;
-					color.a = 1f;
-					mat.color = color;
-				}
-			}
+			rend.enabled = true;
 		}
-
+		transparentRenderers = null;
 	}
 }

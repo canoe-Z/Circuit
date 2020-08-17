@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,20 +11,29 @@ public class Wdw_Menu_Settings : MonoBehaviour
 
 	void Awake()
 	{
-		// 启动时自动读取上一次的设置
-		if (File.Exists("Saves/settings.binary"))
+		try//抓取可能出现的错误
 		{
-			BinaryFormatter formatter = new BinaryFormatter();
-			FileStream saveFile = File.Open("Saves/settings.binary", FileMode.Open);
-			SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
-			saveFile.Close();
+			// 启动时自动读取上一次的设置
+			if (File.Exists("Saves/settings.binary"))
+			{
+				BinaryFormatter formatter = new BinaryFormatter();
+				FileStream saveFile = File.Open("Saves/settings.binary", FileMode.Open);
+				SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
+				saveFile.Close();
 
-			datafromfile.Load(this);
+				datafromfile.Load(this);
+			}
+			else
+			{
+				sldMove.value = 1f;
+				sldTurn.value = 1f;
+			}
 		}
-		else
+		catch(Exception e)
 		{
-			sldMove.value = 1f;
-			sldTurn.value = 1f;
+#if UNITY_EDITOR
+			Debug.LogError(e);
+#endif
 		}
 
 		MoveController.MoveRatio = sldMove.value;
