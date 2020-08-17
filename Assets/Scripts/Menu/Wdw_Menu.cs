@@ -12,11 +12,13 @@ public class Wdw_Menu : MonoBehaviour
 	public Button btnToCreate;
 	public Button btnToSave;
 	public Button btnToSettings;
+
 	/// <summary>
 	/// 置为1时，强制关闭菜单
 	/// </summary>
 	[HideInInspector]
 	public static bool shouldCloseMenu = false;
+
 	void Start()
 	{
 		if (mainThings == null) Debug.LogError("这里没挂");
@@ -31,16 +33,41 @@ public class Wdw_Menu : MonoBehaviour
 	}
 
 	void Update()
-	{
+	{	
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			// 能操作场景对象，能操作角色，意味着菜单未开启
+			if (MoveController.CanOperate && MoveController.CanControll)
+			{
+				OpenMenu();
+				return;
+			}
+
+			// 不能操作场景对象，不能操作角色，意味着菜单已经开启
+			if (!MoveController.CanOperate && !MoveController.CanControll)
+			{
+				CloseMenu();
+				return;
+			}
+
+			// 不能操作场景对象，但是能操作角色，意味着正在添加元件，放下物体
+			if (!MoveController.CanOperate && MoveController.CanControll)
+			{
+				OpenMenu();
+				return;
+			}
+
+			// 能操作场景对象，但是不能操作角色，不存在这种情况，报错
+			if (MoveController.CanOperate && !MoveController.CanControll)
+			{
+				return;
+			}
+		}
+
 		if (shouldCloseMenu)//由其它类强制关闭
 		{
 			shouldCloseMenu = false;
 			CloseMenu();
-		}
-		if (Input.GetKeyDown(KeyCode.Escape))//开启或者关闭菜单，取决于是否进行过无法移动锁定
-		{
-			if (MoveController.CanOperate) OpenMenu();
-			else CloseMenu();
 		}
 	}
 
@@ -94,8 +121,10 @@ public class Wdw_Menu : MonoBehaviour
 
 		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
 		Cursor.visible = true;
-		MoveController.CanOperate = false;//不允许移动视角
+
+		MoveController.CanOperate = false;
 		MoveController.CanControll = false;
+
 		mainThings.enabled = true;
 
 		//清空输入框和下拉菜单
@@ -116,8 +145,6 @@ public class Wdw_Menu : MonoBehaviour
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
-		MoveController.CanOperate = true;//允许移动视角
-		MoveController.CanControll = true;
 		mainThings.enabled = false;
 	}
 }

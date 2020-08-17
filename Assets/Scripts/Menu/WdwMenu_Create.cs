@@ -193,7 +193,7 @@ public class WdwMenu_Create : MonoBehaviour
 				willBeSet = null;
 				MoveController.CanOperate = true;//可以操作物体了
 			}
-			else if (Input.GetMouseButtonDown(1))
+			else if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Escape))
 			{
 				OpenColl(willBeSet);//打开碰撞体
 				EntityBase entityBase = willBeSet.GetComponent<EntityBase>();//销毁
@@ -211,6 +211,7 @@ public class WdwMenu_Create : MonoBehaviour
 		CloseColl(willBeSet);//关闭碰撞体
 		Wdw_Menu.shouldCloseMenu = true;//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
+		MoveController.CanControll = true;
 	}
 
 	//

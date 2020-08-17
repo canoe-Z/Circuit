@@ -7,10 +7,17 @@ using UnityEngine;
 public class MoveController : MonoBehaviour
 {
 	public static float MoveRatio { get; set; } = 1f;		// 移动速度倍率
-	public static float TurnRatio { get; set; } = 1f;		// 转头速度倍率
+	public static float TurnRatio { get; set; } = 1f;       // 转头速度倍率
 
-	public static bool CanOperate { get; set; } = true;		// 可以操纵元件
-	public static bool CanControll { get; set; } = true;	// 可以操纵角色
+	/// <summary>
+	/// 可以操纵场景内已有对象
+	/// </summary>
+	public static bool CanOperate { get; set; } = true;
+
+	/// <summary>
+	/// 可以操纵角色
+	/// </summary>
+	public static bool CanControll { get; set; } = true;
 
 	// 用于获取CapsLock的状态
 	[DllImport("user32.dll")]
