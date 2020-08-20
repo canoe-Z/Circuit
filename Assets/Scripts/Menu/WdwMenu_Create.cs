@@ -181,6 +181,7 @@ public class WdwMenu_Create : MonoBehaviour
 	{
 		if (willBeSet)//如果带了一个物体
 		{
+
 			RaycastHit info;
 			Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
 			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, (1 << 11) | (1 << 0)))//0层碰撞
@@ -209,7 +210,7 @@ public class WdwMenu_Create : MonoBehaviour
 	void NormalCreate()
 	{
 		CloseColl(willBeSet);//关闭碰撞体
-		Wdw_Menu.shouldCloseMenu = true;//关闭菜单
+		Wdw_Menu.MenuState = 0;
 		MoveController.CanOperate = false;//禁止操作物体
 		MoveController.CanControll = true;
 	}
