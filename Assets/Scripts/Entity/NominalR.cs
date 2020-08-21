@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 待测电阻
 /// </summary>
-public class NominalR : Resistance
+public class NominalR : MyResistor
 {
 	private double nominalValue;    //标称值
 	private string prefix;          //前缀
@@ -53,7 +53,7 @@ public class NominalR : Resistance
 	public override EntityData Save() => new NominalRData(this);
 
 	[System.Serializable]
-	private class NominalRData : ResistanceData
+	private class NominalRData : ResistorData
 	{
 		private readonly double nominalValue;
 		private readonly string prefix;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 电阻
 /// </summary>
-public class Resistance : EntityBase
+public class MyResistor : EntityBase
 {
 	protected double RValue = 120;
 	protected Text resistanceText;
@@ -57,29 +57,29 @@ public class Resistance : EntityBase
 
 	public static GameObject Create(double RValue)
 	{
-		return BaseCreate<Resistance>().Set(RValue).gameObject;
+		return BaseCreate<MyResistor>().Set(RValue).gameObject;
 	}
 
-	public Resistance Set(double RValue)
+	public MyResistor Set(double RValue)
 	{
 		this.RValue = RValue;
 		return this;
 	}
 
-	public override EntityData Save() => new ResistanceData(this);
+	public override EntityData Save() => new ResistorData(this);
 
 	[System.Serializable]
-	protected class ResistanceData : EntityData
+	protected class ResistorData : EntityData
 	{
 		protected double RValue;
 
-		public ResistanceData(Resistance resistance)
+		public ResistorData(MyResistor resistance)
 		{
 			baseData = new EntityBaseData(resistance);
 			RValue = resistance.RValue;
 		}
 
-		public override void Load() => BaseCreate<Resistance>(baseData).Set(RValue);
+		public override void Load() => BaseCreate<MyResistor>(baseData).Set(RValue);
 	}
 }
 

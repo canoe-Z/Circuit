@@ -136,7 +136,7 @@ public class WdwMenu_Create : MonoBehaviour
 		if (ParseRNum(iptNum_R.text, out double num))
 		{
 			iptNum_R.text = "";
-			willBeSet = Resistance.Create(num).gameObject;
+			willBeSet = MyResistor.Create(num).gameObject;
 			NormalCreate();
 		}
 	}
