@@ -93,6 +93,7 @@ public class ThreeSource : EntityBase, ISource
 	{
 		// 关机时旋钮可以调整，但是不更新电源
 		if (!mySwitch.IsOn) return;
+
 		for (var i = 0; i < sourceNum; i++)
 		{
 			if (i < knobNum)

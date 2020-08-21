@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using UnityEngine;
 using SpiceSharp.Components;
 using SpiceSharp.Entities;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,21 +12,30 @@ public class Solar : EntityBase, ISource
 {
 	private const double IscMax = 0.06; // 最大短路电流
 	private double Isc;
+	private int PortID_G, PortID_V;
+
+	private MySwitch mySwitch;
 	private MySlider mySlider;
 	private Text sloarText;
-	private int PortID_G, PortID_V;
+	private Light sloarLight;
 
 	public override void EntityAwake()
 	{
+		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
 		mySlider = transform.FindComponent_DFS<MySlider>("Slider");
 		sloarText = transform.FindComponent_DFS<Text>("Text");
+		sloarLight = transform.FindComponent_DFS<Light>("Spot Light");
+
+		// 默认启动时关机，读档可覆盖该设置
+		mySwitch.IsOn = false;
 	}
 
 	void Start()
 	{
-		// 第一次执行初始化，此后受事件控制
+		// 第一次执行初始化，此后受事件控制，UpdateSlider由ChangePower初始化
+		mySwitch.SwitchEvent += ChangePower;
 		mySlider.SliderEvent += UpdateSlider;
-		UpdateSlider();
+		ChangePower();
 
 		PortID_G = ChildPorts[0].ID;
 		PortID_V = ChildPorts[1].ID;
@@ -35,6 +43,9 @@ public class Solar : EntityBase, ISource
 
 	void UpdateSlider()
 	{
+		// 关机时滑块可以调整，但是不更新太阳能电池
+		if (!mySwitch.IsOn) return;
+
 		float fm = 6 - 5 * mySlider.SliderPos;  // 会被平方的分母
 		float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
 		Isc = lightStrength * IscMax;
@@ -43,10 +54,28 @@ public class Solar : EntityBase, ISource
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
-	public override void LoadElement()
+	/// <summary>
+	/// 根据MySwtich状态开启/关闭
+	/// </summary>
+	private void ChangePower()
 	{
-		CircuitCalculator.UF.Union(PortID_G, PortID_V);
+		// 开机
+		if (mySwitch.IsOn)
+		{
+			// 根据滑块位置更新太阳能电池状态
+			UpdateSlider();
+			sloarLight.enabled = true;
+		}
+		// 关机
+		else
+		{
+			Isc = 0;
+			sloarText.text = "00.00";
+			sloarLight.enabled = false;
+		}
 	}
+
+	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_G, PortID_V);
 
 	// 构建二极管模型
 	protected void ApplyParameters(Entity entity, string definition)
@@ -59,7 +88,7 @@ public class Solar : EntityBase, ISource
 			// Get the name and value
 			var parts = assignment.Split('=');
 			if (parts.Length != 2)
-				throw new Exception("Invalid assignment");
+				throw new System.Exception("Invalid assignment");
 			var name = parts[0].ToLower();
 			var value = double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture);
 
@@ -80,7 +109,6 @@ public class Solar : EntityBase, ISource
 		PortID_G = ChildPorts[0].ID;
 		PortID_V = ChildPorts[1].ID;
 
-		Debug.Log("短路电流为" + Isc);
 		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(entityID, "_S"), "S+", PortID_G.ToString(), Isc));
 		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"), PortID_G.ToString(), "S+", "1N4007"));
 		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
@@ -105,17 +133,20 @@ public class Solar : EntityBase, ISource
 	[System.Serializable]
 	public class SolarData : EntityData
 	{
+		private readonly bool isOn;
 		private readonly float sliderPos;
 
 		public SolarData(Solar solar)
 		{
 			baseData = new EntityBaseData(solar);
+			isOn = solar.mySwitch.IsOn;
 			sliderPos = solar.mySlider.SliderPos;
 		}
 
 		public override void Load()
 		{
 			Solar solar = BaseCreate<Solar>(baseData);
+			solar.mySwitch.IsOn = isOn;
 			solar.mySlider.SetSliderPos(sliderPos);
 		}
 	}
