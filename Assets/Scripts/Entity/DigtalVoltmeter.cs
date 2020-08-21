@@ -48,6 +48,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			digtalDigtalVoltmeter.text = EntityText.GetText(0, 2);
 		}
 
+		// 开关变化引起电路重新计算，之后调用该部分
 		if (!mySwitch.IsOn)
 		{
 			digtalDigtalVoltmeter.text = EntityText.GetText(0, 2);
@@ -67,7 +68,24 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	// 数字电压表属于简单元件（不需特殊值）
-	public override EntityData Save() => new SimpleEntityData<DigtalVoltmeter>(this);
+	public override EntityData Save() => new DigtalVoltmeterData(this);
+
+	[System.Serializable]
+	public class DigtalVoltmeterData : EntityData
+	{
+		private readonly bool isOn;
+
+		public DigtalVoltmeterData(DigtalVoltmeter digtalVoltmeter)
+		{
+			baseData = new EntityBaseData(digtalVoltmeter);
+			isOn = digtalVoltmeter.mySwitch.IsOn;
+		}
+
+		public override void Load()
+		{
+			DigtalVoltmeter digtalVoltmeter = BaseCreate<DigtalVoltmeter>(baseData);
+			digtalVoltmeter.mySwitch.IsOn = isOn;
+		}
+	}
 }
 
