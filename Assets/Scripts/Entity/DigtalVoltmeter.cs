@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Components;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
@@ -45,13 +44,13 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		}
 		else
 		{
-			digtalDigtalVoltmeter.text = EntityText.GetText(0, 2);
+			digtalDigtalVoltmeter.text = "0.00";
 		}
 
 		// 开关变化引起电路重新计算，之后调用该部分
 		if (!mySwitch.IsOn)
 		{
-			digtalDigtalVoltmeter.text = EntityText.GetText(0, 2);
+			digtalDigtalVoltmeter.text = "0.00";
 		}
 	}
 

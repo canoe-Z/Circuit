@@ -7,12 +7,15 @@ using UnityEngine.UI;
 public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double R = 0.001;
-	private Text digtalAmmeterText;
 	private int PortID_GND, PortID_mA, PortID_A;
+
+	private Text digtalAmmeterText;
+	private MySwitch mySwitch;
 
 	public override void EntityAwake()
 	{
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
+		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
 	}
 
 	void Start()
@@ -24,6 +27,9 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		PortID_GND = ChildPorts[0].ID;
 		PortID_mA = ChildPorts[1].ID;
 		PortID_A = ChildPorts[2].ID;
+
+		// 默认启动时开机，读档可覆盖该设置
+		mySwitch.IsOn = true;
 	}
 
 	public void CalculatorUpdate()
@@ -44,7 +50,13 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		}
 		else
 		{
-			digtalAmmeterText.text = EntityText.GetText(0, 2);
+			digtalAmmeterText.text = "0.00";
+		}
+
+		// 开关变化引起电路重新计算，之后调用该部分
+		if (!mySwitch.IsOn)
+		{
+			digtalAmmeterText.text = "0.00";
 		}
 	}
 
@@ -56,12 +68,32 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 	public override void SetElement(int entityID)
 	{
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
+		if (mySwitch.IsOn)
+		{
+			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
+			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
 
-		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
+			CircuitCalculator.SpicePorts.AddRange(ChildPorts);
+		}
 	}
 
-	// 数字电流表属于简单元件
-	public override EntityData Save() => new SimpleEntityData<DigtalAmmeter>(this);
+	public override EntityData Save() => new DigtalAmmeterData(this);
+
+	[System.Serializable]
+	public class DigtalAmmeterData : EntityData
+	{
+		private readonly bool isOn;
+
+		public DigtalAmmeterData(DigtalAmmeter digtalAmmeter)
+		{
+			baseData = new EntityBaseData(digtalAmmeter);
+			isOn = digtalAmmeter.mySwitch.IsOn;
+		}
+
+		public override void Load()
+		{
+			DigtalAmmeter digtalAmmeter = BaseCreate<DigtalAmmeter>(baseData);
+			digtalAmmeter.mySwitch.IsOn = isOn;
+		}
+	}
 }
