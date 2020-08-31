@@ -55,77 +55,42 @@ abstract public class EntityBase : MonoBehaviour
 		return circuitPorts;
 	}
 
-	void Update()
+	// 元件移动
+	void OnMouseDrag()
 	{
-		//左键松开，停止移动
-		if (Input.GetMouseButtonUp(0))
+		if (!MoveController.CanOperate) return;
+		if (HitCheck("Table", out Vector3 hitPos))
 		{
-			isMoving = false;
-		}
-		//移动元件的状态
-		if (isMoving)
-		{
-			if (HitCheck(out Vector3 hitPos))
-			{
-				transform.position = deltaPos + hitPos;
-			}
-			else
-			{//举高高
-				Vector3 campos = Camera.main.transform.position;
-				Vector3 thispos = gameObject.transform.position;
-				float dis = (thispos - campos).magnitude;
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				Vector3 vec = ray.direction;
-				vec.Normalize();
-				vec *= dis;
-				thispos = campos + vec;
-				gameObject.transform.position = thispos;
-			}
+			transform.position = hitPos;
 		}
 		else
 		{
-			if (MoveController.CanOperate)
-			{
-				if (gameObject == controlGameObj)
-				{
-					//按左键开始移动
-					if (Input.GetMouseButtonDown(0))
-					{
-						isMoving = true;
-						if (HitCheck(out Vector3 hitPos))
-						{
-							deltaPos = transform.position - hitPos;
-						}
-						else
-						{
-							deltaPos = Vector3.zero;
-						}
-					}
-
-					// 按鼠标中键摆正元件
-					if (Input.GetMouseButtonDown(2))
-					{
-						gameObject.transform.eulerAngles = Vector3.zero;
-					}
-
-					//按右键删除
-					if (Input.GetMouseButtonDown(1))
-					{
-						DestroyEntity();
-					}
-				}
-			}
+			Vector3 campos = Camera.main.transform.position;
+			Vector3 thispos = gameObject.transform.position;
+			float dis = (thispos - campos).magnitude;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			Vector3 vec = ray.direction;
+			vec.Normalize();
+			vec *= dis;
+			thispos = campos + vec;
+			gameObject.transform.position = thispos;
 		}
 	}
 
-	Vector3 deltaPos;
-	bool isMoving = false;
-
-	static GameObject controlGameObj;
 	void OnMouseOver()
 	{
 		if (!MoveController.CanOperate) return;
-		controlGameObj = gameObject;
+
+		// 按鼠标中键摆正元件
+		if (Input.GetMouseButtonDown(2))
+		{
+			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+		}
+
+		if (Input.GetMouseButtonDown(1))
+		{
+			DestroyEntity();
+		}
 	}
 
 	public void DestroyEntity()
@@ -143,19 +108,23 @@ abstract public class EntityBase : MonoBehaviour
 	/// <summary>
 	/// 得到打击到桌子的点
 	/// </summary>
-	private static bool HitCheck(out Vector3 hitPos)
+	private static bool HitCheck(string tag, out Vector3 hitPos)
 	{
-		Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
-		if (Physics.Raycast(camTr.position, camTr.forward, out RaycastHit info, 2000, 1 << 11))//11层碰撞
+		hitPos = new Vector3(0, 0, 0);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit[] hitObj;
+		hitObj = Physics.RaycastAll(ray);
+
+		for (int i = 0; i < hitObj.Length; i++)
 		{
-			hitPos = info.point;
-			return true;
+			GameObject hitedItem = hitObj[i].collider.gameObject;
+			if (tag == null || hitedItem.CompareTag(tag))
+			{
+				hitPos = hitObj[i].point;
+				return true;
+			}
 		}
-		else
-		{
-			hitPos = new Vector3(0, 0, 0);
-			return false;
-		}
+		return false;
 	}
 
 	//速度限制
