@@ -82,40 +82,50 @@ abstract public class EntityBase : MonoBehaviour
 				gameObject.transform.position = thispos;
 			}
 		}
+		else
+		{
+			if (MoveController.CanOperate)
+			{
+				if (gameObject == controlGameObj)
+				{
+					//按左键开始移动
+					if (Input.GetMouseButtonDown(0))
+					{
+						isMoving = true;
+						if (HitCheck(out Vector3 hitPos))
+						{
+							deltaPos = transform.position - hitPos;
+						}
+						else
+						{
+							deltaPos = Vector3.zero;
+						}
+					}
+
+					// 按鼠标中键摆正元件
+					if (Input.GetMouseButtonDown(2))
+					{
+						gameObject.transform.eulerAngles = Vector3.zero;
+					}
+
+					//按右键删除
+					if (Input.GetMouseButtonDown(1))
+					{
+						DestroyEntity();
+					}
+				}
+			}
+		}
 	}
 
 	Vector3 deltaPos;
 	bool isMoving = false;
 
+	static GameObject controlGameObj;
 	void OnMouseOver()
 	{
 		if (!MoveController.CanOperate) return;
-
-		//按左键开始移动
-		if (Input.GetMouseButtonDown(0))
-		{
-			isMoving = true;
-			if (HitCheck(out Vector3 hitPos))
-			{
-				deltaPos = transform.position - hitPos;
-			}
-			else
-			{
-				deltaPos = Vector3.zero;
-			}
-		}
-
-		// 按鼠标中键摆正元件
-		if (Input.GetMouseButtonDown(2))
-		{
-			gameObject.transform.eulerAngles = Vector3.zero;
-		}
-
-		//按右键删除
-		if (Input.GetMouseButtonDown(1))
-		{
-			DestroyEntity();
-		}
+		controlGameObj = gameObject;
 	}
 
 	public void DestroyEntity()
@@ -157,7 +167,7 @@ abstract public class EntityBase : MonoBehaviour
 	void FixedUpdate()//与物理引擎保持帧同步
 	{
 		//奇怪的东西
-		deltaPos *= 0.9f;
+		//deltaPos *= 0.9f;
 
 		Vector3 speed = rigidBody.velocity;
 		//备份Y
