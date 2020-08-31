@@ -39,7 +39,11 @@ public class MyPin : MonoBehaviour
 		thePin = transform.FindComponent_DFS<Transform>("ThePin");
 	}
 
+	/// <summary>
+	/// 不显示刻度
+	/// </summary>
 	public void CloseText() => ScaleTexts.ForEach(x => x.enabled = false);
+
 	/// <summary>
 	/// 接收0-1的值，最左端到最右端
 	/// </summary>
@@ -52,9 +56,12 @@ public class MyPin : MonoBehaviour
 		// 指针转动
 		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * pos);
 	}
+
 	/// <summary>
-	/// 参数：显示在中间的单位、显示的最大刻度
+	/// 设置字符串
 	/// </summary>
+	/// <param name="unit">单位</param>
+	/// <param name="scaleMax">最大刻度</param>
 	public void SetString(string unit, int scaleMax)
 	{
 		unitSymbol = unit;
