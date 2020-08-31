@@ -176,14 +176,37 @@ public class WdwMenu_Create : MonoBehaviour
 		}
 		NormalCreate();
 	}
-	
+
+
+	int counter_shanshuoInterval = 0;
+	bool nowState = true;
 	private void FixedUpdate()
 	{
-		if (transparentRenderers != null)//模型闪烁
+		//bool闪烁
+		if (counter_shanshuoInterval > 0)
+		{
+			counter_shanshuoInterval--;
+		}
+		else
+		{
+			counter_shanshuoInterval = 5;//3帧间隔
+			nowState = !nowState;
+		}
+
+		//模型闪烁
+		if (transparentRenderers != null)
 		{
 			foreach (var tr in transparentRenderers)
 			{
-				tr.enabled = !tr.enabled;
+				tr.enabled = nowState;
+			}
+		}
+		//画布闪烁
+		if (transparentCanvas != null)
+		{
+			foreach (var ctr in transparentCanvas)
+			{
+				ctr.enabled = nowState;
 			}
 		}
 	}
@@ -245,7 +268,11 @@ public class WdwMenu_Create : MonoBehaviour
 			return false;
 		}
 	}
+
+
+	//
 	static Renderer[] transparentRenderers = null;
+	static Canvas[] transparentCanvas = null;
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
 	{
@@ -255,6 +282,7 @@ public class WdwMenu_Create : MonoBehaviour
 			coll.enabled = false;
 		}
 		transparentRenderers = operate.GetComponentsInChildren<Renderer>();
+		transparentCanvas = operate.GetComponentsInChildren<Canvas>();
 	}
 	//打开这东西的碰撞体
 	static void OpenColl(GameObject operate)
@@ -264,10 +292,17 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = true;
 		}
+		//开模型
 		foreach (var rend in transparentRenderers)
 		{
 			rend.enabled = true;
 		}
+		//开画布
+		foreach (var rend in transparentCanvas)
+		{
+			rend.enabled = true;
+		}
 		transparentRenderers = null;
+		transparentCanvas = null;
 	}
 }
