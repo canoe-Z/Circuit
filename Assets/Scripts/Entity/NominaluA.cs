@@ -15,11 +15,11 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 
 	public override void EntityAwake()
 	{
-		// 得到引用并且初始化
 		myPin = GetComponentInChildren<MyPin>();
+
+		// 必须手动初始化Pin来保证Pin的初始化顺序
 		myPin.PinAwake();
 		myPin.SetPos(0);
-		myPin.SetString("uA", maxuI);
 	}
 
 	void Start()
@@ -63,6 +63,7 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 	{
 		this.nominalR = nominalR;
 		this.maxuI = maxuI;
+		myPin.SetString("uA", maxuI);
 		return this;
 	}
 
