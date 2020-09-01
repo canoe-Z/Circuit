@@ -10,10 +10,17 @@ public class QuickOperate : MonoBehaviour
 {
 	void Work()
 	{
-		EventSystem[] eventSystems = FindObjectsOfType<EventSystem>();
-		foreach(var e in eventSystems)
+		InputChecker[] inputCheckers = FindObjectsOfType<InputChecker>();
+		foreach(var i in inputCheckers)
 		{
-			Debug.Log(e.gameObject);
+			Transform now = i.transform;
+			string outS = "";
+			while (now)
+			{
+				outS += now.gameObject.name;
+				now = now.parent;
+			}
+			Debug.Log(outS);
 		}
 	}
 

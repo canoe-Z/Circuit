@@ -174,10 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: 10
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!135 &8040996723748936004
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -331,10 +327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: 10
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!1 &2161137984080019229
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,10 +561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: -1
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!135 &1908264587609608586
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -792,10 +780,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: 10
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!1 &3481871751246481262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,10 +1138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: 10
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!1 &5588035283802256130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,10 +1291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 780bcc52a6fb43447bc385edb2da8c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Devide: 10
-  CanLoop: 0
-  AngleRange: 360
-  SpeedUpPerSecond: 0.001
 --- !u!1 &6751824764423583360
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
 --- !u!135 &8362302345727407980
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2808,7 +2783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
 --- !u!135 &8362302346205692637
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3691,7 +3665,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 98090ce3d01243440af2c886f3ea08ee, type: 2}
+  - {fileID: 2100000, guid: f6e15940b5e67634aaf528248d1c50a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3941,16 +3915,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21024edb8bf851943aceaf277685ed67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  R_99999: 0
-  R_99: 0
-  R_09: 0
-  myKnobs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &8362302347359966282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4050,7 +4014,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
 --- !u!135 &8362302347367661999
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4161,7 +4124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 391f7db4e32c4824e93c2f5d0ba19e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showid: 0
 --- !u!135 &8362302347441419544
 SphereCollider:
   m_ObjectHideFlags: 0

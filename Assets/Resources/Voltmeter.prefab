@@ -2173,6 +2173,7 @@ GameObject:
   - component: {fileID: 7694849404002265803}
   - component: {fileID: 7694849404002265797}
   - component: {fileID: 7694849404002265802}
+  - component: {fileID: 4868583547029582110}
   m_Layer: 0
   m_Name: Voltmeter
   m_TagString: Item
@@ -2211,8 +2212,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.1812992, y: 0.28463268, z: 1}
-  m_Center: {x: -0.29960346, y: 0.14231634, z: 0}
+  m_Size: {x: 1.0006256, y: 0.23356247, z: 1}
+  m_Center: {x: -0.13856888, y: 0.116781235, z: 0}
 --- !u!54 &7694849404002265806
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2273,6 +2274,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinematicForParticles: 0
+--- !u!65 &4868583547029582110
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7694849404002265804}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.61901665, y: 0.525589, z: 1}
+  m_Center: {x: -0.33188725, y: 0.5200577, z: 0}
 --- !u!1 &7694849404555628726
 GameObject:
   m_ObjectHideFlags: 0
