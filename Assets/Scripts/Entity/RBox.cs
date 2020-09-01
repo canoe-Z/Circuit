@@ -92,6 +92,12 @@ public class RBox : EntityBase
 			}
 		}
 
+		// 误差限中的R0
+		for (var i = 0; i < 3; i++)
+		{
+			tolerance[i] += 0.02;
+		}
+
 		R[0] = total / (float)10;
 		R[1] = total % 100 / (float)10;
 		R[2] = total % 10 / (float)10;
