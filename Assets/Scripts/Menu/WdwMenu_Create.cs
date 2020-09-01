@@ -129,6 +129,10 @@ public class WdwMenu_Create : MonoBehaviour
 			willBeSet = SliderR.Create(num).gameObject;
 			NormalCreate();
 		}
+		else if (iptNum_SliderR.text == "")
+		{
+			iptNum_SliderR.text = "100";
+		}
 	}
 
 	void OnButtonSP_R()
@@ -138,6 +142,10 @@ public class WdwMenu_Create : MonoBehaviour
 			iptNum_R.text = "";
 			willBeSet = MyResistor.Create(num).gameObject;
 			NormalCreate();
+		}
+		else if (iptNum_R.text == "")
+		{
+			iptNum_R.text = "100";
 		}
 	}
 
