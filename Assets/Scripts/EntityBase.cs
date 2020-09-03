@@ -11,7 +11,7 @@ abstract public class EntityBase : MonoBehaviour
 	public List<CircuitPort> ChildPorts { get; set; }                       //端口们的引用
 	public List<int> ChildPortID { get; set; }
 
-	private bool isEmission = false;
+	//private bool isEmission = false;
 
 	// 元件删除事件
 	public delegate void EntityDestroyEventHandler();
