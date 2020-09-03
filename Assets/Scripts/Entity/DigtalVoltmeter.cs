@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
@@ -49,7 +50,8 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			// 否则计算误差限，使用随机生成的误差值
 			else
 			{
-				nominal_mV = mV;
+				tolerance_mV = 0.02 * 0.01 * mV + 0.01 * 2;
+				nominal_mV = mV + tolerance_mV * Random.Range(-1f, 1f);
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
 			}
 		}
@@ -62,7 +64,8 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			}
 			else
 			{
-				nominal_V = V;
+				tolerance_V = 0.02 * 0.01 * V + 0.01 * 2;
+				nominal_V = V + tolerance_V * Random.Range(-1f, 1f);
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
 			}
 		}

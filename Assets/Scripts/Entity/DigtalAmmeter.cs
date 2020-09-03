@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
@@ -55,7 +56,8 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			// 否则计算误差限，使用随机生成的误差值
 			else
 			{
-				nominal_mA = mA;
+				tolerance_mA = 0.02 * 0.01 * mA + 0.01 * 2;
+				nominal_mA = mA + tolerance_mA * Random.Range(-1f, 1f);
 				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
 			}
 		}
@@ -68,7 +70,8 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			}
 			else
 			{
-				nominal_A = A;
+				tolerance_A = 0.02 * 0.01 * A + 0.01 * 2;
+				nominal_A = A + tolerance_A * Random.Range(-1f, 1f);
 				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
 			}
 		}
