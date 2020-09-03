@@ -7,6 +7,11 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	private readonly double R = 15000;
 	private int PortID_GND, PortID_mV, PortID_V;
 
+	private bool isLoad = false;
+	private double mV, V;
+	private double tolerance_mV, tolerance_V;
+	private double nominal_mV, nominal_V;
+
 	private Text digtalDigtalVoltmeter;
 	private MySwitch mySwitch;
 
@@ -34,13 +39,32 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	{
 		if (ChildPorts[1].IsConnected)
 		{
-			double mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
-			digtalDigtalVoltmeter.text = EntityText.GetText(mV, 999.99, 2);
+			// 更新真实值
+			mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
+			// 存档沿用误差值
+			if (isLoad)
+			{
+				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
+			}
+			// 否则计算误差限，使用随机生成的误差值
+			else
+			{
+				nominal_mV = mV;
+				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
+			}
 		}
 		else if (ChildPorts[2].IsConnected)
 		{
-			double V = ChildPorts[2].U - ChildPorts[0].U;
-			digtalDigtalVoltmeter.text = EntityText.GetText(V, 999.99, 2);
+			V = ChildPorts[2].U - ChildPorts[0].U;
+			if (isLoad)
+			{
+				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
+			}
+			else
+			{
+				nominal_V = V;
+				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
+			}
 		}
 		else
 		{
@@ -73,17 +97,24 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	public class DigtalVoltmeterData : EntityData
 	{
 		private readonly bool isOn;
+		private readonly double nominal_mV, nominal_V;
+
 
 		public DigtalVoltmeterData(DigtalVoltmeter digtalVoltmeter)
 		{
 			baseData = new EntityBaseData(digtalVoltmeter);
 			isOn = digtalVoltmeter.mySwitch.IsOn;
+			nominal_mV = digtalVoltmeter.nominal_mV;
+			nominal_V = digtalVoltmeter.nominal_V;
 		}
 
 		public override void Load()
 		{
 			DigtalVoltmeter digtalVoltmeter = BaseCreate<DigtalVoltmeter>(baseData);
 			digtalVoltmeter.mySwitch.IsOn = isOn;
+			digtalVoltmeter.isLoad = true;
+			digtalVoltmeter.nominal_mV = nominal_mV;
+			digtalVoltmeter.nominal_V = nominal_V;
 		}
 	}
 }

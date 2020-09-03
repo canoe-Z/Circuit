@@ -9,6 +9,11 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	private readonly double R = 0.001;
 	private int PortID_GND, PortID_mA, PortID_A;
 
+	private bool isLoad = false;
+	private double mA, A;
+	private double tolerance_mA, tolerance_A;
+	private double nominal_mA, nominal_A;
+
 	private Text digtalAmmeterText;
 	private MySwitch mySwitch;
 
@@ -40,13 +45,32 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 		if (ChildPorts[1].IsConnected)
 		{
-			double mA = ChildPorts[1].I * 1000;
-			digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
+			// 更新真实值
+			mA = ChildPorts[1].I * 1000;
+			// 存档沿用误差值
+			if (isLoad)
+			{
+				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
+			}
+			// 否则计算误差限，使用随机生成的误差值
+			else
+			{
+				nominal_mA = mA;
+				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
+			}
 		}
 		else if (ChildPorts[2].IsConnected)
 		{
-			double A = ChildPorts[2].I;
-			digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
+			A = ChildPorts[2].I;
+			if(isLoad)
+			{
+				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
+			}
+			else
+			{
+				nominal_A = A;
+				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
+			}
 		}
 		else
 		{
@@ -83,17 +107,23 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	public class DigtalAmmeterData : EntityData
 	{
 		private readonly bool isOn;
+		private readonly double nominal_mA, nominal_A;
 
 		public DigtalAmmeterData(DigtalAmmeter digtalAmmeter)
 		{
 			baseData = new EntityBaseData(digtalAmmeter);
 			isOn = digtalAmmeter.mySwitch.IsOn;
+			nominal_mA = digtalAmmeter.nominal_mA;
+			nominal_A = digtalAmmeter.nominal_A;
 		}
 
 		public override void Load()
 		{
 			DigtalAmmeter digtalAmmeter = BaseCreate<DigtalAmmeter>(baseData);
 			digtalAmmeter.mySwitch.IsOn = isOn;
+			digtalAmmeter.isLoad = true;
+			digtalAmmeter.nominal_mA = nominal_mA;
+			digtalAmmeter.nominal_A = nominal_A;
 		}
 	}
 }
