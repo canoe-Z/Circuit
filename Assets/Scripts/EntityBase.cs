@@ -59,7 +59,7 @@ abstract public class EntityBase : MonoBehaviour
 	void OnMouseDrag()
 	{
 		if (!MoveController.CanOperate) return;
-		if (HitCheck("Table", out Vector3 hitPos))
+		if (HitCheckTable(out Vector3 hitPos))
 		{
 			transform.position = hitPos;
 		}
@@ -108,23 +108,20 @@ abstract public class EntityBase : MonoBehaviour
 	/// <summary>
 	/// 得到打击到桌子的点
 	/// </summary>
-	private static bool HitCheck(string tag, out Vector3 hitPos)
+	private static bool HitCheckTable(out Vector3 hitPos)
 	{
-		hitPos = new Vector3(0, 0, 0);
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit[] hitObj;
-		hitObj = Physics.RaycastAll(ray);
-
-		for (int i = 0; i < hitObj.Length; i++)
+		RaycastHit info;
+		Transform tr = SmallCamManager.MainCam.transform;
+		if (Physics.Raycast(tr.position, tr.forward, out info, 2000, 1 << 11))
 		{
-			GameObject hitedItem = hitObj[i].collider.gameObject;
-			if (tag == null || hitedItem.CompareTag(tag))
-			{
-				hitPos = hitObj[i].point;
-				return true;
-			}
+			hitPos = info.point;
+			return true;
 		}
-		return false;
+		else
+		{
+			hitPos = Vector3.zero;
+			return false;
+		}
 	}
 
 	//速度限制
