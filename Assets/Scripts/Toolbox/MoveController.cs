@@ -135,7 +135,7 @@ public class MoveController : MonoBehaviour
 			foreach (CircuitLine line in CircuitCalculator.Lines)
 			{
 				line.GetComponent<MeshCollider>().sharedMesh = line.GetComponent<MeshFilter>().sharedMesh;
-				line.GetComponent<MeshCollider>().convex = true;
+				//line.GetComponent<MeshCollider>().convex = true;
 			}
 
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
