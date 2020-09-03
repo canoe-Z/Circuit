@@ -11,6 +11,8 @@ abstract public class EntityBase : MonoBehaviour
 	public List<CircuitPort> ChildPorts { get; set; }                       //端口们的引用
 	public List<int> ChildPortID { get; set; }
 
+	private bool isEmission = false;
+
 	// 元件删除事件
 	public delegate void EntityDestroyEventHandler();
 	public event EntityDestroyEventHandler EntityDestroy;
@@ -59,6 +61,7 @@ abstract public class EntityBase : MonoBehaviour
 	void OnMouseDrag()
 	{
 		if (!MoveController.CanOperate) return;
+
 		if (HitCheckTable(out Vector3 hitPos))
 		{
 			transform.position = hitPos;
@@ -74,6 +77,23 @@ abstract public class EntityBase : MonoBehaviour
 			vec *= dis;
 			thispos = campos + vec;
 			gameObject.transform.position = thispos;
+		}
+	}
+
+	void OnMouseEnter()
+	{
+		Renderer[] renderers = GetComponentsInChildren<Renderer>();
+		foreach(var renderer in renderers)
+		{
+			renderer.material.SetColor("Color_592D9D79", Color.yellow);
+		}
+	}
+	void OnMouseExit()
+	{
+		Renderer[] renderers = GetComponentsInChildren<Renderer>();
+		foreach (var renderer in renderers)
+		{
+			renderer.material.SetColor("Color_592D9D79", Color.black);
 		}
 	}
 
