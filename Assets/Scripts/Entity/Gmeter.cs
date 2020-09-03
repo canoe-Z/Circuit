@@ -53,7 +53,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		double doublePin = ChildPorts[0].I / MaxI;
 		//myPin.SetPos((float)doublePin + 0.5f);
-		// Debug.LogError((doublePin + 0.5).ToString()+" "+ myPin.pos.ToString());
+		//Debug.LogError((doublePin + 0.5).ToString()+" "+ myPin.pos.ToString());
 		StartCoroutine(PosShake(doublePin + 0.5,myPin.pos));
 	}
 
