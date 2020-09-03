@@ -85,6 +85,10 @@ abstract public class EntityBase : MonoBehaviour
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach(var renderer in renderers)
 		{
+			if(renderer.material.shader.name== "Shader Graphs/MyShader")
+            {
+				Debug.Log("hello");
+            }
 			renderer.material.SetColor("Color_592D9D79", Color.yellow);
 		}
 	}
