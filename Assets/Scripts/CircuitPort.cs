@@ -38,29 +38,23 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanOperate) return;
-		/*
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
-			renderer.material.SetColor("Color_592D9D79", Color.blue);
-			renderer.material.SetInt("_SurfaceType", 0);
-			renderer.material.SetInt("_RenderQueueType", 5);
+			renderer.material.SetColor("Color_592D9D79", Color.white);
 
 		}
-		*/
 		transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 
 	void OnMouseExit()
 	{
 		if (!MoveController.CanOperate) return;
-		/*
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
 			renderer.material.SetColor("Color_592D9D79", Color.black);
 		}
-		*/
 		transform.localScale = new Vector3(1, 1, 1);
 	}
 }

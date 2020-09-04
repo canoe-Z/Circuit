@@ -33,6 +33,8 @@ public class CircuitLine : MonoBehaviour
 		StartPort.Father.EntityDestroy += DestroyRope;
 		EndPort.Father.EntityDestroy += DestroyRope;
 
+		// 鼠标悬停于接线柱时，该接线柱上的导线边缘发光
+
 		CircuitCalculator.Lines.AddLast(this);
 	}
 
@@ -51,12 +53,12 @@ public class CircuitLine : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	void OnMouseEnter()
+	private void EnableFresnel()
 	{
 		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.blue);
 	}
 
-	void OnMouseExit()
+	private void DisablFresnel()
 	{
 		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.black);
 	}

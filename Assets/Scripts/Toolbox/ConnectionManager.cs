@@ -86,12 +86,16 @@ public class ConnectionManager : MonoBehaviour
 		GameObject rope = CreateRope(port1.gameObject, port2.gameObject, GetSolver());
 		ObiParticlePicker picker = rope.AddComponent<ObiParticlePicker>();
 		picker.solver = GetSolver();
+
 		// 关闭碰撞检测
 		rope.layer = 8;
 		rope.AddComponent<MeshCollider>();
 		Material RopeMat = Resources.Load<Material>("Rope");
+
+		// 使用MyShader以实现边缘发光
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
 		rope.GetComponent<MeshRenderer>().material.SetColor("Color_51411BA8", colors[DisplayController.ColorID]);
+		
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
 	}
 
