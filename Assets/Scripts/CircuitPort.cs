@@ -42,7 +42,6 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 		foreach (var renderer in renderers)
 		{
 			renderer.material.SetColor("Color_592D9D79", Color.white);
-
 		}
 		transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}

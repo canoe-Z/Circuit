@@ -80,27 +80,27 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	void OnMouseEnter()
+	private void EnableFresnel()
 	{
-		return;
-		Renderer[] renderers = GetComponentsInChildren<Renderer>();
-		foreach(var renderer in renderers)
-		{
-			if(renderer.material.shader.name== "Shader Graphs/MyShader")
-            {
-				Debug.Log("hello");
-            }
-			renderer.material.SetColor("Color_592D9D79", Color.yellow);
-		}
-	}
-	void OnMouseExit()
-	{
-		return;
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
-			renderer.material.SetColor("Color_592D9D79", Color.black);
+			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
+			{
+				renderer.material.SetColor("Color_592D9D79", Color.blue);
+			}
+		}
+	}
 
+	private void DisablFresnel()
+	{
+		Renderer[] renderers = GetComponentsInChildren<Renderer>();
+		foreach (var renderer in renderers)
+		{
+			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
+			{
+				renderer.material.SetColor("Color_592D9D79", Color.black);
+			}
 		}
 	}
 
@@ -114,14 +114,30 @@ abstract public class EntityBase : MonoBehaviour
 			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
 		}
 
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetKey(KeyCode.X))
+		{
+			EnableFresnel();
+		}
+
+		if (Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.X))
 		{
 			DestroyEntity();
 		}
+
+		if (Input.GetKeyUp(KeyCode.X))
+		{
+			DisablFresnel();
+		}
+	}
+
+	void OnMouseExit()
+	{
+		DisablFresnel();
 	}
 
 	public void DestroyEntity()
 	{
+		// 如果订阅了计算事件则取消订阅
 		if (this is ICalculatorUpdate updateEntity)
 		{
 			CircuitCalculator.CalculateEvent -= updateEntity.CalculatorUpdate;
@@ -157,30 +173,30 @@ abstract public class EntityBase : MonoBehaviour
 	const float speedLimit = 1f;
 	const float speedLimit_Y = 1f;
 
-	void FixedUpdate()//与物理引擎保持帧同步
+	void FixedUpdate()
 	{
-		//奇怪的东西
+		// 奇怪的东西
 		//deltaPos *= 0.9f;
 
 		Vector3 speed = rigidBody.velocity;
-		//备份Y
+		// 备份Y
 		float spdY = speed.y;
 		speed.y = 0;
-		//两个方向的速度限制
+		// 两个方向的速度限制
 		if (isOnTable)
 		{
-			//竖直方向速度限制
+			// 竖直方向速度限制
 			if (spdY > speedLimit_Y) spdY = speedLimit_Y;
 			if (speed.magnitude > speedLimit)
 			{
 				speed = speed.normalized * speedLimit;
 			}
 		}
-		//还原Y
+		// 还原Y
 		speed.y = spdY;
 		rigidBody.velocity = speed;
 
-		//bool值
+		// bool值
 		isOnTable = false;
 	}
 
