@@ -867,6 +867,8 @@ GameObject:
   - component: {fileID: 8601939405806407853}
   - component: {fileID: 8601939405806407851}
   - component: {fileID: 8601939405806407852}
+  - component: {fileID: 2495343981908640703}
+  - component: {fileID: 2723180243877831212}
   m_Layer: 9
   m_Name: 2
   m_TagString: Port
@@ -931,6 +933,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.06
   m_Center: {x: 0, y: 0.061, z: 0}
+--- !u!114 &2495343981908640703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939405806407849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  phase: 0
+  thickness: 0
+  sourceCollider: {fileID: 8601939405806407852}
+  accurateContacts: 0
+  useDistanceFields: 0
+  distanceField: {fileID: 0}
+--- !u!114 &2723180243877831212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939405806407849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62359d80fdc0e4315ab6331b78ec5b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicForParticles: 0
 --- !u!1 &8601939406068620478
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,6 +1141,8 @@ GameObject:
   - component: {fileID: 8601939406837111362}
   - component: {fileID: 8601939406837111360}
   - component: {fileID: 8601939406837111361}
+  - component: {fileID: 3851559840453772549}
+  - component: {fileID: 214745208019968153}
   m_Layer: 9
   m_Name: 0
   m_TagString: Port
@@ -1171,6 +1207,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.06
   m_Center: {x: 0, y: 0.061, z: 0}
+--- !u!114 &3851559840453772549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939406837111374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  phase: 0
+  thickness: 0
+  sourceCollider: {fileID: 8601939406837111361}
+  accurateContacts: 0
+  useDistanceFields: 0
+  distanceField: {fileID: 0}
+--- !u!114 &214745208019968153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939406837111374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62359d80fdc0e4315ab6331b78ec5b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicForParticles: 0
 --- !u!1 &8601939406973126635
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,12 +1412,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8601939407194768717}
-  - component: {fileID: 8601939407194768716}
   - component: {fileID: 8601939407194768715}
   - component: {fileID: 8601939407194768719}
-  - component: {fileID: 8601939407194768705}
-  - component: {fileID: 8601939407194768704}
+  - component: {fileID: 8601939407194768716}
   - component: {fileID: 957259058165418275}
+  - component: {fileID: 8601939407194768705}
+  - component: {fileID: 80078369867466484}
+  - component: {fileID: 8601939407194768704}
   m_Layer: 0
   m_Name: Ammeter
   m_TagString: Item
@@ -1377,19 +1446,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8601939407194768716
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8601939407194768714}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.9558024, y: 0.23172116, z: 1}
-  m_Center: {x: -0.15699407, y: 0.11586058, z: 0}
 --- !u!54 &8601939407194768715
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1418,6 +1474,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d48c5d89677a54e8f8e26e94e3baaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &8601939407194768716
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407194768714}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.02, y: 0.23172116, z: 1}
+  m_Center: {x: -0.14, y: 0.11586058, z: 0}
+--- !u!65 &957259058165418275
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407194768714}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.73, z: 1}
+  m_Center: {x: -0.38189876, y: 0.47874916, z: 0}
 --- !u!114 &8601939407194768705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1437,6 +1519,25 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
+--- !u!114 &80078369867466484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407194768714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  phase: 0
+  thickness: 0
+  sourceCollider: {fileID: 957259058165418275}
+  accurateContacts: 0
+  useDistanceFields: 0
+  distanceField: {fileID: 0}
 --- !u!114 &8601939407194768704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1450,19 +1551,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinematicForParticles: 0
---- !u!65 &957259058165418275
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8601939407194768714}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.49080157, y: 0.5619955, z: 1}
-  m_Center: {x: -0.38189876, y: 0.47874916, z: 0}
 --- !u!1 &8601939407514217661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,6 +1563,8 @@ GameObject:
   - component: {fileID: 8601939407514217649}
   - component: {fileID: 8601939407514217663}
   - component: {fileID: 8601939407514217648}
+  - component: {fileID: 2030536561219271736}
+  - component: {fileID: 4478951005559223326}
   m_Layer: 9
   m_Name: 1
   m_TagString: Port
@@ -1539,6 +1629,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.06
   m_Center: {x: 0, y: 0.061, z: 0}
+--- !u!114 &2030536561219271736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407514217661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  phase: 0
+  thickness: 0
+  sourceCollider: {fileID: 8601939407514217648}
+  accurateContacts: 0
+  useDistanceFields: 0
+  distanceField: {fileID: 0}
+--- !u!114 &4478951005559223326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407514217661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62359d80fdc0e4315ab6331b78ec5b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicForParticles: 0
 --- !u!1 &8601939407676222562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,6 +1673,8 @@ GameObject:
   - component: {fileID: 8601939407676222566}
   - component: {fileID: 8601939407676222564}
   - component: {fileID: 8601939407676222565}
+  - component: {fileID: 5952508810150245076}
+  - component: {fileID: 2597639425564572440}
   m_Layer: 9
   m_Name: 3
   m_TagString: Port
@@ -1615,6 +1739,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.06
   m_Center: {x: 0, y: 0.061, z: 0}
+--- !u!114 &5952508810150245076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407676222562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 0}
+  phase: 0
+  thickness: 0
+  sourceCollider: {fileID: 8601939407676222565}
+  accurateContacts: 0
+  useDistanceFields: 0
+  distanceField: {fileID: 0}
+--- !u!114 &2597639425564572440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8601939407676222562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62359d80fdc0e4315ab6331b78ec5b90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinematicForParticles: 0
 --- !u!1001 &489253144992084837
 PrefabInstance:
   m_ObjectHideFlags: 0
