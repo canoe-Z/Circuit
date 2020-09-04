@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.BaseShaderGUI;
 
 /// <summary>
 /// 找端口，需要带有CircuitPort的端口，把自己重命名成序号
@@ -98,6 +99,7 @@ abstract public class EntityBase : MonoBehaviour
 		foreach (var renderer in renderers)
 		{
 			renderer.material.SetColor("Color_592D9D79", Color.black);
+
 		}
 	}
 
