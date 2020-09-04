@@ -1,68 +1,11 @@
 fileFormatVersion: 2
-guid: 6ee28fcb6e9e67341865f082963ff6a8
+guid: e2d1b6eb25461784db572e4dd607a43e
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: Box001
-    100002: Box002
-    100004: CasementWindow001
-    100006: //RootNode
-    100008: "\u5BF9\u8C61001"
-    100010: "\u5BF9\u8C61002"
-    100012: "\u5BF9\u8C61003"
-    100014: "\u5BF9\u8C61004"
-    100016: "\u5BF9\u8C61005"
-    100018: "\u5BF9\u8C61006"
-    100020: "\u5BF9\u8C61007"
-    100022: "\u5BF9\u8C61008"
-    400000: Box001
-    400002: Box002
-    400004: CasementWindow001
-    400006: //RootNode
-    400008: "\u5BF9\u8C61001"
-    400010: "\u5BF9\u8C61002"
-    400012: "\u5BF9\u8C61003"
-    400014: "\u5BF9\u8C61004"
-    400016: "\u5BF9\u8C61005"
-    400018: "\u5BF9\u8C61006"
-    400020: "\u5BF9\u8C61007"
-    400022: "\u5BF9\u8C61008"
-    2100000: No Name
-    2100002: 02 - Default
-    2100004: 'Material #46'
-    2300000: Box002
-    2300002: CasementWindow001
-    2300004: "\u5BF9\u8C61001"
-    2300006: "\u5BF9\u8C61002"
-    2300008: "\u5BF9\u8C61003"
-    2300010: "\u5BF9\u8C61004"
-    2300012: "\u5BF9\u8C61005"
-    2300014: "\u5BF9\u8C61006"
-    2300016: "\u5BF9\u8C61007"
-    2300018: "\u5BF9\u8C61008"
-    3300000: Box002
-    3300002: CasementWindow001
-    3300004: "\u5BF9\u8C61001"
-    3300006: "\u5BF9\u8C61002"
-    3300008: "\u5BF9\u8C61003"
-    3300010: "\u5BF9\u8C61004"
-    3300012: "\u5BF9\u8C61005"
-    3300014: "\u5BF9\u8C61006"
-    3300016: "\u5BF9\u8C61007"
-    3300018: "\u5BF9\u8C61008"
-    4300000: "\u5BF9\u8C61001"
-    4300002: "\u5BF9\u8C61002"
-    4300004: "\u5BF9\u8C61003"
-    4300006: "\u5BF9\u8C61004"
-    4300008: "\u5BF9\u8C61005"
-    4300010: "\u5BF9\u8C61006"
-    4300012: CasementWindow001
-    4300014: Box002
-    4300016: "\u5BF9\u8C61007"
-    4300018: "\u5BF9\u8C61008"
+  serializedVersion: 20101
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -88,32 +31,39 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 10
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -122,10 +72,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -135,13 +85,16 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

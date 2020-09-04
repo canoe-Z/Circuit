@@ -83,6 +83,7 @@ abstract public class EntityBase : MonoBehaviour
 
 	void OnMouseEnter()
 	{
+		return;
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach(var renderer in renderers)
 		{
@@ -95,6 +96,7 @@ abstract public class EntityBase : MonoBehaviour
 	}
 	void OnMouseExit()
 	{
+		return;
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{

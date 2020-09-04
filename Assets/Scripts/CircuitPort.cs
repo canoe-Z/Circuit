@@ -39,6 +39,7 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanOperate) return;
+		return;
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
@@ -53,6 +54,7 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	void OnMouseExit()
 	{
 		if (!MoveController.CanOperate) return;
+		return;
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
