@@ -39,7 +39,7 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 	void OnMouseEnter()
 	{
 		if (!MoveController.CanOperate) return;
-		return;
+		/*
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
@@ -48,18 +48,20 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 			renderer.material.SetInt("_RenderQueueType", 5);
 
 		}
-		//transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+		*/
+		transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 
 	void OnMouseExit()
 	{
 		if (!MoveController.CanOperate) return;
-		return;
+		/*
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
 			renderer.material.SetColor("Color_592D9D79", Color.black);
 		}
-		//transform.localScale = new Vector3(1, 1, 1);
+		*/
+		transform.localScale = new Vector3(1, 1, 1);
 	}
 }
