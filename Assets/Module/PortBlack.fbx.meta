@@ -1,91 +1,19 @@
 fileFormatVersion: 2
-guid: ff7d42e1fb641354a86b4bb3b255f4e5
+guid: 41a76350df07e4141859a376fa694d35
 ModelImporter:
   serializedVersion: 20101
-  internalIDToNameTable:
-  - first:
-      1: 100000
-    second: Circle001
-  - first:
-      1: 100002
-    second: Circle002
-  - first:
-      1: 100004
-    second: NGon001
-  - first:
-      1: 100006
-    second: NGon002
-  - first:
-      1: 100008
-    second: Star001
-  - first:
-      1: 100010
-    second: "\u5BF9\u8C61001"
-  - first:
-      1: 100012
-    second: //RootNode
-  - first:
-      4: 400000
-    second: Circle001
-  - first:
-      4: 400002
-    second: Circle002
-  - first:
-      4: 400004
-    second: NGon001
-  - first:
-      4: 400006
-    second: NGon002
-  - first:
-      4: 400008
-    second: Star001
-  - first:
-      4: 400010
-    second: "\u5BF9\u8C61001"
-  - first:
-      4: 400012
-    second: //RootNode
-  - first:
-      21: 2100000
-    second: 02 - Default
-  - first:
-      21: 2100002
-    second: 03 - Default
-  - first:
-      23: 2300000
-    second: NGon002
-  - first:
-      23: 2300002
-    second: "\u5BF9\u8C61001"
-  - first:
-      33: 3300000
-    second: NGon002
-  - first:
-      33: 3300002
-    second: "\u5BF9\u8C61001"
-  - first:
-      43: 4300000
-    second: NGon002
-  - first:
-      43: 4300002
-    second: "\u5BF9\u8C61001"
-  - first:
-      64: 6400000
-    second: NGon002
-  - first:
-      64: 6400002
-    second: "\u5BF9\u8C61001"
+  internalIDToNameTable: []
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 02 - Default
-    second: {fileID: 2100000, guid: 05dc017b5ccd60048848f1515c662c41, type: 2}
+      name: Side
+    second: {fileID: 2100000, guid: f6e15940b5e67634aaf528248d1c50a6, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 03 - Default
-    second: {fileID: 2100000, guid: f6e15940b5e67634aaf528248d1c50a6, type: 2}
+      name: Top
+    second: {fileID: 2100000, guid: 05dc017b5ccd60048848f1515c662c41, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -113,10 +41,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 10
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -125,7 +53,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
-    fileIdsGeneration: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -141,7 +69,7 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
-    secondaryUVMarginMethod: 0
+    secondaryUVMarginMethod: 1
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
@@ -167,14 +95,14 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 10
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
   additionalBone: 0
