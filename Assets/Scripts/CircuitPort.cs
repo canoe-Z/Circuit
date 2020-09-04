@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEditor.BaseShaderGUI;
 
 /// <summary>
 /// 端口
@@ -42,8 +43,10 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
-			renderer.material.shader = Shader.Find("Shader Graphs/New Shader Graph");
-			renderer.material.SetColor("Color_592D9D79", Color.yellow);
+			renderer.material.SetColor("Color_592D9D79", Color.blue);
+			renderer.material.SetInt("_SurfaceType", 0);
+			renderer.material.SetInt("_RenderQueueType", 5);
+
 		}
 		//transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
