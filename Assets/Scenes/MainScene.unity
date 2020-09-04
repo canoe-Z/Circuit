@@ -5485,6 +5485,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -42.08
       objectReference: {fileID: 0}
+    - target: {fileID: -4897732323685117858, guid: e2d1b6eb25461784db572e4dd607a43e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 05dc017b5ccd60048848f1515c662c41, type: 2}
     - target: {fileID: -305091885687274788, guid: e2d1b6eb25461784db572e4dd607a43e,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -5495,6 +5500,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: House
       objectReference: {fileID: 0}
+    - target: {fileID: 8032750206264916975, guid: e2d1b6eb25461784db572e4dd607a43e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 05dc017b5ccd60048848f1515c662c41, type: 2}
     - target: {fileID: 8174764318561223555, guid: e2d1b6eb25461784db572e4dd607a43e,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
