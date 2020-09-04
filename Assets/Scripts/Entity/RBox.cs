@@ -41,9 +41,11 @@ public class RBox : EntityBase
 
 	void Update()
 	{
+		/*
 		Debug.Log("准确值" + R[1].ToString());
 		Debug.Log("误差限" + tolerance[1].ToString());
 		Debug.Log("模糊值" + nominal[1].ToString());
+		*/
 	}
 
 	private void UpdateKnob()

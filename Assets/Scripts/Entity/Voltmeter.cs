@@ -1,4 +1,6 @@
 ﻿using SpiceSharp.Components;
+using System;
+using System.Collections;
 
 /// <summary>
 /// 三量程电压表
@@ -45,10 +47,8 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		doublePin += (ChildPorts[1].U - GNDu) / MaxU0;
 		doublePin += (ChildPorts[2].U - GNDu) / MaxU1;
 		doublePin += (ChildPorts[3].U - GNDu) / MaxU2;
-
-		myPin.SetPos((float)doublePin);
+		myPin.SetPos(doublePin);
 	}
-
 
 	public override void LoadElement()
 	{

@@ -11,8 +11,6 @@ abstract public class EntityBase : MonoBehaviour
 	public List<CircuitPort> ChildPorts { get; set; }                       //端口们的引用
 	public List<int> ChildPortID { get; set; }
 
-	//private bool isEmission = false;
-
 	// 元件删除事件
 	public delegate void EntityDestroyEventHandler();
 	public event EntityDestroyEventHandler EntityDestroy;
@@ -80,6 +78,9 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 启用边缘发光
+	/// </summary>
 	private void EnableFresnel()
 	{
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
@@ -92,6 +93,9 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 关闭边缘发光
+	/// </summary>
 	private void DisablFresnel()
 	{
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
@@ -153,9 +157,8 @@ abstract public class EntityBase : MonoBehaviour
 	/// </summary>
 	private static bool HitCheckTable(out Vector3 hitPos)
 	{
-		RaycastHit info;
 		Transform tr = SmallCamManager.MainCam.transform;
-		if (Physics.Raycast(tr.position, tr.forward, out info, 2000, 1 << 11))
+		if (Physics.Raycast(tr.position, tr.forward, out RaycastHit info, 2000, 1 << 11))
 		{
 			hitPos = info.point;
 			return true;

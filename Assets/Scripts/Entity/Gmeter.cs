@@ -52,23 +52,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		// 示数
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		double doublePin = ChildPorts[0].I / MaxI;
-		//myPin.SetPos((float)doublePin + 0.5f);
-		//Debug.LogError((doublePin + 0.5).ToString()+" "+ myPin.pos.ToString());
-		StartCoroutine(PosShake(doublePin + 0.5,myPin.pos));
-	}
-
-	IEnumerator PosShake(double newPos,double oldPos)
-	{
-		int count = 0;
-		while (true)
-		{
-			count++;
-			if (Math.Abs(newPos - oldPos) > 0.2)
-			{
-				myPin.SetPos(0.2 * Math.Exp(-0.3 * 0.05 * count) * Math.Sin(0.05 * count) + newPos);
-			}
-			yield return 0;
-		}
+		myPin.SetPos(doublePin + 0.5f);
 	}
 
 	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
