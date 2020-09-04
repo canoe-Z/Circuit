@@ -89,9 +89,9 @@ public class ConnectionManager : MonoBehaviour
 		// 关闭碰撞检测
 		rope.layer = 8;
 		rope.AddComponent<MeshCollider>();
-		Material RopeMat = Resources.Load<Material>("Button");
+		Material RopeMat = Resources.Load<Material>("Rope");
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
-		rope.GetComponent<MeshRenderer>().material.color = colors[DisplayController.ColorID];
+		rope.GetComponent<MeshRenderer>().material.SetColor("Color_51411BA8", colors[DisplayController.ColorID]);
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
 	}
 

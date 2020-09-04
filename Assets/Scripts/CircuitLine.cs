@@ -51,6 +51,16 @@ public class CircuitLine : MonoBehaviour
 		Destroy(gameObject);
 	}
 
+	void OnMouseEnter()
+	{
+		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.blue);
+	}
+
+	void OnMouseExit()
+	{
+		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.black);
+	}
+
 	public LineData Save() => new LineData(StartID, EndID);
 }
 
