@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.BaseShaderGUI;
 
 /// <summary>
 /// 找端口，需要带有CircuitPort的端口，把自己重命名成序号
