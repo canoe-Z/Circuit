@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: e6942a4366cde334389cf46cda506bb0
+guid: cbeee738db739164b99d1cda4b9e5213
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable: []
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bady
+    second: {fileID: 2100000, guid: 3953f11b1a59cc544b46dafb0ee8aed9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -12,18 +17,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Body
-    second: {fileID: 2100000, guid: 3953f11b1a59cc544b46dafb0ee8aed9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Foot
-    second: {fileID: 2100000, guid: 3953f11b1a59cc544b46dafb0ee8aed9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
       name: Gai
-    second: {fileID: 2100000, guid: 9493ae62281379242b99b6edddbb442d, type: 2}
+    second: {fileID: 2100000, guid: 98090ce3d01243440af2c886f3ea08ee, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -33,7 +28,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Screen
-    second: {fileID: 2100000, guid: f17e8d1266d5b884698fdc8b173a7631, type: 2}
+    second: {fileID: 2100000, guid: 77fe6099ac4accd49ad3268743b9bab7, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

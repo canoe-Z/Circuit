@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -185,38 +186,9 @@ public class WdwMenu_Create : MonoBehaviour
 		NormalCreate();
 	}
 
-
-	int counter_shanshuoInterval = 0;
-	bool nowState = true;
 	private void FixedUpdate()
 	{
-		//bool闪烁
-		if (counter_shanshuoInterval > 0)
-		{
-			counter_shanshuoInterval--;
-		}
-		else
-		{
-			counter_shanshuoInterval = 5;//3帧间隔
-			nowState = !nowState;
-		}
 
-		//模型闪烁
-		if (transparentRenderers != null)
-		{
-			foreach (var tr in transparentRenderers)
-			{
-				tr.enabled = nowState;
-			}
-		}
-		//画布闪烁
-		if (transparentCanvas != null)
-		{
-			foreach (var ctr in transparentCanvas)
-			{
-				ctr.enabled = nowState;
-			}
-		}
 	}
 	void Update()
 	{
@@ -279,8 +251,8 @@ public class WdwMenu_Create : MonoBehaviour
 
 
 	//
-	static Renderer[] transparentRenderers = null;
 	static Canvas[] transparentCanvas = null;
+	static Dictionary<Renderer, Material[]> backUp = new Dictionary<Renderer, Material[]>();
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
 	{
@@ -289,8 +261,23 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = false;
 		}
-		transparentRenderers = operate.GetComponentsInChildren<Renderer>();
+		//得到引用
+		Renderer[] transparentRenderers = operate.GetComponentsInChildren<Renderer>();
 		transparentCanvas = operate.GetComponentsInChildren<Canvas>();
+		//模型
+		foreach (var rend in transparentRenderers)
+		{
+			backUp.Add(rend, rend.sharedMaterials);//备份
+			foreach (var m in rend.materials)
+			{
+				m.SetFloat("Vector1_A623D23A", 0.5f);
+			}
+		}
+		//画布
+		foreach (var rend in transparentCanvas)
+		{
+			rend.enabled = false;
+		}
 	}
 	//打开这东西的碰撞体
 	static void OpenColl(GameObject operate)
@@ -300,17 +287,24 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = true;
 		}
-		//开模型
-		foreach (var rend in transparentRenderers)
-		{
-			rend.enabled = true;
+		//还原所有的半透明物体
+		foreach(var m in backUp)
+        {
+			m.Key.materials = m.Value;
+			//Debug.Log("one");
 		}
-		//开画布
-		foreach (var rend in transparentCanvas)
+		backUp.Clear();
+
+		//画布恢复
+		if (transparentCanvas != null)
 		{
-			rend.enabled = true;
+			//画布
+			foreach (var rend in transparentCanvas)
+			{
+				rend.enabled = true;
+			}
 		}
-		transparentRenderers = null;
+		//清除引用
 		transparentCanvas = null;
 	}
 }
