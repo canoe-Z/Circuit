@@ -251,7 +251,6 @@ public class WdwMenu_Create : MonoBehaviour
 
 
 	//
-	static Canvas[] transparentCanvas = null;
 	static Dictionary<Renderer, Material[]> backUp = new Dictionary<Renderer, Material[]>();
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
@@ -263,7 +262,6 @@ public class WdwMenu_Create : MonoBehaviour
 		}
 		//得到引用
 		Renderer[] transparentRenderers = operate.GetComponentsInChildren<Renderer>();
-		transparentCanvas = operate.GetComponentsInChildren<Canvas>();
 		//模型
 		foreach (var rend in transparentRenderers)
 		{
@@ -272,11 +270,6 @@ public class WdwMenu_Create : MonoBehaviour
 			{
 				m.SetFloat("Vector1_A623D23A", 0.5f);
 			}
-		}
-		//画布
-		foreach (var rend in transparentCanvas)
-		{
-			rend.enabled = false;
 		}
 	}
 	//打开这东西的碰撞体
@@ -294,17 +287,6 @@ public class WdwMenu_Create : MonoBehaviour
 			//Debug.Log("one");
 		}
 		backUp.Clear();
-
-		//画布恢复
-		if (transparentCanvas != null)
-		{
-			//画布
-			foreach (var rend in transparentCanvas)
-			{
-				rend.enabled = true;
-			}
-		}
 		//清除引用
-		transparentCanvas = null;
 	}
 }
