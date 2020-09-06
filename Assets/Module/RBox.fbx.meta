@@ -14,6 +14,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Mental
     second: {fileID: 2100000, guid: 05dc017b5ccd60048848f1515c662c41, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roof
+    second: {fileID: 2100000, guid: 98090ce3d01243440af2c886f3ea08ee, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

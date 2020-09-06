@@ -88,7 +88,10 @@ abstract public class EntityBase : MonoBehaviour
 		{
 			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
 			{
-				renderer.material.SetColor("Color_592D9D79", Color.blue);
+				foreach(var material in renderer.materials)
+				{
+					material.SetColor("Color_592D9D79", Color.blue);
+				}
 			}
 		}
 	}
@@ -103,7 +106,10 @@ abstract public class EntityBase : MonoBehaviour
 		{
 			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
 			{
-				renderer.material.SetColor("Color_592D9D79", Color.black);
+				foreach (var material in renderer.materials)
+				{
+					material.SetColor("Color_592D9D79", Color.black);
+				}
 			}
 		}
 	}
