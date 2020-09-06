@@ -251,7 +251,6 @@ public class WdwMenu_Create : MonoBehaviour
 
 
 	//
-	static Dictionary<Renderer, Material[]> backUp = new Dictionary<Renderer, Material[]>();
 	//关闭这东西的碰撞体
 	static void CloseColl(GameObject operate)
 	{
@@ -265,10 +264,10 @@ public class WdwMenu_Create : MonoBehaviour
 		//模型
 		foreach (var rend in transparentRenderers)
 		{
-			backUp.Add(rend, rend.sharedMaterials);//备份
 			foreach (var m in rend.materials)
 			{
-				m.SetFloat("Vector1_A623D23A", 0.5f);
+				if (m.name.Remove(5) != "Glass")
+					m.SetFloat("Vector1_A623D23A", 0.5f);
 			}
 		}
 	}
@@ -280,13 +279,17 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			coll.enabled = true;
 		}
-		//还原所有的半透明物体
-		foreach(var m in backUp)
-        {
-			m.Key.materials = m.Value;
-			//Debug.Log("one");
+		//得到引用
+		Renderer[] transparentRenderers = operate.GetComponentsInChildren<Renderer>();
+		//模型
+		foreach (var rend in transparentRenderers)
+		{
+			foreach (var m in rend.materials)
+			{
+				if (m.name.Remove(5) != "Glass")
+					m.SetFloat("Vector1_A623D23A", 1f);
+			}
 		}
-		backUp.Clear();
 		//清除引用
 	}
 }
