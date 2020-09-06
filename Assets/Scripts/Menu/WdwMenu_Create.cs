@@ -266,7 +266,7 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			foreach (var m in rend.materials)
 			{
-				if (m.name != "Glass")
+				if (m.name.Remove(5) != "Glass")
 					m.SetFloat("Vector1_A623D23A", 0.5f);
 			}
 		}
@@ -286,7 +286,7 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			foreach (var m in rend.materials)
 			{
-				if (m.name != "Glass")
+				if (m.name.Remove(5) != "Glass")
 					m.SetFloat("Vector1_A623D23A", 1f);
 			}
 		}
