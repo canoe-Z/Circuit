@@ -43,6 +43,12 @@ public class MyKnob : MonoBehaviour
 	// 当前旋转速度
 	private float nowSpeedPerSec = 0;
 
+	void OnMouseEnter()
+	{
+		if (!MoveController.CanOperate) return;
+		transform.EnableFresnel((Color.red + Color.yellow) / 2);
+	}
+
 	void OnMouseOver()
 	{
 		if (!MoveController.CanOperate) return;
@@ -88,6 +94,11 @@ public class MyKnob : MonoBehaviour
 				nowSpeedPerSec = 0;
 			}
 		}
+	}
+
+	void OnMouseExit()
+	{
+		transform.DisablFresnel();
 	}
 
 	public void SetKnobRot(float newRot)

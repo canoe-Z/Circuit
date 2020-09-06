@@ -415,5 +415,35 @@ public static partial class TransformExtensions
 		}
 	}
 
+	/// <summary>
+	/// 启用边缘发光(使用Myshader)
+	/// </summary>
+	public static void EnableFresnel(this Transform transform, Color color)
+	{
+		Renderer[] renderers = transform.GetComponentsInChildren<Renderer>();
+		foreach (var renderer in renderers)
+		{
+			foreach (var material in renderer.materials)
+			{
+				material.SetColor("Color_592D9D79", color);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 关闭边缘发光(使用Myshader)
+	/// </summary>
+	public static void DisablFresnel(this Transform transform)
+	{
+		Renderer[] renderers = transform.GetComponentsInChildren<Renderer>();
+		foreach (var renderer in renderers)
+		{
+			foreach (var material in renderer.materials)
+			{
+				material.SetColor("Color_592D9D79", Color.black);
+			}
+		}
+	}
+
 	public static IEnumerable<(T item, int index)> WithIndex<T>(this IEnumerable<T> self) => self.Select((item, index) => (item, index));
 }

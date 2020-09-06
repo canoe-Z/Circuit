@@ -78,44 +78,9 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// 启用边缘发光
-	/// </summary>
-	private void EnableFresnel()
-	{
-		Renderer[] renderers = GetComponentsInChildren<Renderer>();
-		foreach (var renderer in renderers)
-		{
-			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
-			{
-				foreach(var material in renderer.materials)
-				{
-					material.SetColor("Color_592D9D79", Color.blue);
-				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// 关闭边缘发光
-	/// </summary>
-	private void DisablFresnel()
-	{
-		Renderer[] renderers = GetComponentsInChildren<Renderer>();
-		foreach (var renderer in renderers)
-		{
-			if (!renderer.gameObject.transform.parent.GetComponent<CircuitPort>())
-			{
-				foreach (var material in renderer.materials)
-				{
-					material.SetColor("Color_592D9D79", Color.black);
-				}
-			}
-		}
-	}
-
 	void OnMouseOver()
 	{
+
 		if (!MoveController.CanOperate) return;
 
 		// 按鼠标中键摆正元件
@@ -124,25 +89,30 @@ abstract public class EntityBase : MonoBehaviour
 			gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
 		}
 
+		// X键按下时
 		if (Input.GetKey(KeyCode.X))
 		{
-			EnableFresnel();
+			// 启用边缘发光
+			transform.EnableFresnel(Color.blue);
+			if(Input.GetMouseButtonDown(1))
+			{
+				DestroyEntity();
+			}
 		}
 
-		if (Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.X))
-		{
-			DestroyEntity();
-		}
-
+		// X键抬起时禁用边缘发光
 		if (Input.GetKeyUp(KeyCode.X))
 		{
-			DisablFresnel();
+			transform.DisablFresnel();
 		}
 	}
 
 	void OnMouseExit()
 	{
-		DisablFresnel();
+		if (!MoveController.CanOperate) return;
+
+		// 禁用边缘发光
+		transform.DisablFresnel();
 	}
 
 	public void DestroyEntity()
@@ -176,7 +146,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	//速度限制
+	// 速度限制
 	Rigidbody rigidBody;
 	bool isOnTable = true;
 	const float speedLimit = 1f;
@@ -184,13 +154,13 @@ abstract public class EntityBase : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		// 奇怪的东西
-		//deltaPos *= 0.9f;
 
 		Vector3 speed = rigidBody.velocity;
+
 		// 备份Y
 		float spdY = speed.y;
 		speed.y = 0;
+
 		// 两个方向的速度限制
 		if (isOnTable)
 		{
@@ -201,6 +171,7 @@ abstract public class EntityBase : MonoBehaviour
 				speed = speed.normalized * speedLimit;
 			}
 		}
+
 		// 还原Y
 		speed.y = spdY;
 		rigidBody.velocity = speed;
