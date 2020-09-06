@@ -48,12 +48,12 @@ public class MySwitch : MonoBehaviour
 	{
 		if (IsOn)
 		{
-			ChangeMat(Color.green);
+			ChangeMat(Sw, Color.green);
 			Sw.transform.localEulerAngles = basicPos + new Vector3(angleRange, 0, 0);
 		}
 		else
 		{
-			ChangeMat(Color.red);
+			ChangeMat(Sw, Color.red);
 			Sw.transform.localEulerAngles = basicPos + new Vector3(-angleRange, 0, 0);
 		}
 	}
@@ -62,11 +62,15 @@ public class MySwitch : MonoBehaviour
 	/// 修改颜色
 	/// </summary>
 	/// <param name="color">颜色</param>
-	void ChangeMat(Color color)
+	void ChangeMat(Transform trans, Color color)
 	{
-		foreach (var m in renderers)
+		Renderer[] renderers = trans.GetComponentsInChildren<Renderer>();
+		foreach (var renderer in renderers)
 		{
-			m.material.color = color;
+			foreach (var material in renderer.materials)
+			{
+				material.SetColor("Color_51411BA8", color);
+			}
 		}
 	}
 }
