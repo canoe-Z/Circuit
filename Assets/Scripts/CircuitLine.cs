@@ -9,6 +9,7 @@ public class CircuitLine : MonoBehaviour
 	public int StartID { get; set; }
 	public int EndID { get; set; }
 	public bool IsActived { get; set; }
+	public bool IsEmission { get; set; } = false;
 
 	// 对外暴露端口以注入电压
 	public CircuitPort StartPort { get; set; }
@@ -36,6 +37,30 @@ public class CircuitLine : MonoBehaviour
 		// 鼠标悬停于接线柱时，该接线柱上的导线边缘发光
 
 		CircuitCalculator.Lines.AddLast(this);
+	}
+
+	void Update()
+	{
+		if(IsEmission)
+		{
+			GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
+		}
+	}
+
+	void OnMouseEnter()
+	{
+		if (IsEmission)
+		{
+			EnableFresnel();
+		}
+	}
+
+	void OnMouseExit()
+	{
+		if (IsEmission)
+		{
+			DisablFresnel();
+		}
 	}
 
 	/// <summary>
