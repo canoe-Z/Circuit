@@ -151,7 +151,6 @@ public class RBox : EntityBase
 			baseData = new EntityBaseData(RBox);
 			RBox.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
 			nominal = RBox.nominal;
-			Debug.LogError("模糊值" + nominal[1].ToString());
 		}
 
 		public override void Load()
@@ -164,7 +163,6 @@ public class RBox : EntityBase
 			}
 			RBox.isLoad = true;
 			RBox.nominal = nominal;
-			Debug.LogError("模糊值" + RBox.nominal[1].ToString());
 		}
 	}
 }
