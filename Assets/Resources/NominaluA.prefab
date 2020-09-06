@@ -1652,6 +1652,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Meter
       objectReference: {fileID: 0}
+    - target: {fileID: 2823182906006554070, guid: cdf962d0f147c0e478aa566bdd61d474,
+        type: 3}
+      propertyPath: m_Name
+      value: Glass
+      objectReference: {fileID: 0}
+    - target: {fileID: 8154468473710174727, guid: cdf962d0f147c0e478aa566bdd61d474,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 029f2a5822452d44a826585d34ba1fa3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdf962d0f147c0e478aa566bdd61d474, type: 3}
 --- !u!4 &5934246722843373960 stripped
