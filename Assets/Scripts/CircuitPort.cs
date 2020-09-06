@@ -43,7 +43,7 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 		{
 			foreach (var material in renderer.materials)
 			{
-				material.SetColor("Color_592D9D79", Color.white);
+				material.SetColor("Color_592D9D79", (Color.red + Color.yellow) / 2);
 			}
 		}
 	}
