@@ -41,9 +41,11 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
-			renderer.material.SetColor("Color_592D9D79", Color.white);
+			foreach (var material in renderer.materials)
+			{
+				material.SetColor("Color_592D9D79", Color.white);
+			}
 		}
-		//transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 	}
 
 	void OnMouseExit()
@@ -52,8 +54,10 @@ public class CircuitPort : MonoBehaviour, IUniqueIdentity
 		Renderer[] renderers = GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
 		{
-			renderer.material.SetColor("Color_592D9D79", Color.black);
+			foreach (var material in renderer.materials)
+			{
+				material.SetColor("Color_592D9D79", Color.black);
+			}
 		}
-		transform.localScale = new Vector3(1, 1, 1);
 	}
 }
