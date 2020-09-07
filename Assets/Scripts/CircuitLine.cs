@@ -9,7 +9,7 @@ public class CircuitLine : MonoBehaviour
 	public int StartID { get; set; }
 	public int EndID { get; set; }
 	public bool IsActived { get; set; }
-	public bool IsEmission { get; set; } = false;
+	public static bool IsEmission { get; set; } = false;
 
 	// 对外暴露端口以注入电压
 	public CircuitPort StartPort { get; set; }

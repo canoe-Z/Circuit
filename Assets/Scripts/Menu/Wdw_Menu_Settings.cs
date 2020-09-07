@@ -8,7 +8,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 {
 	public Slider sldMove;
 	public Slider sldTurn;
-
+	public Toggle tglLine;
 	void Awake()
 	{
 		try//抓取可能出现的错误
@@ -27,6 +27,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 			{
 				sldMove.value = 1f;
 				sldTurn.value = 1f;
+				tglLine.isOn = true;
 			}
 		}
 		catch(Exception e)
@@ -36,16 +37,22 @@ public class Wdw_Menu_Settings : MonoBehaviour
 #endif
 		}
 
-		MoveController.MoveRatio = sldMove.value;
-		MoveController.TurnRatio = sldTurn.value;
-
 		sldMove.onValueChanged.AddListener(ChangeMoveRatio);
 		sldTurn.onValueChanged.AddListener(ChangeTurnRatio);
+		tglLine.onValueChanged.AddListener(ChangeLine);
+		ChangeMoveRatio(sldMove.value);
+		ChangeTurnRatio(sldTurn.value);
+		ChangeLine(tglLine.isOn);
 	}
 
 	private void ChangeMoveRatio(float value)=> MoveController.MoveRatio = value;
 
 	private void ChangeTurnRatio(float value) => MoveController.TurnRatio = value;
+
+	void ChangeLine(bool value)
+    {
+		CircuitLine.IsEmission = tglLine.isOn;
+	}
 
 	void OnApplicationQuit() => Save(new SettingsData(this));
 
@@ -65,17 +72,20 @@ public class Wdw_Menu_Settings : MonoBehaviour
 	{
 		private readonly float moveRatio;
 		private readonly float turnRatio;
+		private readonly bool lineguang;
 
 		public SettingsData(Wdw_Menu_Settings menu_Settings)
 		{
 			moveRatio = menu_Settings.sldMove.value;
 			turnRatio = menu_Settings.sldTurn.value;
+			lineguang = menu_Settings.tglLine.isOn;
 		}
 
 		public void Load(Wdw_Menu_Settings menu_Settings)
 		{
 			menu_Settings.sldMove.value = moveRatio;
 			menu_Settings.sldTurn.value = turnRatio;
+			menu_Settings.tglLine.isOn = lineguang;
 		}
 	}
 }
