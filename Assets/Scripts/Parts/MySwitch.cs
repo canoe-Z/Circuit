@@ -23,7 +23,6 @@ public class MySwitch : MonoBehaviour
 
 	void Start()
 	{
-		Sw = transform.FindComponent_DFS<Transform>("Sw");
 		basicPos = Sw.transform.localEulerAngles;
 		renderers = Sw.GetComponentsInChildren<Renderer>();
 		ChangeState();
