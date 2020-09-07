@@ -51,7 +51,7 @@ public class CircuitLine : MonoBehaviour
 	{
 		if (IsEmission)
 		{
-			EnableFresnel();
+			transform.EnableFresnel(Color.blue);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class CircuitLine : MonoBehaviour
 	{
 		if (IsEmission)
 		{
-			DisablFresnel();
+			transform.DisablFresnel();
 		}
 	}
 
@@ -76,16 +76,6 @@ public class CircuitLine : MonoBehaviour
 		CircuitCalculator.NeedCalculate = true;
 
 		Destroy(gameObject);
-	}
-
-	private void EnableFresnel()
-	{
-		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.blue);
-	}
-
-	private void DisablFresnel()
-	{
-		GetComponent<MeshRenderer>().material.SetColor("Color_592D9D79", Color.black);
 	}
 
 	public LineData Save() => new LineData(StartID, EndID);
