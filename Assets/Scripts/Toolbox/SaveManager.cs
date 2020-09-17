@@ -55,7 +55,7 @@ public class SaveData
 /// <summary>
 /// 存档管理器，包含存档读档等与文件的交互，和一些存档时需要用到的方法
 /// </summary>
-public class SaveManager : MonoBehaviour
+public class SaveManager : Singleton<SaveManager>
 {
 	public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
 
