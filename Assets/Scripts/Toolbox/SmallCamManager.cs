@@ -119,9 +119,9 @@ public class SmallCamManager : MonoBehaviour
 [System.Serializable]
 public class CameraData
 {
-	private List<Float3> camPosList = new List<Float3>();
-	private List<Float4> camAngleList = new List<Float4>();
-	private List<bool> isCamEnableList = new List<bool>();
+	private readonly List<Float3> camPosList = new List<Float3>();
+	private readonly List<Float4> camAngleList = new List<Float4>();
+	private readonly List<bool> isCamEnableList = new List<bool>();
 
 	public CameraData(List<Camera> cameras)
 	{
