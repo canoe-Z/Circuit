@@ -15,6 +15,9 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Ameter;
 	public Button btn_Gmeter;
 	public Button btn_Solar;
+	public Button btn_debug1;
+	public Button btn_debug2;
+	public Button btn_debug3;
 	[Header("参数创建")]
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
