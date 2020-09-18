@@ -87,6 +87,13 @@ public class SaveManager : Singleton<SaveManager>
 		{
 			Load(1);
 		}
+
+		// DEBUG:强制生成新的XML
+		if (Input.GetKeyDown(KeyCode.F10))
+		{
+			xml = CreateSaveInfo();
+			xml.Save("Saves/SaveInfo.xml");
+		}
 	}
 
 	public void Save(int saveID, string saveName)
