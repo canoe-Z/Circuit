@@ -44,11 +44,11 @@ public class WdwMenu_Save : MonoBehaviour
 	{
 		if (isLoading)
 		{
-
+			SaveManager.Instance.Load(id);
 		}
 		else
 		{
-
+			SaveManager.Instance.Save(id, "nmsl");
 		}
 	}
 }

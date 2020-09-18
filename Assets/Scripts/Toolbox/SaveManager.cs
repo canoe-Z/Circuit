@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
 using UnityEngine;
 
 /// <summary>
@@ -58,26 +59,20 @@ public class SaveData
 /// </summary>
 public class SaveManager : Singleton<SaveManager>
 {
-	public delegate void CallBack(int saveID, string saveName, byte[] bytes);//利用委托回调可以先关闭UI，截取到没有UI的画面
-																			 //XmlDocument xml = new XmlDocument();
-	SaveInfo[] saveInfoList = new SaveInfo[100];
+	public delegate void CallBack();//利用委托回调可以先关闭UI，截取到没有UI的画面
+	XmlDocument xml = new XmlDocument();
 
 	void Start()
 	{
-		if (File.Exists("Saves/saveinfo.banary"))
+		if (File.Exists("Saves/SaveInfo.xml"))
 		{
-			BinaryFormatter formatter = new BinaryFormatter();
-			FileStream saveFile = File.Open("Saves/saveinfo.banary", FileMode.Open);
-			saveInfoList = (SaveInfo[])formatter.Deserialize(saveFile);
-			saveFile.Close();
+			xml.Load("Saves/SaveInfo.xml");
+
 		}
 		else
 		{
-			saveInfoList = CreateSaveInfo();
-			BinaryFormatter formatter = new BinaryFormatter();
-			FileStream saveFile = File.Create("Saves/saveinfo.banary");
-			formatter.Serialize(saveFile, saveInfoList);
-			saveFile.Close();
+			xml = CreateSaveInfo();
+			xml.Save("Saves/SaveInfo.xml");
 		}
 	}
 
@@ -101,38 +96,55 @@ public class SaveManager : Singleton<SaveManager>
 		if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
 
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream saveFile = File.Create("Saves/saveData" + saveID.ToString() + ".binary");
+		FileStream saveFile = File.Create(
+			string.Format("Saves/SaveData_" + "{0:D3}" + ".binary",saveID));
 		formatter.Serialize(saveFile, savedata);
 		saveFile.Close();
 
-		StartCoroutine(ScreenShotTex(SaveCallBack, saveID, saveName));
+		StartCoroutine(ScreenShotTex());
+
+		WriteSaveInfo(saveID, saveName);
+		xml.Save("Saves/SaveInfo.xml");
 	}
 
-	private void SaveCallBack(int saveID, string saveName, byte[] bytes)
+	public XmlDocument CreateSaveInfo()
 	{
-		saveInfoList[saveID] = new SaveInfo(true, saveName, GetSaveTime(), bytes);
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream saveFile = File.Create("Saves/saveinfo.banary");
-		formatter.Serialize(saveFile, saveInfoList);
-		saveFile.Close();
-	}
-
-	public SaveInfo[] CreateSaveInfo()
-	{
-		SaveInfo[] datainfos = new SaveInfo[100];
+		XmlDocument xml = new XmlDocument();
+		xml.AppendChild(xml.CreateXmlDeclaration("1.0", "UTF-8", null));
+		XmlElement root = xml.CreateElement("Index");
+		xml.AppendChild(root);
 		for (var i = 0; i < 100; i++)
 		{
-			datainfos[i] = new SaveInfo(false);
+			var node = root.AppendChild(xml.CreateElement("SavaData" + i.ToString()));
+			node.AppendChild(xml.CreateElement("IsUsed")).InnerText = "";
+			node.AppendChild(xml.CreateElement("SaveName")).InnerText = "";
+			node.AppendChild(xml.CreateElement("SaveTime")).InnerText = "";
 		}
-		return datainfos;
+		return xml;
+
 	}
 
-	public SaveInfo[] LoadSaveInfo()
+	private void WriteSaveInfo(int saveID, string saveName)
 	{
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream saveFile = File.Open("Saves/saveinfo.banary", FileMode.Open);
-		SaveInfo[] saveInfoList = (SaveInfo[])formatter.Deserialize(saveFile);
-		saveFile.Close();
+		var node = xml.SelectSingleNode("Index").ChildNodes[saveID];
+		node.ChildNodes[0].InnerText = "1";
+		node.ChildNodes[1].InnerText = saveName;
+		node.ChildNodes[2].InnerText = GetSaveTime();
+	}
+
+	public List<SaveInfo> LoadSaveInfo(int? start=null,int? end=null)
+	{
+		var node = xml.SelectSingleNode("Index");
+		List<SaveInfo> saveInfoList = new List<SaveInfo>();
+		if (start == null) start = 0;
+		if (end == null) end = 100;
+		for (int i=start.Value; i < end.Value; i++)
+		{
+			saveInfoList.Add(new SaveInfo(
+				node.ChildNodes[i].ChildNodes[0].InnerText,
+				node.ChildNodes[i].ChildNodes[1].InnerText,
+				node.ChildNodes[i].ChildNodes[2].InnerText));
+		}
 		return saveInfoList;
 	}
 
@@ -143,7 +155,7 @@ public class SaveManager : Singleton<SaveManager>
 			DateTime.Now.Hour, DateTime.Now.Minute);
 	}
 
-	private void Load(int saveID)
+	public void Load(int saveID)
 	{
 		// 删除场景内所有元件，通过委托调用也将删除所有端口和导线
 		var node = CircuitCalculator.Entities.First;
@@ -156,9 +168,9 @@ public class SaveManager : Singleton<SaveManager>
 
 		if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
 
-
 		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream saveFile = File.Open("Saves/saveData" + saveID.ToString() + ".binary", FileMode.Open);
+		FileStream saveFile = File.Open(
+			string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", saveID), FileMode.Open);
 		SaveData datafromfile = (SaveData)formatter.Deserialize(saveFile);
 		saveFile.Close();
 
@@ -175,7 +187,7 @@ public class SaveManager : Singleton<SaveManager>
 	/// <param name="fileName">文件名</param>
 	/// <param name="callBack">截图完成回调</param>
 	/// <returns>协程</returns>
-	public IEnumerator ScreenShotTex(CallBack callBack, int saveID, string saveName)
+	public IEnumerator ScreenShotTex()
 	{
 		// 等待菜单关闭
 		yield return null;
@@ -183,7 +195,6 @@ public class SaveManager : Singleton<SaveManager>
 		Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();//截图返回Texture2D对象
 		byte[] bytes = tex.EncodeToPNG();//将纹理数据，转化成一个png图片
 		File.WriteAllBytes("Saves/save2.png", bytes);//写入数据
-		callBack?.Invoke(saveID, saveName, bytes);
 	}
 
 	/// <summary>
@@ -218,52 +229,26 @@ public class SaveManager : Singleton<SaveManager>
 	}
 }
 
-public struct XmlInfo
+public struct SaveInfo
 {
 	public bool isUsed;
 	public string saveName;
-	public string saveDate;
+	public string saveTime;
 
-	public XmlInfo(string isUsed, string saveName, string saveDate)
+	public SaveInfo(string isUsed, string saveName, string saveTime)
 	{
 		if (isUsed == "1")
 		{
 			this.isUsed = true;
 			this.saveName = saveName;
-			this.saveDate = saveDate;
-
+			this.saveTime = saveTime;
 		}
 		else
 		{
 			this.isUsed = false;
 			this.saveName = "";
-			this.saveDate = "";
+			this.saveTime = "";
 		}
-	}
-}
-
-[System.Serializable]
-public struct SaveInfo
-{
-	public bool isUsed;
-	public byte[] bytes;
-	public string saveName;
-	public string saveDate;
-
-	public SaveInfo(bool isUsed, string saveName, string saveDate, byte[] bytes)
-	{
-		this.isUsed = isUsed;
-		this.bytes = bytes;
-		this.saveName = saveName;
-		this.saveDate = saveDate;
-	}
-
-	public SaveInfo(bool isUsed)
-	{
-		this.isUsed = isUsed;
-		bytes = null;
-		saveName = "";
-		saveDate = "";
 	}
 }
 
