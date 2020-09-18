@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5347458607636847203}
   - component: {fileID: 5048582683377368852}
   - component: {fileID: 8631361360898117398}
+  - component: {fileID: 1070125884924330138}
   m_Layer: 0
   m_Name: HotR
   m_TagString: Untagged
@@ -135,6 +136,18 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
+--- !u!114 &1070125884924330138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370815023485432142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d401c8a70f26c4092113e289a979ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &370815024200550056
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,34 +1,54 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine.UI;
 
 /// <summary>
-/// TODO:热敏电阻
+/// 热敏电阻
 /// </summary>
 public class Thermistor : EntityBase
 {
+	private double RValue;
+	private double TWill = 90;
+	private double TNow = 30;
+	private MyKnob knob;
+	private Text TWillText;
+	private Text TNowText;
+	protected int PortID_Left, PortID_Right;
+
 	public override void EntityAwake()
 	{
-		throw new System.NotImplementedException();
+		TWillText = transform.GetChildByName("Will").GetComponent<Text>();
+		TNowText = transform.GetChildByName("Now").GetComponent<Text>();
+		knob = GetComponentInChildren<MyKnob>();
 	}
 
 	void Start()
 	{
-		throw new System.NotImplementedException();
+		PortID_Left = ChildPorts[0].ID;
+		PortID_Right = ChildPorts[1].ID;
 	}
 
-
-	public override void LoadElement()
+	void FixedUpdate()
 	{
-		throw new System.NotImplementedException();
+		if(TWill>TNow)
+		{
+			TWill -= 0.1;
+		}
+		else
+		{
+			TWill += 0.1;
+		}
+		RValue = 100 * TNow;
+		CircuitCalculator.NeedCalculate = true;
 	}
+
+	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
+
 
 	public override void SetElement(int entityID)
 	{
-		throw new System.NotImplementedException();
+		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), RValue));
 	}
 
-	public override EntityData Save()
-	{
-		throw new System.NotImplementedException();
-	}
+	public override EntityData Save() => new SimpleEntityData<Thermistor>(this);
 }
 
