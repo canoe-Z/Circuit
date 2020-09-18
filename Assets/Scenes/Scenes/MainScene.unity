@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.2674865, g: 0.3300282, b: 0.3545647, a: 1}
+  m_IndirectSpecularColor: {r: 0.26755163, g: 0.32992074, b: 0.3546442, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -17140,9 +17140,9 @@ MonoBehaviour:
   btn_Ameter: {fileID: 1492655100}
   btn_Gmeter: {fileID: 1291554333}
   btn_Solar: {fileID: 28491452}
-  btn_debug1: {fileID: 0}
-  btn_debug2: {fileID: 0}
-  btn_debug3: {fileID: 0}
+  btn_debug1: {fileID: 104984699}
+  btn_debug2: {fileID: 1432434054}
+  btn_debug3: {fileID: 1925446826}
   iptNum_SliderR: {fileID: 253484464}
   btn_SliderR: {fileID: 1921507284}
   iptNum_R: {fileID: 646263107}
