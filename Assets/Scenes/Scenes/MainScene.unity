@@ -1383,8 +1383,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnSave: {fileID: 1814992808}
   btnLoad: {fileID: 422793516}
-  iptName: {fileID: 0}
-  saveOrLoad: {fileID: 0}
+  iptName: {fileID: 1321732995}
+  saveOrLoad: {fileID: 1918768093}
   btnSaves:
   - {fileID: 368109646}
   - {fileID: 2105368999}
