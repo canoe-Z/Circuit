@@ -8,6 +8,7 @@ public class WdwMenu_Save : MonoBehaviour
 	public Button btnSave;
 	public Button btnLoad;
 	public InputField iptName;
+	public Canvas saveOrLoad;
 
 	public Button[] btnSaves;
 	Text[] txtSaves;
@@ -26,8 +27,7 @@ public class WdwMenu_Save : MonoBehaviour
 			txtSaves[i].text = "hello\nworld";
 		}
 
-
-		Load();
+		saveOrLoad.enabled = false;
 	}
 
 	void Save()
@@ -40,6 +40,7 @@ public class WdwMenu_Save : MonoBehaviour
 	}
 	void OnButtonSelect(int id)
 	{
+		saveOrLoad.enabled = true;
 		if (isLoading)
 		{
 
