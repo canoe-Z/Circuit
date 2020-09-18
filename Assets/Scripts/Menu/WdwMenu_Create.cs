@@ -39,6 +39,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public Dropdown dpdSourceType;
 	void Start()
 	{
+		btn_debug1.onClick.AddListener(OnButton_Simple<Thermistor>);
 		btn_RBox.onClick.AddListener(OnButton_Simple<RBox>);
 		btn_Solar.onClick.AddListener(OnButton_Simple<Solar>);
 		btn_Switch.onClick.AddListener(OnButton_Simple<Switch>);
