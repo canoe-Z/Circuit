@@ -50,7 +50,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			// 否则计算误差限，使用随机生成的误差值
 			else
 			{
-				tolerance_mV = 0.02 * 0.01 * mV + 0.01 * 2;
+				tolerance_mV = 0.02 * 0.01 * mV + 0.001 * 2;
 				nominal_mV = mV + tolerance_mV * Random.Range(-1f, 1f);
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
 			}
@@ -64,7 +64,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			}
 			else
 			{
-				tolerance_V = 0.02 * 0.01 * V + 0.01 * 2;
+				tolerance_V = 0.02 * 0.01 * V + 0.001 * 2;
 				nominal_V = V + tolerance_V * Random.Range(-1f, 1f);
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
 			}
