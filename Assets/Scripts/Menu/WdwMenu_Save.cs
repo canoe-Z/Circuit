@@ -7,7 +7,7 @@ public class WdwMenu_Save : MonoBehaviour
 {
 	public Button btnSave;
 	public Button btnLoad;
-	public Text txtIndex;
+	public InputField iptName;
 
 	public Button[] btnSaves;
 	Text[] txtSaves;
@@ -15,32 +15,30 @@ public class WdwMenu_Save : MonoBehaviour
 	bool isLoading = true;
 	void Start()
 	{
-		btnSave.onClick.AddListener(ToSave);
-		btnLoad.onClick.AddListener(ToLoad);
+		btnSave.onClick.AddListener(Save);
+		btnLoad.onClick.AddListener(Load);
 
 		txtSaves = new Text[btnSaves.Length];
 		for (int i = 0; i < btnSaves.Length; i++)
 		{
-			btnSaves[i].onClick.AddListener(delegate () { OnButtonSave(i); });//添加带参数的按钮
+			btnSaves[i].onClick.AddListener(delegate () { OnButtonSelect(i); });//添加带参数的按钮
 			txtSaves[i] = btnSaves[i].GetComponentInChildren<Text>();
 			txtSaves[i].text = "hello\nworld";
 		}
 
 
-		ToLoad();
+		Load();
 	}
 
-	void ToSave()
+	void Save()
 	{
 		isLoading = false;
-		txtIndex.text = "请选择保存的存档";
 	}
-	void ToLoad()
+	void Load()
 	{
 		isLoading = true;
-		txtIndex.text = "请选择加载的存档";
 	}
-	void OnButtonSave(int id)
+	void OnButtonSelect(int id)
 	{
 		if (isLoading)
 		{
