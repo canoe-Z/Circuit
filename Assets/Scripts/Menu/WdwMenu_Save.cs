@@ -19,8 +19,13 @@ public class WdwMenu_Save : MonoBehaviour
 	Text[] txtSaves;
 	Image[] imgSaves;
 
+
+	Wdw_Menu menuFather;
 	void Start()
 	{
+		//菜单的爹
+		menuFather = GetComponentInParent<Wdw_Menu>();
+
 		//自己的画布
 		canvas = GetComponent<Canvas>();
 
@@ -108,7 +113,7 @@ public class WdwMenu_Save : MonoBehaviour
 	void OnButtonOK()
 	{
 		ok.enabled = false;//关闭选择框
-		if (iptName.text == "") iptName.text = "default";
+		if (iptName.text == "") iptName.text = "未命名";
 
 		//按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
@@ -124,7 +129,7 @@ public class WdwMenu_Save : MonoBehaviour
 		SaveManager.Instance.Load(saveID);
 
 		saveOrLoad.enabled = false;//关闭弹窗
-		RenewNameAndImages();
+		menuFather.CloseMenu();//关闭菜单
 	}
 	void OnButtonSelect(int id)
 	{
