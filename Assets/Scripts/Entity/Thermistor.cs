@@ -43,7 +43,7 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	{
 		if (TWill > TNow)
 		{
-			TWill -= 0.1;
+			TNow += 0.1;
 		}
 		else
 		{
