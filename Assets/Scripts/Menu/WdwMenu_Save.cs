@@ -5,49 +5,131 @@ using UnityEngine.UI;
 
 public class WdwMenu_Save : MonoBehaviour
 {
+	public Button btnLastPage;
+	public Button btnNextPage;
 	public Button btnSave;
 	public Button btnLoad;
+	public Button btnOK;
 	public InputField iptName;
 	public Canvas saveOrLoad;
+	public Canvas ok;
 
-	public Button[] btnSaves;
+	public GameObject btnFathers;
+	Button[] btnSavesAndPics;
 	Text[] txtSaves;
+	Image[] imgSaves;
 
-	bool isLoading = true;
 	void Start()
 	{
-		btnSave.onClick.AddListener(Save);
-		btnLoad.onClick.AddListener(Load);
+		//自己的画布
+		canvas = GetComponent<Canvas>();
 
-		txtSaves = new Text[btnSaves.Length];
-		for (int i = 0; i < btnSaves.Length; i++)
+		//按钮
+		btnLastPage.onClick.AddListener(OnButtonLastPage);
+		btnNextPage.onClick.AddListener(OnButtonNextPage);
+		btnSave.onClick.AddListener(OnButtonSave);
+		btnLoad.onClick.AddListener(OnButtonLoad);
+		btnOK.onClick.AddListener(OnButtonOK);
+
+		//存档们
+		btnSavesAndPics = btnFathers.GetComponentsInChildren<Button>();
+
+		idInOnePage = btnSavesAndPics.Length;
+		txtSaves = new Text[btnSavesAndPics.Length];
+		imgSaves = new Image[btnSavesAndPics.Length];
+
+
+		for (int i = 0; i < btnSavesAndPics.Length; i++)
 		{
-			btnSaves[i].onClick.AddListener(delegate () { OnButtonSelect(i); });//添加带参数的按钮
-			txtSaves[i] = btnSaves[i].GetComponentInChildren<Text>();
-			txtSaves[i].text = "hello\nworld";
+			int id = i;
+			btnSavesAndPics[i].onClick.AddListener(delegate () {
+				OnButtonSelect(id); });//添加带参数的按钮
+
+			//处理按钮下面的文本
+			txtSaves[i] = btnSavesAndPics[i].GetComponentInChildren<Text>();
+			imgSaves[i] = btnSavesAndPics[i].GetComponentInChildren<Image>();
 		}
 
 		saveOrLoad.enabled = false;
 	}
-
-	void Save()
+	Canvas canvas;
+	public void SetCanvas(bool value)
 	{
-		isLoading = false;
+		canvas.enabled = value;//打开/关闭画布
+		saveOrLoad.enabled = false;//每次切换都会关闭这个弹窗
+		ok.enabled = false;//每次切换都会关闭弹窗上的悬浮窗
+		if (value)//打开画布时
+		{
+			RenewNameAndImages();//更新存档的显示
+		}
 	}
-	void Load()
+
+	int selectedID = 0;//0-8
+	int idNowPage = 0;//0-无穷
+	int idInOnePage = 9;//一页有多少个存档
+
+	void RenewNameAndImages()
 	{
-		isLoading = true;
+		int startId = idNowPage * idInOnePage;
+		int endId = startId + idInOnePage;
+		List<SaveInfo> saveInfos = SaveManager.Instance.LoadSaveInfo(startId, endId);
+		if (saveInfos.Count != idInOnePage)
+		{
+			Debug.LogError("数量不匹配");
+			Debug.Log(saveInfos.Count);
+		}
+		
+		for(int i = 0; i < saveInfos.Count; i++)
+		{
+			int nowID = idNowPage * idInOnePage + i;
+			if (saveInfos[i].isUsed)
+				txtSaves[i].text = nowID.ToString("00") + "：" + saveInfos[i].saveName + "\n" + saveInfos[i].saveTime;
+			else
+				txtSaves[i].text = nowID.ToString("00") + "空存档";
+		}
+	}
+
+	void OnButtonNextPage()
+	{
+		idNowPage++;
+		if (idNowPage > 9) idNowPage = 9;
+		RenewNameAndImages();
+	}
+	void OnButtonLastPage()
+	{
+		idNowPage--;
+		if (idNowPage < 0) idNowPage = 0;
+		RenewNameAndImages();
+	}
+	void OnButtonSave()
+	{
+		ok.enabled = true;//关闭选择框
+	}
+	void OnButtonOK()
+	{
+		ok.enabled = false;//关闭选择框
+		if (iptName.text == "") iptName.text = "default";
+
+		//按照ID存档
+		int saveID = selectedID + idInOnePage * idNowPage;
+		SaveManager.Instance.Save(saveID, iptName.text);
+
+		saveOrLoad.enabled = false;//关闭弹窗
+		RenewNameAndImages();
+	}
+	void OnButtonLoad()
+	{
+		//按照ID存档
+		int saveID = selectedID + idInOnePage * idNowPage;
+		SaveManager.Instance.Load(saveID);
+
+		saveOrLoad.enabled = false;//关闭弹窗
+		RenewNameAndImages();
 	}
 	void OnButtonSelect(int id)
 	{
-		saveOrLoad.enabled = true;
-		if (isLoading)
-		{
-			SaveManager.Instance.Load(id);
-		}
-		else
-		{
-			SaveManager.Instance.Save(id, "nmsl");
-		}
+		selectedID = id;
+		saveOrLoad.enabled = true;//打开弹窗
+		iptName.text = "";//清空弹窗的内容
 	}
 }

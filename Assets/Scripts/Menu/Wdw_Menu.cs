@@ -6,7 +6,7 @@ public class Wdw_Menu : MonoBehaviour
 {
 	public Canvas mainThings;
 	public Canvas createThings;
-	public Canvas saveThings;
+	public WdwMenu_Save saveThings;
 	public Canvas settingsThings;
 	public Button exitGame;
 	public Button continueGame;
@@ -112,20 +112,20 @@ public class Wdw_Menu : MonoBehaviour
 	void ToCreateMode()
 	{
 		createThings.enabled = true;
-		saveThings.enabled = false;
+		saveThings.SetCanvas(false);
 		settingsThings.enabled = false;
 	}
 	//变为存档的界面
 	void ToSaveMode()
 	{
 		createThings.enabled = false;
-		saveThings.enabled = true;
+		saveThings.SetCanvas(true);
 		settingsThings.enabled = false;
 	}
 	void ToSettingsMode()
 	{
 		createThings.enabled = false;
-		saveThings.enabled = false;
+		saveThings.SetCanvas(false);
 		settingsThings.enabled = true;
 	}
 

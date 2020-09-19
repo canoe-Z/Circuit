@@ -139,6 +139,9 @@ public class SaveManager : Singleton<SaveManager>
 		node.ChildNodes[2].InnerText = GetSaveTime();
 	}
 
+	/// <summary>
+	/// 加载从start到end的存档信息，不包括end
+	/// </summary>
 	public List<SaveInfo> LoadSaveInfo(int? start=null,int? end=null)
 	{
 		var node = xml.SelectSingleNode("Index");
