@@ -1,10 +1,11 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 热敏电阻
 /// </summary>
-public class Thermistor : EntityBase
+public class Thermistor : EntityBase, ICalculatorUpdate
 {
 	private double RValue;
 	private double TWill = 90;
@@ -23,13 +24,24 @@ public class Thermistor : EntityBase
 
 	void Start()
 	{
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+
+		CalculatorUpdate();
 		PortID_Left = ChildPorts[0].ID;
 		PortID_Right = ChildPorts[1].ID;
 	}
 
+	public void CalculatorUpdate()
+	{
+		Debug.LogError("ZQGGP");
+		TWillText.text = TWill.ToString();
+		TNowText.text = TNow.ToString();
+	}
+
 	void FixedUpdate()
 	{
-		if(TWill>TNow)
+		if (TWill > TNow)
 		{
 			TWill -= 0.1;
 		}
