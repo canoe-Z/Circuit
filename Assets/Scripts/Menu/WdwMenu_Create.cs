@@ -15,9 +15,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Ameter;
 	public Button btn_Gmeter;
 	public Button btn_Solar;
-	public Button btn_debug1;
-	public Button btn_debug2;
-	public Button btn_debug3;
+	public Button btn_Thermistor;
 	[Header("参数创建")]
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
@@ -39,7 +37,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public Dropdown dpdSourceType;
 	void Start()
 	{
-		btn_debug1.onClick.AddListener(OnButton_Simple<Thermistor>);
+		btn_Thermistor.onClick.AddListener(OnButton_Simple<Thermistor>);
 		btn_RBox.onClick.AddListener(OnButton_Simple<RBox>);
 		btn_Solar.onClick.AddListener(OnButton_Simple<Solar>);
 		btn_Switch.onClick.AddListener(OnButton_Simple<Switch>);
