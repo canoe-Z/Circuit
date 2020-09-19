@@ -158,7 +158,7 @@ public class Wdw_Menu : MonoBehaviour
 
 	}
 	//关闭菜单
-	public void CloseMenu()
+	private void CloseMenu()
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;
