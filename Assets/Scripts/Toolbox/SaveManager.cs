@@ -108,7 +108,7 @@ public class SaveManager : Singleton<SaveManager>
 		formatter.Serialize(saveFile, savedata);
 		saveFile.Close();
 
-		StartCoroutine(ScreenShotTex());
+		StartCoroutine(ScreenShotTex(saveID));
 
 		WriteSaveInfo(saveID, saveName);
 		xml.Save("Saves/SaveInfo.xml");
@@ -153,7 +153,8 @@ public class SaveManager : Singleton<SaveManager>
 			saveInfoList.Add(new SaveInfo(
 				node.ChildNodes[i].ChildNodes[0].InnerText,
 				node.ChildNodes[i].ChildNodes[1].InnerText,
-				node.ChildNodes[i].ChildNodes[2].InnerText));
+				node.ChildNodes[i].ChildNodes[2].InnerText,
+				string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", i)));
 		}
 		return saveInfoList;
 	}
@@ -197,14 +198,37 @@ public class SaveManager : Singleton<SaveManager>
 	/// <param name="fileName">文件名</param>
 	/// <param name="callBack">截图完成回调</param>
 	/// <returns>协程</returns>
-	public IEnumerator ScreenShotTex()
+	public IEnumerator ScreenShotTex(int saveID)
 	{
 		// 等待菜单关闭
 		yield return null;
-		yield return new WaitForEndOfFrame();//等到帧结束，不然会报错
-		Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();//截图返回Texture2D对象
-		byte[] bytes = tex.EncodeToPNG();//将纹理数据，转化成一个png图片
-		File.WriteAllBytes("Saves/save2.png", bytes);//写入数据
+		// 等待帧结束，不然会报错
+		yield return new WaitForEndOfFrame();
+		Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();
+		byte[] bytes = tex.EncodeToPNG();
+		File.WriteAllBytes(string.Format("Saves/SaveImg_" + "{0:D3}" + ".png", saveID), bytes);
+	}
+
+	/// <summary>
+	/// 读取文件为byte数组
+	/// </summary>
+	/// <param name="fileName">文件路径</param>
+	/// <returns>byte数组</returns>
+	public static byte[] FileContent(string fileName)
+	{
+		using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+		{
+			try
+			{
+				byte[] buffur = new byte[fs.Length];
+				fs.Read(buffur, 0, (int)fs.Length);
+				return buffur;
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
 	}
 
 	/// <summary>
@@ -244,20 +268,23 @@ public struct SaveInfo
 	public bool isUsed;
 	public string saveName;
 	public string saveTime;
+	public byte[] bytes;
 
-	public SaveInfo(string isUsed, string saveName, string saveTime)
+	public SaveInfo(string isUsed, string saveName, string saveTime,string imgPath)
 	{
 		if (isUsed == "1")
 		{
 			this.isUsed = true;
 			this.saveName = saveName;
 			this.saveTime = saveTime;
+			bytes = SaveManager.FileContent(imgPath);
 		}
 		else
 		{
 			this.isUsed = false;
 			this.saveName = "";
 			this.saveTime = "";
+			bytes = null;
 		}
 	}
 }
