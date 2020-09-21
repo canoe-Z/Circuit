@@ -72,7 +72,7 @@ public class WdwMenu_Save : MonoBehaviour
 	{
 		int startId = idNowPage * idInOnePage;
 		int endId = startId + idInOnePage;
-		List<SaveInfo> saveInfos = SaveManager.Instance.LoadSaveInfo(startId, endId);
+		List<SaveInfo> saveInfos = SaveManager.Instance.MyLoadSaveInfo(startId, endId);
 		if (saveInfos.Count != idInOnePage)
 		{
 			Debug.LogError("数量不匹配");
@@ -112,7 +112,7 @@ public class WdwMenu_Save : MonoBehaviour
 
 		//按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.Save(saveID, iptName.text);
+		SaveManager.Instance.MySave(saveID, iptName.text);
 
 		saveOrLoad.enabled = false;//关闭弹窗
 		Wdw_Menu.MenuState = 0;//关闭菜单
@@ -121,7 +121,7 @@ public class WdwMenu_Save : MonoBehaviour
 	{
 		//按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.Load(saveID);
+		SaveManager.Instance.MyLoad(saveID);
 
 		saveOrLoad.enabled = false;//关闭弹窗
 		Wdw_Menu.MenuState = 0;//关闭菜单

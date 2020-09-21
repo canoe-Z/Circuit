@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +53,7 @@ public class DisplayController : MonoBehaviour
 			ColorID -= colorMax;
 		}
 
-		Debug.LogError(fpsText.text);
+		//Debug.LogError(fpsText.text);
 
 		IsCursorHidden = true;
 	}
