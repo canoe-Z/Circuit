@@ -60,7 +60,7 @@ public class WdwMenu_Save : MonoBehaviour
 		ok.enabled = false;//每次切换都会关闭弹窗上的悬浮窗
 		if (value)//打开画布时
 		{
-			RenewNameAndImages();//更新存档的显示
+			MyRenewNameAndImages();//更新存档的显示
 		}
 	}
 
@@ -68,7 +68,10 @@ public class WdwMenu_Save : MonoBehaviour
 	int idNowPage = 0;//0-无穷
 	int idInOnePage = 9;//一页有多少个存档
 
-	void RenewNameAndImages()
+	/// <summary>
+	/// 刷新
+	/// </summary>
+	public void MyRenewNameAndImages()
 	{
 		int startId = idNowPage * idInOnePage;
 		int endId = startId + idInOnePage;
@@ -86,6 +89,10 @@ public class WdwMenu_Save : MonoBehaviour
 				txtSaves[i].text = nowID.ToString("00") + "：" + saveInfos[i].saveName + "\n" + saveInfos[i].saveTime;
 			else
 				txtSaves[i].text = nowID.ToString("00") + "空存档";
+
+			Texture2D tex = new Texture2D(0, 0);
+			tex.LoadImage(saveInfos[i].bytes);
+			imgSaves[i].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
 		}
 	}
 
@@ -93,13 +100,13 @@ public class WdwMenu_Save : MonoBehaviour
 	{
 		idNowPage++;
 		if (idNowPage > 9) idNowPage = 9;
-		RenewNameAndImages();
+		MyRenewNameAndImages();
 	}
 	void OnButtonLastPage()
 	{
 		idNowPage--;
 		if (idNowPage < 0) idNowPage = 0;
-		RenewNameAndImages();
+		MyRenewNameAndImages();
 	}
 	void OnButtonSave()
 	{
@@ -115,7 +122,7 @@ public class WdwMenu_Save : MonoBehaviour
 		SaveManager.Instance.MySave(saveID, iptName.text);
 
 		saveOrLoad.enabled = false;//关闭弹窗
-		Wdw_Menu.MenuState = 0;//关闭菜单
+		//Wdw_Menu.Instance.MyCloseMenu();//关闭菜单
 	}
 	void OnButtonLoad()
 	{
@@ -124,7 +131,7 @@ public class WdwMenu_Save : MonoBehaviour
 		SaveManager.Instance.MyLoad(saveID);
 
 		saveOrLoad.enabled = false;//关闭弹窗
-		Wdw_Menu.MenuState = 0;//关闭菜单
+		Wdw_Menu.Instance.MyCloseMenu();//关闭菜单
 	}
 	void OnButtonSelect(int id)
 	{

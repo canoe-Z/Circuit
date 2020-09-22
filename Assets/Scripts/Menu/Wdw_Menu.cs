@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Wdw_Menu : MonoBehaviour
+public class Wdw_Menu : Singleton<Wdw_Menu>
 {
 	public Canvas mainThings;
 	public Canvas createThings;
@@ -14,25 +15,17 @@ public class Wdw_Menu : MonoBehaviour
 	public Button btnToSave;
 	public Button btnToSettings;
 
-	/// <summary>
-	/// 置为1时，强制关闭菜单
-	/// </summary>
-	[HideInInspector]
-	public static bool shouldCloseMenu = false;
-
-	public static int MenuState = -1;
-
 	void Awake()
 	{
-		StartCoroutine(MenuUpdate());
 	}
+
 
 	void Start()
 	{
 		if (mainThings == null) Debug.LogError("这里没挂");
 		if (exitGame == null) Debug.LogError("这里没挂");
 		if (continueGame == null) Debug.LogError("这里没挂");
-		CloseMenu();
+		MyCloseMenu();
 		exitGame.onClick.AddListener(OnQuitButton);
 		continueGame.onClick.AddListener(OnContinueButton);
 		btnToCreate.onClick.AddListener(ToCreateMode);
@@ -47,47 +40,24 @@ public class Wdw_Menu : MonoBehaviour
 			// 能操作场景对象，能操作角色，意味着菜单未开启
 			if (MoveController.CanOperate && MoveController.CanControll)
 			{
-				MenuState = 1;
+				MyOpenMenu();
 				return;
 			}
 
 			// 不能操作场景对象，不能操作角色，意味着菜单已经开启
 			if (!MoveController.CanOperate && !MoveController.CanControll)
 			{
-				MenuState = 0;
+				MyCloseMenu();
 				return;
 			}
 
 			// 不能操作场景对象，但是能操作角色，意味着正在添加元件，放下物体
 			if (!MoveController.CanOperate && MoveController.CanControll)
 			{
-				MenuState = 1;
+				MyOpenMenu();
 				return;
 			}
 
-			// 能操作场景对象，但是不能操作角色，不存在这种情况，报错
-			if (MoveController.CanOperate && !MoveController.CanControll)
-			{
-				return;
-			}
-		}
-	}
-
-	private IEnumerator MenuUpdate()
-	{
-		while (true)
-		{
-			if (MenuState == 1)
-			{
-				OpenMenu();
-				MenuState = -1;
-			}
-			else if (MenuState == 0)
-			{
-				CloseMenu();
-				MenuState = -1;
-			}
-			yield return null; //下一帧再次调用，yield return null的执行时机在Update()之后
 		}
 	}
 
@@ -105,7 +75,7 @@ public class Wdw_Menu : MonoBehaviour
 	//继续
 	void OnContinueButton()
 	{
-		CloseMenu();
+		MyCloseMenu();
 	}
 
 	//变为创建元件的界面
@@ -116,7 +86,7 @@ public class Wdw_Menu : MonoBehaviour
 		settingsThings.enabled = false;
 	}
 	//变为存档的界面
-	void ToSaveMode()
+	public void ToSaveMode()
 	{
 		createThings.enabled = false;
 		saveThings.SetCanvas(true);
@@ -133,7 +103,7 @@ public class Wdw_Menu : MonoBehaviour
 	//奇怪的函数
 
 	//打开菜单
-	private void OpenMenu()
+	public void MyOpenMenu()
 	{
 		//默认界面是创建元件的界面
 		ToCreateMode();
@@ -158,7 +128,7 @@ public class Wdw_Menu : MonoBehaviour
 
 	}
 	//关闭菜单
-	private void CloseMenu()
+	public void MyCloseMenu()
 	{
 		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
 		Cursor.visible = false;

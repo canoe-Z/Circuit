@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-﻿using UnityEngine;
-=======
 ﻿using System.Collections;
 using UnityEngine;
->>>>>>> d2f577c21810436a6bc014131fee5161befcc1ea
 using UnityEngine.UI;
 
 /// <summary>
@@ -12,7 +8,7 @@ using UnityEngine.UI;
 public class DisplayController : MonoBehaviour
 {
 	/// <summary>
-	/// 保留奇怪的东西，方便存档。随便艹的变量
+	/// 随便艹的变量，可用于保存存档
 	/// /// </summary>
 	public static int MyColorID { get; set; } = 0;
 	/// <summary>
@@ -39,28 +35,31 @@ public class DisplayController : MonoBehaviour
 			thisInstance.imgCross.enabled = value;
 		}
 	}
+	/// <summary>
+	/// 令这些东西隐藏一帧
+	/// </summary>
+	public static void MyHideOneFrame()
+	{
+		MyShowCross = false;
+		MyShowFps = false;
+		thisInstance.frameHide_counter = 2;
+	}
 
 
+
+	Color[] crossColor = new Color[colorMax];
+	const int colorMax = 5;
 	Image imgCross;
 	Text txtFps;
 
-	private static readonly int colorMax = 5;
-	private static readonly Color[] corssColor = new Color[5];
-	private static Rect rectTex = new Rect(0, 0, 100, 100);
-	public static bool IsCursorHidden = false;
-	public Canvas canvas;
-	public Text fpsText;
-
 	void Awake()
 	{
-		fpsText = canvas.transform.FindComponent_BFS<Text>("FPSDisplay");
 		// 加载光标颜色
-<<<<<<< HEAD
-		corssColor[0] = Color.black;
-		corssColor[1] = Color.white;
-		corssColor[2] = Color.red;
-		corssColor[3] = Color.yellow;
-		corssColor[4] = Color.green;
+		crossColor[0] = Color.black;
+		crossColor[1] = Color.white;
+		crossColor[2] = Color.red;
+		crossColor[3] = Color.yellow;
+		crossColor[4] = Color.green;
 	}
 
 	static DisplayController thisInstance;
@@ -69,17 +68,9 @@ public class DisplayController : MonoBehaviour
 		thisInstance = this;
 		imgCross = GetComponentInChildren<Image>();
 		txtFps = GetComponentInChildren<Text>();
-=======
-		mouseTex[0] = (Texture2D)Resources.Load("Cross");
-		mouseTex[1] = (Texture2D)Resources.Load("CrossWhite");
-		mouseTex[2] = (Texture2D)Resources.Load("CrossRed");
-		mouseTex[3] = (Texture2D)Resources.Load("CrossYellow");
-		mouseTex[4] = (Texture2D)Resources.Load("CrossGreen");
-
-		StartCoroutine(CursorUpdate());
->>>>>>> d2f577c21810436a6bc014131fee5161befcc1ea
 	}
 
+	int frameHide_counter = 0;
 	void Update()
 	{
 		// 颜色控制
@@ -104,47 +95,23 @@ public class DisplayController : MonoBehaviour
 		{
 			MyColorID -= colorMax;
 		}
-<<<<<<< HEAD
-=======
-
-		//Debug.LogError(fpsText.text);
-
-		IsCursorHidden = true;
-	}
-
-	void OnGUI()
-	{
-		float mousex = Input.mousePosition.x;
-		float mousey = Screen.height - Input.mousePosition.y;
->>>>>>> d2f577c21810436a6bc014131fee5161befcc1ea
-
+		//光标位置
 		imgCross.transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-		imgCross.color = corssColor[MyColorID];
-		MyColorReal =	corssColor[MyColorID];
-	}
+		//光标颜色
+		imgCross.color = crossColor[MyColorID];
+		//更新用于外部读取的颜色
+		MyColorReal = crossColor[MyColorID];
 
-	private IEnumerator CursorUpdate()
-	{
-		while (true)
+
+		//实现延时一帧的效果
+		if (frameHide_counter > 0)
 		{
-			// 鼠标隐藏一帧
-			if (IsCursorHidden)
+			frameHide_counter--;
+			if (frameHide_counter == 0)
 			{
-				IsCursorHidden = false;
-				// 关闭光标
-				fpsText.enabled = false;
-				// 多等待一帧
-				yield return null;
-				
-				//TODO
+				MyShowCross = true;
+				MyShowFps = true;
 			}
-			else
-			{
-				fpsText.enabled = true;
-				//TODO
-			}
-			yield return null;
-			//下一帧再次调用，yield return null的执行时机在Update()之后
 		}
 	}
 }

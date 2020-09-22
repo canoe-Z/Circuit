@@ -222,7 +222,7 @@ public class WdwMenu_Create : MonoBehaviour
 	void NormalCreate()
 	{
 		CloseColl(willBeSet);//关闭碰撞体
-		Wdw_Menu.MenuState = 0;
+		Wdw_Menu.Instance.MyCloseMenu();
 		MoveController.CanOperate = false;//禁止操作物体
 		MoveController.CanControll = true;
 	}

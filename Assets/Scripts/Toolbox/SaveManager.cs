@@ -261,6 +261,11 @@ public class SaveManager : Singleton<SaveManager>
 
 	private void SaveCallBack(int saveID, byte[] bytes)
 	{
+		//开光标
+		DisplayController.MyShowCross = true;
+		Wdw_Menu.Instance.MyOpenMenu();
+		Wdw_Menu.Instance.ToSaveMode();
+
 		// 写入截图字节数组
 		SaveData saveData = Read(saveID);
 		saveData.Bytes = bytes;
@@ -269,8 +274,10 @@ public class SaveManager : Singleton<SaveManager>
 
 	private IEnumerator ScreenShotTex(CallBack callback, int saveID)
 	{
+		//关光标
+		DisplayController.MyShowCross = false;
+		Wdw_Menu.Instance.MyCloseMenu();
 		// 等待菜单关闭
-		yield return null;
 		// 等待帧结束截图
 		yield return new WaitForEndOfFrame();
 		callback(saveID, ScreenCapture.CaptureScreenshotAsTexture().EncodeToPNG());
