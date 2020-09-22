@@ -9,7 +9,6 @@ public class ConnectionManager : MonoBehaviour
 	public static CircuitPort clickedPort = null;
 
 	// 导线颜色配置
-	public static Color[] colors = new Color[5];
 
 	// Obi
 	private static ObiRopeBlueprint blueprint;
@@ -21,13 +20,6 @@ public class ConnectionManager : MonoBehaviour
 	void Awake()
 	{
 		Physics.IgnoreLayerCollision(0, 8);
-
-		// 加载导线颜色
-		colors[0] = Color.black;
-		colors[1] = Color.white;
-		colors[2] = Color.red;
-		colors[3] = Color.yellow;
-		colors[4] = Color.green;
 	}
 
 	void Update()
@@ -94,7 +86,7 @@ public class ConnectionManager : MonoBehaviour
 
 		// 使用MyShader以实现边缘发光
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
-		rope.GetComponent<MeshRenderer>().material.SetColor("Color_51411BA8", colors[DisplayController.ColorID]);
+		rope.GetComponent<MeshRenderer>().material.SetColor("Color_51411BA8", DisplayController.MyColorReal);
 		
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
 	}

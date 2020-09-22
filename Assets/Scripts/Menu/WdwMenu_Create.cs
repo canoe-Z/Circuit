@@ -28,13 +28,14 @@ public class WdwMenu_Create : MonoBehaviour
 	public Dropdown dpdType_Src;
 	public Button btn_Src;
 	[Header("3路电源")]
-	public Button btn_StrangeSource;
-	public Canvas cnvStrange;
 	public InputField iptNum_V0;
 	public InputField iptNum_V1;
 	public InputField iptNum_V2;
 	public Button btn_Source;
 	public Dropdown dpdSourceType;
+	public Sprite imgSource_1;
+	public Sprite imgSource_2;
+	public Sprite imgSource_3;
 	void Start()
 	{
 		btn_Thermistor.onClick.AddListener(OnButton_Simple<Thermistor>);
@@ -52,7 +53,6 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
 		btn_Src.onClick.AddListener(OnButtonSP_Src);
 
-		btn_StrangeSource.onClick.AddListener(OnStrange_Source);
 		btn_Source.onClick.AddListener(OnButtonSP_Source);
 		dpdSourceType.onValueChanged.AddListener(OnDropDown_Source);
 		OnDropDown_Source(dpdSourceType.value);//更新
@@ -68,7 +68,6 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			willBeSet = ThreeSource.Create(willType, new List<double> { num0, num1, num2 }).gameObject;
 			NormalCreate();
-			cnvStrange.enabled = false;//创建之后关闭选项卡
 		}
 		else
 		{
@@ -76,11 +75,6 @@ public class WdwMenu_Create : MonoBehaviour
 			if (iptNum_V1.text == "") iptNum_V1.text = "15";
 			if (iptNum_V2.text == "") iptNum_V2.text = "5";
 		}
-	}
-	//打开/关闭菜单
-	void OnStrange_Source()
-	{
-		cnvStrange.enabled = !cnvStrange.enabled;
 	}
 	//切换电源模式
 	void OnDropDown_Source(int value)
@@ -95,6 +89,7 @@ public class WdwMenu_Create : MonoBehaviour
 				iptNum_V1.gameObject.SetActive(false);
 				iptNum_V2.text = "5";
 				iptNum_V2.gameObject.SetActive(false);
+				btn_Source.GetComponent<Image>().sprite = imgSource_1;
 				break;
 			case 1:
 				willType = ThreeSource.SourceMode.twoOfThree;
@@ -104,6 +99,7 @@ public class WdwMenu_Create : MonoBehaviour
 				iptNum_V1.gameObject.SetActive(true);
 				iptNum_V2.text = "5";
 				iptNum_V2.gameObject.SetActive(false);
+				btn_Source.GetComponent<Image>().sprite = imgSource_2;
 				break;
 			case 2:
 				willType = ThreeSource.SourceMode.three;
@@ -113,6 +109,7 @@ public class WdwMenu_Create : MonoBehaviour
 				iptNum_V1.gameObject.SetActive(true);
 				iptNum_V2.text = "";
 				iptNum_V2.gameObject.SetActive(true);
+				btn_Source.GetComponent<Image>().sprite = imgSource_3;
 				break;
 		}
 	}

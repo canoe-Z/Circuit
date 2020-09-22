@@ -33,7 +33,7 @@ public class SaveData
 		{
 			savedata.lineDataList.Add(line.Save());
 		}
-		savedata.colorID = DisplayController.ColorID;
+		savedata.colorID = DisplayController.MyColorID;
 		savedata.cameraData = SmallCamManager.Save();
 		return savedata;
 	}
@@ -49,7 +49,7 @@ public class SaveData
 		{
 			linedata.Load();
 		}
-		DisplayController.ColorID = colorID;
+		DisplayController.MyColorID = colorID;
 		cameraData.Load();
 	}
 }

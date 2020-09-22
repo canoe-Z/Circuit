@@ -1,23 +1,64 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 用于显示光标，控制颜色和显示提示
 /// </summary>
 public class DisplayController : MonoBehaviour
 {
-	public static int ColorID { get; set; } = 0;
+	/// <summary>
+	/// 保留奇怪的东西，方便存档。随便艹的变量
+	/// /// </summary>
+	public static int MyColorID { get; set; } = 0;
+	/// <summary>
+	/// 返回当前真实的颜色值
+	/// </summary>
+	public static Color MyColorReal { get; private set; } = Color.black;
+	/// <summary>
+	/// 改这个就能把FPS关闭
+	/// </summary>
+	public static bool MyShowFps
+	{
+		set
+		{
+			thisInstance.txtFps.enabled = value;
+		}
+	}
+	/// <summary>
+	/// 改这个就能把光标关闭
+	/// </summary>
+	public static bool MyShowCross
+	{
+		set
+		{
+			thisInstance.imgCross.enabled = value;
+		}
+	}
+
+
+	Image imgCross;
+	Text txtFps;
+
 	private static readonly int colorMax = 5;
-	private static readonly Texture2D[] mouseTex = new Texture2D[5];
+	private static readonly Color[] corssColor = new Color[5];
 	private static Rect rectTex = new Rect(0, 0, 100, 100);
 
 	void Awake()
 	{
 		// 加载光标颜色
-		mouseTex[0] = (Texture2D)Resources.Load("Cross");
-		mouseTex[1] = (Texture2D)Resources.Load("CrossWhite");
-		mouseTex[2] = (Texture2D)Resources.Load("CrossRed");
-		mouseTex[3] = (Texture2D)Resources.Load("CrossYellow");
-		mouseTex[4] = (Texture2D)Resources.Load("CrossGreen");
+		corssColor[0] = Color.black;
+		corssColor[1] = Color.white;
+		corssColor[2] = Color.red;
+		corssColor[3] = Color.yellow;
+		corssColor[4] = Color.green;
+	}
+
+	static DisplayController thisInstance;
+	void Start()
+	{
+		thisInstance = this;
+		imgCross = GetComponentInChildren<Image>();
+		txtFps = GetComponentInChildren<Text>();
 	}
 
 	void Update()
@@ -26,34 +67,27 @@ public class DisplayController : MonoBehaviour
 		// 按Q切换颜色
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			ColorID--;
+			MyColorID--;
 		}
 
 		// 按E切换颜色
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			ColorID++;
+			MyColorID++;
 		}
 
 		// 循环颜色
-		if (ColorID < 0)
+		if (MyColorID < 0)
 		{
-			ColorID += colorMax;
+			MyColorID += colorMax;
 		}
-		if (ColorID >= colorMax)
+		if (MyColorID >= colorMax)
 		{
-			ColorID -= colorMax;
+			MyColorID -= colorMax;
 		}
-	}
 
-	void OnGUI()
-	{
-		float mousex = Input.mousePosition.x;
-		float mousey = Screen.height - Input.mousePosition.y;
-
-		// 绘制光标
-		rectTex.x = mousex - rectTex.width / 2;
-		rectTex.y = mousey - rectTex.height / 2;
-		GUI.DrawTexture(rectTex, mouseTex[ColorID]);
+		imgCross.transform.position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+		imgCross.color = corssColor[MyColorID];
+		MyColorReal =	corssColor[MyColorID];
 	}
 }
