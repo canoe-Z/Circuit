@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +20,9 @@ public class WdwMenu_Save : MonoBehaviour
 	Button[] btnSavesAndPics;
 	Text[] txtSaves;
 	Image[] imgSaves;
+
+	List<SaveInfo> saveInfos = new List<SaveInfo>();
+	List<Sprite> images = new List<Sprite>();
 
 	void Start()
 	{
@@ -51,7 +56,11 @@ public class WdwMenu_Save : MonoBehaviour
 		}
 
 		saveOrLoad.enabled = false;
+
+		// 启动时读取所有存档
+		MyRenewAll();
 	}
+
 	Canvas canvas;
 	public void SetCanvas(bool value)
 	{
@@ -73,27 +82,77 @@ public class WdwMenu_Save : MonoBehaviour
 	/// </summary>
 	public void MyRenewNameAndImages()
 	{
-		int startId = idNowPage * idInOnePage;
-		int endId = startId + idInOnePage;
-		List<SaveInfo> saveInfos = SaveManager.Instance.MyLoadSaveInfo(startId, endId);
-		if (saveInfos.Count != idInOnePage)
-		{
-			Debug.LogError("数量不匹配");
-			Debug.Log(saveInfos.Count);
-		}
-		
-		for(int i = 0; i < saveInfos.Count; i++)
+		for (int i = 0; i < idInOnePage; i++)
 		{
 			int nowID = idNowPage * idInOnePage + i;
 			if (saveInfos[i].isUsed)
-				txtSaves[i].text = nowID.ToString("00") + "：" + saveInfos[i].saveName + "\n" + saveInfos[i].saveTime;
+			{
+				txtSaves[i].text = nowID.ToString("00") + "：" + 
+					saveInfos[nowID].saveName + "\n" + saveInfos[nowID].saveTime;
+			}
 			else
+			{
 				txtSaves[i].text = nowID.ToString("00") + "空存档";
+			}
 
+			imgSaves[i].sprite = images[nowID];
+		}
+	}
+
+
+	public void MyRenewNameAndImages(int saveID, SaveInfo saveInfo)
+	{
+		txtSaves[saveID].text = saveID.ToString("00") + "：" + saveInfo.saveName + "\n" + saveInfo.saveTime;
+		Texture2D tex = new Texture2D(0, 0);
+		tex.LoadImage(saveInfo.bytes);
+		imgSaves[saveID].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+	}
+
+	/// <summary>
+	/// 刷新
+	/// </summary>
+	public void MyRenewAll()
+	{
+		saveInfos = SaveManager.Instance.MyLoadSaveInfo();
+
+		for (int i = 0; i < saveInfos.Count; i++)
+		{
 			Texture2D tex = new Texture2D(0, 0);
 			tex.LoadImage(saveInfos[i].bytes);
-			imgSaves[i].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+			images.Add(Sprite.Create(
+				tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
 		}
+	}
+
+	private IEnumerator ScreenShotTex(int saveID, SaveInfo saveInfo)
+	{
+		// 关闭光标和菜单
+		DisplayController.MyShowCross = false;
+		Wdw_Menu.Instance.MyCloseMenu();
+
+		// 等待帧结束截图
+		yield return new WaitForEndOfFrame();
+		byte[] image = ScreenCapture.CaptureScreenshotAsTexture().EncodeToPNG();
+		saveInfo.bytes = image;
+
+		// 开启光标和菜单
+		DisplayController.MyShowCross = true;
+		Wdw_Menu.Instance.MyOpenMenu();
+		Wdw_Menu.Instance.ToSaveMode();
+
+		// 刷新存档页面
+		MyRenewNameAndImages(saveID, saveInfo);
+		
+		// 给出saveInfo后异步写入文件
+		yield return null;
+		SaveManager.Instance.MySave(saveID, saveInfo.saveName, saveInfo.saveTime, image);
+	}
+
+	private string GetSaveTime()
+	{
+		return string.Format("{0:D4}/{1:D2}/{2:D2}" + " " + "{3:D2}:{4:D2}",
+			DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+			DateTime.Now.Hour, DateTime.Now.Minute);
 	}
 
 	void OnButtonNextPage()
@@ -102,37 +161,44 @@ public class WdwMenu_Save : MonoBehaviour
 		if (idNowPage > 9) idNowPage = 9;
 		MyRenewNameAndImages();
 	}
+
 	void OnButtonLastPage()
 	{
 		idNowPage--;
 		if (idNowPage < 0) idNowPage = 0;
 		MyRenewNameAndImages();
 	}
+
 	void OnButtonSave()
 	{
 		ok.enabled = true;//关闭选择框
 	}
+
 	void OnButtonOK()
 	{
-		ok.enabled = false;//关闭选择框
-		if (iptName.text == "") iptName.text = "未命名";
-
-		//按照ID存档
+		// 关闭选择框
+		ok.enabled = false;
+		if (iptName.text == "") iptName.text = "未命名存档";
+		
+		// 按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.MySave(saveID, iptName.text);
+		SaveInfo saveinfo = new SaveInfo(true, iptName.text, GetSaveTime(), null);
+		StartCoroutine(ScreenShotTex(saveID,saveinfo));
 
+		// 关闭弹窗
 		saveOrLoad.enabled = false;//关闭弹窗
-		//Wdw_Menu.Instance.MyCloseMenu();//关闭菜单
 	}
+
 	void OnButtonLoad()
 	{
-		//按照ID存档
+		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyLoad(saveID);
 
-		saveOrLoad.enabled = false;//关闭弹窗
-		Wdw_Menu.Instance.MyCloseMenu();//关闭菜单
+		saveOrLoad.enabled = false;			// 关闭弹窗
+		Wdw_Menu.Instance.MyCloseMenu();	// 关闭菜单
 	}
+
 	void OnButtonSelect(int id)
 	{
 		selectedID = id;

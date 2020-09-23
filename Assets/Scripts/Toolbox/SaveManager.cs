@@ -83,7 +83,7 @@ public class SaveManager : Singleton<SaveManager>
 	public delegate void CallBack(int saveID, byte[] bytes);
 	XmlDocument xml = new XmlDocument();
 
-	void Start()
+	void Awake()
 	{
 		if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
 		if (!Directory.Exists("Export")) Directory.CreateDirectory("Export");
@@ -110,7 +110,7 @@ public class SaveManager : Singleton<SaveManager>
 		}
 	}
 
-	private SaveData Read(int saveID)
+	private SaveData LoadDataFromFile(int saveID)
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream saveFile = File.Open(
@@ -120,8 +120,20 @@ public class SaveManager : Singleton<SaveManager>
 		return saveData;
 	}
 
-	private bool Write(SaveData saveData, int saveID)
+	/// <summary>
+	/// 写入存档
+	/// </summary>
+	/// <param name="saveID"></param>
+	/// <param name="saveName"></param>
+	/// <param name="saveTime"></param>
+	/// <param name="bytes"></param>
+	/// <returns></returns>
+	public bool MySave(int saveID, string saveName, string saveTime,byte[] bytes)
 	{
+		WriteSaveInfo(saveID, saveName, saveTime);
+
+		var saveData = SaveData.Create();
+		saveData.Bytes = bytes;
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream saveFile = File.Create(
 			string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", saveID));
@@ -130,20 +142,10 @@ public class SaveManager : Singleton<SaveManager>
 		return true;
 	}
 
-	public void MySave(int saveID, string saveName, string saveTime = null)
-	{
-		Write(SaveData.Create(), saveID);
-		StartCoroutine(ScreenShotTex(SaveCallBack, saveID));
-
-		if (saveTime == null)
-		{
-			saveTime = GetSaveTime();
-		}
-		WriteSaveInfo(saveID, saveName, GetSaveTime());
-		xml.Save("Saves/SaveInfo.xml");
-	}
-
-
+	/// <summary>
+	/// 清空场景，导入指定存档
+	/// </summary>
+	/// <param name="saveID">存档位置</param>
 	public void MyLoad(int saveID)
 	{
 		// 删除场景内所有元件，通过委托调用也将删除所有端口和导线
@@ -156,7 +158,7 @@ public class SaveManager : Singleton<SaveManager>
 		}
 		if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
 
-		Read(saveID).Load();
+		LoadDataFromFile(saveID).Load();
 
 		// 下一帧计算，直接调用计算会在Start()之前执行计算，丢失引用
 		CircuitCalculator.NeedCalculate = true;
@@ -193,20 +195,19 @@ public class SaveManager : Singleton<SaveManager>
 		node.ChildNodes[0].InnerText = "1";
 		node.ChildNodes[1].InnerText = saveName;
 		node.ChildNodes[2].InnerText = saveTime;
+		xml.Save("Saves/SaveInfo.xml");
 	}
 
 	/// <summary>
-	/// 加载从start到end的存档信息
+	/// 从文件加载从start到end的存档信息
 	/// for (int i = start; i < end; i++)
 	/// </summary>
-	public List<SaveInfo> MyLoadSaveInfo(int? start = null, int? end = null)
+	public List<SaveInfo> MyLoadSaveInfo()
 	{
 		var node = xml.SelectSingleNode("Index");
 		List<SaveInfo> saveInfoList = new List<SaveInfo>();
-		if (start == null) start = 0;
-		if (end == null) end = 100;
 
-		for (int i = start.Value; i < end.Value; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			if (node.ChildNodes[i].ChildNodes[0].InnerText == "1")
 			{
@@ -214,13 +215,12 @@ public class SaveManager : Singleton<SaveManager>
 					true,
 					node.ChildNodes[i].ChildNodes[1].InnerText,
 					node.ChildNodes[i].ChildNodes[2].InnerText,
-					Read(i).Bytes));
+					LoadDataFromFile(i).Bytes));
 			}
 			else
 			{
 				saveInfoList.Add(new SaveInfo(false, null, null, null));
 			}
-
 		}
 		return saveInfoList;
 	}
@@ -231,56 +231,19 @@ public class SaveManager : Singleton<SaveManager>
 	/// <param name="saveID">存档位置</param>
 	/// <param name="isDataCleared">二进制数据是否被正常删除</param>
 	/// <returns></returns>
-	public bool MyClear(int saveID, out bool isDataCleared)
+	public void MyClear(int saveID)
 	{
 		string saveDataPath = string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", saveID);
 
 		if (File.Exists(saveDataPath))
 		{
 			File.Delete(saveDataPath);
-			isDataCleared = true;
-		}
-		else
-		{
-			isDataCleared = false;
 		}
 
 		var node = xml.SelectSingleNode("Index").ChildNodes[saveID];
 		node.ChildNodes[0].InnerText = "";
 		node.ChildNodes[1].InnerText = "";
 		node.ChildNodes[2].InnerText = "";
-		return true;
-	}
-
-	private string GetSaveTime()
-	{
-		return string.Format("{0:D4}/{1:D2}/{2:D2}" + " " + "{3:D2}:{4:D2}",
-			DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-			DateTime.Now.Hour, DateTime.Now.Minute);
-	}
-
-	private void SaveCallBack(int saveID, byte[] bytes)
-	{
-		//开光标
-		DisplayController.MyShowCross = true;
-		Wdw_Menu.Instance.MyOpenMenu();
-		Wdw_Menu.Instance.ToSaveMode();
-
-		// 写入截图字节数组
-		SaveData saveData = Read(saveID);
-		saveData.Bytes = bytes;
-		Write(saveData, saveID);
-	}
-
-	private IEnumerator ScreenShotTex(CallBack callback, int saveID)
-	{
-		//关光标
-		DisplayController.MyShowCross = false;
-		Wdw_Menu.Instance.MyCloseMenu();
-		// 等待菜单关闭
-		// 等待帧结束截图
-		yield return new WaitForEndOfFrame();
-		callback(saveID, ScreenCapture.CaptureScreenshotAsTexture().EncodeToPNG());
 	}
 
 	[System.Serializable]
@@ -290,27 +253,15 @@ public class SaveManager : Singleton<SaveManager>
 		private string saveName;
 		private string saveTime;
 
-		// 禁止使用构造函数创建
-		private ExportData() { }
-
-		public static ExportData Create(int saveID)
+		public ExportData(int saveID,SaveInfo saveInfo)
 		{
-			ExportData exportData = new ExportData();
-			exportData.saveData = Instance.Read(saveID);
-
-			var node = Instance.xml.SelectSingleNode("Index");
-			exportData.saveName = node.ChildNodes[saveID].ChildNodes[1].InnerText;
-			exportData.saveTime = node.ChildNodes[saveID].ChildNodes[2].InnerText;
-
-			return exportData;
+			saveData = Instance.LoadDataFromFile(saveID);
+			saveName = saveInfo.saveName;
+			saveTime = saveInfo.saveTime;
 		}
 
-		public void Import(int saveID)
-		{
-			Instance.Write(saveData, saveID);
-			Instance.WriteSaveInfo(saveID, saveName, saveTime);
-			Instance.xml.Save("Saves/SaveInfo.xml");
-		}
+		public void Import(int saveID) =>
+			Instance.MySave(saveID, saveName, saveTime, saveData.Bytes);
 	}
 
 	/// <summary>
@@ -318,11 +269,11 @@ public class SaveManager : Singleton<SaveManager>
 	/// </summary>
 	/// <param name="saveID">需要导出的存档位置</param>
 	/// <returns>导出成功</returns>
-	public bool MyExport(int saveID)
+	public bool MyExport(int saveID, SaveInfo saveInfo)
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream exportFile = File.Create("Export/Data.binary");
-		formatter.Serialize(exportFile, ExportData.Create(saveID));
+		formatter.Serialize(exportFile, new ExportData(saveID, saveInfo));
 		exportFile.Close();
 		return true;
 	}
