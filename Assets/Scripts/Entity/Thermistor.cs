@@ -34,7 +34,6 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 
 	public void CalculatorUpdate()
 	{
-		Debug.LogError("ZQGGP");
 		TWillText.text = TWill.ToString();
 		TNowText.text = TNow.ToString();
 	}
