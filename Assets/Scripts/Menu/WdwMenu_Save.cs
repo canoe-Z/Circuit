@@ -22,7 +22,7 @@ public class WdwMenu_Save : MonoBehaviour
 	Image[] imgSaves;
 
 	List<SaveInfo> saveInfos = new List<SaveInfo>();
-	List<Sprite> images = new List<Sprite>();
+	List<Sprite> saveImgSprites = new List<Sprite>();
 
 	void Start()
 	{
@@ -47,8 +47,10 @@ public class WdwMenu_Save : MonoBehaviour
 		for (int i = 0; i < btnSavesAndPics.Length; i++)
 		{
 			int id = i;
-			btnSavesAndPics[i].onClick.AddListener(delegate () {
-				OnButtonSelect(id); });//添加带参数的按钮
+			btnSavesAndPics[i].onClick.AddListener(delegate ()
+			{
+				OnButtonSelect(id);
+			});//添加带参数的按钮
 
 			//处理按钮下面的文本
 			txtSaves[i] = btnSavesAndPics[i].GetComponentInChildren<Text>();
@@ -58,7 +60,7 @@ public class WdwMenu_Save : MonoBehaviour
 		saveOrLoad.enabled = false;
 
 		// 启动时读取所有存档
-		MyRenewAll();
+		LoadAll();
 	}
 
 	Canvas canvas;
@@ -73,12 +75,12 @@ public class WdwMenu_Save : MonoBehaviour
 		}
 	}
 
-	int selectedID = 0;//0-8
-	int idNowPage = 0;//0-无穷
-	int idInOnePage = 9;//一页有多少个存档
+	int selectedID = 0;			// 当前选中的ID：0-8
+	int idNowPage = 0;			// 存档页数：0-无穷
+	int idInOnePage = 9;		// 每页存档数
 
 	/// <summary>
-	/// 刷新
+	/// 刷新一页的存档，包括名称时间和图片
 	/// </summary>
 	public void MyRenewNameAndImages()
 	{
@@ -87,7 +89,7 @@ public class WdwMenu_Save : MonoBehaviour
 			int nowID = idNowPage * idInOnePage + i;
 			if (saveInfos[i].isUsed)
 			{
-				txtSaves[i].text = nowID.ToString("00") + "：" + 
+				txtSaves[i].text = nowID.ToString("00") + "：" +
 					saveInfos[nowID].saveName + "\n" + saveInfos[nowID].saveTime;
 			}
 			else
@@ -95,23 +97,14 @@ public class WdwMenu_Save : MonoBehaviour
 				txtSaves[i].text = nowID.ToString("00") + "空存档";
 			}
 
-			imgSaves[i].sprite = images[nowID];
+			imgSaves[i].sprite = saveImgSprites[nowID];
 		}
 	}
 
-
-	public void MyRenewNameAndImages(int saveID, SaveInfo saveInfo)
-	{
-		txtSaves[saveID].text = saveID.ToString("00") + "：" + saveInfo.saveName + "\n" + saveInfo.saveTime;
-		Texture2D tex = new Texture2D(0, 0);
-		tex.LoadImage(saveInfo.bytes);
-		imgSaves[saveID].sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-	}
-
 	/// <summary>
-	/// 刷新
+	/// 从文件中读取所有SaveInfo
 	/// </summary>
-	public void MyRenewAll()
+	private void LoadAll()
 	{
 		saveInfos = SaveManager.Instance.MyLoadSaveInfo();
 
@@ -119,7 +112,7 @@ public class WdwMenu_Save : MonoBehaviour
 		{
 			Texture2D tex = new Texture2D(0, 0);
 			tex.LoadImage(saveInfos[i].bytes);
-			images.Add(Sprite.Create(
+			saveImgSprites.Add(Sprite.Create(
 				tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
 		}
 	}
@@ -140,9 +133,21 @@ public class WdwMenu_Save : MonoBehaviour
 		Wdw_Menu.Instance.MyOpenMenu();
 		Wdw_Menu.Instance.ToSaveMode();
 
+		// 创建精灵
+		Texture2D tex = new Texture2D(0, 0);
+		tex.LoadImage(saveInfo.bytes);
+		Sprite saveImgSprite= Sprite.Create(
+			tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+
+		// 写入List
+		saveInfos[saveID] = saveInfo;
+		saveImgSprites[saveID] = saveImgSprite;
+
 		// 刷新存档页面
-		MyRenewNameAndImages(saveID, saveInfo);
-		
+		txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
+			saveInfo.saveName + "\n" + saveInfo.saveTime;
+		imgSaves[saveID % 9].sprite = saveImgSprite;
+
 		// 给出saveInfo后异步写入文件
 		yield return null;
 		SaveManager.Instance.MySave(saveID, saveInfo.saveName, saveInfo.saveTime, image);
@@ -179,11 +184,11 @@ public class WdwMenu_Save : MonoBehaviour
 		// 关闭选择框
 		ok.enabled = false;
 		if (iptName.text == "") iptName.text = "未命名存档";
-		
+
 		// 按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveInfo saveinfo = new SaveInfo(true, iptName.text, GetSaveTime(), null);
-		StartCoroutine(ScreenShotTex(saveID,saveinfo));
+		StartCoroutine(ScreenShotTex(saveID, saveinfo));
 
 		// 关闭弹窗
 		saveOrLoad.enabled = false;//关闭弹窗
@@ -195,8 +200,8 @@ public class WdwMenu_Save : MonoBehaviour
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyLoad(saveID);
 
-		saveOrLoad.enabled = false;			// 关闭弹窗
-		Wdw_Menu.Instance.MyCloseMenu();	// 关闭菜单
+		saveOrLoad.enabled = false;         // 关闭弹窗
+		Wdw_Menu.Instance.MyCloseMenu();    // 关闭菜单
 	}
 
 	void OnButtonSelect(int id)
