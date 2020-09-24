@@ -5,31 +5,29 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 /// <summary>
 /// 编译前的操作命令，用于批量处理奇怪的东西
 /// </summary>
 [ExecuteInEditMode]
 public class QuickOperate : MonoBehaviour
 {
-	//public string path;
-	public UnityEngine.Object o1;
 	void Work()
 	{
-		//path = Application.dataPath + "/Resources";
-		//renderer.material.SetFloat("Vector1_5B99BAC5", 0.5f);
+		Text[] texts = FindObjectsOfType<Text>();
+		foreach(var t in texts)
+		{
+			switch (t.fontSize)
+			{
+				case 30:t.fontSize = 20; break;
+				case 50:t.fontSize = 40; break;
+				case 100:t.fontSize = 80; break;
+			}
+		}
 	}
 
 	void LoopWork()
 	{
-		if (o1)
-		{
-			/*
-			Texture2D t1 = AssetPreview.GetAssetPreview(o1);
-			MyFunction.MyWriteFile("C:/Users/vc/Desktop/PNGS/" + o1.name + ".png", t1.EncodeToPNG());
-			Debug.Log(o1.name);
-			o1 = null;
-			*/
-		}
 	}
 
 
