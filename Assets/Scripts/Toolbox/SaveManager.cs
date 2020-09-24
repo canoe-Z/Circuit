@@ -270,13 +270,12 @@ public class SaveManager : Singleton<SaveManager>
 	/// </summary>
 	/// <param name="saveID">需要导出的存档位置</param>
 	/// <returns>导出成功</returns>
-	public bool MyExport(int saveID, SaveInfo saveInfo)
+	public void MyExport(int saveID, SaveInfo saveInfo)
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream exportFile = File.Create("Export/Data.binary");
 		formatter.Serialize(exportFile, new ExportData(saveID, saveInfo));
 		exportFile.Close();
-		return true;
 	}
 
 	/// <summary>
@@ -286,13 +285,21 @@ public class SaveManager : Singleton<SaveManager>
 	/// <returns>导入成功</returns>
 	public bool MyImport(int saveID, out ExportData exportData)
 	{
-		BinaryFormatter formatter = new BinaryFormatter();
-		FileStream exportFile = File.Open("Import/Data.binary", FileMode.Open);
-		exportData = (ExportData)formatter.Deserialize(exportFile);
-		exportFile.Close();
+		try
+		{
+			BinaryFormatter formatter = new BinaryFormatter();
+			FileStream exportFile = File.Open("Import/Data.binary", FileMode.Open);
+			exportData = (ExportData)formatter.Deserialize(exportFile);
+			exportFile.Close();
 
-		exportData.Import(saveID);
-		return true;
+			exportData.Import(saveID);
+			return true;
+		}
+		catch
+		{
+			exportData = null;
+			return false;
+		}
 	}
 
 	/// <summary>
