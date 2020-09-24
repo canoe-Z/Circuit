@@ -214,7 +214,10 @@ public class WdwMenu_Save : MonoBehaviour
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyClear(saveID);
+		saveInfos[saveID] = new SaveInfo(false, null, null, null);
+		saveImgSprites[saveID] = null;
 		MyRenewNameAndImages();
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonImport()
@@ -222,6 +225,15 @@ public class WdwMenu_Save : MonoBehaviour
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyImport(saveID);
+
+
+		// 刷新存档页面
+		txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
+			saveInfo.saveName + "\n" + saveInfo.saveTime;
+		imgSaves[saveID % 9].sprite = saveImgSprite;
+
+		MyRenewNameAndImages();
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonExport()
@@ -229,6 +241,7 @@ public class WdwMenu_Save : MonoBehaviour
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyExport(saveID, saveInfos[saveID]);
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonSelect(int id)
