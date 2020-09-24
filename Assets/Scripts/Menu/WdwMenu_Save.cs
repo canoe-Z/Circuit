@@ -186,9 +186,13 @@ public class WdwMenu_Save : MonoBehaviour
 
 	void OnButtonOK()
 	{
+		if (iptName.text == "")
+		{
+			iptName.text = "未命名存档";
+			return;
+		}
 		// 关闭选择框
 		ok.enabled = false;
-		if (iptName.text == "") iptName.text = "未命名存档";
 
 		// 按照ID存档
 		int saveID = selectedID + idInOnePage * idNowPage;
@@ -203,10 +207,17 @@ public class WdwMenu_Save : MonoBehaviour
 	{
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.MyLoad(saveID);
+		if (saveInfos[saveID].isUsed)
+		{
+			SaveManager.Instance.MyLoad(saveID);
+			saveOrLoad.enabled = false;         // 关闭弹窗
+			Wdw_Menu.Instance.MyCloseMenu();    // 关闭菜单
+		}
+		else
+		{
+			saveOrLoad.enabled = false;         // 关闭弹窗
+		}
 
-		saveOrLoad.enabled = false;         // 关闭弹窗
-		Wdw_Menu.Instance.MyCloseMenu();    // 关闭菜单
 	}
 
 	void OnButtonDelete()
@@ -214,21 +225,40 @@ public class WdwMenu_Save : MonoBehaviour
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
 		SaveManager.Instance.MyClear(saveID);
+		saveInfos[saveID] = new SaveInfo(false, null, null, null);
+		saveImgSprites[saveID] = null;
 		MyRenewNameAndImages();
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonImport()
 	{
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.MyImport(saveID);
+		if (SaveManager.Instance.MyImport(saveID, out SaveManager.ExportData exportData))
+		{
+			// 刷新存档页面
+			txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
+				exportData.saveName + "\n" + exportData.saveTime;
+			Texture2D tex = new Texture2D(0, 0);
+			tex.LoadImage(exportData.saveData.Bytes);
+			saveImgSprites[saveID] = Sprite.Create(
+			tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+			imgSaves[saveID % 9].sprite = saveImgSprites[saveID];
+		}
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonExport()
 	{
 		// 按照ID读档
 		int saveID = selectedID + idInOnePage * idNowPage;
-		SaveManager.Instance.MyExport(saveID, saveInfos[saveID]);
+
+		if (saveInfos[saveID].isUsed)
+		{
+			SaveManager.Instance.MyExport(saveID, saveInfos[saveID]);
+		}
+		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
 	void OnButtonSelect(int id)
