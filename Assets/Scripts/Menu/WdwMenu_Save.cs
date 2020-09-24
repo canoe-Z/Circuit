@@ -80,9 +80,9 @@ public class WdwMenu_Save : MonoBehaviour
 		}
 	}
 
-	int selectedID = 0;			// 当前选中的ID：0-8
-	int idNowPage = 0;			// 存档页数：0-无穷
-	int idInOnePage = 9;		// 每页存档数
+	int selectedID = 0;         // 当前选中的ID：0-8
+	int idNowPage = 0;          // 存档页数：0-无穷
+	int idInOnePage = 9;        // 每页存档数
 
 	/// <summary>
 	/// 刷新一页的存档，包括名称时间和图片
@@ -125,7 +125,10 @@ public class WdwMenu_Save : MonoBehaviour
 	private IEnumerator ScreenShotTex(int saveID, SaveInfo saveInfo)
 	{
 		// 关闭光标和菜单
-		DisplayController.MyShowCross = false;
+		if (DisplayController.MyShowCross)
+		{
+			DisplayController.MyShowCross = false;
+		}
 		Wdw_Menu.Instance.MyCloseMenu();
 
 		// 等待帧结束截图
@@ -141,7 +144,7 @@ public class WdwMenu_Save : MonoBehaviour
 		// 创建精灵
 		Texture2D tex = new Texture2D(0, 0);
 		tex.LoadImage(saveInfo.bytes);
-		Sprite saveImgSprite= Sprite.Create(
+		Sprite saveImgSprite = Sprite.Create(
 			tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
 
 		// 写入List
