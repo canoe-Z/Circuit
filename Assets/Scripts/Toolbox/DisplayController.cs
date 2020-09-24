@@ -30,10 +30,6 @@ public class DisplayController : MonoBehaviour
 	/// </summary>
 	public static bool MyShowCross
 	{
-		get
-		{
-			return thisInstance.imgCross.enabled;
-		}
 		set
 		{
 			thisInstance.imgCross.enabled = value;
