@@ -10,6 +10,9 @@ public class WdwMenu_Save : MonoBehaviour
 	public Button btnNextPage;
 	public Button btnSave;
 	public Button btnLoad;
+	public Button btnDelete;
+	public Button btnImport;
+	public Button btnExport;
 	public Button btnOK;
 	public InputField iptName;
 	public Canvas saveOrLoad;
@@ -33,6 +36,9 @@ public class WdwMenu_Save : MonoBehaviour
 		btnNextPage.onClick.AddListener(OnButtonNextPage);
 		btnSave.onClick.AddListener(OnButtonSave);
 		btnLoad.onClick.AddListener(OnButtonLoad);
+		btnDelete.onClick.AddListener(OnButtonDelete);
+		btnExport.onClick.AddListener(OnButtonExport);
+		btnImport.onClick.AddListener(OnButtonImport);
 		btnOK.onClick.AddListener(OnButtonOK);
 
 		//存档们
@@ -201,6 +207,28 @@ public class WdwMenu_Save : MonoBehaviour
 
 		saveOrLoad.enabled = false;         // 关闭弹窗
 		Wdw_Menu.Instance.MyCloseMenu();    // 关闭菜单
+	}
+
+	void OnButtonDelete()
+	{
+		// 按照ID读档
+		int saveID = selectedID + idInOnePage * idNowPage;
+		SaveManager.Instance.MyClear(saveID);
+		MyRenewNameAndImages();
+	}
+
+	void OnButtonImport()
+	{
+		// 按照ID读档
+		int saveID = selectedID + idInOnePage * idNowPage;
+		SaveManager.Instance.MyImport(saveID);
+	}
+
+	void OnButtonExport()
+	{
+		// 按照ID读档
+		int saveID = selectedID + idInOnePage * idNowPage;
+		SaveManager.Instance.MyExport(saveID, saveInfos[saveID]);
 	}
 
 	void OnButtonSelect(int id)
