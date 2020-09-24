@@ -11,7 +11,7 @@ public class UJ25 : EntityBase
 	private double Rab;
 	private double Rcd;
 	private double Rp;
-	private double T;
+	private double T = 25;
 	private double En;
 	private const double E20 = 1.01860;
 
