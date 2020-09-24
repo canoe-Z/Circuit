@@ -11,7 +11,7 @@ public class UJ25 : EntityBase
 	private double Rab;
 	private double Rcd;
 	private double Rp;
-	private double T;
+	private double T = 25;
 	private double En;
 	private const double E20 = 1.01860;
 
@@ -19,6 +19,9 @@ public class UJ25 : EntityBase
 	private int PortID_Normal_G, PortID_Normal_V;
 	private int PortID_X1_G, PortID_X1_V;
 	private int PortID_X2_G, PortID_X2_V;
+
+	// 四种工作模式，对应N，断，X1，X2
+	private enum uj25Mode { n, disconnect, x1, x2 }
 
 	private List<MyKnob> knobs;
 
@@ -78,16 +81,6 @@ public class UJ25 : EntityBase
 		// 标准电池温度修正公式
 		En = E20 - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0)
 			+ 9e-9 * Math.Pow(T - 20, 3.0);
-
-	}
-
-	// Start is called before the first frame update
-
-
-	// Update is called once per frame
-	void Update()
-	{
-
 	}
 
 	public override void LoadElement()
