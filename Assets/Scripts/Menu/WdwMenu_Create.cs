@@ -16,6 +16,8 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_Gmeter;
 	public Button btn_Solar;
 	public Button btn_Thermistor;
+	public Button btn_Triode;
+	public Button btn_YunFang;
 	[Header("参数创建")]
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
@@ -38,6 +40,7 @@ public class WdwMenu_Create : MonoBehaviour
 	public Sprite imgSource_3;
 	void Start()
 	{
+		btn_Triode.onClick.AddListener(OnButton_Simple<Triode>);
 		btn_Thermistor.onClick.AddListener(OnButton_Simple<Thermistor>);
 		btn_RBox.onClick.AddListener(OnButton_Simple<RBox>);
 		btn_Solar.onClick.AddListener(OnButton_Simple<Solar>);

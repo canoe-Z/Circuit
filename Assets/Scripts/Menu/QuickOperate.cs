@@ -12,6 +12,7 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class QuickOperate : MonoBehaviour
 {
+	public GameObject[] gameObjects;
 	void Work()
 	{
 		Text[] texts = FindObjectsOfType<Text>();
