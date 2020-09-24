@@ -23,10 +23,12 @@ public class QuickOperate : MonoBehaviour
 	{
 		if (o1)
 		{
+			/*
 			Texture2D t1 = AssetPreview.GetAssetPreview(o1);
 			MyFunction.MyWriteFile("C:/Users/vc/Desktop/PNGS/" + o1.name + ".png", t1.EncodeToPNG());
 			Debug.Log(o1.name);
 			o1 = null;
+			*/
 		}
 	}
 
