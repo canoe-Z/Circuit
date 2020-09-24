@@ -244,6 +244,7 @@ public class SaveManager : Singleton<SaveManager>
 		node.ChildNodes[0].InnerText = "";
 		node.ChildNodes[1].InnerText = "";
 		node.ChildNodes[2].InnerText = "";
+		xml.Save("Saves/SaveInfo.xml");
 	}
 
 	[System.Serializable]
