@@ -128,7 +128,7 @@ public class SaveManager : Singleton<SaveManager>
 	/// <param name="saveTime"></param>
 	/// <param name="bytes"></param>
 	/// <returns></returns>
-	public bool MySave(int saveID, string saveName, string saveTime,byte[] bytes)
+	public bool MySave(int saveID, string saveName, string saveTime, byte[] bytes)
 	{
 		WriteSaveInfo(saveID, saveName, saveTime);
 
@@ -254,7 +254,7 @@ public class SaveManager : Singleton<SaveManager>
 		private string saveName;
 		private string saveTime;
 
-		public ExportData(int saveID,SaveInfo saveInfo)
+		public ExportData(int saveID, SaveInfo saveInfo)
 		{
 			saveData = Instance.LoadDataFromFile(saveID);
 			saveName = saveInfo.saveName;
@@ -284,11 +284,11 @@ public class SaveManager : Singleton<SaveManager>
 	/// </summary>
 	/// <param name="saveID">导入到的存档位置</param>
 	/// <returns>导入成功</returns>
-	public bool MyImport(int saveID)
+	public bool MyImport(int saveID, out ExportData exportData)
 	{
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream exportFile = File.Open("Import/Data.binary", FileMode.Open);
-		ExportData exportData = (ExportData)formatter.Deserialize(exportFile);
+		exportData = (ExportData)formatter.Deserialize(exportFile);
 		exportFile.Close();
 
 		exportData.Import(saveID);
