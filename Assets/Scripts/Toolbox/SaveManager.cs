@@ -250,9 +250,9 @@ public class SaveManager : Singleton<SaveManager>
 	[System.Serializable]
 	public class ExportData
 	{
-		private SaveData saveData;
-		private string saveName;
-		private string saveTime;
+		public SaveData saveData;
+		public string saveName;
+		public string saveTime;
 
 		public ExportData(int saveID, SaveInfo saveInfo)
 		{
