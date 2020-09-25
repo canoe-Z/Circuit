@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 用于显示光标，控制颜色和显示提示
 /// </summary>
-public class DisplayController : Singleton<DisplayController>
+public class DisplayController : MonoBehaviour
 {
 	/// <summary>
 	/// 随便艹的变量，可用于保存存档
@@ -22,7 +22,7 @@ public class DisplayController : Singleton<DisplayController>
 	{
 		set
 		{
-			Instance.txtFps.enabled = value;
+			thisInstance.txtFps.enabled = value;
 		}
 	}
 	/// <summary>
@@ -32,7 +32,7 @@ public class DisplayController : Singleton<DisplayController>
 	{
 		set
 		{
-			Instance.imgCross.enabled = value;
+			thisInstance.imgCross.enabled = value;
 		}
 	}
 	/// <summary>
@@ -42,8 +42,10 @@ public class DisplayController : Singleton<DisplayController>
 	{
 		MyShowCross = false;
 		MyShowFps = false;
-		Instance.frameHide_counter = 2;
+		thisInstance.frameHide_counter = 2;
 	}
+
+
 
 	Color[] crossColor = new Color[colorMax];
 	const int colorMax = 5;
@@ -60,8 +62,10 @@ public class DisplayController : Singleton<DisplayController>
 		crossColor[4] = Color.green;
 	}
 
+	static DisplayController thisInstance;
 	void Start()
 	{
+		thisInstance = this;
 		imgCross = GetComponentInChildren<Image>();
 		txtFps = GetComponentInChildren<Text>();
 	}

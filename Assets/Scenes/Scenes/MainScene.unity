@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.26755163, g: 0.32992074, b: 0.3546442, a: 1}
+  m_IndirectSpecularColor: {r: 0.2674865, g: 0.3300282, b: 0.3545647, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1858,7 +1858,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 24.238, y: 0, z: 0}
 --- !u!1 &181481535
 GameObject:
@@ -2740,6 +2740,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 271323534}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &279272473
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 279272475}
+  m_Layer: 0
+  m_Name: DisplayController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &279272475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279272473}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.718, y: 8.35, z: 2.175}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &283767134
 GameObject:
   m_ObjectHideFlags: 0
@@ -3324,7 +3354,7 @@ Transform:
   - {fileID: 650680906}
   - {fileID: 882973110}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &359389134
 BoxCollider:
@@ -5335,7 +5365,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &534669902
 GameObject:
@@ -5420,7 +5450,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 17.498001, y: -90.00001, z: 0}
 --- !u!114 &534669906
 MonoBehaviour:
@@ -8360,7 +8390,7 @@ Transform:
   m_Children:
   - {fileID: 1951352935}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &874898384
 GameObject:
@@ -8857,7 +8887,7 @@ Transform:
   - {fileID: 1117489311}
   - {fileID: 1652501701}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &904196258
 GameObject:
@@ -10153,7 +10183,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1303957654}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12406,7 +12436,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1298715421
 GameObject:
@@ -12438,7 +12468,7 @@ Transform:
   m_Children:
   - {fileID: 904196262}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1298715423
 MonoBehaviour:
@@ -15023,7 +15053,6 @@ GameObject:
   - component: {fileID: 1593042451}
   - component: {fileID: 1593042454}
   - component: {fileID: 1593042452}
-  - component: {fileID: 1593042453}
   m_Layer: 5
   m_Name: FPSCursor
   m_TagString: Untagged
@@ -15069,18 +15098,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1593042453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1593042450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951a0ce7142cb3046a52863df6cd6178, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!223 &1593042454
 Canvas:
   m_ObjectHideFlags: 0
