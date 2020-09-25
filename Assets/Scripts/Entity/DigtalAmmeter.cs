@@ -44,7 +44,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R;
 
-		if (ChildPorts[1].IsConnected)
+		if (ChildPorts[0].IsConnected && ChildPorts[1].IsConnected)
 		{
 			// 更新真实值
 			mA = ChildPorts[1].I * 1000;
@@ -61,7 +61,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
 			}
 		}
-		else if (ChildPorts[2].IsConnected)
+		else if (ChildPorts[0].IsConnected && ChildPorts[2].IsConnected)
 		{
 			A = ChildPorts[2].I;
 			if(isLoad)
