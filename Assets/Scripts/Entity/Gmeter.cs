@@ -55,12 +55,16 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		myPin.SetPos(doublePin + 0.5f);
 	}
 
+	void Update()
+	{
+		Debug.LogError(ChildPorts[0].I.ToString());
+	}
+
 	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
 
 	public override void SetElement(int entityID)
 	{
 		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), R));
-
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
