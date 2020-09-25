@@ -18,7 +18,7 @@ public class WdwMenu_Save : MonoBehaviour
 	public Canvas saveOrLoad;
 	public Canvas ok;
 
-	private GameObject btnFathers;
+	public GameObject btnFathers;
 	private Button[] btnSavesAndPics;
 
 	/// <summary>
