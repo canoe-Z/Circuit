@@ -52,14 +52,18 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			if (isLoad)
 			{
 				isLoad = false;
-				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
+				//digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
+				digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
 			}
 			// 否则计算误差限，使用随机生成的误差值
 			else
 			{
+				/*
 				tolerance_mA = 0.02 * 0.01 * mA + 0.001 * 2;
 				nominal_mA = mA + tolerance_mA * Random.Range(-1f, 1f);
 				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
+				*/
+				digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
 			}
 		}
 		else if (ChildPorts[0].IsConnected && ChildPorts[2].IsConnected)
@@ -68,13 +72,17 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			if(isLoad)
 			{
 				isLoad = false;
-				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
+				//digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
+				digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
 			}
 			else
 			{
+				/*
 				tolerance_A = 0.02 * 0.01 * A + 0.001 * 2;
 				nominal_A = A + tolerance_A * Random.Range(-1f, 1f);
 				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
+				*/
+				digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
 			}
 		}
 		else
