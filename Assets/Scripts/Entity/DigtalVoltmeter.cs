@@ -45,6 +45,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			// 存档沿用误差值
 			if (isLoad)
 			{
+				isLoad = false;
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
 			}
 			// 否则计算误差限，使用随机生成的误差值
@@ -60,6 +61,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 			V = ChildPorts[2].U - ChildPorts[0].U;
 			if (isLoad)
 			{
+				isLoad = false;
 				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
 			}
 			else

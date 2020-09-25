@@ -51,6 +51,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			// 存档沿用误差值
 			if (isLoad)
 			{
+				isLoad = false;
 				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
 			}
 			// 否则计算误差限，使用随机生成的误差值
@@ -66,6 +67,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			A = ChildPorts[2].I;
 			if(isLoad)
 			{
+				isLoad = false;
 				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
 			}
 			else
@@ -85,6 +87,11 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		{
 			digtalAmmeterText.text = "0.00";
 		}
+	}
+
+	void Update()
+	{
+		//Debug.LogError(digtalAmmeterText.text);
 	}
 
 	public override void LoadElement()
