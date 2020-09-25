@@ -9,7 +9,7 @@ using UnityEngine;
 public class Gmeter : EntityBase, ICalculatorUpdate
 {
 	private double MaxI;
-	private double R;
+	private double R = 10;
 	private MyKnob myKnob;
 	private MyPin myPin;
 	private int PortID_Left, PortID_Right;
@@ -26,6 +26,10 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 		myKnob = GetComponentInChildren<MyKnob>();
 		myKnob.Devide = 5;
+
+		// 第一次执行初始化，此后受事件控制
+		myKnob.KnobEvent += UpdateKnob;
+		UpdateKnob();
 	}
 
 	void Start()
@@ -40,7 +44,16 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 	public void CalculatorUpdate()
 	{
-		// 量程
+		// 计算示数
+		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
+		double doublePin = ChildPorts[0].I / MaxI * 2;
+		Debug.LogError(ChildPorts[0].I);
+		myPin.SetPos(doublePin + 0.5f);
+	}
+
+	private void UpdateKnob()
+	{
+		// 更新参数
 		MaxI = 0.1;
 		R = 10;
 		for (int i = 0; i < myKnob.KnobPos_int; i++)
@@ -48,11 +61,6 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 			MaxI *= 0.01;
 			R *= 2;
 		}
-
-		// 示数
-		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
-		double doublePin = ChildPorts[0].I / MaxI * 2;
-		myPin.SetPos(doublePin + 0.5f);
 	}
 
 	public override void LoadElement() => CircuitCalculator.UF.Union(PortID_Left, PortID_Right);
