@@ -27,7 +27,17 @@ public class RBox : EntityBase
 		knobs.ForEach(x => x.Devide = 10);
 
 		// 第一次执行初始化，此后受事件控制
-		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
+		for(var i=1;i<knobs.Count;i++)
+		{
+			int k = 1;
+			knobs[i].KnobEvent += () => UpdateOneKnob(k);
+		}
+		UpdateKnob();
+	}
+
+	private void UpdateOneKnob(int knobID)
+	{
+		Debug.LogError(knobID.ToString());
 		UpdateKnob();
 	}
 
@@ -115,7 +125,7 @@ public class RBox : EntityBase
 		{
 			for (var i = 0; i < 3; i++)
 			{
-				nominal[i] = R[i] + tolerance[i] * Random.Range(-1f, 1f);
+				nominal[i] = R[i] + tolerance[i] * UnityEngine.Random.Range(-1f, 1f);
 				nominal[i] = System.Math.Abs(nominal[i]);
 			}
 		}
