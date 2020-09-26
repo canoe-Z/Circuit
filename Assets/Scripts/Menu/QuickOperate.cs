@@ -12,18 +12,18 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class QuickOperate : MonoBehaviour
 {
-	public GameObject[] gameObjects;
+	public GameObject gm;
 	void Work()
 	{
-		Text[] texts = FindObjectsOfType<Text>();
-		foreach(var t in texts)
+		BoxCollider[] colliders = gm.GetComponentsInChildren<BoxCollider>();
+		float max = 0;
+		foreach(var c in colliders)
 		{
-			switch (t.fontSize)
-			{
-				case 30:t.fontSize = 20; break;
-				case 50:t.fontSize = 40; break;
-				case 100:t.fontSize = 80; break;
-			}
+			max = Mathf.Max(
+				Mathf.Abs(c.bounds.max.x),
+				Mathf.Abs(c.bounds.max.y),
+				Mathf.Abs(c.bounds.max.z),
+				max);
 		}
 	}
 
