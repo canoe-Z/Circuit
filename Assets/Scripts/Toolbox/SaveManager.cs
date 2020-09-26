@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -79,12 +77,11 @@ public struct SaveInfo
 /// </summary>
 public class SaveManager : Singleton<SaveManager>
 {
-	// 利用委托回调可以先关闭UI，截取到没有UI的画面
-	public delegate void CallBack(int saveID, byte[] bytes);
 	XmlDocument xml = new XmlDocument();
 
 	void Awake()
 	{
+		// 创建相关文件夹
 		if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
 		if (!Directory.Exists("Export")) Directory.CreateDirectory("Export");
 		if (!Directory.Exists("Import")) Directory.CreateDirectory("Import");
@@ -94,16 +91,6 @@ public class SaveManager : Singleton<SaveManager>
 			xml.Load("Saves/SaveInfo.xml");
 		}
 		else
-		{
-			xml = CreateSaveInfo();
-			xml.Save("Saves/SaveInfo.xml");
-		}
-	}
-
-	void Update()
-	{
-		// DEBUG:强制生成新的XML
-		if (Input.GetKeyDown(KeyCode.F10))
 		{
 			xml = CreateSaveInfo();
 			xml.Save("Saves/SaveInfo.xml");
@@ -123,17 +110,22 @@ public class SaveManager : Singleton<SaveManager>
 	/// <summary>
 	/// 写入存档
 	/// </summary>
-	/// <param name="saveID"></param>
-	/// <param name="saveName"></param>
-	/// <param name="saveTime"></param>
-	/// <param name="bytes"></param>
+	/// <param name="saveID">存档ID</param>
+	/// <param name="saveName">存档名称</param>
+	/// <param name="saveTime">存档时间</param>
+	/// <param name="bytes">存档截图</param>
+	/// <param name="saveData">可选已有的SaveData</param>
 	/// <returns></returns>
-	public bool MySave(int saveID, string saveName, string saveTime, byte[] bytes)
+	public bool MySave(int saveID, string saveName, string saveTime, byte[] bytes, SaveData saveData = null)
 	{
 		WriteSaveInfo(saveID, saveName, saveTime);
 
-		var saveData = SaveData.Create();
-		saveData.Bytes = bytes;
+		if (saveData == null)
+		{
+			saveData = SaveData.Create();
+			saveData.Bytes = bytes;
+		}
+
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream saveFile = File.Create(
 			string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", saveID));
@@ -156,7 +148,10 @@ public class SaveManager : Singleton<SaveManager>
 			node.Value.DestroyEntity();
 			node = next;
 		}
-		if (CircuitCalculator.Lines.Count != 0) Debug.LogError(CircuitCalculator.Lines.Count);
+		if (CircuitCalculator.Lines.Count != 0)
+		{
+			Debug.LogError(CircuitCalculator.Lines.Count);
+		}
 
 		LoadDataFromFile(saveID).Load();
 
@@ -233,13 +228,19 @@ public class SaveManager : Singleton<SaveManager>
 	/// <returns></returns>
 	public void MyClear(int saveID)
 	{
-		string saveDataPath = string.Format("Saves/SaveData_" + "{0:D3}" + ".binary", saveID);
+		string saveDataPath = string.Format(
+			"Saves/SaveData_" + "{0:D3}" + ".binary", saveID);
 
 		if (File.Exists(saveDataPath))
 		{
 			File.Delete(saveDataPath);
 		}
 
+		ClearXml(saveID);
+	}
+
+	private void ClearXml(int saveID)
+	{
 		var node = xml.SelectSingleNode("Index").ChildNodes[saveID];
 		node.ChildNodes[0].InnerText = "";
 		node.ChildNodes[1].InnerText = "";
@@ -261,8 +262,9 @@ public class SaveManager : Singleton<SaveManager>
 			saveTime = saveInfo.saveTime;
 		}
 
+
 		public void Import(int saveID) =>
-			Instance.MySave(saveID, saveName, saveTime, saveData.Bytes);
+			Instance.MySave(saveID, saveName, saveTime, saveData.Bytes, saveData);
 	}
 
 	/// <summary>
