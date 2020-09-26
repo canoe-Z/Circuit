@@ -13,36 +13,44 @@ public class RBox : EntityBase
 	// 对应99999,99,9
 	private readonly double[] R = new double[3];                // 不同挡位下的内阻
 	private readonly double[] tolerance = new double[3];        // 不同挡位下的误差限
-	private double[] nominal = new double[3];					// 不同挡位下包含误差的内阻
+	private readonly double[] nominal = new double[3];          // 不同挡位下包含误差的内阻
+	private float[] rands = null;								// 不同挡位生成误差所用的随机数
 
 	private int PortID_G, PortID_R999, PortID_R99, PortID_R9;
 	private List<MyKnob> knobs;
-
-	private bool isLoad = false;
 
 	public override void EntityAwake()
 	{
 		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 		knobs.ForEach(x => x.Devide = 10);
-
-		// 第一次执行初始化，此后受事件控制
-		for(var i=1;i<knobs.Count;i++)
-		{
-			int k = 1;
-			knobs[i].KnobEvent += () => UpdateOneKnob(k);
-		}
-		UpdateKnob();
 	}
 
 	private void UpdateOneKnob(int knobID)
 	{
-		Debug.LogError(knobID.ToString());
 		UpdateKnob();
 	}
 
 	void Start()
 	{
+		// 先处理随机数，UpdateKnob()会用到，对于存档，沿用之前的随机数，否则生成新随机数
+		if (rands == null)
+		{
+			rands = new float[3];
+			for (var i = 0; i < 3; i++)
+			{
+				rands[i] = Random.Range(-1f, 1f);
+			}
+		}
+
+		// 第一次执行初始化，此后受事件控制
+		UpdateKnob();
+		for (var i = 1; i < knobs.Count; i++)
+		{
+			int k = i;
+			knobs[i].KnobEvent += () => UpdateOneKnob(k);
+		}
+
 		PortID_G = ChildPorts[0].ID;
 		PortID_R9 = ChildPorts[1].ID;
 		PortID_R99 = ChildPorts[2].ID;
@@ -51,11 +59,10 @@ public class RBox : EntityBase
 
 	void Update()
 	{
-		/*
 		Debug.Log("准确值" + R[1].ToString());
 		Debug.Log("误差限" + tolerance[1].ToString());
+		Debug.Log("随机数" + rands[1].ToString());
 		Debug.Log("模糊值" + nominal[1].ToString());
-		*/
 	}
 
 	private void UpdateKnob()
@@ -116,18 +123,10 @@ public class RBox : EntityBase
 		R[1] = total % 100 / (float)10;
 		R[2] = total % 10 / (float)10;
 
-		// 对于读档，沿用读档内的模糊值，而不是生成新的
-		if (isLoad)
+		for (var i = 0; i < 3; i++)
 		{
-			isLoad = false;
-		}
-		else
-		{
-			for (var i = 0; i < 3; i++)
-			{
-				nominal[i] = R[i] + tolerance[i] * UnityEngine.Random.Range(-1f, 1f);
-				nominal[i] = System.Math.Abs(nominal[i]);
-			}
+			nominal[i] = R[i] + tolerance[i] * rands[i];
+			nominal[i] = System.Math.Abs(nominal[i]);
 		}
 	}
 
@@ -154,25 +153,26 @@ public class RBox : EntityBase
 	public class RboxData : EntityData
 	{
 		private readonly List<int> knobRotIntList = new List<int>();
-		private readonly double[] nominal;
+		private readonly float[] rands;
 
 		public RboxData(RBox RBox)
 		{
 			baseData = new EntityBaseData(RBox);
 			RBox.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
-			nominal = RBox.nominal;
+			rands = RBox.rands;
 		}
 
 		public override void Load()
 		{
 			RBox RBox = BaseCreate<RBox>(baseData);
+			// 此时执行RBox.Awake()
 			for (var i = 0; i < knobRotIntList.Count; i++)
 			{
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
 				RBox.knobs[i].SetKnobRot(knobRotIntList[i]);
 			}
-			RBox.isLoad = true;
-			RBox.nominal = nominal;
+			if (rands != null) RBox.rands = rands;
+			// 此时执行RBox.Start()
 		}
 	}
 }
