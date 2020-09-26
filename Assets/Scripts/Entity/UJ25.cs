@@ -19,10 +19,9 @@ public class UJ25 : EntityBase
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
-	private int PortID_Normal_G, PortID_Normal_V;
+	private int PortID_En_G, PortID_En_V;
 	private int PortID_X1_G, PortID_X1_V;
 	private int PortID_X2_G, PortID_X2_V;
-	private int PortID_A, PortID_B, PortID_C, PortID_D, PortID_E;
 
 	// 四种工作模式，对应N，断，X1，X2
 	private enum UJ25Mode { n, disconnect, x1, x2 }
@@ -64,12 +63,19 @@ public class UJ25 : EntityBase
 		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
+		// 电计
 		PortID_G_G = ChildPorts[0].ID;
 		PortID_G_V = ChildPorts[1].ID;
-		PortID_Normal_G = ChildPorts[2].ID;
-		PortID_Normal_V = ChildPorts[3].ID;
+
+		// 标准
+		PortID_En_G = ChildPorts[2].ID;
+		PortID_En_V = ChildPorts[3].ID;
+
+		// 未知1
 		PortID_X1_G = ChildPorts[4].ID;
 		PortID_X1_V = ChildPorts[5].ID;
+
+		// 未知2
 		PortID_X2_G = ChildPorts[6].ID;
 		PortID_X2_V = ChildPorts[7].ID;
 	}
@@ -79,7 +85,7 @@ public class UJ25 : EntityBase
 	double Rabp;
 	private void UpdateKnob()
 	{
-		if(uj25Mode== UJ25Mode.n)
+		if (uj25Mode == UJ25Mode.n)
 		{
 			// 计算Rab和Rp
 			Rab = 1018 + knobs[6].KnobPos_int * 0.1 + knobs[7].KnobPos_int * 0.01;
@@ -99,7 +105,7 @@ public class UJ25 : EntityBase
 			// 即使用户设置了Rcd也令其为0
 			Rcd = 0;
 		}
-		else if(uj25Mode==UJ25Mode.x1 || uj25Mode == UJ25Mode.x2)
+		else if (uj25Mode == UJ25Mode.x1 || uj25Mode == UJ25Mode.x2)
 		{
 			// 在用户切到X1或X2时记录 Rabp = Rab + Rp
 			// 计算Rcd并显示,5为高位旋钮(e2),0为最低位(e-3)
@@ -124,9 +130,39 @@ public class UJ25 : EntityBase
 			+ 9e-9 * Math.Pow(T - 20, 3.0);
 	}
 
+	// UJ25的电源端连接时视为已连接
+	public override bool IsConnected()
+	{
+		if (ChildPorts[8].IsConnected || ChildPorts[9].IsConnected)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 	public override void LoadElement()
 	{
-		throw new System.NotImplementedException();
+		switch (uj25Mode)
+		{
+			case UJ25Mode.n:
+				break;
+
+			case UJ25Mode.x1:
+				break;
+
+			case UJ25Mode.x2:
+				break;
+
+			case UJ25Mode.disconnect:
+				break;
+
+			default:
+				break;
+		}
 	}
 
 
@@ -140,50 +176,104 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
+				// 电源正极->Rab
+				// PortID_E_V.ToString() == GetName("A")
+
 				// Rab
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rab"),
-					PortID_A.ToString(),
-					PortID_B.ToString(),
+					PortID_E_V.ToString(),
+					GetName("B"),
 					Rab));
 
 				// 不接Rcd
-				// Rp
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rab"),
-					PortID_B.ToString(),
-					PortID_E.ToString(),
-					Rp));
-				break;
-			case UJ25Mode.disconnect:
-				// 外部连接均断路
-				break;
-			case UJ25Mode.x1:
-				// En，Ex1两端口断路
-				// Rabp
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rab"),
-					PortID_A.ToString(),
-					PortID_B.ToString(),
-					Rab));
 
-				// Rcd
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rcd"),
-					PortID_B.ToString(),
-					PortID_D.ToString(),
-					Rcd));
+				// Rab->Rp
+				// GetName("B") == GetName("E")
 
 				// Rp
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rp"),
-					PortID_D.ToString(),
-					PortID_E.ToString(),
+					GetName("B"),
+					PortID_E_G.ToString(),
 					Rp));
+
+				// Rp->电源负极
+				// PortID_E_G.ToString() == GetName("F")
+
+				// En,G
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("En_V"),
+					PortID_En_V.ToString(),
+					PortID_E_V.ToString(),
+					0));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("En-G"),
+					PortID_En_G.ToString(),
+					PortID_G_V.ToString(),
+					0));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("G_G"),
+					PortID_G_G.ToString(),
+					GetName("B").ToString(),
+					0));
+				break;
+
+			case UJ25Mode.disconnect:
+				// 外部连接均断路
+				break;
+
+			case UJ25Mode.x1:
+				// 电源正极->Rabp
+				// PortID_E_V.ToString() == GetName("A")
+
+				// Rabp
+				CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("Rabp"),
+					PortID_E_V.ToString(),
+					GetName("B"),
+					Rabp));
+
+				// Rabp->Rcd
+				// GetName("B") = GetName("C")
+
+				// Rcd
+				CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("Rcd"),
+					GetName("B"),
+					PortID_E_V.ToString(),
+					Rabp));
+
+
+				// Rcd->电源负极
+				// PortID_E_G.ToString() == GetName("D")
+
+				// En,G
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("En_V"),
+					PortID_En_V.ToString(),
+					GetName("A"),
+					0));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("En-G"),
+					PortID_En_G.ToString(),
+					PortID_G_V.ToString(),
+					0));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("G_G"),
+					PortID_G_G.ToString(),
+					GetName("B").ToString(),
+					0));
 				break;
 
 			case UJ25Mode.x2:
+
 				break;
+
 			default:
 				break;
 		}
@@ -199,17 +289,19 @@ public class UJ25 : EntityBase
 		public UJ25Data(UJ25 uj25)
 		{
 			baseData = new EntityBaseData(uj25);
-			uj25.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
+			//uj25.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
 		}
 
 		public override void Load()
 		{
+			/*
 			UJ25 uj25 = BaseCreate<UJ25>(baseData);
 			for (var i = 0; i < knobRotIntList.Count; i++)
 			{
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
 				uj25.knobs[i].SetKnobRot(knobRotIntList[i]);
 			}
+			*/
 		}
 	}
 }

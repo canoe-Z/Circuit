@@ -23,14 +23,14 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 
 		myKnob = GetComponentInChildren<MyKnob>();
 		myKnob.Devide = 5;
-
-		// 第一次执行初始化，此后受事件控制
-		myKnob.KnobEvent += UpdateKnob;
-		UpdateKnob();
 	}
 
 	void Start()
 	{
+		// 第一次执行初始化，此后受事件控制
+		myKnob.KnobEvent += UpdateKnob;
+		UpdateKnob();
+
 		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();

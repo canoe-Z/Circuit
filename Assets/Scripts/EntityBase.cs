@@ -188,7 +188,8 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	public virtual bool IsConnected() => ChildPorts.Select(x => x.IsConnected).Contains(true);
+	public virtual bool IsConnected() => 
+		ChildPorts.Select(x => x.IsConnected).Contains(true);
 
 	public abstract void EntityAwake();
 

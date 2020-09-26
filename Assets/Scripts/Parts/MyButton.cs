@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 元件开关
+/// 元件按动开关
 /// 挂在包含有碰撞体和刚体的物体上，令localEular.z变动
 /// </summary>
-public class MySwitch2 : MonoBehaviour
+public class MyButton : MonoBehaviour
 {
 	// 开关状态变化事件
 	public delegate void SwitchEventHandler();
