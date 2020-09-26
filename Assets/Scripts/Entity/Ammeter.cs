@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 
 /// <summary>
 /// 三量程电流表

@@ -10,10 +10,8 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	private readonly double R = 0.001;
 	private int PortID_GND, PortID_mA, PortID_A;
 
-	private bool isLoad = false;
-	private double mA, A;
-	private double tolerance_mA, tolerance_A;
-	private double nominal_mA, nominal_A;
+	private const int randNum = 2;					// 需要的随机数数量，一般和元件的挡位数量相同
+	private float[] rands = null;                   // 随机数
 
 	private Text digtalAmmeterText;
 	private MySwitch mySwitch;
@@ -26,6 +24,16 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 	void Start()
 	{
+		// 先处理随机数
+		if (rands == null)
+		{
+			rands = new float[randNum];
+			for (var i = 0; i < randNum; i++)
+			{
+				rands[i] = Random.Range(-1f, 1f);
+			}
+		}
+
 		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
@@ -46,51 +54,24 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 		if (ChildPorts[0].IsConnected && ChildPorts[1].IsConnected)
 		{
-			// 更新真实值
-			mA = ChildPorts[1].I * 1000;
-			// 存档沿用误差值
-			if (isLoad)
-			{
-				isLoad = false;
-				//digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
-				digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
-			}
-			// 否则计算误差限，使用随机生成的误差值
-			else
-			{
-				/*
-				tolerance_mA = 0.02 * 0.01 * mA + 0.001 * 2;
-				nominal_mA = mA + tolerance_mA * Random.Range(-1f, 1f);
-				digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
-				*/
-				digtalAmmeterText.text = EntityText.GetText(mA, 999.99, 2);
-			}
+			double mA = ChildPorts[1].I * 1000;
+			double tolerance_mA = 0.02 * 0.01 * mA + 0.001 * 2;
+			double nominal_mA = mA + tolerance_mA * rands[0];
+			digtalAmmeterText.text = EntityText.GetText(nominal_mA, 999.99, 2);
 		}
 		else if (ChildPorts[0].IsConnected && ChildPorts[2].IsConnected)
 		{
-			A = ChildPorts[2].I;
-			if(isLoad)
-			{
-				isLoad = false;
-				//digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
-				digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
-			}
-			else
-			{
-				/*
-				tolerance_A = 0.02 * 0.01 * A + 0.001 * 2;
-				nominal_A = A + tolerance_A * Random.Range(-1f, 1f);
-				digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
-				*/
-				digtalAmmeterText.text = EntityText.GetText(A, 999.99, 2);
-			}
+			double A = ChildPorts[2].I;
+			double tolerance_A = 0.02 * 0.01 * A + 0.001 * 2;
+			double nominal_A = A + tolerance_A * rands[1];
+			digtalAmmeterText.text = EntityText.GetText(nominal_A, 999.99, 2);
 		}
 		else
 		{
 			digtalAmmeterText.text = "0.00";
 		}
 
-		// 开关变化引起电路重新计算，之后调用该部分
+		// 开关变化引起电路重新计算，之后即可调用该部分
 		if (!mySwitch.IsOn)
 		{
 			digtalAmmeterText.text = "0.00";
@@ -120,23 +101,22 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	public class DigtalAmmeterData : EntityData
 	{
 		private readonly bool isOn;
-		private readonly double nominal_mA, nominal_A;
+		private readonly float[] rands;
 
 		public DigtalAmmeterData(DigtalAmmeter digtalAmmeter)
 		{
 			baseData = new EntityBaseData(digtalAmmeter);
 			isOn = digtalAmmeter.mySwitch.IsOn;
-			nominal_mA = digtalAmmeter.nominal_mA;
-			nominal_A = digtalAmmeter.nominal_A;
+			rands = digtalAmmeter.rands;
 		}
 
 		public override void Load()
 		{
 			DigtalAmmeter digtalAmmeter = BaseCreate<DigtalAmmeter>(baseData);
+			// 此时执行Awake()
 			digtalAmmeter.mySwitch.IsOn = isOn;
-			digtalAmmeter.isLoad = true;
-			digtalAmmeter.nominal_mA = nominal_mA;
-			digtalAmmeter.nominal_A = nominal_A;
+			if (rands != null) digtalAmmeter.rands = rands;
+			// 此时执行Start()
 		}
 	}
 }

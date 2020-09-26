@@ -14,7 +14,8 @@ public class RBox : EntityBase
 	private readonly double[] R = new double[3];                // 不同挡位下的内阻
 	private readonly double[] tolerance = new double[3];        // 不同挡位下的误差限
 	private readonly double[] nominal = new double[3];          // 不同挡位下包含误差的内阻
-	private float[] rands = null;								// 不同挡位生成误差所用的随机数
+	private float[] rands = null;                               // 随机数
+	private const int randNum = 2;                              // 需要的随机数数量，一般和元件的挡位数量相同
 
 	private int PortID_G, PortID_R999, PortID_R99, PortID_R9;
 	private List<MyKnob> knobs;
@@ -31,8 +32,8 @@ public class RBox : EntityBase
 		// 先处理随机数，UpdateKnob()会用到，对于存档，沿用之前的随机数，否则生成新随机数
 		if (rands == null)
 		{
-			rands = new float[3];
-			for (var i = 0; i < 3; i++)
+			rands = new float[randNum];
+			for (var i = 0; i < randNum; i++)
 			{
 				rands[i] = Random.Range(-1f, 1f);
 			}
@@ -162,14 +163,14 @@ public class RBox : EntityBase
 		public override void Load()
 		{
 			RBox RBox = BaseCreate<RBox>(baseData);
-			// 此时执行RBox.Awake()
+			// 此时执行Awake()
 			for (var i = 0; i < knobRotIntList.Count; i++)
 			{
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
 				RBox.knobs[i].SetKnobRot(knobRotIntList[i]);
 			}
 			if (rands != null) RBox.rands = rands;
-			// 此时执行RBox.Start()
+			// 此时执行Start()
 		}
 	}
 }
