@@ -26,11 +26,6 @@ public class RBox : EntityBase
 		knobs.ForEach(x => x.Devide = 10);
 	}
 
-	private void UpdateOneKnob(int knobID)
-	{
-		UpdateKnob();
-	}
-
 	void Start()
 	{
 		// 先处理随机数，UpdateKnob()会用到，对于存档，沿用之前的随机数，否则生成新随机数
@@ -44,12 +39,12 @@ public class RBox : EntityBase
 		}
 
 		// 第一次执行初始化，此后受事件控制
-		UpdateKnob();
 		for (var i = 1; i < knobs.Count; i++)
 		{
 			int k = i;
-			knobs[i].KnobEvent += () => UpdateOneKnob(k);
+			knobs[i].KnobEvent += UpdateKnob;
 		}
+		UpdateKnob();
 
 		PortID_G = ChildPorts[0].ID;
 		PortID_R9 = ChildPorts[1].ID;
@@ -59,10 +54,12 @@ public class RBox : EntityBase
 
 	void Update()
 	{
+		/*
 		Debug.Log("准确值" + R[1].ToString());
 		Debug.Log("误差限" + tolerance[1].ToString());
 		Debug.Log("随机数" + rands[1].ToString());
 		Debug.Log("模糊值" + nominal[1].ToString());
+		*/
 	}
 
 	private void UpdateKnob()
