@@ -47,7 +47,6 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		// 计算示数
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
 		double doublePin = ChildPorts[0].I / MaxI * 2;
-		Debug.LogError(ChildPorts[0].I);
 		myPin.SetPos(doublePin + 0.5f);
 	}
 

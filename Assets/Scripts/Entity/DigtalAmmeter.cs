@@ -97,11 +97,6 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	void Update()
-	{
-		//Debug.LogError(digtalAmmeterText.text);
-	}
-
 	public override void LoadElement()
 	{
 		CircuitCalculator.UF.Union(PortID_GND, PortID_mA);

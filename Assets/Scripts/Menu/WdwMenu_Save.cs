@@ -19,12 +19,12 @@ public class WdwMenu_Save : MonoBehaviour
 	public Canvas ok;
 
 	public GameObject btnFathers;
-	Button[] btnSavesAndPics;
-	Text[] txtSaves;
-	Image[] imgSaves;
+	private Button[] btnSavesAndPics;
+	private Text[] txtSaves;
+	private Image[] imgSaves;
 
-	List<SaveInfo> saveInfos = new List<SaveInfo>();
-	List<Sprite> saveImgSprites = new List<Sprite>();
+	private List<SaveInfo> saveInfos = new List<SaveInfo>();
+	private List<Sprite> saveImgSprites = new List<Sprite>();
 
 	void Start()
 	{
@@ -68,115 +68,20 @@ public class WdwMenu_Save : MonoBehaviour
 		LoadAll();
 	}
 
-	Canvas canvas;
-	public void SetCanvas(bool value)
-	{
-		canvas.enabled = value;//打开/关闭画布
-		saveOrLoad.enabled = false;//每次切换都会关闭这个弹窗
-		ok.enabled = false;//每次切换都会关闭弹窗上的悬浮窗
-		if (value)//打开画布时
-		{
-			MyRenewNameAndImages();//更新存档的显示
-		}
-	}
 
-	int selectedID = 0;			// 当前选中的ID：0-8
-	int idNowPage = 0;			// 存档页数：0-无穷
-	int idInOnePage = 9;		// 每页存档数
-
-	/// <summary>
-	/// 刷新一页的存档，包括名称时间和图片
-	/// </summary>
-	public void MyRenewNameAndImages()
-	{
-		for (int i = 0; i < idInOnePage; i++)
-		{
-			int nowID = idNowPage * idInOnePage + i;
-			if (saveInfos[i].isUsed)
-			{
-				txtSaves[i].text = nowID.ToString("00") + "：" +
-					saveInfos[nowID].saveName + "\n" + saveInfos[nowID].saveTime;
-			}
-			else
-			{
-				txtSaves[i].text = nowID.ToString("00") + "空存档";
-			}
-
-			imgSaves[i].sprite = saveImgSprites[nowID];
-		}
-	}
-
-	/// <summary>
-	/// 从文件中读取所有SaveInfo
-	/// </summary>
-	private void LoadAll()
-	{
-		saveInfos = SaveManager.Instance.MyLoadSaveInfo();
-
-		for (int i = 0; i < saveInfos.Count; i++)
-		{
-			Texture2D tex = new Texture2D(0, 0);
-			tex.LoadImage(saveInfos[i].bytes);
-			saveImgSprites.Add(Sprite.Create(
-				tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
-		}
-	}
-
-	private IEnumerator ScreenShotTex(int saveID, SaveInfo saveInfo)
-	{
-		// 关闭光标和菜单
-		DisplayController.MyShowCross = false;
-		Wdw_Menu.Instance.MyCloseMenu();
-
-		// 等待帧结束截图
-		yield return new WaitForEndOfFrame();
-		byte[] image = ScreenCapture.CaptureScreenshotAsTexture().EncodeToPNG();
-		saveInfo.bytes = image;
-
-		// 开启光标和菜单
-		DisplayController.MyShowCross = true;
-		Wdw_Menu.Instance.MyOpenMenu();
-		Wdw_Menu.Instance.ToSaveMode();
-
-		// 创建精灵
-		Texture2D tex = new Texture2D(0, 0);
-		tex.LoadImage(saveInfo.bytes);
-		Sprite saveImgSprite= Sprite.Create(
-			tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-
-		// 写入List
-		saveInfos[saveID] = saveInfo;
-		saveImgSprites[saveID] = saveImgSprite;
-
-		// 刷新存档页面
-		txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
-			saveInfo.saveName + "\n" + saveInfo.saveTime;
-		imgSaves[saveID % 9].sprite = saveImgSprite;
-
-		// 给出saveInfo后异步写入文件
-		yield return null;
-		SaveManager.Instance.MySave(saveID, saveInfo.saveName, saveInfo.saveTime, image);
-	}
-
-	private string GetSaveTime()
-	{
-		return string.Format("{0:D4}/{1:D2}/{2:D2}" + " " + "{3:D2}:{4:D2}",
-			DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
-			DateTime.Now.Hour, DateTime.Now.Minute);
-	}
 
 	void OnButtonNextPage()
 	{
 		idNowPage++;
 		if (idNowPage > 9) idNowPage = 9;
-		MyRenewNameAndImages();
+		RenewOnePage();
 	}
 
 	void OnButtonLastPage()
 	{
 		idNowPage--;
 		if (idNowPage < 0) idNowPage = 0;
-		MyRenewNameAndImages();
+		RenewOnePage();
 	}
 
 	void OnButtonSave()
@@ -227,7 +132,7 @@ public class WdwMenu_Save : MonoBehaviour
 		SaveManager.Instance.MyClear(saveID);
 		saveInfos[saveID] = new SaveInfo(false, null, null, null);
 		saveImgSprites[saveID] = null;
-		MyRenewNameAndImages();
+		RenewOnePage();
 		saveOrLoad.enabled = false;         // 关闭弹窗
 	}
 
@@ -237,6 +142,9 @@ public class WdwMenu_Save : MonoBehaviour
 		int saveID = selectedID + idInOnePage * idNowPage;
 		if (SaveManager.Instance.MyImport(saveID, out SaveManager.ExportData exportData))
 		{
+			var saveInfo = new SaveInfo(true, exportData.saveName, exportData.saveTime, exportData.saveData.Bytes);
+			saveInfos[saveID] = saveInfo;
+			
 			// 刷新存档页面
 			txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
 				exportData.saveName + "\n" + exportData.saveTime;
@@ -267,4 +175,105 @@ public class WdwMenu_Save : MonoBehaviour
 		saveOrLoad.enabled = true;//打开弹窗
 		iptName.text = "";//清空弹窗的内容
 	}
+
+	Canvas canvas;
+	public void SetCanvas(bool value)
+	{
+		canvas.enabled = value;//打开/关闭画布
+		saveOrLoad.enabled = false;//每次切换都会关闭这个弹窗
+		ok.enabled = false;//每次切换都会关闭弹窗上的悬浮窗
+		if (value)//打开画布时
+		{
+			RenewOnePage();//更新存档的显示
+		}
+	}
+
+	private int selectedID = 0;         // 当前选中的ID：0-8
+	private int idNowPage = 0;          // 存档页数：0-无穷
+	private int idInOnePage = 9;        // 每页存档数
+
+	/// <summary>
+	/// 刷新一页的存档，包括名称时间和图片
+	/// </summary>
+	public void RenewOnePage()
+	{
+		for (int i = 0; i < idInOnePage; i++)
+		{
+			int nowID = idNowPage * idInOnePage + i;
+			if (saveInfos[i].isUsed)
+			{
+				txtSaves[i].text = nowID.ToString("00") + "：" +
+					saveInfos[nowID].saveName + "\n" + saveInfos[nowID].saveTime;
+			}
+			else
+			{
+				txtSaves[i].text = nowID.ToString("00") + "空存档";
+			}
+
+			imgSaves[i].sprite = saveImgSprites[nowID];
+		}
+	}
+
+	/// <summary>
+	/// 从文件中读取所有SaveInfo
+	/// </summary>
+	private void LoadAll()
+	{
+		saveInfos = SaveManager.Instance.MyLoadSaveInfo();
+
+		for (int i = 0; i < saveInfos.Count; i++)
+		{
+			Texture2D tex = new Texture2D(0, 0);
+			tex.LoadImage(saveInfos[i].bytes);
+			saveImgSprites.Add(Sprite.Create(
+				tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f)));
+		}
+	}
+
+	private IEnumerator ScreenShotTex(int saveID, SaveInfo saveInfo)
+	{
+		// 关闭光标和菜单
+		DisplayController.MyShowCross = false;
+		Wdw_Menu.Instance.MyCloseMenu();
+
+		// 等待帧结束截图
+		yield return new WaitForEndOfFrame();
+		byte[] image = ScreenCapture.CaptureScreenshotAsTexture().EncodeToPNG();
+		saveInfo.bytes = image;
+
+		// 开启光标和菜单
+		DisplayController.MyShowCross = true;
+		Wdw_Menu.Instance.MyOpenMenu();
+		Wdw_Menu.Instance.ToSaveMode();
+
+		// 写入List
+		Sprite saveImgSprite = GetSprite(saveInfo.bytes);
+		saveInfos[saveID] = saveInfo;
+		saveImgSprites[saveID] = saveImgSprite;
+
+		// 刷新存档页面
+		txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
+			saveInfo.saveName + "\n" + saveInfo.saveTime;
+		imgSaves[saveID % 9].sprite = saveImgSprite;
+
+		// 给出saveInfo后异步写入文件
+		yield return null;
+		SaveManager.Instance.MySave(saveID, saveInfo.saveName, saveInfo.saveTime, image);
+	}
+
+	private string GetSaveTime()
+	{
+		return string.Format("{0:D4}/{1:D2}/{2:D2}" + " " + "{3:D2}:{4:D2}",
+			DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,
+			DateTime.Now.Hour, DateTime.Now.Minute);
+	}
+
+	private Sprite GetSprite(byte[] bytes)
+	{
+		Texture2D tex = new Texture2D(0, 0);
+		tex.LoadImage(bytes);
+		return Sprite.Create(
+			tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+	}
+
 }

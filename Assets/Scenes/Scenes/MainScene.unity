@@ -16145,6 +16145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1692699543}
   - component: {fileID: 1692699544}
+  - component: {fileID: 1692699545}
   m_Layer: 0
   m_Name: shiyan
   m_TagString: Untagged
@@ -16180,6 +16181,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameObjects: []
   boolStartWork: 0
+--- !u!114 &1692699545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692699542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0646d248a5b05004288aa11d72f7f78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+  position: {x: 0, y: 0, z: 1}
+  rotation: {x: 345.8529, y: 313.8297, z: 14.28433}
+  scale: {x: 1, y: 1, z: 1}
 --- !u!1 &1719982383
 GameObject:
   m_ObjectHideFlags: 0

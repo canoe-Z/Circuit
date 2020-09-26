@@ -1,6 +1,4 @@
 ﻿using SpiceSharp.Components;
-using System;
-using System.Collections;
 
 /// <summary>
 /// 三量程电压表
