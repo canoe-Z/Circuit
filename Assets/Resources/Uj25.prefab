@@ -1894,6 +1894,7 @@ GameObject:
   - component: {fileID: 881234517906154805}
   - component: {fileID: 6940403517279991008}
   - component: {fileID: 917714695197210253}
+  - component: {fileID: 6799568140772016707}
   m_Layer: 0
   m_Name: Uj25
   m_TagString: Untagged
@@ -2004,6 +2005,18 @@ MonoBehaviour:
   accurateContacts: 0
   useDistanceFields: 0
   distanceField: {fileID: 0}
+--- !u!114 &6799568140772016707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271522986807766928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da12f0d3248d43c48be834940029d9eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4395898770431522902
 GameObject:
   m_ObjectHideFlags: 0

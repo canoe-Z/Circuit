@@ -1,7 +1,4 @@
 ﻿using SpiceSharp.Components;
-using System;
-using System.Collections;
-using UnityEngine;
 
 /// <summary>
 /// 电流计
