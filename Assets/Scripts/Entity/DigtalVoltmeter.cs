@@ -8,10 +8,8 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	private readonly double R = 15000;
 	private int PortID_GND, PortID_mV, PortID_V;
 
-	private bool isLoad = false;
-	private double mV, V;
-	private double tolerance_mV, tolerance_V;
-	private double nominal_mV, nominal_V;
+	private const int randNum = 2;                  // 需要的随机数数量，一般和元件的挡位数量相同
+	private float[] rands = null;                   // 随机数
 
 	private Text digtalDigtalVoltmeter;
 	private MySwitch mySwitch;
@@ -27,6 +25,16 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 
 	void Start()
 	{
+		// 先处理随机数
+		if (rands == null)
+		{
+			rands = new float[randNum];
+			for (var i = 0; i < randNum; i++)
+			{
+				rands[i] = Random.Range(-1f, 1f);
+			}
+		}
+
 		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
 		CircuitCalculator.CalculateEvent += CalculatorUpdate;
 		CalculatorUpdate();
@@ -34,42 +42,27 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		PortID_GND = ChildPorts[0].ID;
 		PortID_mV = ChildPorts[1].ID;
 		PortID_V = ChildPorts[2].ID;
+
+		// 默认启动时开机，读档可覆盖该设置
+		mySwitch.IsOn = true;
 	}
 
 	public void CalculatorUpdate()
 	{
-		if (ChildPorts[1].IsConnected)
+		if (ChildPorts[0].IsConnected && ChildPorts[1].IsConnected)
 		{
 			// 更新真实值
-			mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
-			// 存档沿用误差值
-			if (isLoad)
-			{
-				isLoad = false;
-				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
-			}
-			// 否则计算误差限，使用随机生成的误差值
-			else
-			{
-				tolerance_mV = 0.02 * 0.01 * mV + 0.001 * 2;
-				nominal_mV = mV + tolerance_mV * Random.Range(-1f, 1f);
-				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
-			}
+			double mV = (ChildPorts[1].U - ChildPorts[0].U) * 1000;
+			double tolerance_mV = 0.02 * 0.01 * mV + 0.001 * 2;
+			double nominal_mV = mV + tolerance_mV * Random.Range(-1f, 1f);
+			digtalDigtalVoltmeter.text = EntityText.GetText(nominal_mV, 999.99, 2);
 		}
-		else if (ChildPorts[2].IsConnected)
+		else if (ChildPorts[0].IsConnected && ChildPorts[2].IsConnected)
 		{
-			V = ChildPorts[2].U - ChildPorts[0].U;
-			if (isLoad)
-			{
-				isLoad = false;
-				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
-			}
-			else
-			{
-				tolerance_V = 0.02 * 0.01 * V + 0.001 * 2;
-				nominal_V = V + tolerance_V * Random.Range(-1f, 1f);
-				digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
-			}
+			double V = ChildPorts[2].U - ChildPorts[0].U;
+			double tolerance_V = 0.02 * 0.01 * V + 0.001 * 2;
+			double nominal_V = V + tolerance_V * Random.Range(-1f, 1f);
+			digtalDigtalVoltmeter.text = EntityText.GetText(nominal_V, 999.99, 2);
 		}
 		else
 		{
@@ -102,24 +95,23 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 	public class DigtalVoltmeterData : EntityData
 	{
 		private readonly bool isOn;
-		private readonly double nominal_mV, nominal_V;
+		private readonly float[] rands;
 
 
 		public DigtalVoltmeterData(DigtalVoltmeter digtalVoltmeter)
 		{
 			baseData = new EntityBaseData(digtalVoltmeter);
 			isOn = digtalVoltmeter.mySwitch.IsOn;
-			nominal_mV = digtalVoltmeter.nominal_mV;
-			nominal_V = digtalVoltmeter.nominal_V;
+			rands = digtalVoltmeter.rands;
 		}
 
 		public override void Load()
 		{
 			DigtalVoltmeter digtalVoltmeter = BaseCreate<DigtalVoltmeter>(baseData);
+			// 此时执行Awake()
 			digtalVoltmeter.mySwitch.IsOn = isOn;
-			digtalVoltmeter.isLoad = true;
-			digtalVoltmeter.nominal_mV = nominal_mV;
-			digtalVoltmeter.nominal_V = nominal_V;
+			if (rands != null) digtalVoltmeter.rands = rands;
+			// 此时执行Start()
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 
 /// <summary>
 /// 三量程电流表
@@ -52,7 +51,6 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		doublePin += (ChildPorts[2].I) / MaxI1;
 		doublePin += (ChildPorts[3].I) / MaxI2;
 
-		Debug.LogError(ChildPorts[1].I.ToString());
 		myPin.SetPos((float)doublePin);
 	}
 
