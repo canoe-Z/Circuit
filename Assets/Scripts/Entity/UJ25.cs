@@ -12,7 +12,6 @@ public class UJ25 : EntityBase
 	private double Rab;         // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
 	private double Rcd;         // 与标准电源并联的电阻，值根据En的后两位确定
 	private double Rp;          // 用标准电源校准时调节的电阻
-	private double Rg;          // 为检流计串联的电阻
 	private double T = 25;      // 当前温度
 	private double En;          // 当前温度下的标准电池电动势
 	private const double E20 = 1.01860;     //20摄氏度下的标准电池电动势
