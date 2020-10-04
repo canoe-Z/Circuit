@@ -9,7 +9,27 @@ using UnityEngine.UI;
 /// </summary>
 public class MyPin : MonoBehaviour
 {
-	public float pos = 0;                               //当前的位置，0-1
+	const float f = 0.2f;//阻尼系数
+	const float m = 0.1f;//质量
+	const float k = 1;//劲度系数
+	float nowSpeed;//当前速度
+	float willPos = 0;//目标位置
+	float nowPos = 0;//当前的位置，0-1，实际是-0.1到1.1
+	private void Update()
+	{
+		float deltaPos = willPos - nowPos;//距离差值
+		float force = k * deltaPos;//力
+		float a = (force - nowSpeed * f) / m;//加速度
+		nowSpeed += a * Time.deltaTime;//对时间积分
+		nowPos += nowSpeed * Time.deltaTime;//再次积分
+
+		if (nowPos > 1.1f) nowPos = 1.1f;
+		if (nowPos < -0.1f) nowPos = -0.1f;
+		// 指针转动
+		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * nowPos);
+	}
+
+
 	private string unitSymbol = "uA";                   //显示在表盘的字符串
 	private int maxScale = 100;                         //最大刻度
 	private Transform thePin;                           //指针（物理意义）
@@ -45,16 +65,11 @@ public class MyPin : MonoBehaviour
 	public void CloseText() => ScaleTexts.ForEach(x => x.enabled = false);
 
 	/// <summary>
-	/// 接收0-1的值，最左端到最右端
+	/// 接收0-1的值，实际上你可以随意设置，最左端到最右端
 	/// </summary>
 	public void SetPos(float newPos)
 	{
-		if (newPos > 1.1f) newPos = 1.1f;
-		if (newPos < -0.1f) newPos = -0.1f;
-		pos = newPos;
-
-		// 指针转动
-		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * pos);
+		willPos = newPos;
 	}
 
 	public void SetPos(double newPos) => SetPos((float)newPos);
