@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 滑块
-/// 挂在包含有碰撞体和刚体的物体上，令localPosition.z变动范围为0-1
+/// 滑块，挂在包含有碰撞体和刚体的物体上，令localPosition在两个向量之间变化
 /// </summary>
 public class MySlider : MonoBehaviour
 {
+	[Header("填入两个localPosition")]
+	public Vector3 localStartPos = new Vector3(0, 0, 0);
+	public Vector3 localEndPos = new Vector3(0, 0, 1);
 	// 滑块位置变化事件
 	public delegate void SliderEventHandler();
 	public event SliderEventHandler SliderEvent;
@@ -31,7 +33,17 @@ public class MySlider : MonoBehaviour
 
 		if (HitOnlyOne(out Vector3 hitPos))//打到就算
 		{
-			SetSliderPos(transform.parent.InverseTransformPoint(hitPos).z);
+			//转换成本地坐标
+			Vector3 hitPosLocal = transform.parent.InverseTransformPoint(hitPos);
+			//两个向量
+			Vector3 start_hitPos = hitPosLocal - localStartPos;
+			Vector3 start_end = localEndPos - localStartPos;
+			//点积求投影长度
+			float shadowLen = Vector3.Dot(start_hitPos, start_end.normalized);
+			//总长度
+			float totalLen = start_end.magnitude;
+			//按比例扔进去
+			SetSliderPos(shadowLen / totalLen);
 			CircuitCalculator.NeedCalculateByConnection = true;
 		}
 	}
@@ -52,8 +64,8 @@ public class MySlider : MonoBehaviour
 			if (SliderPos_int >= Devide) SliderPos_int = Devide - 1;
 			newPos = SliderPos_int * pre + pre / 2;
 		}
-
-		transform.SetLocalPositionZ(newPos);
+		//按比例设置
+		transform.localPosition = newPos * localEndPos + (1 - newPos) * localStartPos;
 		SliderPos = newPos;
 
 		// 更改位置后发送消息
