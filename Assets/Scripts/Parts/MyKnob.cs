@@ -164,3 +164,19 @@ public class MyKnob : MonoBehaviour
 		WriteKnobRot(newRot);
 	}
 }
+
+/// <summary>
+/// 旋钮存档数据（元件中存在混合旋钮时用到）
+/// </summary>
+[System.Serializable]
+public struct KnobData
+{
+	public float KnobPos;
+	public int KnobPos_int;
+
+	public KnobData(float knobPos, int knobPos_int)
+	{
+		KnobPos = knobPos;
+		KnobPos_int = knobPos_int;
+	}
+}

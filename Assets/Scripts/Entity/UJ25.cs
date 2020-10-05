@@ -166,21 +166,25 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
-				// 三个端口互相连通
+				// 三个元件互相连通
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
 				break;
 
 			case UJ25Mode.x1:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_X1_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
 				break;
 
 			case UJ25Mode.x2:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_X2_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
@@ -287,24 +291,32 @@ public class UJ25 : EntityBase
 	[System.Serializable]
 	public class UJ25Data : EntityData
 	{
-		private readonly List<int> knobRotIntList = new List<int>();
+		private readonly List<KnobData> knobDataList = new List<KnobData>();
 
 		public UJ25Data(UJ25 uj25)
 		{
 			baseData = new EntityBaseData(uj25);
-			//uj25.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
+			foreach (var knob in uj25.knobs)
+			{
+				knobDataList.Add(new KnobData(knob.KnobPos, knob.KnobPos_int));
+			}
 		}
 
 		public override void Load()
 		{
-			/*
 			UJ25 uj25 = BaseCreate<UJ25>(baseData);
-			for (var i = 0; i < knobRotIntList.Count; i++)
+			for (var i = 0; i < knobDataList.Count; i++)
 			{
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
-				uj25.knobs[i].SetKnobRot(knobRotIntList[i]);
+				if (uj25.knobs[i].Devide == -1)
+				{
+					uj25.knobs[i].SetKnobRot(knobDataList[i].KnobPos);
+				}
+				else
+				{
+					uj25.knobs[i].SetKnobRot(knobDataList[i].KnobPos_int);
+				}
 			}
-			*/
 		}
 	}
 }
