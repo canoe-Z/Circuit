@@ -30,10 +30,10 @@ public class UJ25 : EntityBase
 
 	public override void EntityAwake()
 	{
-		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
+		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
-		RcdTexts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
+		RcdTexts = transform.FindComponentsInChildren<Text>().OrderBy(x => int.Parse(x.name)).ToList();
 
 		// 0-5为Rcd调节旋钮，6-7为Rab调节，8-11为Rp调节旋钮（连续），
 		// 12为UJ25的切换开关

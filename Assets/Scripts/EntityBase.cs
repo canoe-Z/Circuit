@@ -45,7 +45,7 @@ abstract public class EntityBase : MonoBehaviour
 			circuitPorts.Add(port);
 		}
 		CircuitCalculator.PortNum += circuitPorts.Count;
-		circuitPorts.Sort((x, y) => { return x.name.CompareTo(y.name); });
+		circuitPorts.Sort((x, y) => { return x.LocalID.CompareTo(y.LocalID); });
 
 		foreach (CircuitPort port in circuitPorts)
 		{

@@ -59,10 +59,10 @@ public class ThreeSource : EntityBase, ISource
 		// 获取开关，旋钮和文本的引用
 		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
 
-		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
+		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
-		texts = transform.FindComponentsInChildren<Text>().OrderBy(x => x.name).ToList();
+		texts = transform.FindComponentsInChildren<Text>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (texts.Count != sourceNum) Debug.LogError("文本个数不合法");
 
 		// 默认启动时开机，读档可覆盖该设置

@@ -22,7 +22,7 @@ public class RBox : EntityBase
 
 	public override void EntityAwake()
 	{
-		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => x.name).ToList();
+		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 		knobs.ForEach(x => x.Devide = 10);
 	}
