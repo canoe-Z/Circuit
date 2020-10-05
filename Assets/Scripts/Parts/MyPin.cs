@@ -53,7 +53,7 @@ public class MyPin : MonoBehaviour
 					return false;
 				}
 			})
-			.OrderBy(x => x.name)
+			.OrderBy(x => int.Parse(x.name))
 			.ToList();
 
 		thePin = transform.FindComponent_DFS<Transform>("ThePin");
