@@ -159,7 +159,6 @@ abstract public class EntityBase : MonoBehaviour
 
 	void FixedUpdate()
 	{
-
 		Vector3 speed = rigidBody.velocity;
 
 		// 备份Y

@@ -195,6 +195,7 @@ public class ThreeSource : EntityBase, ISource
 					CircuitCalculator.GNDLines.Add(new GNDLine(G[j]));
 				}
 			}
+
 		}
 	}
 
