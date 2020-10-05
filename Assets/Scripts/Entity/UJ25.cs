@@ -9,9 +9,9 @@ public class UJ25 : EntityBase
 {
 	private readonly int knobNum = 13;      // 含有的旋钮个数
 
-	private double Rab;						// 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
-	private double Rcd;						// 与标准电源并联的电阻，值根据En的后两位确定
-	private double Rp;						// 用标准电源校准时调节的电阻
+	private double Rab;                     // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
+	private double Rcd;                     // 与标准电源并联的电阻，值根据En的后两位确定
+	private double Rp;                      // 用标准电源校准时调节的电阻
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
@@ -45,7 +45,7 @@ public class UJ25 : EntityBase
 		// UJ25挡位切换，共5挡
 		knobs[10].AngleRange = 225;
 		knobs[10].Devide = 5;
-		knobs[10].SetKnobRot(4);
+		knobs[10].SetKnobRot(3);
 
 		// Rab调节旋钮，可调节至10
 		knobs[11].Devide = 11;
@@ -79,8 +79,40 @@ public class UJ25 : EntityBase
 		PortID_E_V = ChildPorts[9].ID;
 	}
 
+	public void Update()
+	{
+		Debug.LogWarning("Rab为：" + Rab.ToString());
+		Debug.LogWarning("Rcd为：" + Rcd.ToString());
+		Debug.LogWarning("Rp为：" + Rp.ToString());
+		Debug.LogWarning("Rabp为：" + Rabp.ToString());
+	}
+
 	private void UpdateKnob()
 	{
+		// 模式切换
+		switch (knobs[10].KnobPos_int)
+		{
+			case 0:
+				uj25Mode = UJ25Mode.x2;
+				break;
+			case 1:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+			case 2:
+				uj25Mode = UJ25Mode.x1;
+				break;
+			case 3:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+			case 4:
+				uj25Mode = UJ25Mode.n;
+				break;
+			default:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+		}
+
+		// 根据模式计算元件实时参数
 		if (uj25Mode == UJ25Mode.n)
 		{
 			// 计算Rab和Rp
@@ -88,7 +120,8 @@ public class UJ25 : EntityBase
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
 			// 可调范围982-2282
-			Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
+			Rp = 3000 - 1018;
+			//Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
 
 			// 计算Rcd并显示,0为高位旋钮(电阻e2/对应电压e-1),5为最低位(e-3/对应e-6)
 			Rcd = 0;
@@ -124,17 +157,8 @@ public class UJ25 : EntityBase
 	}
 
 	// UJ25的电源端连接时视为已连接
-	public override bool IsConnected()
-	{
-		if (ChildPorts[8].IsConnected || ChildPorts[9].IsConnected)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	public override bool IsConnected() =>
+		ChildPorts[8].IsConnected || ChildPorts[9].IsConnected;
 
 
 	public override void LoadElement()
@@ -142,21 +166,24 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
+				// 三个端口互相连通
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
 				break;
 
 			case UJ25Mode.x1:
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
 				break;
 
 			case UJ25Mode.x2:
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				break;
 
 			default:
@@ -167,10 +194,7 @@ public class UJ25 : EntityBase
 
 	public override void SetElement(int entityID)
 	{
-		string GetName(string shortName)
-		{
-			return string.Concat(entityID.ToString(), shortName);
-		}
+		string GetName(string shortName) => string.Concat(entityID.ToString(), shortName);
 
 		switch (uj25Mode)
 		{
@@ -192,11 +216,13 @@ public class UJ25 : EntityBase
 					PortID_En_V.ToString(),
 					PortID_E_V.ToString(),
 					0));
+
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("En-G"),
 					PortID_En_G.ToString(),
 					PortID_G_V.ToString(),
 					0));
+
 				break;
 
 			case UJ25Mode.x1:
@@ -254,16 +280,6 @@ public class UJ25 : EntityBase
 			default:
 				break;
 		}
-	}
-
-	public static GameObject Create()
-	{
-		return BaseCreate<UJ25>().Set().gameObject;
-	}
-
-	private UJ25 Set()
-	{
-		return this;
 	}
 
 	public override EntityData Save() => new UJ25Data(this);
