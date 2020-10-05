@@ -12,6 +12,7 @@ public class UJ25 : EntityBase
 	private double Rab;                     // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
 	private double Rcd;                     // 与标准电源并联的电阻，值根据En的后两位确定
 	private double Rp;                      // 用标准电源校准时调节的电阻
+	private double Rabp;
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
@@ -19,7 +20,6 @@ public class UJ25 : EntityBase
 	private int PortID_X1_G, PortID_X1_V;
 	private int PortID_X2_G, PortID_X2_V;
 
-	private double lastRcd, lastRp, Rabp;
 
 	// 四种工作模式，对应N，断，X1，X2
 	private enum UJ25Mode { n, disconnect, x1, x2 }
@@ -112,46 +112,38 @@ public class UJ25 : EntityBase
 				break;
 		}
 
-		// 根据模式计算元件实时参数
+		// 根据不同模式，计算元件实时参数
 		if (uj25Mode == UJ25Mode.n)
 		{
-			// 计算Rab和Rp
-			Rab = 1018 + knobs[6].KnobPos_int * 0.1 + knobs[7].KnobPos_int * 0.01;
+			// 计算Rab和Rp，Rab最大值为10191.0
+			double RabOffSet = knobs[11].KnobPos_int * 1 + knobs[12].KnobPos_int * 0.1;
+			Rab = 10180.0 + RabOffSet;
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
-			// 可调范围0-13600
-			Rp = 13600 * knobs[8].KnobPos * (1 + 0.01 * knobs[9].KnobPos) * (1 + 0.001 * knobs[10].KnobPos) * (1 + 0.0001 * knobs[11].KnobPos);
-
-			// 计算Rcd并显示,0为高位旋钮(电阻e2/对应电压e-1),5为最低位(e-3/对应e-6)
-			Rcd = 0;
-			for (var i = 0; i != 6; i++)
-			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
-				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
-			}
-			lastRcd = Rcd;
-
-			// 即使用户设置了Rcd也令其为0
-			Rcd = 0;
+			// 可调范围9000-24000
+			Rp = (24000 - 9000) * knobs[6].KnobPos * (1 + 1e-1 * knobs[7].KnobPos) * (1 + 1e-2 * knobs[8].KnobPos) * (1 + 1e-3 * knobs[9].KnobPos)
+				+ 9000 - RabOffSet;
 		}
 		else if (uj25Mode == UJ25Mode.x1 || uj25Mode == UJ25Mode.x2)
 		{
-			// 在用户切到X1或X2时记录 Rabp = Rab + Rp
-			// 计算Rcd并显示,5为高位旋钮(e2),0为最低位(e-3)
+			// 计算Rcd并显示,0为高位旋钮(电阻e3/对应电压e-1),5为最低位(e-2/对应e-6)
 			Rcd = 0;
 			for (var i = 0; i != 6; i++)
 			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
+				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 3));
 				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
 			}
-			double offsetRcd = Rcd - lastRcd;
-			lastRcd = Rcd;
 
-			Rp = (2282 - 982) * knobs[6].KnobPos_int + 982;
-			double offsetRp = Rp - lastRp;
-			lastRp = Rp;
-			Rabp = Rabp - offsetRcd + offsetRp;
-			if (Rabp < 0) Rabp = 0;
+			// 计算Rab和Rp，Rab最大值为10191.0
+			double RabOffSet = knobs[11].KnobPos_int * 1 + knobs[12].KnobPos_int * 0.1;
+			Rab = 10180.0 + RabOffSet;
+
+			// 用户调节Rp示0，完成标准化，实际可能没有完成
+			// 可调范围9000-24000
+			Rp = (24000 - 9000) * knobs[6].KnobPos * (1 + 1e-2 * knobs[7].KnobPos) * (1 + 1e-4 * knobs[8].KnobPos) * (1 + 1e-6 * knobs[9].KnobPos)
+				+ 9000 - RabOffSet;
+
+			Rabp = Rab + Rp - Rcd;
 		}
 	}
 
@@ -190,6 +182,11 @@ public class UJ25 : EntityBase
 				break;
 
 			default:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
+				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
+				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				break;
 		}
 	}
@@ -230,28 +227,29 @@ public class UJ25 : EntityBase
 
 			case UJ25Mode.x1:
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rabp"),
+					GetName("Rcd"),
 					PortID_E_V.ToString(),
 					PortID_G_G.ToString(),
-					Rabp));
+					Rcd));
 
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rcd"),
+					GetName("Rabp"),
 					PortID_G_G.ToString(),
 					PortID_E_G.ToString(),
-					Rcd));
+					Rabp));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("X1_V"),
+					PortID_X1_V.ToString(),
+					PortID_E_V.ToString(),
+					0));
 
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("X1-G"),
-					PortID_X1_V.ToString(),
+					PortID_X1_G.ToString(),
 					PortID_G_V.ToString(),
 					0));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("X1-E"),
-					PortID_X1_G.ToString(),
-					PortID_E_G.ToString(),
-					0));
 				break;
 
 			case UJ25Mode.x2:

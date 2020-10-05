@@ -122,6 +122,7 @@ public class CircuitCalculator : MonoBehaviour
 		// 对有连接的电源实行接地检测，只涉及并查集操作
 		Sources.ForEach(x => x.GroundCheck());
 
+		Debug.LogError(GNDLines.Count.ToString());
 		// 连接接地线，只涉及并查集操作
 		ConnectGND(GNDLines);
 
