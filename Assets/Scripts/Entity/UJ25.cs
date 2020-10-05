@@ -9,18 +9,20 @@ public class UJ25 : EntityBase
 {
 	private readonly int knobNum = 13;      // 含有的旋钮个数
 
-	private double Rab;         // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
-	private double Rcd;         // 与标准电源并联的电阻，值根据En的后两位确定
-	private double Rp;          // 用标准电源校准时调节的电阻
-	private double T = 25;      // 当前温度
-	private double En;          // 当前温度下的标准电池电动势
-	private const double E20 = 1.01860;     //20摄氏度下的标准电池电动势
+	private double Rab;						// 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
+	private double Rcd;						// 与标准电源并联的电阻，值根据En的后两位确定
+	private double Rp;						// 用标准电源校准时调节的电阻
+	private double T = 25;					// 当前温度
+	private double En;						// 当前温度下的标准电池电动势
+	private const double E20 = 1.01860;     // 20摄氏度下的标准电池电动势
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
 	private int PortID_En_G, PortID_En_V;
 	private int PortID_X1_G, PortID_X1_V;
 	private int PortID_X2_G, PortID_X2_V;
+
+	private double lastRcd, lastRp, Rabp;
 
 	// 四种工作模式，对应N，断，X1，X2
 	private enum UJ25Mode { n, disconnect, x1, x2 }
@@ -79,9 +81,6 @@ public class UJ25 : EntityBase
 		PortID_X2_V = ChildPorts[7].ID;
 	}
 
-	double lastRcd;
-	double lastRp;
-	double Rabp;
 	private void UpdateKnob()
 	{
 		if (uj25Mode == UJ25Mode.n)
@@ -90,7 +89,8 @@ public class UJ25 : EntityBase
 			Rab = 1018 + knobs[6].KnobPos_int * 0.1 + knobs[7].KnobPos_int * 0.01;
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
-			Rp = (2282 - 982) * knobs[6].KnobPos_int + 982;
+			// 可调范围982-2282
+			Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
 
 			// 计算Rcd并显示,5为高位旋钮(e2),0为最低位(e-3)
 			Rcd = 0;
@@ -175,102 +175,83 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
-				// 电源正极->Rab
-				// PortID_E_V.ToString() == GetName("A")
-
-				// Rab
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rab"),
 					PortID_E_V.ToString(),
-					GetName("B"),
+					PortID_G_G.ToString(),
 					Rab));
 
-				// 不接Rcd
-
-				// Rab->Rp
-				// GetName("B") == GetName("E")
-
-				// Rp
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rp"),
-					GetName("B"),
+					PortID_G_G.ToString(),
 					PortID_E_G.ToString(),
 					Rp));
 
-				// Rp->电源负极
-				// PortID_E_G.ToString() == GetName("F")
-
-				// En,G
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("En_V"),
 					PortID_En_V.ToString(),
 					PortID_E_V.ToString(),
 					0));
-
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("En-G"),
 					PortID_En_G.ToString(),
 					PortID_G_V.ToString(),
-					0));
-
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("G_G"),
-					PortID_G_G.ToString(),
-					GetName("B").ToString(),
 					0));
 				break;
 
 			case UJ25Mode.disconnect:
-				// 外部连接均断路
 				break;
 
 			case UJ25Mode.x1:
-				// 电源正极->Rabp
-				// PortID_E_V.ToString() == GetName("A")
-
-				// Rabp
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rabp"),
 					PortID_E_V.ToString(),
-					GetName("B"),
+					PortID_G_G.ToString(),
 					Rabp));
 
-				// Rabp->Rcd
-				// GetName("B") = GetName("C")
-
-				// Rcd
 				CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rcd"),
-					GetName("B"),
-					PortID_E_V.ToString(),
-					Rabp));
-
-
-				// Rcd->电源负极
-				// PortID_E_G.ToString() == GetName("D")
-
-				// En,G
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("En_V"),
-					PortID_En_V.ToString(),
-					GetName("A"),
-					0));
+					PortID_G_G.ToString(),
+					PortID_E_G.ToString(),
+					Rcd));
 
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("En-G"),
-					PortID_En_G.ToString(),
+					GetName("X1-G"),
+					PortID_X1_V.ToString(),
 					PortID_G_V.ToString(),
 					0));
 
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("G_G"),
-					PortID_G_G.ToString(),
-					GetName("B").ToString(),
+					GetName("X1-E"),
+					PortID_X1_G.ToString(),
+					PortID_E_G.ToString(),
 					0));
 				break;
 
 			case UJ25Mode.x2:
+				CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("Rabp"),
+					PortID_E_V.ToString(),
+					PortID_G_G.ToString(),
+					Rabp));
 
+				CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("Rcd"),
+					PortID_G_G.ToString(),
+					PortID_E_G.ToString(),
+					Rcd));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("X2-G"),
+					PortID_X2_V.ToString(),
+					PortID_G_V.ToString(),
+					0));
+
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("X2-E"),
+					PortID_X2_G.ToString(),
+					PortID_E_G.ToString(),
+					0));
 				break;
 
 			default:
