@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,10 +6,9 @@ using UnityEngine;
 /// </summary>
 public class NominaluA : EntityBase, ICalculatorUpdate
 {
-	private int maxuI;                  //量程，单位微安
-	private double nominalR;            //内阻标称值
-	private double realR;               //内阻真实值
-	private MyPin myPin;                //指针（显示数字的那种）
+	private int maxuI;                  // 量程，单位微安
+	private double resistance;          // 内阻真实值
+	private MyPin myPin;                // 表盘指针
 	private int PortID_GND, PortID_V0;
 
 	public override void EntityAwake()
@@ -35,7 +33,7 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 	public void CalculatorUpdate()
 	{
 		// 计算自身电流
-		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / nominalR;
+		ChildPorts[1].I = (ChildPorts[1].U - ChildPorts[0].U) / resistance;
 
 		double maxI = maxuI / 1e6;
 		myPin.SetPos((float)(ChildPorts[1].I / maxI));
@@ -48,20 +46,19 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 
 	public override void SetElement(int entityID)
 	{
-		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), nominalR));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_GND.ToString(), PortID_V0.ToString(), resistance));
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public static GameObject Create(int maxuI, double nominalR)
+	public static GameObject Create(int maxuI, double resistance)
 	{
-		NominaluA nominaluA = BaseCreate<NominaluA>().Set(maxuI, nominalR);
-		nominaluA.realR = Nominal.GetRealValue(nominalR);
+		NominaluA nominaluA = BaseCreate<NominaluA>().Set(maxuI, resistance);
 		return nominaluA.gameObject;
 	}
 
-	private NominaluA Set(int maxuI, double nominalR)
+	private NominaluA Set(int maxuI, double resistance)
 	{
-		this.nominalR = nominalR;
+		this.resistance = resistance;
 		this.maxuI = maxuI;
 		myPin.SetString("uA", maxuI);
 		return this;
@@ -72,22 +69,20 @@ public class NominaluA : EntityBase, ICalculatorUpdate
 	[System.Serializable]
 	public class NominaluAData : EntityData
 	{
-		private readonly double nominalR;
-		private readonly double realR;
+		private readonly double resistance;
 		private readonly int maxuI;
 
 		public NominaluAData(NominaluA nominaluA)
 		{
 			baseData = new EntityBaseData(nominaluA);
-			nominalR = nominaluA.nominalR;
-			realR = nominaluA.realR;
+			resistance = nominaluA.resistance;
 			maxuI = nominaluA.maxuI;
 		}
 
 		public override void Load()
 		{
-			NominaluA nominaluA = BaseCreate<NominaluA>(baseData).Set(maxuI, nominalR);
-			nominaluA.realR = realR;
+			NominaluA nominaluA = BaseCreate<NominaluA>(baseData).Set(maxuI, resistance);
+			nominaluA.resistance = resistance;
 		}
 	}
 }
