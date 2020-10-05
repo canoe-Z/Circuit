@@ -119,9 +119,8 @@ public class UJ25 : EntityBase
 			Rab = 1018 + knobs[6].KnobPos_int * 0.1 + knobs[7].KnobPos_int * 0.01;
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
-			// 可调范围982-2282
-			Rp = 3000 - 1018;
-			//Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
+			// 可调范围0-13600
+			Rp = 13600 * knobs[8].KnobPos * (1 + 0.01 * knobs[9].KnobPos) * (1 + 0.001 * knobs[10].KnobPos) * (1 + 0.0001 * knobs[11].KnobPos);
 
 			// 计算Rcd并显示,0为高位旋钮(电阻e2/对应电压e-1),5为最低位(e-3/对应e-6)
 			Rcd = 0;
