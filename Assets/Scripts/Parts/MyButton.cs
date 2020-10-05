@@ -10,10 +10,22 @@ public class MyButton : MonoBehaviour
 	public delegate void SwitchEventHandler();
 	public event SwitchEventHandler SwitchEvent;
 
+	bool isOn = true;
 	/// <summary>
 	/// 开关状态
 	/// </summary>
-	public bool IsOn { get; set; } = true;
+	public bool IsOn
+	{
+		get
+		{
+			return isOn;
+		}
+		set
+		{
+			isOn = value;
+			ChangeState();//更新
+		}
+	}
 
 	private readonly float posYRange = 0.1f;
 
@@ -34,19 +46,17 @@ public class MyButton : MonoBehaviour
 		if (!MoveController.CanOperate) return;
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
-			IsOn = !IsOn;
+			isOn = !isOn;
 			ChangeState();
 			SwitchEvent?.Invoke();
 			CircuitCalculator.NeedCalculateByConnection = true;
 		}
 	}
 
-	/// <summary>
-	/// 根据开关状态修改颜色和位置
-	/// </summary>
+	//根据开关状态修改颜色和位置
 	void ChangeState()
 	{
-		if (IsOn)
+		if (isOn)
 		{
 			ChangeMat(Sw, Color.green);
 			Sw.transform.localPosition = basicPos + new Vector3(0, 0, 0);
@@ -58,10 +68,7 @@ public class MyButton : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// 修改颜色
-	/// </summary>
-	/// <param name="color">颜色</param>
+	//修改颜色
 	void ChangeMat(Transform trans, Color color)
 	{
 		Renderer[] renderers = trans.GetComponentsInChildren<Renderer>();
