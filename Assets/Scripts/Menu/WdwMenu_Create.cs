@@ -140,10 +140,27 @@ public class WdwMenu_Create : MonoBehaviour
 
 	void OnButtonSP_R()
 	{
-		if (ParseRNum(iptNum_R.text, out double num))
+		if (ParseRNum(iptNum_R.text, out double RValue))
 		{
 			iptNum_R.text = "";
-			willBeSet = MyResistor.Create(num).gameObject;
+
+			string str;
+
+			// 根据阻值确定显示方式
+			if (RValue >= 1e6)
+			{
+				str = (RValue / 1e6).ToString() + "MΩ";
+			}
+			else if (RValue >= 1e3)
+			{
+				str = (RValue / 1e3).ToString() + "kΩ";
+			}
+			else
+			{
+				str = RValue.ToString() + "Ω";
+			}
+
+			willBeSet = MyResistor.Create(RValue,str).gameObject;
 			NormalCreate();
 		}
 		else if (iptNum_R.text == "")
@@ -156,10 +173,10 @@ public class WdwMenu_Create : MonoBehaviour
 	{
 		switch (dpdType_NominalR.value)
 		{
-			case 0: willBeSet = NominalR.Create(100, "待测"); break;
-			case 1: willBeSet = NominalR.Create(1e6, "待测"); break;
-			case 2: willBeSet = NominalR.Create(0.1, "待测"); break;
-			case 3: willBeSet = NominalR.Create(120, "标称"); break;
+			case 0: willBeSet = MyResistor.Create(100, "待测\n100Ω"); break;
+			case 1: willBeSet = MyResistor.Create(1e6, "待测\n1MΩ"); break;
+			case 2: willBeSet = MyResistor.Create(0.1, "待测\n0.1Ω"); break;
+			case 3: willBeSet = MyResistor.Create(120, "待测\n120Ω"); break;
 		}
 		NormalCreate();
 	}
