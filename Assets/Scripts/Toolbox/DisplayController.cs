@@ -64,6 +64,9 @@ public class DisplayController : Singleton<DisplayController>
 	{
 		imgCross = GetComponentInChildren<Image>();
 		txtFps = GetComponentInChildren<Text>();
+		Vector3 pos = txtFps.transform.position;
+		pos.x = 10;
+		txtFps.transform.position = pos;
 	}
 
 	int frameHide_counter = 0;
