@@ -33,8 +33,7 @@ public class UJ25 : EntityBase
 		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
-		// 0-5为Rcd调节旋钮，6-7为Rab调节，8-11为Rp调节旋钮（连续），
-		// 12为UJ25的切换开关
+		// 0-5为Rcd调节旋钮，6-9为Rp调节，10为模式切换旋钮，11-12为Rab调节，
 
 		// Rcd调节旋钮，最高位旋钮可以调节至18，其余旋钮调节至10
 		knobs[0].Devide = 19;
@@ -43,14 +42,14 @@ public class UJ25 : EntityBase
 			knobs[i].Devide = 11;
 		}
 
-		// Rab调节旋钮，可调节至10
-		for (var i = 6; i != 8; i++)
-		{
-			knobs[i].Devide = 10;
-		}
-
 		// UJ25挡位切换，共5挡
-		knobs[12].Devide = 5;
+		knobs[10].AngleRange = 225;
+		knobs[10].Devide = 5;
+		knobs[10].SetKnobRot(4);
+
+		// Rab调节旋钮，可调节至10
+		knobs[11].Devide = 11;
+		knobs[12].Devide = 11;
 	}
 
 	void Start()
