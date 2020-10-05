@@ -199,7 +199,7 @@ public class WdwMenu_Create : MonoBehaviour
 		switch (dpdType_Src.value)
 		{
 			case 0:
-				// TODO 将标准电池电动势计算转移到前端
+				//将标准电池电动势计算转移到前端
 				double E20 = 1.01860;     // 20摄氏度下的标准电池电动势
 				double T = 25;
 				// 标准电池温度修正公式
@@ -208,7 +208,8 @@ public class WdwMenu_Create : MonoBehaviour
 				willBeSet = Source.Create(En, 100, "标准电池");
 				break;//1.01865
 			case 1:
-				willBeSet = Source.Create(1.54652, 100, "待测电池");
+				double willE = UnityEngine.Random.Range(1.48f, 1.52f);//随机数
+				willBeSet = Source.Create(willE, 100, "待测电池");
 				break;//待测
 		}
 		NormalCreate();
