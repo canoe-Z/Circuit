@@ -15,7 +15,7 @@ public class RBox : EntityBase
 	private readonly double[] tolerance = new double[3];        // 不同挡位下的误差限
 	private readonly double[] nominal = new double[3];          // 不同挡位下包含误差的内阻
 	private float[] rands = null;                               // 随机数
-	private const int randNum = 2;                              // 需要的随机数数量，一般和元件的挡位数量相同
+	private const int randNum = 3;                              // 需要的随机数数量，一般和元件的挡位数量相同
 
 	private int PortID_G, PortID_R999, PortID_R99, PortID_R9;
 	private List<MyKnob> knobs;
