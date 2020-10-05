@@ -2017,6 +2017,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da12f0d3248d43c48be834940029d9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RcdTexts:
+  - {fileID: 6126950605575760400}
+  - {fileID: 5784010055911724363}
+  - {fileID: 5545549771133920029}
+  - {fileID: 3943366925194800999}
+  - {fileID: 3098332570814194480}
+  - {fileID: 7246622442244268639}
 --- !u!1 &4395898770431522902
 GameObject:
   m_ObjectHideFlags: 0
@@ -6887,7 +6894,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0f99c7868cbb88d4db5db959028f3d23,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f99c7868cbb88d4db5db959028f3d23,
         type: 3}
@@ -6902,12 +6909,12 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0f99c7868cbb88d4db5db959028f3d23,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f99c7868cbb88d4db5db959028f3d23,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f99c7868cbb88d4db5db959028f3d23,
         type: 3}

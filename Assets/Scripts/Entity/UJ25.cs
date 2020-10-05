@@ -9,9 +9,9 @@ public class UJ25 : EntityBase
 {
 	private readonly int knobNum = 13;      // 含有的旋钮个数
 
-	private double Rab;						// 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
-	private double Rcd;						// 与标准电源并联的电阻，值根据En的后两位确定
-	private double Rp;						// 用标准电源校准时调节的电阻
+	private double Rab;                     // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
+	private double Rcd;                     // 与标准电源并联的电阻，值根据En的后两位确定
+	private double Rp;                      // 用标准电源校准时调节的电阻
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
@@ -26,17 +26,14 @@ public class UJ25 : EntityBase
 	UJ25Mode uj25Mode;
 
 	private List<MyKnob> knobs;
-	private List<Text> RcdTexts;
+	public Text[] RcdTexts = new Text[6];
 
 	public override void EntityAwake()
 	{
 		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
 
-		RcdTexts = transform.FindComponentsInChildren<Text>().OrderBy(x => int.Parse(x.name)).ToList();
-
-		// 0-5为Rcd调节旋钮，6-7为Rab调节，8-11为Rp调节旋钮（连续），
-		// 12为UJ25的切换开关
+		// 0-5为Rcd调节旋钮，6-9为Rp调节，10为模式切换旋钮，11-12为Rab调节，
 
 		// Rcd调节旋钮，最高位旋钮可以调节至18，其余旋钮调节至10
 		knobs[0].Devide = 19;
@@ -45,14 +42,14 @@ public class UJ25 : EntityBase
 			knobs[i].Devide = 11;
 		}
 
-		// Rab调节旋钮，可调节至10
-		for (var i = 6; i != 8; i++)
-		{
-			knobs[i].Devide = 10;
-		}
-
 		// UJ25挡位切换，共5挡
-		knobs[12].Devide = 5;
+		knobs[10].AngleRange = 225;
+		knobs[10].Devide = 5;
+		knobs[10].SetKnobRot(3);
+
+		// Rab调节旋钮，可调节至10
+		knobs[11].Devide = 11;
+		knobs[12].Devide = 11;
 	}
 
 	void Start()
@@ -76,10 +73,46 @@ public class UJ25 : EntityBase
 		// 未知2
 		PortID_X2_G = ChildPorts[6].ID;
 		PortID_X2_V = ChildPorts[7].ID;
+
+		// 电源
+		PortID_E_G = ChildPorts[8].ID;
+		PortID_E_V = ChildPorts[9].ID;
+	}
+
+	public void Update()
+	{
+		Debug.LogWarning("Rab为：" + Rab.ToString());
+		Debug.LogWarning("Rcd为：" + Rcd.ToString());
+		Debug.LogWarning("Rp为：" + Rp.ToString());
+		Debug.LogWarning("Rabp为：" + Rabp.ToString());
 	}
 
 	private void UpdateKnob()
 	{
+		// 模式切换
+		switch (knobs[10].KnobPos_int)
+		{
+			case 0:
+				uj25Mode = UJ25Mode.x2;
+				break;
+			case 1:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+			case 2:
+				uj25Mode = UJ25Mode.x1;
+				break;
+			case 3:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+			case 4:
+				uj25Mode = UJ25Mode.n;
+				break;
+			default:
+				uj25Mode = UJ25Mode.disconnect;
+				break;
+		}
+
+		// 根据模式计算元件实时参数
 		if (uj25Mode == UJ25Mode.n)
 		{
 			// 计算Rab和Rp
@@ -87,14 +120,15 @@ public class UJ25 : EntityBase
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
 			// 可调范围982-2282
-			Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
+			Rp = 3000 - 1018;
+			//Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
 
-			// 计算Rcd并显示,5为高位旋钮(e2),0为最低位(e-3)
+			// 计算Rcd并显示,0为高位旋钮(电阻e2/对应电压e-1),5为最低位(e-3/对应e-6)
 			Rcd = 0;
 			for (var i = 0; i != 6; i++)
 			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, i - 3);
-				RcdTexts[i].text = knobs[5 - i].KnobPos_int.ToString();
+				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
+				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
 			}
 			lastRcd = Rcd;
 
@@ -108,8 +142,8 @@ public class UJ25 : EntityBase
 			Rcd = 0;
 			for (var i = 0; i != 6; i++)
 			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, i - 3);
-				RcdTexts[i].text = knobs[5 - i].KnobPos_int.ToString();
+				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
+				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
 			}
 			double offsetRcd = Rcd - lastRcd;
 			lastRcd = Rcd;
@@ -123,17 +157,8 @@ public class UJ25 : EntityBase
 	}
 
 	// UJ25的电源端连接时视为已连接
-	public override bool IsConnected()
-	{
-		if (ChildPorts[8].IsConnected || ChildPorts[9].IsConnected)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	public override bool IsConnected() =>
+		ChildPorts[8].IsConnected || ChildPorts[9].IsConnected;
 
 
 	public override void LoadElement()
@@ -141,21 +166,28 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
+				// 三个元件互相连通
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
 				break;
 
 			case UJ25Mode.x1:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_X1_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
 				break;
 
 			case UJ25Mode.x2:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_X2_G);
 				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				break;
 
 			default:
@@ -166,10 +198,7 @@ public class UJ25 : EntityBase
 
 	public override void SetElement(int entityID)
 	{
-		string GetName(string shortName)
-		{
-			return string.Concat(entityID.ToString(), shortName);
-		}
+		string GetName(string shortName) => string.Concat(entityID.ToString(), shortName);
 
 		switch (uj25Mode)
 		{
@@ -191,11 +220,13 @@ public class UJ25 : EntityBase
 					PortID_En_V.ToString(),
 					PortID_E_V.ToString(),
 					0));
+
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("En-G"),
 					PortID_En_G.ToString(),
 					PortID_G_V.ToString(),
 					0));
+
 				break;
 
 			case UJ25Mode.x1:
@@ -255,39 +286,37 @@ public class UJ25 : EntityBase
 		}
 	}
 
-	public static GameObject Create()
-	{
-		return BaseCreate<UJ25>().Set().gameObject;
-	}
-
-	private UJ25 Set()
-	{
-		return this;
-	}
-
 	public override EntityData Save() => new UJ25Data(this);
 
 	[System.Serializable]
 	public class UJ25Data : EntityData
 	{
-		private readonly List<int> knobRotIntList = new List<int>();
+		private readonly List<KnobData> knobDataList = new List<KnobData>();
 
 		public UJ25Data(UJ25 uj25)
 		{
 			baseData = new EntityBaseData(uj25);
-			//uj25.knobs.ForEach(x => knobRotIntList.Add(x.KnobPos_int));
+			foreach (var knob in uj25.knobs)
+			{
+				knobDataList.Add(new KnobData(knob.KnobPos, knob.KnobPos_int));
+			}
 		}
 
 		public override void Load()
 		{
-			/*
 			UJ25 uj25 = BaseCreate<UJ25>(baseData);
-			for (var i = 0; i < knobRotIntList.Count; i++)
+			for (var i = 0; i < knobDataList.Count; i++)
 			{
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
-				uj25.knobs[i].SetKnobRot(knobRotIntList[i]);
+				if (uj25.knobs[i].Devide == -1)
+				{
+					uj25.knobs[i].SetKnobRot(knobDataList[i].KnobPos);
+				}
+				else
+				{
+					uj25.knobs[i].SetKnobRot(knobDataList[i].KnobPos_int);
+				}
 			}
-			*/
 		}
 	}
 }
