@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEngine;
 
 /// <summary>
 /// 电流计
@@ -67,5 +68,23 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save() => new SimpleEntityData<Gmeter>(this);
+	public override EntityData Save() => new GmeterData(this);
+
+	[System.Serializable]
+	public class GmeterData : EntityData
+	{
+		private readonly int knobPos_int;
+
+		public GmeterData(Gmeter gmeter)
+		{
+			baseData = new EntityBaseData(gmeter);
+			knobPos_int = gmeter.myKnob.KnobPos_int;
+		}
+
+		public override void Load()
+		{
+			Gmeter gmeter = BaseCreate<Gmeter>(baseData);
+			gmeter.myKnob.SetKnobRot(knobPos_int);
+		}
+	}
 }
