@@ -196,10 +196,10 @@ public class WdwMenu_Create : MonoBehaviour
 		switch (dpdType_Src.value)
 		{
 			case 0:
-				willBeSet = Source.Create(1.01865, 100);
+				willBeSet = Source.Create(1.01865, 100, "标准电池");
 				break;//1.01865
 			case 1:
-				willBeSet = NominalSource.Create(1.54652, 100, "待测电源");
+				willBeSet = Source.Create(1.54652, 100, "待测电池");
 				break;//待测
 		}
 		NormalCreate();

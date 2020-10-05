@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Components;
+﻿using SpiceSharp.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,7 @@ public class Source : EntityBase, ISource
 	protected double E, R;
 	protected int PortID_G, PortID_V;
 	protected Text sourceText;
+
 	public override void EntityAwake()
 	{
 		sourceText = GetComponentInChildren<Text>();
@@ -18,8 +18,6 @@ public class Source : EntityBase, ISource
 
 	void Start()
 	{
-		sourceText.text = E.ToString() + "V";
-
 		PortID_G = ChildPorts[0].ID;
 		PortID_V = ChildPorts[1].ID;
 	}
@@ -45,15 +43,23 @@ public class Source : EntityBase, ISource
 		}
 	}
 
-	public static GameObject Create(double E, double R)
+	/// <summary>
+	/// 创建标准电池
+	/// </summary>
+	/// <param name="E">电动势</param>
+	/// <param name="R">内阻</param>
+	/// <param name="str">显示文本</param>
+	/// <returns></returns>
+	public static GameObject Create(double E, double R,string str)
 	{
-		return BaseCreate<Source>().Set(E, R).gameObject;
+		return BaseCreate<Source>().Set(E, R,str).gameObject;
 	}
 
-	public Source Set(double E, double R)
+	private Source Set(double E, double R,string str)
 	{
 		this.E = E;
 		this.R = R;
+		sourceText.text = str;
 		return this;
 	}
 
@@ -62,14 +68,16 @@ public class Source : EntityBase, ISource
 	[System.Serializable]
 	protected class SourceStandData : EntityData
 	{
-		protected double E, R;
+		private double E, R;
+		private string str;
 		public SourceStandData(Source source)
 		{
 			baseData = new EntityBaseData(source);
 			E = source.E;
 			R = source.R;
+			str = source.sourceText.text;
 		}
 
-		public override void Load() => BaseCreate<Source>(baseData).Set(E, R);
+		public override void Load() => BaseCreate<Source>(baseData).Set(E, R, str);
 	}
 }
