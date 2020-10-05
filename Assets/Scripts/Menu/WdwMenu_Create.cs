@@ -199,7 +199,7 @@ public class WdwMenu_Create : MonoBehaviour
 		switch (dpdType_Src.value)
 		{
 			case 0:
-				//将标准电池电动势计算转移到前端
+				// TODO:将标准电池电动势计算转移到前端
 				double E20 = 1.01860;     // 20摄氏度下的标准电池电动势
 				double T = 25;
 				// 标准电池温度修正公式
