@@ -123,10 +123,6 @@ public class UJ25 : EntityBase
 			Rabp = Rabp - offsetRcd + offsetRp;
 			if (Rabp < 0) Rabp = 0;
 		}
-
-		// 标准电池温度修正公式
-		En = E20 - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0)
-			+ 9e-9 * Math.Pow(T - 20, 3.0);
 	}
 
 	// UJ25的电源端连接时视为已连接
@@ -148,15 +144,21 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
+				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				break;
 
 			case UJ25Mode.x1:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
+				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				break;
 
 			case UJ25Mode.x2:
-				break;
-
-			case UJ25Mode.disconnect:
+				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
+				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 				break;
 
 			default:
@@ -197,9 +199,6 @@ public class UJ25 : EntityBase
 					PortID_En_G.ToString(),
 					PortID_G_V.ToString(),
 					0));
-				break;
-
-			case UJ25Mode.disconnect:
 				break;
 
 			case UJ25Mode.x1:
