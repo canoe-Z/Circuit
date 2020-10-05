@@ -26,14 +26,12 @@ public class UJ25 : EntityBase
 	UJ25Mode uj25Mode;
 
 	private List<MyKnob> knobs;
-	private List<Text> RcdTexts;
+	public Text[] RcdTexts = new Text[6];
 
 	public override void EntityAwake()
 	{
 		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-
-		RcdTexts = transform.FindComponentsInChildren<Text>().OrderBy(x => int.Parse(x.name)).ToList();
 
 		// 0-5为Rcd调节旋钮，6-7为Rab调节，8-11为Rp调节旋钮（连续），
 		// 12为UJ25的切换开关
@@ -76,6 +74,10 @@ public class UJ25 : EntityBase
 		// 未知2
 		PortID_X2_G = ChildPorts[6].ID;
 		PortID_X2_V = ChildPorts[7].ID;
+
+		// 电源
+		PortID_E_G = ChildPorts[8].ID;
+		PortID_E_V = ChildPorts[9].ID;
 	}
 
 	private void UpdateKnob()
@@ -89,12 +91,12 @@ public class UJ25 : EntityBase
 			// 可调范围982-2282
 			Rp = (2282 - 982) * knobs[8].KnobPos_int + 982;
 
-			// 计算Rcd并显示,5为高位旋钮(e2),0为最低位(e-3)
+			// 计算Rcd并显示,0为高位旋钮(电阻e2/对应电压e-1),5为最低位(e-3/对应e-6)
 			Rcd = 0;
 			for (var i = 0; i != 6; i++)
 			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, i - 3);
-				RcdTexts[i].text = knobs[5 - i].KnobPos_int.ToString();
+				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
+				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
 			}
 			lastRcd = Rcd;
 
@@ -108,8 +110,8 @@ public class UJ25 : EntityBase
 			Rcd = 0;
 			for (var i = 0; i != 6; i++)
 			{
-				Rcd += knobs[i].KnobPos_int * Math.Pow(10, i - 3);
-				RcdTexts[i].text = knobs[5 - i].KnobPos_int.ToString();
+				Rcd += knobs[i].KnobPos_int * Math.Pow(10, -(i - 2));
+				RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
 			}
 			double offsetRcd = Rcd - lastRcd;
 			lastRcd = Rcd;
