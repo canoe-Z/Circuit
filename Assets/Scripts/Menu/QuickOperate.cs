@@ -15,15 +15,10 @@ public class QuickOperate : MonoBehaviour
 	public GameObject gm;
 	void Work()
 	{
-		BoxCollider[] colliders = gm.GetComponentsInChildren<BoxCollider>();
-		float max = 0;
-		foreach(var c in colliders)
+		Canvas[] canvas = FindObjectsOfType<Canvas>();
+		foreach(var c in canvas)
 		{
-			max = Mathf.Max(
-				Mathf.Abs(c.bounds.max.x),
-				Mathf.Abs(c.bounds.max.y),
-				Mathf.Abs(c.bounds.max.z),
-				max);
+			c.enabled = true;
 		}
 	}
 
