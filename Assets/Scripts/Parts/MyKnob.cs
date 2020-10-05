@@ -25,10 +25,8 @@ public class MyKnob : MonoBehaviour
 	/// </summary>
 	public float AngleRange { get; set; } = 360;
 
-	/// <summary>
-	/// 连续旋转时，每秒从0-1的速度增量
-	/// </summary>
-	public float SpeedUpPerSecond { get; set; } = 0.001f;
+	// 连续旋转时，每秒从0-1的速度增量
+	const float speedUpPerSecond = 0.001f;
 
 	/// <summary>
 	/// 旋钮位置，0-1的数值
@@ -76,7 +74,7 @@ public class MyKnob : MonoBehaviour
 			if (Input.GetMouseButton(0))
 			{
 				// 转速逐步加快
-				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
+				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos + nowSpeedPerSec);
 				CircuitCalculator.NeedCalculateByConnection = true;
 			}
@@ -84,7 +82,7 @@ public class MyKnob : MonoBehaviour
 			else if (Input.GetMouseButton(1))
 			{
 				// 转速逐步加快
-				nowSpeedPerSec += SpeedUpPerSecond * Time.deltaTime;
+				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos - nowSpeedPerSec);
 				CircuitCalculator.NeedCalculateByConnection = true;
 			}
@@ -101,6 +99,10 @@ public class MyKnob : MonoBehaviour
 		transform.DisablFresnel();
 	}
 
+	/// <summary>
+	/// 参数0-1
+	/// </summary>
+	/// <param name="newRot"></param>
 	public void SetKnobRot(float newRot)
 	{
 		// 如果旋钮是离散的，报错
@@ -117,6 +119,10 @@ public class MyKnob : MonoBehaviour
 		WriteKnobRot(newRot);
 	}
 
+	/// <summary>
+	/// 离散的参数
+	/// </summary>
+	/// <param name="newRot_int"></param>
 	public void SetKnobRot(int newRot_int)
 	{
 		// 如果旋钮是连续的，报错
@@ -138,10 +144,14 @@ public class MyKnob : MonoBehaviour
 			if (CanLoop) KnobPos_int += Devide;
 			else newRot_int = 0;
 		}
+		KnobPos_int = newRot_int;
 
-		WriteKnobRot(newRot_int);
+		// 用每份的长度计算出旋钮的连续位置
+		float pre = 1f / Devide;
+		float newRot = newRot_int * pre;
+
+		WriteKnobRot(newRot);
 	}
-
 	private void WriteKnobRot(float newRot)
 	{
 		KnobPos = newRot;
@@ -151,17 +161,6 @@ public class MyKnob : MonoBehaviour
 
 		// 更改位置后发送消息通知元件
 		KnobEvent?.Invoke();
-	}
-
-	private void WriteKnobRot(int newRot_int)
-	{
-		KnobPos_int = newRot_int;
-
-		// 用每份的长度计算出旋钮的连续位置
-		float pre = 1f / Devide;
-		float newRot = newRot_int * pre;
-
-		WriteKnobRot(newRot);
 	}
 }
 

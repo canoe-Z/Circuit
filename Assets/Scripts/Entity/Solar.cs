@@ -22,7 +22,7 @@ public class Solar : EntityBase, ISource
 	public override void EntityAwake()
 	{
 		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
-		mySlider = transform.FindComponent_DFS<MySlider>("Slider");
+		mySlider = GetComponentInChildren<MySlider>();
 		sloarText = transform.FindComponent_DFS<Text>("Text");
 		sloarLight = transform.FindComponent_DFS<Light>("Spot Light");
 
@@ -45,8 +45,11 @@ public class Solar : EntityBase, ISource
 	{
 		// 关机时滑块可以调整，但是不更新太阳能电池
 		if (!mySwitch.IsOn) return;
+		const float minDis = 0.2f;//0.2米
+		const float maxDis = 1.2f;//0.2米
+		float distance = minDis + (maxDis - minDis) * mySlider.SliderPos;
 
-		float fm = 6 - 5 * mySlider.SliderPos;  // 会被平方的分母
+		float fm = distance / 0.19f;  // 会被平方的分母
 		float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
 		Isc = lightStrength * IscMax;
 
