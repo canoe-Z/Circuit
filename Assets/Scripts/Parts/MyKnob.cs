@@ -38,6 +38,11 @@ public class MyKnob : MonoBehaviour
 	/// </summary>
 	public int KnobPos_int { get; private set; } = 0;
 
+	/// <summary>
+	/// 是否会改变电路连接关系
+	/// </summary>
+	public bool IsChangeConnection { get; set; } = false;
+
 	// 当前旋转速度
 	private float nowSpeedPerSec = 0;
 
@@ -58,13 +63,29 @@ public class MyKnob : MonoBehaviour
 			if (Input.GetMouseButtonDown(0))
 			{
 				SetKnobRot(KnobPos_int + 1);
-				CircuitCalculator.NeedCalculateByConnection = true;
+				if (IsChangeConnection)
+				{
+
+					CircuitCalculator.NeedCalculate = true;
+				}
+				else
+				{
+					CircuitCalculator.NeedCalculateByConnection = true;
+				}
 			}
 			// 右键减小
 			else if (Input.GetMouseButtonDown(1))
 			{
 				SetKnobRot(KnobPos_int - 1);
-				CircuitCalculator.NeedCalculateByConnection = true;
+				if (IsChangeConnection)
+				{
+
+					CircuitCalculator.NeedCalculate = true;
+				}
+				else
+				{
+					CircuitCalculator.NeedCalculateByConnection = true;
+				}
 			}
 		}
 		// 连续情况
@@ -76,7 +97,15 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos + nowSpeedPerSec);
-				CircuitCalculator.NeedCalculateByConnection = true;
+				if (IsChangeConnection)
+				{
+
+					CircuitCalculator.NeedCalculate = true;
+				}
+				else
+				{
+					CircuitCalculator.NeedCalculateByConnection = true;
+				}
 			}
 			// 右键减小
 			else if (Input.GetMouseButton(1))
@@ -84,7 +113,15 @@ public class MyKnob : MonoBehaviour
 				// 转速逐步加快
 				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
 				SetKnobRot(KnobPos - nowSpeedPerSec);
-				CircuitCalculator.NeedCalculateByConnection = true;
+				if (IsChangeConnection)
+				{
+
+					CircuitCalculator.NeedCalculate = true;
+				}
+				else
+				{
+					CircuitCalculator.NeedCalculateByConnection = true;
+				}
 			}
 			else
 			{

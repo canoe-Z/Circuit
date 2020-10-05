@@ -45,11 +45,17 @@ public class UJ25 : EntityBase
 		// UJ25挡位切换，共5挡
 		knobs[10].AngleRange = 225;
 		knobs[10].Devide = 5;
+		knobs[10].IsChangeConnection = true;
 		knobs[10].SetKnobRot(3);
 
 		// Rab调节旋钮，可调节至10
 		knobs[11].Devide = 11;
 		knobs[12].Devide = 11;
+
+		for (var i = 0; i != 6; i++)
+		{
+			RcdTexts[i].text = "0";
+		}
 	}
 
 	void Start()
@@ -147,46 +153,41 @@ public class UJ25 : EntityBase
 		}
 	}
 
-	// UJ25的电源端连接时视为已连接
-	public override bool IsConnected() =>
-		ChildPorts[8].IsConnected || ChildPorts[9].IsConnected;
-
-
 	public override void LoadElement()
 	{
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
-				// 三个元件互相连通
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
-				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
+					// 三个元件互相连通
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+					CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
+				
 				break;
 
 			case UJ25Mode.x1:
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_X1_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
-				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
+				
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_X1_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+					CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
+				
 				break;
 
 			case UJ25Mode.x2:
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_X2_G);
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
-				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
+				
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_X2_G);
+					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
+					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
+					CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
+				
 				break;
 
 			default:
-				CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
-				CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
-				CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
-				CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
-				CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
 				break;
 		}
 	}
@@ -199,83 +200,87 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
+				
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rab"),
 					PortID_E_V.ToString(),
 					PortID_G_G.ToString(),
 					Rab));
 
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rp"),
-					PortID_G_G.ToString(),
-					PortID_E_G.ToString(),
-					Rp));
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
+						GetName("Rp"),
+						PortID_G_G.ToString(),
+						PortID_E_G.ToString(),
+						Rp));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("En_V"),
-					PortID_En_V.ToString(),
-					PortID_E_V.ToString(),
-					0));
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("En-E"),
+						PortID_En_V.ToString(),
+						PortID_E_V.ToString(),
+						0));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("En-G"),
-					PortID_En_G.ToString(),
-					PortID_G_V.ToString(),
-					0));
-
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("En-G"),
+						PortID_En_G.ToString(),
+						PortID_G_V.ToString(),
+						0));
+				
 				break;
 
 			case UJ25Mode.x1:
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
+				
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rcd"),
 					PortID_E_V.ToString(),
 					PortID_G_G.ToString(),
 					Rcd));
 
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rabp"),
-					PortID_G_G.ToString(),
-					PortID_E_G.ToString(),
-					Rabp));
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
+						GetName("Rabp"),
+						PortID_G_G.ToString(),
+						PortID_E_G.ToString(),
+						Rabp));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("X1_V"),
-					PortID_X1_V.ToString(),
-					PortID_E_V.ToString(),
-					0));
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("X1-E"),
+						PortID_X1_V.ToString(),
+						PortID_E_V.ToString(),
+						0));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("X1-G"),
-					PortID_X1_G.ToString(),
-					PortID_G_V.ToString(),
-					0));
-
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("X1-G"),
+						PortID_X1_G.ToString(),
+						PortID_G_V.ToString(),
+						0));
+				
 				break;
 
 			case UJ25Mode.x2:
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rabp"),
+				
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("Rcd"),
 					PortID_E_V.ToString(),
 					PortID_G_G.ToString(),
-					Rabp));
-
-				CircuitCalculator.SpiceEntities.Add(new Resistor(
-					GetName("Rcd"),
-					PortID_G_G.ToString(),
-					PortID_E_G.ToString(),
 					Rcd));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("X2-G"),
-					PortID_X2_V.ToString(),
-					PortID_G_V.ToString(),
-					0));
+					CircuitCalculator.SpiceEntities.Add(new Resistor(
+						GetName("Rabp"),
+						PortID_G_G.ToString(),
+						PortID_E_G.ToString(),
+						Rabp));
 
-				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-					GetName("X2-E"),
-					PortID_X2_G.ToString(),
-					PortID_E_G.ToString(),
-					0));
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("X1-E"),
+						PortID_X2_V.ToString(),
+						PortID_E_V.ToString(),
+						0));
+
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+						GetName("X1-G"),
+						PortID_X2_G.ToString(),
+						PortID_G_V.ToString(),
+						0));
+				
 				break;
 
 			default:
