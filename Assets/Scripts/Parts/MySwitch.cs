@@ -44,7 +44,7 @@ public class MySwitch : MonoBehaviour
 	/// <summary>
 	/// 根据开关状态修改颜色和位置
 	/// </summary>
-	void ChangeState()
+	public void ChangeState()
 	{
 		if (IsOn)
 		{

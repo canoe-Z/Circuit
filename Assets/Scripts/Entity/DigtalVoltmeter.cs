@@ -76,7 +76,13 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	public override void LoadElement() => CircuitCalculator.UF.ListUnion(new List<(int, int)> { (PortID_GND, PortID_mV), (PortID_GND, PortID_V) });
+	public override void LoadElement()
+	{
+		if (mySwitch.IsOn)
+		{
+			CircuitCalculator.UF.ListUnion(new List<int> { PortID_GND, PortID_mV, PortID_V });
+		}
+	}
 
 	public override void SetElement(int entityID)
 	{

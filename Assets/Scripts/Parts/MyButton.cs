@@ -7,13 +7,13 @@
 public class MyButton : MonoBehaviour
 {
 	// 开关状态变化事件
-	public delegate void SwitchEventHandler();
-	public event SwitchEventHandler SwitchEvent;
+	public delegate void ButtonEventHandler();
+	public event ButtonEventHandler ButtonEvent;
 
-	bool isOn = true;
 	/// <summary>
 	/// 开关状态
 	/// </summary>
+	private bool isOn = true;
 	public bool IsOn
 	{
 		get
@@ -23,22 +23,24 @@ public class MyButton : MonoBehaviour
 		set
 		{
 			isOn = value;
-			ChangeState();//更新
+			ChangeState();
 		}
 	}
+
+	/// <summary>
+	/// 是否会改变电路连接关系
+	/// </summary>
+	public bool IsChangeConnection { get; set; } = false;
 
 	private readonly float posYRange = 0.1f;
 
 	private Transform Sw;
-	private Renderer[] renderers;
 	private Vector3 basicPos;
 
-	void Start()
+	void Awake()
 	{
 		Sw = transform.FindComponent_DFS<Transform>("Switch");
 		basicPos = Sw.transform.localPosition;
-		renderers = Sw.GetComponentsInChildren<Renderer>();
-		ChangeState();
 	}
 
 	void OnMouseOver()
@@ -46,17 +48,25 @@ public class MyButton : MonoBehaviour
 		if (!MoveController.CanOperate) return;
 		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
 		{
-			isOn = !isOn;
+			IsOn = !IsOn;
 			ChangeState();
-			SwitchEvent?.Invoke();
-			CircuitCalculator.NeedCalculateByConnection = true;
+			ButtonEvent?.Invoke();
+			if (IsChangeConnection)
+			{
+
+				CircuitCalculator.NeedCalculate = true;
+			}
+			else
+			{
+				CircuitCalculator.NeedCalculateByConnection = true;
+			}
 		}
 	}
 
-	//根据开关状态修改颜色和位置
-	void ChangeState()
+	// 根据开关状态修改颜色和位置
+	private void ChangeState()
 	{
-		if (isOn)
+		if (IsOn)
 		{
 			ChangeMat(Sw, Color.green);
 			Sw.transform.localPosition = basicPos + new Vector3(0, 0, 0);
@@ -68,8 +78,8 @@ public class MyButton : MonoBehaviour
 		}
 	}
 
-	//修改颜色
-	void ChangeMat(Transform trans, Color color)
+	// 修改颜色
+	private void ChangeMat(Transform trans, Color color)
 	{
 		Renderer[] renderers = trans.GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
