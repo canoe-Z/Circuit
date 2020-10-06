@@ -72,7 +72,7 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		// 开关变化引起电路重新计算，之后调用该部分
 		if (!mySwitch.IsOn)
 		{
-			digtalAmmeterText.text = "";
+			digtalDigtalVoltmeter.text = "";
 		}
 	}
 
