@@ -192,18 +192,8 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	public virtual bool IsConnected()
-	{
-		if(this is IPower powerEntity)
-		{
-			return powerEntity.IsPowerOn() && ChildPorts.Select(x => x.IsConnected).Contains(true);
-		}
-		else
-		{
-			return ChildPorts.Select(x => x.IsConnected).Contains(true);
-		}
-	}
-		
+	public virtual bool IsConnected() => 
+		ChildPorts.Select(x => x.IsConnected).Contains(true);
 
 	public abstract void EntityAwake();
 
@@ -291,9 +281,4 @@ public interface ISource
 public interface ICalculatorUpdate
 {
 	void CalculatorUpdate();
-}
-
-public interface IPower
-{
-	bool IsPowerOn();
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 数字电流表
 /// </summary>
-public class DigtalAmmeter : EntityBase, ICalculatorUpdate,IPower
+public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 {
 	private readonly double R = 0.001;
 	private int PortID_GND, PortID_mA, PortID_A;
@@ -78,23 +78,27 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate,IPower
 		}
 	}
 
-	public bool IsPowerOn() => true;
-
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
-		CircuitCalculator.UF.Union(PortID_GND, PortID_A);
+		if (mySwitch.IsOn)
+		{
+			CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
+			CircuitCalculator.UF.Union(PortID_GND, PortID_A);
+		}
 	}
 
 	public override void SetElement(int entityID)
 	{
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
-		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
+		if (mySwitch.IsOn)
+		{
+			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
+			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
+
+			CircuitCalculator.SpicePorts.AddRange(ChildPorts);
+		}
 	}
 
 	public override EntityData Save() => new DigtalAmmeterData(this);
-
 
 	[System.Serializable]
 	public class DigtalAmmeterData : EntityData
