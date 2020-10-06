@@ -72,27 +72,20 @@ public class DigtalVoltmeter : EntityBase, ICalculatorUpdate
 		// 开关变化引起电路重新计算，之后调用该部分
 		if (!mySwitch.IsOn)
 		{
-			digtalDigtalVoltmeter.text = "0.00";
+			digtalAmmeterText.text = "";
 		}
 	}
 
 	public override void LoadElement()
 	{
-		if (mySwitch.IsOn)
-		{
-			CircuitCalculator.UF.ListUnion(new List<int> { PortID_GND, PortID_mV, PortID_V });
-		}
+		CircuitCalculator.UF.ListUnion(new List<int> { PortID_GND, PortID_mV, PortID_V });
 	}
 
 	public override void SetElement(int entityID)
 	{
-		if (mySwitch.IsOn)
-		{
-			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_Off_mV"), PortID_GND.ToString(), PortID_mV.ToString(), R));
-			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_Off_V"), PortID_GND.ToString(), PortID_V.ToString(), R));
-
-			CircuitCalculator.SpicePorts.AddRange(ChildPorts);
-		}
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_Off_mV"), PortID_GND.ToString(), PortID_mV.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_Off_V"), PortID_GND.ToString(), PortID_V.ToString(), R));
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
 	public override EntityData Save() => new DigtalVoltmeterData(this);

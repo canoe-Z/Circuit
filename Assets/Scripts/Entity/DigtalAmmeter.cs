@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,22 +81,14 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 
 	public override void LoadElement()
 	{
-		if (mySwitch.IsOn)
-		{
-			CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
-			CircuitCalculator.UF.Union(PortID_GND, PortID_A);
-		}
+		CircuitCalculator.UF.ListUnion(new List<int> { PortID_GND, PortID_mA, PortID_A });
 	}
 
 	public override void SetElement(int entityID)
 	{
-		if (mySwitch.IsOn)
-		{
-			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
-			CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
-
-			CircuitCalculator.SpicePorts.AddRange(ChildPorts);
-		}
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_mA"), PortID_GND.ToString(), PortID_mA.ToString(), R));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_A"), PortID_GND.ToString(), PortID_A.ToString(), R));
+		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
 	public override EntityData Save() => new DigtalAmmeterData(this);
