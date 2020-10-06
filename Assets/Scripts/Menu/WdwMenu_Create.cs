@@ -205,11 +205,11 @@ public class WdwMenu_Create : MonoBehaviour
 				// 标准电池温度修正公式
 				double En = E20 - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0)
 					+ 9e-9 * Math.Pow(T - 20, 3.0);
-				willBeSet = Source.Create(1.01865, 100, "标准电池");
+				willBeSet = Source.Create(En, 100, "标准电池");
 				break;//1.01865
 			case 1:
 				double willE = UnityEngine.Random.Range(1.48f, 1.52f);//随机数
-				willBeSet = Source.Create(1.5, 100, "待测电池");
+				willBeSet = Source.Create(willE, 100, "待测电池");
 				break;//待测
 		}
 		NormalCreate();
