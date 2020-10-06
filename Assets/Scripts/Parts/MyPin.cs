@@ -9,6 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class MyPin : MonoBehaviour
 {
+	const float zeroRange = 0.1f;//浮动最大范围占整个表盘的比例
 	public MyKnob knobZero;
 	private void Start()
 	{
@@ -17,9 +18,14 @@ public class MyPin : MonoBehaviour
 			knobZero.CanLoop = false;
 			knobZero.AngleRange = 360;
 			knobZero.Devide = -1;
+			knobZero.SetKnobRot(0.5f);
 		}
 	}
-	const float zeroRange = 0.1f;
+	/// <summary>
+	/// 设置调零随机值（打乱调零）
+	/// </summary>
+	public bool myRandomFlag { set; private get; } = false;
+
 
 	const float f = 0.2f;//阻尼系数
 	const float m = 0.1f;//质量
@@ -29,6 +35,14 @@ public class MyPin : MonoBehaviour
 	float nowPos = 0;//当前的位置
 	private void Update()
 	{
+		if (myRandomFlag)
+		{
+			myRandomFlag = false;
+			int a = Random.Range(0, 2);//0-1的随机数
+			float f = 0.7f * a + Random.Range(0, 0.3f);//0-0.3，0.7-1
+			if(knobZero) knobZero.SetKnobRot(f);
+		}
+
 		if (MySettings.openMyPinDamping)
 		{
 			float deltaPos = willPos - nowPos;//距离差值

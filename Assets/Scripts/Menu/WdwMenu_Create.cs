@@ -75,7 +75,7 @@ public class WdwMenu_Create : MonoBehaviour
 			double.TryParse(iptNum_V2.text, out double num2))
 		{
 			willBeSet = ThreeSource.Create(willType, new List<double> { num0, num1, num2 }).gameObject;
-			NormalCreate();
+			NormalStartCreate();
 		}
 		else
 		{
@@ -126,7 +126,7 @@ public class WdwMenu_Create : MonoBehaviour
 	void OnButton_Simple<T>() where T : EntityBase
 	{
 		willBeSet = EntityBase.BaseCreate<T>().gameObject;//复制物体
-		NormalCreate();
+		NormalStartCreate();
 	}
 
 	void OnButtonSP_SliderR()
@@ -135,7 +135,7 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			iptNum_SliderR.text = "";
 			willBeSet = SliderR.Create(num).gameObject;
-			NormalCreate();
+			NormalStartCreate();
 		}
 		else if (iptNum_SliderR.text == "")
 		{
@@ -166,7 +166,7 @@ public class WdwMenu_Create : MonoBehaviour
 			}
 
 			willBeSet = MyResistor.Create(RValue,str).gameObject;
-			NormalCreate();
+			NormalStartCreate();
 		}
 		else if (iptNum_R.text == "")
 		{
@@ -183,7 +183,7 @@ public class WdwMenu_Create : MonoBehaviour
 			case 2: willBeSet = MyResistor.Create(0.1, "待测\n0.1Ω"); break;
 			case 3: willBeSet = MyResistor.Create(120, "待测\n120Ω"); break;
 		}
-		NormalCreate();
+		NormalStartCreate();
 	}
 
 	void OnButtonSP_uA()
@@ -194,7 +194,7 @@ public class WdwMenu_Create : MonoBehaviour
 			case 1: willBeSet = NominaluA.Create(100, 1); break;//100
 			case 2: willBeSet = NominaluA.Create(200, 0.5); break;//200
 		}
-		NormalCreate();
+		NormalStartCreate();
 	}
 	void OnButtonSP_Src()
 	{
@@ -214,7 +214,7 @@ public class WdwMenu_Create : MonoBehaviour
 				willBeSet = Source.Create(willE, 100, "待测电池");
 				break;//待测
 		}
-		NormalCreate();
+		NormalStartCreate();
 	}
 
 	private void FixedUpdate()
@@ -251,10 +251,13 @@ public class WdwMenu_Create : MonoBehaviour
 	GameObject willBeSet;//即将会被扔到桌子上的物体
 
 	//正常创建一个物体，减少重复代码的使用
-	void NormalCreate()
+	void NormalStartCreate()
 	{
+		MyPin theMyPin = willBeSet.GetComponentInChildren<MyPin>();//只要有这东西
+		if(theMyPin) theMyPin.myRandomFlag = true;//就设置随机值
+
 		CloseColl(willBeSet);//关闭碰撞体
-		Wdw_Menu.Instance.MyCloseMenu();
+		Wdw_Menu.Instance.MyCloseMenu();//关闭菜单
 		MoveController.CanOperate = false;//禁止操作物体
 		MoveController.CanControll = true;
 	}
