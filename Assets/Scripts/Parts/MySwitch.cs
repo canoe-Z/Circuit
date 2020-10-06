@@ -18,14 +18,12 @@ public class MySwitch : MonoBehaviour
 	private readonly float angleRange = 15;
 
 	private Transform Sw;
-	private Renderer[] renderers;
 	private Vector3 basicPos;
 
 	void Start()
 	{
 		Sw = transform.FindComponent_DFS<Transform>("Sw");
 		basicPos = Sw.transform.localEulerAngles;
-		renderers = Sw.GetComponentsInChildren<Renderer>();
 		ChangeState();
 	}
 

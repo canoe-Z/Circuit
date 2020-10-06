@@ -351,8 +351,6 @@ public class WeightedQuickUnionUF
 		}
 	}
 
-	public void ListUnion(List<(int, int)> list) => list.ForEach(x => Union(x.Item1, x.Item2));
-
 	public void ListUnion(List<int> list)
 	{
 		for(var i=1;i!=list.Count;i++)
