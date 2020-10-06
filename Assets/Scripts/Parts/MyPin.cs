@@ -11,8 +11,33 @@ public class MyPin : MonoBehaviour
 {
 	const float zeroRange = 0.1f;//浮动最大范围占整个表盘的比例
 	public MyKnob knobZero;
-	private void Start()
+
+	/// <summary>
+	/// 设置调零随机值（打乱调零）
+	/// </summary>
+	public bool myRandomFlag { set; private get; } = false;
+
+	public void PinAwake()
 	{
+		// 获取刻度文本和单位文本
+		ScaleTexts = GetComponentsInChildren<Text>()
+			.Where(x =>
+			{
+				if (int.TryParse(x.name, out int num))
+				{
+					return true;
+				}
+				else
+				{
+					if (x.name == "Danwei") unitText = x;
+					return false;
+				}
+			})
+			.OrderBy(x => int.Parse(x.name))
+			.ToList();
+
+		thePin = transform.FindComponent_DFS<Transform>("ThePin");
+
 		if (knobZero)
 		{
 			knobZero.CanLoop = false;
@@ -21,11 +46,6 @@ public class MyPin : MonoBehaviour
 			knobZero.SetKnobRot(0.5f);
 		}
 	}
-	/// <summary>
-	/// 设置调零随机值（打乱调零）
-	/// </summary>
-	public bool myRandomFlag { set; private get; } = false;
-
 
 	const float f = 0.2f;//阻尼系数
 	const float m = 0.1f;//质量
@@ -33,6 +53,7 @@ public class MyPin : MonoBehaviour
 	float nowSpeed = 0;//当前速度
 	float willPos = 0;//目标位置
 	float nowPos = 0;//当前的位置
+
 	private void Update()
 	{
 		if (myRandomFlag)
@@ -40,7 +61,7 @@ public class MyPin : MonoBehaviour
 			myRandomFlag = false;
 			int a = Random.Range(0, 2);//0-1的随机数
 			float f = 0.7f * a + Random.Range(0, 0.3f);//0-0.3，0.7-1
-			if(knobZero) knobZero.SetKnobRot(f);
+			if (knobZero) knobZero.SetKnobRot(f);
 		}
 
 		if (MySettings.openMyPinDamping)
@@ -84,28 +105,6 @@ public class MyPin : MonoBehaviour
 
 	private List<Text> ScaleTexts = new List<Text>();   //刻度文本
 	private Text unitText;                              //单位文本
-
-	public void PinAwake()
-	{
-		// 获取刻度文本和单位文本
-		ScaleTexts = GetComponentsInChildren<Text>()
-			.Where(x =>
-			{
-				if (int.TryParse(x.name, out int num))
-				{
-					return true;
-				}
-				else
-				{
-					if (x.name == "Danwei") unitText = x;
-					return false;
-				}
-			})
-			.OrderBy(x => int.Parse(x.name))
-			.ToList();
-
-		thePin = transform.FindComponent_DFS<Transform>("ThePin");
-	}
 
 	/// <summary>
 	/// 不显示刻度

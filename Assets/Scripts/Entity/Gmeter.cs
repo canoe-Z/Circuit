@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 /// <summary>
@@ -121,17 +122,19 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 	public class GmeterData : EntityData
 	{
 		private readonly int knobPos_int;
-
+		private readonly float randomFloat;
 		public GmeterData(Gmeter gmeter)
 		{
 			baseData = new EntityBaseData(gmeter);
 			knobPos_int = gmeter.myKnob.KnobPos_int;
+			randomFloat = gmeter.myPin.knobZero.KnobPos;
 		}
 
 		public override void Load()
 		{
 			Gmeter gmeter = BaseCreate<Gmeter>(baseData);
 			gmeter.myKnob.SetKnobRot(knobPos_int);
+			gmeter.myPin.knobZero.SetKnobRot(randomFloat);
 		}
 	}
 }
