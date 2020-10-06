@@ -9,15 +9,24 @@ using UnityEngine.UI;
 /// </summary>
 public class MyPin : MonoBehaviour
 {
-
+	public MyKnob knobZero;
+	private void Start()
+	{
+		if (knobZero)
+		{
+			knobZero.CanLoop = false;
+			knobZero.AngleRange = 360;
+			knobZero.Devide = -1;
+		}
+	}
+	const float zeroRange = 0.1f;
 
 	const float f = 0.2f;//阻尼系数
 	const float m = 0.1f;//质量
 	const float k = 1;//劲度系数
 	float nowSpeed = 0;//当前速度
-	const float nowSpeedLimit = 10;//速度上限
 	float willPos = 0;//目标位置
-	float nowPos = 0;//当前的位置，0-1，实际是-0.1到1.1
+	float nowPos = 0;//当前的位置
 	private void Update()
 	{
 		if (MySettings.openMyPinDamping)
@@ -28,8 +37,16 @@ public class MyPin : MonoBehaviour
 			nowSpeed += a * Time.deltaTime;//对时间积分
 			nowPos += nowSpeed * Time.deltaTime;//再次积分
 
-			if (nowSpeed > nowSpeedLimit) nowSpeed = nowSpeedLimit;
-			else if (nowSpeed < -nowSpeedLimit) nowSpeed = -nowSpeedLimit;
+			if (nowPos > 1.5f)//限制在-0.5到1.5范围内，并且不让速度过大
+			{
+				nowPos = 1.5f;
+				if (nowSpeed > 0) nowSpeed = 0;
+			}
+			else if (nowPos < -0.5f)
+			{
+				nowPos = -0.5f;
+				if (nowSpeed < 0) nowSpeed = 0;
+			}
 		}
 		else
 		{
@@ -37,12 +54,13 @@ public class MyPin : MonoBehaviour
 			nowPos = willPos;
 		}
 
-		//float realNowPos
+		float posToSet = nowPos;//即将设置的位置
+		if (knobZero) posToSet += (knobZero.KnobPos - 0.5f) * zeroRange;//如果有调零的话
 
-		if (nowPos > 1.1f) nowPos = 1.1f;
-		if (nowPos < -0.1f) nowPos = -0.1f;
+		if (posToSet > 1.1f) posToSet = 1.1f;
+		if (posToSet < -0.1f) posToSet = -0.1f;
 		// 指针转动
-		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * nowPos);
+		thePin.transform.localEulerAngles = new Vector3(0, 0, 50 - 100 * posToSet);
 	}
 
 
