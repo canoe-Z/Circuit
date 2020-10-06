@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SpiceSharp.Components;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class UJ25 : EntityBase
@@ -45,7 +46,7 @@ public class UJ25 : EntityBase
 		// UJ25挡位切换，共5挡
 		knobs[10].AngleRange = 225;
 		knobs[10].Devide = 5;
-		knobs[10].IsChangeConnection = true;
+		knobs[10].IsChangeConnection=true;
 		knobs[10].SetKnobRot(3);
 
 		// Rab调节旋钮，可调节至10
@@ -146,45 +147,62 @@ public class UJ25 : EntityBase
 
 			// 用户调节Rp示0，完成标准化，实际可能没有完成
 			// 可调范围9000-24000
-			Rp = (24000 - 9000) * knobs[6].KnobPos * (1 + 1e-2 * knobs[7].KnobPos) * (1 + 1e-4 * knobs[8].KnobPos) * (1 + 1e-6 * knobs[9].KnobPos)
+			Rp = (24000 - 9000) * knobs[6].KnobPos * (1 + 1e-1 * knobs[7].KnobPos) * (1 + 1e-2 * knobs[8].KnobPos) * (1 + 1e-3 * knobs[9].KnobPos)
 				+ 9000 - RabOffSet;
 
 			Rabp = Rab + Rp - Rcd;
 		}
 	}
 
+	// UJ25的电源端连接时视为已连接，必须连接检流计使用
+	public override bool IsConnected()
+	{
+		return IsConnected(0) && IsConnected(4);
+	}
+
+	/// <summary>
+	/// 判断二端口连接状态
+	/// </summary>
+	/// <param name="n">0电计，1标准，2未知1，3未知2，4电源</param>
+	/// <returns></returns>
+	public bool IsConnected(int n) => ChildPorts[2 * n + 1].IsConnected && ChildPorts[2 * n].IsConnected;
+
 	public override void LoadElement()
 	{
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
+				if(IsConnected(1))
+				{
 					// 三个元件互相连通
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_En_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 					CircuitCalculator.UF.Union(PortID_En_G, PortID_En_V);
-				
+				}
 				break;
 
 			case UJ25Mode.x1:
-				
+				if (IsConnected(2))
+				{
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_X1_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 					CircuitCalculator.UF.Union(PortID_X1_G, PortID_X1_V);
-				
+				}
 				break;
 
 			case UJ25Mode.x2:
-				
+				if (IsConnected(3))
+				{
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_G_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_X2_G);
 					CircuitCalculator.UF.Union(PortID_E_G, PortID_E_V);
 					CircuitCalculator.UF.Union(PortID_G_G, PortID_G_V);
 					CircuitCalculator.UF.Union(PortID_X2_G, PortID_X2_V);
-				
+				}
 				break;
 
 			default:
@@ -200,7 +218,8 @@ public class UJ25 : EntityBase
 		switch (uj25Mode)
 		{
 			case UJ25Mode.n:
-				
+				if (IsConnected(1))
+				{
 					CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rab"),
 					PortID_E_V.ToString(),
@@ -224,11 +243,12 @@ public class UJ25 : EntityBase
 						PortID_En_G.ToString(),
 						PortID_G_V.ToString(),
 						0));
-				
+				}
 				break;
 
 			case UJ25Mode.x1:
-				
+				if (IsConnected(2))
+				{
 					CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rcd"),
 					PortID_E_V.ToString(),
@@ -252,11 +272,12 @@ public class UJ25 : EntityBase
 						PortID_X1_G.ToString(),
 						PortID_G_V.ToString(),
 						0));
-				
+				}
 				break;
 
 			case UJ25Mode.x2:
-				
+				if (IsConnected(3))
+				{
 					CircuitCalculator.SpiceEntities.Add(new Resistor(
 					GetName("Rcd"),
 					PortID_E_V.ToString(),
@@ -280,7 +301,7 @@ public class UJ25 : EntityBase
 						PortID_X2_G.ToString(),
 						PortID_G_V.ToString(),
 						0));
-				
+				}
 				break;
 
 			default:

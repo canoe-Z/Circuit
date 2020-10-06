@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 三模三路电源
 /// </summary>
-public class ThreeSource : EntityBase, ISource
+public class ThreeSource : EntityBase, ISource, ICalculatorUpdate
 {
 	private int sourceNum;                                      // 含有的独立电源个数
 	private int knobNum;                                        // 含有的旋钮个数
@@ -83,6 +83,17 @@ public class ThreeSource : EntityBase, ISource
 		{
 			G[i] = ChildPorts[2 * i + 1].ID;
 			V[i] = ChildPorts[2 * i].ID;
+		}
+	}
+
+	public void CalculatorUpdate()
+	{
+		for (int i = 0; i < sourceNum; i++)
+		{
+			if (IsConnected(i))
+			{
+				ChildPorts[2 * i].I = (ChildPorts[2 * i + 1].U - ChildPorts[2 * i].U) / R[i];
+			}
 		}
 	}
 
@@ -263,5 +274,3 @@ public class ThreeSource : EntityBase, ISource
 		}
 	}
 }
-
-
