@@ -29,12 +29,12 @@ public class MyResistor : EntityBase
 		CircuitCalculator.SpiceEntities.Add(new Resistor(entityID.ToString(), PortID_Left.ToString(), PortID_Right.ToString(), RValue));
 	}
 
-	public static GameObject Create(double RValue,string str)
+	public static GameObject Create(double RValue, string str)
 	{
 		return BaseCreate<MyResistor>().Set(RValue, str).gameObject;
 	}
 
-	public MyResistor Set(double RValue,string str)
+	public MyResistor Set(double RValue, string str)
 	{
 		this.RValue = RValue;
 		resistanceText.text = str;
@@ -56,7 +56,7 @@ public class MyResistor : EntityBase
 			str = resistor.resistanceText.text;
 		}
 
-		public override void Load() => BaseCreate<MyResistor>(baseData).Set(RValue,str);
+		public override void Load() => BaseCreate<MyResistor>(baseData).Set(RValue, str);
 	}
 }
 

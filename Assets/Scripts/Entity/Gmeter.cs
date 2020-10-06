@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +10,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 	private double R = 10;
 	private MyKnob myKnob;
 	private MyPin myPin;
-	bool notChangeMyPinPos = false;//不改变MyPin的位置
+	bool notChangeMyPinPos = false;         // 不改变MyPin的位置
 	private int PortID_Left, PortID_Right;
 
 	public override void EntityAwake()
@@ -46,7 +45,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 	{
 		// 计算示数
 		ChildPorts[0].I = (ChildPorts[1].U - ChildPorts[0].U) / R;
-		if (notChangeMyPinPos)//强制0.5f
+		if (notChangeMyPinPos)  // 强制0.5f
 		{
 			myPin.SetPos(0.5f);
 		}
@@ -62,42 +61,42 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		// 更新参数
 		switch (myKnob.KnobPos_int)
 		{
-			case 0://表头保护
+			case 0: //表头保护
 				notChangeMyPinPos = true;
-				MaxI = 10000;//你强任你强，我就是不动
+				MaxI = 10000;   //你强任你强，我就是不动
 				R = 1e-8;
 				break;
-			case 1://调零
+			case 1: //调零
 				notChangeMyPinPos = true;
 				MaxI = 10000;
 				R = 1e-8;
 				break;
-			case 2://1uA
+			case 2: //1uA
 				notChangeMyPinPos = false;
 				MaxI = 1e-6;
 				R = 10;
 				break;
-			case 3://300nA
+			case 3: //300nA
 				notChangeMyPinPos = false;
 				MaxI = 300 * 1e-9;
 				R = 30;
 				break;
-			case 4://100nA
+			case 4: //100nA
 				notChangeMyPinPos = false;
 				MaxI = 100 * 1e-9;
 				R = 100;
 				break;
-			case 5://30nA
+			case 5: //30nA
 				notChangeMyPinPos = false;
 				MaxI = 30 * 1e-9;
 				R = 300;
 				break;
-			case 6://10nA
+			case 6: //10nA
 				notChangeMyPinPos = false;
 				MaxI = 10 * 1e-9;
 				R = 1000;
 				break;
-			case 7://3nA
+			case 7: //3nA
 				notChangeMyPinPos = false;
 				MaxI = 3 * 1e-9;
 				R = 3000;

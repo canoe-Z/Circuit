@@ -87,7 +87,7 @@ public class ConnectionManager : MonoBehaviour
 		// 使用MyShader以实现边缘发光
 		rope.GetComponent<MeshRenderer>().material = RopeMat;
 		rope.GetComponent<MeshRenderer>().material.SetColor("Color_51411BA8", DisplayController.MyColorReal);
-		
+
 		rope.AddComponent<CircuitLine>().CreateLine(port1.gameObject, port2.gameObject);
 	}
 

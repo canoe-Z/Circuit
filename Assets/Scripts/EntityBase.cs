@@ -94,7 +94,7 @@ abstract public class EntityBase : MonoBehaviour
 		{
 			// 启用边缘发光
 			transform.EnableFresnel(Color.blue);
-			if(Input.GetMouseButtonDown(1))
+			if (Input.GetMouseButtonDown(1))
 			{
 				DestroyEntity();
 			}
@@ -192,7 +192,7 @@ abstract public class EntityBase : MonoBehaviour
 		}
 	}
 
-	public virtual bool IsConnected() => 
+	public virtual bool IsConnected() =>
 		ChildPorts.Select(x => x.IsConnected).Contains(true);
 
 	public abstract void EntityAwake();

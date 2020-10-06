@@ -16,7 +16,7 @@ public class QuickOperate : MonoBehaviour
 	void Work()
 	{
 		Canvas[] canvas = FindObjectsOfType<Canvas>();
-		foreach(var c in canvas)
+		foreach (var c in canvas)
 		{
 			c.enabled = true;
 		}

@@ -144,7 +144,7 @@ public class WdwMenu_Save : MonoBehaviour
 		{
 			var saveInfo = new SaveInfo(true, exportData.saveName, exportData.saveTime, exportData.saveData.Bytes);
 			saveInfos[saveID] = saveInfo;
-			
+
 			// 刷新存档页面
 			txtSaves[saveID % 9].text = saveID.ToString("00") + "：" +
 				exportData.saveName + "\n" + exportData.saveTime;

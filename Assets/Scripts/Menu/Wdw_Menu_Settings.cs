@@ -42,7 +42,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 	}
 
 	void ChangeLine(bool value)
-    {
+	{
 		MySettings.isEmission = tglLine.isOn;
 	}
 	void ChangeMyPin(bool value)

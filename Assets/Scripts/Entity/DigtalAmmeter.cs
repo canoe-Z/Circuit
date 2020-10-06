@@ -11,7 +11,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	private readonly double R = 0.001;
 	private int PortID_GND, PortID_mA, PortID_A;
 
-	private const int randNum = 2;					// 需要的随机数数量，一般和元件的挡位数量相同
+	private const int randNum = 2;                  // 需要的随机数数量，一般和元件的挡位数量相同
 	private float[] rands = null;                   // 随机数
 
 	private Text digtalAmmeterText;

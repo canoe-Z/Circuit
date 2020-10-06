@@ -50,12 +50,12 @@ public class Source : EntityBase, ISource
 	/// <param name="R">内阻</param>
 	/// <param name="str">显示文本</param>
 	/// <returns></returns>
-	public static GameObject Create(double E, double R,string str)
+	public static GameObject Create(double E, double R, string str)
 	{
-		return BaseCreate<Source>().Set(E, R,str).gameObject;
+		return BaseCreate<Source>().Set(E, R, str).gameObject;
 	}
 
-	private Source Set(double E, double R,string str)
+	private Source Set(double E, double R, string str)
 	{
 		this.E = E;
 		this.R = R;

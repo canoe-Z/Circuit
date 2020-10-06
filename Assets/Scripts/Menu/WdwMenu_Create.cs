@@ -165,7 +165,7 @@ public class WdwMenu_Create : MonoBehaviour
 				str = RValue.ToString() + "Ω";
 			}
 
-			willBeSet = MyResistor.Create(RValue,str).gameObject;
+			willBeSet = MyResistor.Create(RValue, str).gameObject;
 			NormalStartCreate();
 		}
 		else if (iptNum_R.text == "")
@@ -254,7 +254,7 @@ public class WdwMenu_Create : MonoBehaviour
 	void NormalStartCreate()
 	{
 		MyPin theMyPin = willBeSet.GetComponentInChildren<MyPin>();//只要有这东西
-		if(theMyPin) theMyPin.myRandomFlag = true;//就设置随机值
+		if (theMyPin) theMyPin.myRandomFlag = true;//就设置随机值
 
 		CloseColl(willBeSet);//关闭碰撞体
 		Wdw_Menu.Instance.MyCloseMenu();//关闭菜单

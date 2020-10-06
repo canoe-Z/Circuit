@@ -15,7 +15,7 @@ public class UJ25 : EntityBase
 	private double Rab;                     // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
 	private double Rcd;                     // 与标准电源并联的电阻，值根据En的后两位确定
 	private double Rp;                      // 用标准电源校准时调节的电阻
-	private double Rabp;					// 步骤2中使用的辅助电阻
+	private double Rabp;                    // 步骤2中使用的辅助电阻
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
@@ -318,39 +318,39 @@ public class UJ25 : EntityBase
 				break;
 		}
 
-			switch (buttonOnID)
-			{
-				case 0: // 粗
-					CircuitCalculator.SpiceEntities.Add(new Resistor(
-						GetName("G_G"),
-						PortID_G_G.ToString(),
-						GetName("PortG_G"),
-						20000));
+		switch (buttonOnID)
+		{
+			case 0: // 粗
+				CircuitCalculator.SpiceEntities.Add(new Resistor(
+					GetName("G_G"),
+					PortID_G_G.ToString(),
+					GetName("PortG_G"),
+					20000));
 
-					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-						GetName("G_V"),
-						PortID_G_V.ToString(),
-						GetName("PortG_V"),
-						0));
-					break;
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("G_V"),
+					PortID_G_V.ToString(),
+					GetName("PortG_V"),
+					0));
+				break;
 
-				case 1: // 细
-					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-						GetName("G_G"),
-						PortID_G_G.ToString(),
-						GetName("PortG_G"),
-						0));
+			case 1: // 细
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("G_G"),
+					PortID_G_G.ToString(),
+					GetName("PortG_G"),
+					0));
 
-					CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-						GetName("G_V"),
-						PortID_G_V.ToString(),
-						GetName("PortG_V"),
-						0));
-					break;
+				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+					GetName("G_V"),
+					PortID_G_V.ToString(),
+					GetName("PortG_V"),
+					0));
+				break;
 
-				default:
-					break;
-			}
+			default:
+				break;
+		}
 	}
 
 	public override EntityData Save() => new UJ25Data(this);

@@ -40,7 +40,7 @@ public class CircuitLine : MonoBehaviour
 
 	void Update()
 	{
-		if(MySettings.isEmission)
+		if (MySettings.isEmission)
 		{
 			GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
 		}
