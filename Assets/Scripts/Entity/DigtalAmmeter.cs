@@ -20,6 +20,9 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 	{
 		digtalAmmeterText = transform.FindComponent_DFS<Text>("Text");
 		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
+
+		// 默认启动时开机，读档可覆盖该设置
+		mySwitch.IsOn = true;
 	}
 
 	void Start()
@@ -41,9 +44,6 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		PortID_GND = ChildPorts[0].ID;
 		PortID_mA = ChildPorts[1].ID;
 		PortID_A = ChildPorts[2].ID;
-
-		// 默认启动时开机，读档可覆盖该设置
-		mySwitch.IsOn = true;
 	}
 
 	public void CalculatorUpdate()
@@ -74,14 +74,17 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		// 开关变化引起电路重新计算，之后即可调用该部分
 		if (!mySwitch.IsOn)
 		{
-			digtalAmmeterText.text = "0.00";
+			digtalAmmeterText.text = "";
 		}
 	}
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
-		CircuitCalculator.UF.Union(PortID_GND, PortID_A);
+		if (mySwitch.IsOn)
+		{
+			CircuitCalculator.UF.Union(PortID_GND, PortID_mA);
+			CircuitCalculator.UF.Union(PortID_GND, PortID_A);
+		}
 	}
 
 	public override void SetElement(int entityID)
@@ -114,6 +117,7 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 		{
 			DigtalAmmeter digtalAmmeter = BaseCreate<DigtalAmmeter>(baseData);
 			// 此时执行Awake()
+			Debug.LogError("2");
 			digtalAmmeter.mySwitch.IsOn = isOn;
 			if (rands != null) digtalAmmeter.rands = rands;
 			// 此时执行Start()

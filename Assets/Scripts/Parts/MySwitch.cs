@@ -13,19 +13,26 @@ public class MySwitch : MonoBehaviour
 	/// <summary>
 	/// 开关状态
 	/// </summary>
-	public bool IsOn { get; set; } = true;
+	private bool isOn = true;
+	public bool IsOn
+	{
+		get
+		{
+			return isOn;
+		}
+		set
+		{
+			isOn = value;
+			ChangeState();
+		}
+	}
+
+	private bool isAwaked = false;
 
 	private readonly float angleRange = 15;
 
 	private Transform Sw;
 	private Vector3 basicPos;
-
-	void Start()
-	{
-		Sw = transform.FindComponent_DFS<Transform>("Sw");
-		basicPos = Sw.transform.localEulerAngles;
-		ChangeState();
-	}
 
 	void OnMouseOver()
 	{
@@ -39,11 +46,14 @@ public class MySwitch : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// 根据开关状态修改颜色和位置
-	/// </summary>
-	public void ChangeState()
+	// 根据开关状态修改颜色和位置
+	private void ChangeState()
 	{
+		if (Sw == null)
+		{
+			Sw = transform.FindComponent_DFS<Transform>("Sw");
+			basicPos = Sw.transform.localEulerAngles;
+		}
 		if (IsOn)
 		{
 			ChangeMat(Sw, Color.green);
@@ -56,11 +66,8 @@ public class MySwitch : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// 修改颜色
-	/// </summary>
-	/// <param name="color">颜色</param>
-	void ChangeMat(Transform trans, Color color)
+	// 修改颜色
+	private void ChangeMat(Transform trans, Color color)
 	{
 		Renderer[] renderers = trans.GetComponentsInChildren<Renderer>();
 		foreach (var renderer in renderers)
