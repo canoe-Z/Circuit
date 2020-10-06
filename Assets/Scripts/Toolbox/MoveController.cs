@@ -6,9 +6,6 @@ using UnityEngine;
 /// </summary>
 public class MoveController : MonoBehaviour
 {
-	public static float MoveRatio { get; set; } = 1f;		// 移动速度倍率
-	public static float TurnRatio { get; set; } = 1f;       // 转头速度倍率
-
 	/// <summary>
 	/// 可以操纵场景内已有对象
 	/// </summary>
@@ -79,8 +76,8 @@ public class MoveController : MonoBehaviour
 			speed *= 0.8f;
 		}
 
-		camRot.x -= rv * speed * TurnRatio;
-		camRot.y += rh * speed * TurnRatio;
+		camRot.x -= rv * speed * MySettings.turnRatio;
+		camRot.y += rh * speed * MySettings.turnRatio;
 
 		if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
 		if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
@@ -117,7 +114,7 @@ public class MoveController : MonoBehaviour
 		if (Up) dUp -= speed;
 		if (Down) dUp += speed;
 
-		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * MoveRatio;
+		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * MySettings.moveRatio;
 		Vector3 world = Camera.main.gameObject.transform.TransformDirection(control);
 		characterController.Move(world);
 	}

@@ -9,7 +9,6 @@ public class CircuitLine : MonoBehaviour
 	public int StartID { get; set; }
 	public int EndID { get; set; }
 	public bool IsActived { get; set; }
-	public static bool IsEmission { get; set; } = false;
 
 	// 对外暴露端口以注入电压
 	public CircuitPort StartPort { get; set; }
@@ -41,7 +40,7 @@ public class CircuitLine : MonoBehaviour
 
 	void Update()
 	{
-		if(IsEmission)
+		if(MySettings.isEmission)
 		{
 			GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
 		}
@@ -49,7 +48,7 @@ public class CircuitLine : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (IsEmission)
+		if (MySettings.isEmission)
 		{
 			transform.EnableFresnel(Color.blue);
 		}
@@ -57,7 +56,7 @@ public class CircuitLine : MonoBehaviour
 
 	void OnMouseExit()
 	{
-		if (IsEmission)
+		if (MySettings.isEmission)
 		{
 			transform.DisablFresnel();
 		}

@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public static class MySettings
 {
 	public static bool openMyPinDamping = true;
+	public static bool isEmission = true;
+	public static float moveRatio = 1f;//移动速度
+	public static float turnRatio = 1f;//转动速度
 }
 public class Wdw_Menu_Settings : MonoBehaviour
 {
@@ -16,32 +19,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 	public Toggle tglMyPinDamping;
 	void Awake()
 	{
-		try//抓取可能出现的错误
-		{
-			// 启动时自动读取上一次的设置
-			if (File.Exists("Saves/settings.binary"))
-			{
-				BinaryFormatter formatter = new BinaryFormatter();
-				FileStream saveFile = File.Open("Saves/settings.binary", FileMode.Open);
-				SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
-				saveFile.Close();
-
-				datafromfile.Load(this);
-			}
-			else
-			{
-				sldMove.value = 1f;
-				sldTurn.value = 1f;
-				tglLine.isOn = true;
-				tglMyPinDamping.isOn = true;
-			}
-		}
-		catch(Exception e)
-		{
-#if UNITY_EDITOR
-			Debug.LogError(e);
-#endif
-		}
+		LoadSettings();//加载存档
 
 		sldMove.onValueChanged.AddListener(ChangeMoveRatio);
 		sldTurn.onValueChanged.AddListener(ChangeTurnRatio);
@@ -53,31 +31,64 @@ public class Wdw_Menu_Settings : MonoBehaviour
 		ChangeMyPin(tglMyPinDamping.isOn);
 	}
 
-	private void ChangeMoveRatio(float value)=> MoveController.MoveRatio = value;
+	private void ChangeMoveRatio(float value)
+	{
+		MySettings.moveRatio = value;
+	}
 
-	private void ChangeTurnRatio(float value) => MoveController.TurnRatio = value;
+	private void ChangeTurnRatio(float value)
+	{
+		MySettings.turnRatio = value;
+	}
 
 	void ChangeLine(bool value)
     {
-		CircuitLine.IsEmission = tglLine.isOn;
+		MySettings.isEmission = tglLine.isOn;
 	}
 	void ChangeMyPin(bool value)
 	{
 		MySettings.openMyPinDamping = tglMyPinDamping.isOn;
 	}
 
-	void OnApplicationQuit() => Save(new SettingsData(this));
+	void OnApplicationQuit()
+	{
+		SaveSettings();//保存存档
+	}
 
-	private void Save(SettingsData settingsData)
+	private void SaveSettings()
 	{
 		if (!Directory.Exists("Saves"))
 			Directory.CreateDirectory("Saves");
 
 		BinaryFormatter formatter = new BinaryFormatter();
 		FileStream saveFile = File.Create("Saves/settings.binary");
-		formatter.Serialize(saveFile, settingsData);
+		formatter.Serialize(saveFile, new SettingsData(this));
 		saveFile.Close();
 	}
+	void LoadSettings()
+	{
+		try//抓取可能出现的错误
+		{
+			if (!Directory.Exists("Saves"))
+				Directory.CreateDirectory("Saves");
+			if (File.Exists("Saves/settings.binary"))
+			{
+				BinaryFormatter formatter = new BinaryFormatter();
+				FileStream saveFile = File.Open("Saves/settings.binary", FileMode.Open);
+				SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
+				saveFile.Close();
+
+				datafromfile.Load(this);
+			}
+		}
+		catch (Exception e)
+		{
+#if UNITY_EDITOR
+			Debug.LogError(e);
+#endif
+		}
+	}
+
 
 	[System.Serializable]
 	private class SettingsData
