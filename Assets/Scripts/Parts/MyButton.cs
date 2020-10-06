@@ -2,16 +2,16 @@
 
 /// <summary>
 /// 元件按动开关
-/// 挂在包含有碰撞体和刚体的物体上，令localEular.z变动
+/// 挂在包含有碰撞体和刚体的物体上，令pos.y变动
 /// </summary>
 public class MyButton : MonoBehaviour
 {
-	// 开关状态变化事件
+	// 按钮状态变化事件
 	public delegate void ButtonEventHandler();
 	public event ButtonEventHandler ButtonEvent;
 
 	/// <summary>
-	/// 开关状态
+	/// 按钮状态
 	/// </summary>
 	private bool isOn = true;
 	public bool IsOn
@@ -32,12 +32,6 @@ public class MyButton : MonoBehaviour
 	private Transform Sw;
 	private Vector3 basicPos;
 
-	void Awake()
-	{
-		Sw = transform.FindComponent_DFS<Transform>("Switch");
-		basicPos = Sw.transform.localPosition;
-	}
-
 	void OnMouseOver()
 	{
 		if (!MoveController.CanOperate) return;
@@ -53,6 +47,11 @@ public class MyButton : MonoBehaviour
 	// 根据开关状态修改颜色和位置
 	private void ChangeState()
 	{
+		if (Sw == null)
+		{
+			Sw = transform.FindComponent_DFS<Transform>("Switch");
+			basicPos = Sw.transform.localPosition;
+		}
 		if (IsOn)
 		{
 			ChangeMat(Sw, Color.green);
