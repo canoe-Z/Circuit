@@ -9,14 +9,15 @@ using UnityEngine.UI;
 /// </summary>
 public class MyPin : MonoBehaviour
 {
+
+
 	const float f = 0.2f;//阻尼系数
 	const float m = 0.1f;//质量
 	const float k = 1;//劲度系数
 	float nowSpeed = 0;//当前速度
+	const float nowSpeedLimit = 10;//速度上限
 	float willPos = 0;//目标位置
 	float nowPos = 0;//当前的位置，0-1，实际是-0.1到1.1
-	const float nowRealPosTop = 10;
-	const float nowRealPosButtom = -9;
 	private void Update()
 	{
 		if (MySettings.openMyPinDamping)
@@ -27,14 +28,16 @@ public class MyPin : MonoBehaviour
 			nowSpeed += a * Time.deltaTime;//对时间积分
 			nowPos += nowSpeed * Time.deltaTime;//再次积分
 
-			if (nowPos > nowRealPosTop) nowPos = nowRealPosTop;
-			else if (nowPos < nowRealPosButtom) nowPos = nowRealPosButtom;
+			if (nowSpeed > nowSpeedLimit) nowSpeed = nowSpeedLimit;
+			else if (nowSpeed < -nowSpeedLimit) nowSpeed = -nowSpeedLimit;
 		}
 		else
 		{
 			nowSpeed = 0;
 			nowPos = willPos;
 		}
+
+		//float realNowPos
 
 		if (nowPos > 1.1f) nowPos = 1.1f;
 		if (nowPos < -0.1f) nowPos = -0.1f;
