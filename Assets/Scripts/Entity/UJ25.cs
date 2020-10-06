@@ -41,14 +41,7 @@ public class UJ25 : EntityBase
 		buttons = transform.FindComponentsInChildren<MyButton>().OrderBy(x => int.Parse(x.name)).ToList();
 		if (buttons.Count != buttonNum) Debug.LogError("按钮个数不合法");
 
-		// 默认短路，颜色由按钮自行调整
-		for (var i = 0; i < buttons.Count; i++)
-		{
-			buttons[i].IsChangeConnection = true;
-		}
-
 		// 0-5为Rcd调节旋钮，6-9为Rp调节，10为模式切换旋钮，11-12为Rab调节，
-
 		// Rcd调节旋钮，最高位旋钮可以调节至18，其余旋钮调节至10
 		knobs[0].Devide = 19;
 		for (var i = 1; i != 6; i++)
@@ -129,10 +122,12 @@ public class UJ25 : EntityBase
 
 	public void Update()
 	{
+		/*
 		Debug.LogWarning("Rab为：" + Rab.ToString());
 		Debug.LogWarning("Rcd为：" + Rcd.ToString());
 		Debug.LogWarning("Rp为：" + Rp.ToString());
 		Debug.LogWarning("Rabp为：" + Rabp.ToString());
+		*/
 	}
 
 	private void UpdateKnob()

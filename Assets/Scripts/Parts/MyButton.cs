@@ -27,11 +27,6 @@ public class MyButton : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// 是否会改变电路连接关系
-	/// </summary>
-	public bool IsChangeConnection { get; set; } = false;
-
 	private readonly float posYRange = 0.1f;
 
 	private Transform Sw;
@@ -51,15 +46,7 @@ public class MyButton : MonoBehaviour
 			IsOn = !IsOn;
 			ChangeState();
 			ButtonEvent?.Invoke();
-			if (IsChangeConnection)
-			{
-
-				CircuitCalculator.NeedCalculate = true;
-			}
-			else
-			{
-				CircuitCalculator.NeedCalculateByConnection = true;
-			}
+			CircuitCalculator.NeedCalculate = true;
 		}
 	}
 

@@ -35,7 +35,7 @@ public class MySwitch : MonoBehaviour
 			IsOn = !IsOn;
 			ChangeState();
 			SwitchEvent?.Invoke();
-			CircuitCalculator.NeedCalculateByConnection = true;
+			CircuitCalculator.NeedCalculate = true;
 		}
 	}
 
