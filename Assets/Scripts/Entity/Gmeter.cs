@@ -7,10 +7,10 @@ using UnityEngine;
 public class Gmeter : EntityBase, ICalculatorUpdate
 {
 	private double MaxI;
-	private double R = 10;
+	private double R;
 	private MyKnob myKnob;
 	private MyPin myPin;
-	bool notChangeMyPinPos = false;         // 不改变MyPin的位置
+	private bool notChangeMyPinPos = false;         // 不改变MyPin的位置
 	private int PortID_Left, PortID_Right;
 
 	public override void EntityAwake()

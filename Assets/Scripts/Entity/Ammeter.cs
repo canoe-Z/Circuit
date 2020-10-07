@@ -70,6 +70,22 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	// 电流表属于简单元件
-	public override EntityData Save() => new SimpleEntityData<Ammeter>(this);
+	public override EntityData Save() => new AmmeterData(this);
+
+	[System.Serializable]
+	public class AmmeterData : EntityData
+	{
+		private readonly float randomFloat;
+		public AmmeterData(Ammeter ammeter)
+		{
+			baseData = new EntityBaseData(ammeter);
+			randomFloat = ammeter.myPin.knobZero.KnobPos;
+		}
+
+		public override void Load()
+		{
+			Ammeter ammeter = BaseCreate<Ammeter>(baseData);
+			ammeter.myPin.knobZero.SetKnobRot(randomFloat);
+		}
+	}
 }

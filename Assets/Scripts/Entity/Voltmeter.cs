@@ -64,5 +64,22 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		CircuitCalculator.SpicePorts.AddRange(ChildPorts);
 	}
 
-	public override EntityData Save() => new SimpleEntityData<Voltmeter>(this);
+	public override EntityData Save() => new VoltmeterData(this);
+
+	[System.Serializable]
+	public class VoltmeterData : EntityData
+	{
+		private readonly float randomFloat;
+		public VoltmeterData(Voltmeter voltmeter)
+		{
+			baseData = new EntityBaseData(voltmeter);
+			randomFloat = voltmeter.myPin.knobZero.KnobPos;
+		}
+
+		public override void Load()
+		{
+			Voltmeter voltmeter = BaseCreate<Voltmeter>(baseData);
+			voltmeter.myPin.knobZero.SetKnobRot(randomFloat);
+		}
+	}
 }
