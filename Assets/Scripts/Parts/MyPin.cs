@@ -47,12 +47,12 @@ public class MyPin : MonoBehaviour
 		}
 	}
 
-	const float f = 0.2f;//阻尼系数
-	const float m = 0.1f;//质量
-	const float k = 1;//劲度系数
-	float nowSpeed = 0;//当前速度
-	float willPos = 0;//目标位置
-	float nowPos = 0;//当前的位置
+	const float f = 0.2f;		// 阻尼系数
+	const float m = 0.1f;		// 质量
+	const float k = 1;			// 劲度系数
+	float nowSpeed = 0;			// 当前速度
+	float willPos = 0;			// 目标位置
+	float nowPos = 0;			// 当前的位置
 
 	private void Update()
 	{

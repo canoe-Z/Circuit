@@ -141,14 +141,9 @@ abstract public class EntityBase : MonoBehaviour
 		}
 		else
 		{
-			for (var i = 0; i < 5; i++)
-			{
-				int k = 1;
-			}
 			hitPos = Vector3.zero;
 			return false;
 		}
-
 	}
 
 	// 速度限制
