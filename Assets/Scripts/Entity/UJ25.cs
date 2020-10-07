@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SpiceSharp.Components;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class UJ25 : EntityBase
@@ -116,6 +115,13 @@ public class UJ25 : EntityBase
 						buttons[i].IsOn = false;
 					}
 				}
+			}
+		}
+		else
+		{
+			if(!buttons.Select(x => x.IsOn).Contains(true))
+			{
+				buttons[2].IsOn = true;
 			}
 		}
 	}
