@@ -56,6 +56,11 @@ public class MyPin : MonoBehaviour
 
 	private void Update()
 	{
+		if (thePin == null)
+		{
+			Debug.LogError("你他妈的没执行PinAwake！");
+		}
+
 		if (myRandomFlag)
 		{
 			myRandomFlag = false;

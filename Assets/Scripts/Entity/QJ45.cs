@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class QJ45 : EntityBase
+public class QJ45 : EntityBase, ICalculatorUpdate
 {
 	private double Ra;                      // 比例臂电阻
 	private double Rb;                      // 比例臂电阻
@@ -13,13 +13,23 @@ public class QJ45 : EntityBase
 	public MyKnob[] knobs;
 	public MyButton[] buttons;
 	private int buttonOnID = -1;            // 唯一启用的按钮（0，1，2）
+	private MyPin myPin;
+
 	public override void EntityAwake()
 	{
+		myPin = GetComponentInChildren<MyPin>();
+		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
+		// 必须手动初始化Pin来保证Pin的初始化顺序
+		myPin.PinAwake();
+		myPin.CloseText();
+		myPin.SetString("检流计", 150);
+
 		// 0-3为Rn调节旋钮
-		for (var i = 0; i != 4; i++)
+		for (var i = 0; i != 5; i++)
 		{
-			knobs[i].Devide = 10;
+			knobs[i].Devide = 11;
 		}
+		
 	}
 
 	void Start()
@@ -27,6 +37,10 @@ public class QJ45 : EntityBase
 		// TODO: 第一次执行初始化，此后受事件控制
 		knobs.ToList().ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
+
+		// CalculatorUpdate()统一在Start()中执行，保证在实例化并写入元件自身属性完毕后执行
+		CircuitCalculator.CalculateEvent += CalculatorUpdate;
+		CalculatorUpdate();
 
 		// 更新按钮状态
 		for (var i = 0; i < buttons.Length; i++)
@@ -93,6 +107,11 @@ public class QJ45 : EntityBase
 	}
 
 	public override EntityData Save() => new QJ45Data(this);
+
+	public void CalculatorUpdate()
+	{
+		myPin.SetPos(0.5f);
+	}
 
 	[System.Serializable]
 	public class QJ45Data : EntityData
