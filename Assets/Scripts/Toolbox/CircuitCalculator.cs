@@ -15,6 +15,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static int EntityNum { get; set; } = 0;                                              // 元件总数，创建元件时++
 	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                // SpiceSharp计算的元件
 	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         // SpiceSharp计算的端口
+	public static List<(string,double)> InnerSpicePorts { get; set; } = new List<(string, double)>();
 	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      // 并查集，用于接地判断
 	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);  // 并查集，用于接地判断
 

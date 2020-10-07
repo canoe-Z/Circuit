@@ -1,11 +1,15 @@
-﻿using System;
+﻿using SpiceSharp.Components;
+using SpiceSharp.Components.Inductors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class QJ45 : EntityBase, ICalculatorUpdate
 {
 	private double Ra;                      // 比例臂电阻
-	private double Rb;                      // 比例臂电阻
+	private double Rb = 1000;               // 比例臂电阻
+	private double rate;					// 比例臂
 	private double Rn;                      // 标准电阻，比较臂
 
 	private int PortID_X_0, PortID_X_1;
@@ -18,6 +22,7 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 	public override void EntityAwake()
 	{
 		myPin = GetComponentInChildren<MyPin>();
+
 		// 和元件自身属性相关的初始化要放在Awake()中，实例化后可能改变
 		// 必须手动初始化Pin来保证Pin的初始化顺序
 		myPin.PinAwake();
@@ -29,12 +34,14 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 		{
 			knobs[i].Devide = 11;
 		}
-		
+
+		// 4为比例臂切换
+		knobs[4].Devide = 8;
 	}
 
 	void Start()
 	{
-		// TODO: 第一次执行初始化，此后受事件控制
+		// 第一次执行初始化，此后受事件控制
 		knobs.ToList().ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
@@ -82,10 +89,6 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 		}
 	}
 
-	public void Update()
-	{
-	}
-
 	private void UpdateKnob()
 	{
 		// 计算Rn，0为高位（e3）,3为低位（e0)
@@ -94,6 +97,36 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 		{
 			Rn += knobs[i].KnobPos_int * Math.Pow(10, -(i - 3));
 		}
+
+		// 切换比例臂
+		switch(knobs[4].KnobPos_int)
+		{
+			case 0:
+				rate = 1.0 / 1000;
+				break;
+			case 1:
+				rate = 1.0 / 100;
+				break;
+			case 2:
+				rate = 1.0 / 10;
+				break;
+			case 3:
+				rate = 1.0 / 9;
+				break;
+			case 4:
+				rate = 1.0 / 4;
+				break;
+			case 5:
+				rate = 1.0 / 1;
+				break;
+			case 6:
+				rate = 10.0 / 1;
+				break;
+			case 7:
+				rate = 100.0 / 1;
+				break;
+		}
+		Ra = rate * Rb;
 	}
 
 	public override void LoadElement()
@@ -104,12 +137,59 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 
 	public override void SetElement(int entityID)
 	{
+		string GetName(string shortName) => string.Concat(entityID.ToString(), shortName);
+
+		CircuitCalculator.SpiceEntities.Add(new Resistor(
+						GetName("Ra"),
+						GetName("A"),
+						GetName("C"),
+						Ra));
+
+		CircuitCalculator.SpiceEntities.Add(new Resistor(
+				GetName("Rb"),
+				GetName("A"),
+				GetName("D"),
+				Rb));
+
+		CircuitCalculator.SpiceEntities.Add(new Resistor(
+			GetName("Rb"),
+			GetName("B"),
+			GetName("C"),
+			Rn));
+
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+			GetName("Rx_0"),
+			GetName("B"),
+			PortID_X_0.ToString(),
+			0));
+
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(
+			GetName("Rx_1"),
+			GetName("D"),
+			PortID_X_1.ToString(),
+			0));
+
+
+		// G
+		CircuitCalculator.SpiceEntities.Add(new Resistor(
+			GetName("G"),
+			GetName("C"),
+			GetName("D"),
+			100));
+
+		double nmsl = 0;
+		CircuitCalculator.InnerSpicePorts.Add((GetName("C"), nmsl));
 	}
+
+	public static List<(string, double)> nmhl { get; set; } = new List<(string, double)>();
+	public string a = "11";
+	public double b = 1.9;
 
 	public override EntityData Save() => new QJ45Data(this);
 
 	public void CalculatorUpdate()
 	{
+		// 内置检流计
 		myPin.SetPos(0.5f);
 	}
 
