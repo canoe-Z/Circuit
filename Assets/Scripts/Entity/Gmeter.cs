@@ -21,7 +21,7 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 		// 必须手动初始化Pin来保证Pin的初始化顺序
 		myPin.PinAwake();
 		myPin.CloseText();
-		myPin.SetString("G", 150);
+		myPin.SetString("检流计", 150);
 
 		myKnob = GetComponentInChildren<MyKnob>();
 		myKnob.Devide = 8;
