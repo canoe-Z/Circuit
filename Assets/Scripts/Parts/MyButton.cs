@@ -10,6 +10,11 @@ public class MyButton : MonoBehaviour
 	public delegate void ButtonEventHandler();
 	public event ButtonEventHandler ButtonEvent;
 
+	private const float posYRange = 0.08f;
+
+	private Transform Sw;
+	private Vector3 basicPos;
+
 	/// <summary>
 	/// 按钮状态
 	/// </summary>
@@ -26,11 +31,6 @@ public class MyButton : MonoBehaviour
 			ChangeState();
 		}
 	}
-
-	private readonly float posYRange = 0.1f;
-
-	private Transform Sw;
-	private Vector3 basicPos;
 
 	void OnMouseOver()
 	{
