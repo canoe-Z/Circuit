@@ -67,25 +67,34 @@ public class Wdw_Menu_Settings : MonoBehaviour
 	}
 	void LoadSettings()
 	{
-		try//抓取可能出现的错误
+		string saveDirectory = "Saves/";
+		string saveFile = "settings.binary";
+		if (!Directory.Exists(saveDirectory))
+			Directory.CreateDirectory(saveDirectory);
+		if (File.Exists(saveDirectory + saveFile))
 		{
-			if (!Directory.Exists("Saves"))
-				Directory.CreateDirectory("Saves");
-			if (File.Exists("Saves/settings.binary"))
+			try//抓取可能出现的错误
 			{
+				FileStream fs = File.Open(saveDirectory + saveFile, FileMode.Open);
 				BinaryFormatter formatter = new BinaryFormatter();
-				FileStream saveFile = File.Open("Saves/settings.binary", FileMode.Open);
-				SettingsData datafromfile = (SettingsData)formatter.Deserialize(saveFile);
-				saveFile.Close();
-
-				datafromfile.Load(this);
+				try//尝试反序列化
+				{
+					SettingsData datafromfile = (SettingsData)formatter.Deserialize(fs);
+					datafromfile.Load(this);
+					fs.Close();
+				}
+				catch (System.Runtime.Serialization.SerializationException)//反序列化失败，处理掉这个文件
+				{
+					fs.Close();
+					File.Delete(saveDirectory + saveFile);
+				}
 			}
-		}
-		catch (Exception e)
-		{
+			catch (Exception e)
+			{
 #if UNITY_EDITOR
-			Debug.LogError(e);
+				Debug.LogError(e);
 #endif
+			}
 		}
 	}
 
