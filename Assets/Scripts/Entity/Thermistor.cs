@@ -26,7 +26,7 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	protected int PortID_Left, PortID_Right;
 
 	//渐近线
-	double willT = 90;
+	double willT = 30;
 	double nowT = 30;
 	const double willTMax = 100;
 	const double willTMin = 0;
