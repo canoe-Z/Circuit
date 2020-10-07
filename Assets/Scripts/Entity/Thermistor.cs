@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
