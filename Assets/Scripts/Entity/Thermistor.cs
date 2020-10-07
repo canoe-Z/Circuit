@@ -15,11 +15,18 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	private Text TNowText;
 	protected int PortID_Left, PortID_Right;
 
+	private MySwitch mySwitch;
+
+
 	public override void EntityAwake()
 	{
 		TWillText = transform.GetChildByName("Will").GetComponent<Text>();
 		TNowText = transform.GetChildByName("Now").GetComponent<Text>();
 		knob = GetComponentInChildren<MyKnob>();
+		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
+
+		// 默认启动时开机，读档可覆盖该设置
+		mySwitch.IsOn = true;
 	}
 
 	void Start()
