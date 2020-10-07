@@ -51,7 +51,7 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		doublePin += (ChildPorts[2].I) / MaxI1;
 		doublePin += (ChildPorts[3].I) / MaxI2;
 
-		myPin.SetPos((float)doublePin);
+		myPin.SetPos(doublePin);
 	}
 
 	public override void LoadElement()

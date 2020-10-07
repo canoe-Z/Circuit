@@ -39,9 +39,7 @@ public class SliderR : EntityBase
 
 	public override void LoadElement()
 	{
-		CircuitCalculator.UF.Union(PortID_TL, PortID_L);
-		CircuitCalculator.UF.Union(PortID_TL, PortID_R);
-		CircuitCalculator.UF.Union(PortID_TL, PortID_TR);
+		CircuitCalculator.UF.ListUnion(new List<int> { PortID_L, PortID_R, PortID_TL, PortID_TR });
 	}
 
 	public override void SetElement(int entityID)

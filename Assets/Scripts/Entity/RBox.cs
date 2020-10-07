@@ -169,7 +169,7 @@ public class RBox : EntityBase
 				// 此处尚未订阅事件，设置旋钮位置不会调用UpdateKnob()
 				RBox.knobs[i].SetKnobRot(knobRotIntList[i]);
 			}
-			if (rands != null) RBox.rands = rands;
+			RBox.rands = rands;
 			// 此时执行Start()
 		}
 	}

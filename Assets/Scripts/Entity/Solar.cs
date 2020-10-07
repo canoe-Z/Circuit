@@ -73,7 +73,7 @@ public class Solar : EntityBase, ISource
 		else
 		{
 			Isc = 0;
-			sloarText.text = "00.00";
+			sloarText.text = "";
 			sloarLight.enabled = false;
 		}
 	}
