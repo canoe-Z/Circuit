@@ -2218,7 +2218,7 @@ GameObject:
   - component: {fileID: 1882831570575863484}
   - component: {fileID: 4377619620772224358}
   m_Layer: 0
-  m_Name: Qj45
+  m_Name: QJ45
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2405,7 +2405,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 54a222df2f9534d42a1946ee26658d88, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1dfae990d7762d74fa36587fd9f1793a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
