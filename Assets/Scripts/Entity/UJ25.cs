@@ -9,7 +9,7 @@ public class UJ25 : EntityBase
 {
 	private readonly int knobNum = 13;      // 含有的旋钮个数
 	private readonly int buttonNum = 3;     // 含有的按钮个数
-	private int buttonOnID = 2;             // 唯一启用的按钮（0，1，2）
+	private int buttonOnID = -1;            // 唯一启用的按钮（0，1，2）,-1表示都没有打开
 
 	private double Rab;                     // 与待测电源并联的示零电阻，用户调节时，Rp将反方向变化
 	private double Rcd;                     // 与标准电源并联的电阻，值根据En的后两位确定
@@ -121,7 +121,7 @@ public class UJ25 : EntityBase
 		{
 			if(!buttons.Select(x => x.IsOn).Contains(true))
 			{
-				buttons[2].IsOn = true;
+				buttonOnID = -1;
 			}
 		}
 	}
@@ -184,7 +184,7 @@ public class UJ25 : EntityBase
 	// 电计短路，模式为断开，未接电计或未接电源，不视为启用
 	public override bool IsConnected()
 	{
-		return uj25Mode != UJ25Mode.disconnect && buttonOnID != 2 && IsConnected(0) && IsConnected(4);
+		return uj25Mode != UJ25Mode.disconnect && buttonOnID != 2 && buttonOnID != -1 && IsConnected(0) && IsConnected(4);
 	}
 
 	/// <summary>

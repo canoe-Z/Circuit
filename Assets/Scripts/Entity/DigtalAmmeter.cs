@@ -72,7 +72,6 @@ public class DigtalAmmeter : EntityBase, ICalculatorUpdate
 			digtalAmmeterText.text = "0.00";
 		}
 
-		// 开关变化引起电路重新计算，之后即可调用该部分
 		if (!mySwitch.IsOn)
 		{
 			digtalAmmeterText.text = "";
