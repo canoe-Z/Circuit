@@ -11,9 +11,9 @@ public class QJ45 : EntityBase
 	private readonly int buttonNum = 3;     // 含有的按钮个数
 	private int buttonOnID = 2;             // 唯一启用的按钮（0，1，2）
 
-	private double Ra;						// 比例臂电阻
-	private double Rb;						// 比例臂电阻
-	private double Rn;						// 标准电阻，比较臂
+	private double Ra;                      // 比例臂电阻
+	private double Rb;                      // 比例臂电阻
+	private double Rn;                      // 标准电阻，比较臂
 
 	private int PortID_E_G, PortID_E_V;
 	private int PortID_G_G, PortID_G_V;
@@ -23,19 +23,12 @@ public class QJ45 : EntityBase
 	private enum UJ25Mode { n, disconnect, x1, x2 }
 	UJ25Mode uj25Mode;
 
-	private List<MyKnob> knobs;
-	private List<MyButton> buttons;
-	public Text[] RcdTexts = new Text[6];
 
+
+	public MyKnob[] knobs;
+	public MyButton[] buttons;
 	public override void EntityAwake()
-	{
-		knobs = transform.FindComponentsInChildren<MyKnob>().OrderBy(x => int.Parse(x.name)).ToList();
-		if (knobs.Count != knobNum) Debug.LogError("旋钮个数不合法");
-
-		// 0粗，1细，2短路
-		buttons = transform.FindComponentsInChildren<MyButton>().OrderBy(x => int.Parse(x.name)).ToList();
-		if (buttons.Count != buttonNum) Debug.LogError("按钮个数不合法");
-
+	{		
 		// 0-5为Rcd调节旋钮，6-9为Rp调节，10为模式切换旋钮，11-12为Rab调节，
 		// Rcd调节旋钮，最高位旋钮可以调节至18，其余旋钮调节至10
 		knobs[0].Devide = 19;
@@ -54,20 +47,16 @@ public class QJ45 : EntityBase
 		knobs[11].Devide = 11;
 		knobs[12].Devide = 11;
 
-		for (var i = 0; i != 6; i++)
-		{
-			RcdTexts[i].text = "0";
-		}
 	}
 
 	void Start()
 	{
-		// 第一次执行初始化，此后受事件控制
-		knobs.ForEach(x => x.KnobEvent += UpdateKnob);
+		// TODO: 第一次执行初始化，此后受事件控制
+		//knobs.ForEach(x => x.KnobEvent += UpdateKnob);
 		UpdateKnob();
 
 		// 更新按钮状态
-		for (var i = 0; i < buttons.Count; i++)
+		for (var i = 0; i < buttons.Length; i++)
 		{
 			int k = i;
 			buttons[i].IsOn = i == buttonOnID;
@@ -90,7 +79,7 @@ public class QJ45 : EntityBase
 		if (buttons[buttonID].IsOn)
 		{
 			buttonOnID = buttonID;
-			for (var i = 0; i < buttons.Count; i++)
+			for (var i = 0; i < buttons.Length; i++)
 			{
 				if (i != buttonID)
 				{
@@ -145,13 +134,6 @@ public class QJ45 : EntityBase
 				break;
 		}
 
-		// 计算Rcd并显示,0为高位旋钮(电阻e3/对应电压e-1),5为最低位(e-2/对应e-6)
-		Rn = 0;
-		for (var i = 0; i != 6; i++)
-		{
-			Rn += knobs[i].KnobPos_int * Math.Pow(10, -(i - 3));
-			RcdTexts[i].text = knobs[i].KnobPos_int.ToString();
-		}
 	}
 
 	// 电计短路，模式为断开，未接电计或未接电源，不视为启用

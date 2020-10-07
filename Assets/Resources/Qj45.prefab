@@ -347,7 +347,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1130664120883406939}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalPosition: {x: 0, y: 0, z: -0.4}
   m_LocalScale: {x: 0.0006, y: 0.0006, z: 0.001}
   m_Children:
   - {fileID: 6723795761277286501}
@@ -716,7 +716,7 @@ GameObject:
   - component: {fileID: 8298024987971137314}
   - component: {fileID: 5860361238686065140}
   m_Layer: 10
-  m_Name: 2
+  m_Name: btn2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1169,7 +1169,7 @@ GameObject:
   - component: {fileID: 5917478880931773908}
   - component: {fileID: 4914664020405192134}
   m_Layer: 10
-  m_Name: 1
+  m_Name: btn1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1338,7 +1338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3922231448982346971}
   m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 0.036, y: 0.6, z: -0.5}
+  m_LocalPosition: {x: 0.036, y: 0.6, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 2}
   m_Children:
   - {fileID: 4031208238403942572}
@@ -1355,7 +1355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2486113666880142481}
   m_Layer: 10
-  m_Name: MyKnob_1 (2)
+  m_Name: MyKnob_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1545,7 +1545,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3680847508118182109}
   m_Layer: 10
-  m_Name: MyKnob_1 (3)
+  m_Name: MyKnob_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1590,7 +1590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3367969593445421522}
   m_Layer: 10
-  m_Name: MyKnob_1
+  m_Name: MyKnob_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1940,7 +1940,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1658064918077078156}
   m_Layer: 10
-  m_Name: MyKnob_1 (1)
+  m_Name: MyKnob_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2216,6 +2216,7 @@ GameObject:
   - component: {fileID: 2413769091669364013}
   - component: {fileID: 5446223863279533225}
   - component: {fileID: 1882831570575863484}
+  - component: {fileID: 4377619620772224358}
   m_Layer: 0
   m_Name: Qj45
   m_TagString: Untagged
@@ -2311,6 +2312,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinematicForParticles: 0
+--- !u!114 &4377619620772224358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5922751953004502513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d670883422e8e4282a012f92b70ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knobs:
+  - {fileID: 1965213951618904653}
+  - {fileID: 473009829232481438}
+  - {fileID: 1590926549528554743}
+  - {fileID: 5819379404507956843}
+  buttons:
+  - {fileID: 8939558544203868341}
+  - {fileID: 4914664020405192134}
+  - {fileID: 5860361238686065140}
 --- !u!1 &5991924895379863912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2618,7 +2640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4250874844189757599}
   m_Layer: 10
-  m_Name: MyKnob_1 (4)
+  m_Name: Danwei
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2632,7 +2654,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6891521786472583884}
   m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.289, y: 0.6, z: 0.346}
+  m_LocalPosition: {x: -0.289, y: 0.6, z: 0.557}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 6267728544951211087}
@@ -3125,7 +3147,7 @@ GameObject:
   - component: {fileID: 6442146154855067802}
   - component: {fileID: 8939558544203868341}
   m_Layer: 10
-  m_Name: 0
+  m_Name: btn0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4367,6 +4389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: QJ45
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078801227167776475, guid: 7e3e20f240f82c346a9f0637c0c88ec4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e3e20f240f82c346a9f0637c0c88ec4, type: 3}
