@@ -10,6 +10,7 @@ public static class MySettings
 	public static bool isEmission = true;
 	public static float moveRatio = 1f;//移动速度
 	public static float turnRatio = 1f;//转动速度
+	public static float hotRInterval = 0.1f;//热敏电阻计算间隔
 }
 public class Wdw_Menu_Settings : MonoBehaviour
 {
