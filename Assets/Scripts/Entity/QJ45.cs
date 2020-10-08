@@ -1,16 +1,19 @@
 ﻿using SpiceSharp.Components;
-using SpiceSharp.Components.Inductors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class QJ45 : EntityBase, ICalculatorUpdate
+public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 {
 	private double Ra;                      // 比例臂电阻
 	private double Rb = 1000;               // 比例臂电阻
-	private double rate;					// 比例臂
+	private double rate;                    // 比例臂
 	private double Rn;                      // 标准电阻，比较臂
+
+	private bool isExternalG = false;
+	private bool isExternalE = false;
+
 
 	private int PortID_X_0, PortID_X_1;
 
@@ -18,6 +21,7 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 	public MyButton[] buttons;
 	private int buttonOnID = -1;            // 唯一启用的按钮（0，1，2）
 	private MyPin myPin;
+	private int entityID;
 
 	public override void EntityAwake()
 	{
@@ -99,7 +103,7 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 		}
 
 		// 切换比例臂
-		switch(knobs[4].KnobPos_int)
+		switch (knobs[4].KnobPos_int)
 		{
 			case 0:
 				rate = 1.0 / 1000;
@@ -135,62 +139,55 @@ public class QJ45 : EntityBase, ICalculatorUpdate
 	}
 
 
+	private string GetName(string shortName) => string.Concat(entityID.ToString(), shortName);
+
 	public override void SetElement(int entityID)
 	{
-		string GetName(string shortName) => string.Concat(entityID.ToString(), shortName);
+		this.entityID = entityID;
+		CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("Rb"), GetName("A"), GetName("C"), Rb));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("Ra"), GetName("A"), GetName("D"), Ra));
+		CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("Rn"), GetName("B"), GetName("C"), Rn));
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(
-						GetName("Ra"),
-						GetName("A"),
-						GetName("C"),
-						Ra));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("Rx_0"), GetName("B"), PortID_X_0.ToString(), 0));
+		CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("Rx_1"), GetName("D"), PortID_X_1.ToString(), 0));
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(
-				GetName("Rb"),
-				GetName("A"),
-				GetName("D"),
-				Rb));
+		if(!isExternalG)
+		{
+			// 内置检流计
+			CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 100));
+			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), -1);
+			CircuitCalculator.InnerSpicePorts.Add(GetName("D"), -1);
+		}
 
-		CircuitCalculator.SpiceEntities.Add(new Resistor(
-			GetName("Rb"),
-			GetName("B"),
-			GetName("C"),
-			Rn));
-
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-			GetName("Rx_0"),
-			GetName("B"),
-			PortID_X_0.ToString(),
-			0));
-
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(
-			GetName("Rx_1"),
-			GetName("D"),
-			PortID_X_1.ToString(),
-			0));
-
-
-		// G
-		CircuitCalculator.SpiceEntities.Add(new Resistor(
-			GetName("G"),
-			GetName("C"),
-			GetName("D"),
-			100));
-
-		double nmsl = 0;
-		CircuitCalculator.InnerSpicePorts.Add((GetName("C"), nmsl));
+		if(!isExternalE)
+		{
+			// 内置4.5V电源
+			CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("E"), GetName("A"), GetName("B"), 4.5));
+		}
 	}
-
-	public static List<(string, double)> nmhl { get; set; } = new List<(string, double)>();
-	public string a = "11";
-	public double b = 1.9;
 
 	public override EntityData Save() => new QJ45Data(this);
 
 	public void CalculatorUpdate()
 	{
-		// 内置检流计
-		myPin.SetPos(0.5f);
+		double maxI = 1e-6;
+		if(IsConnected())
+		{
+			double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")] - CircuitCalculator.InnerSpicePorts[GetName("D")]) / maxI;
+			myPin.SetPos(0.5f + pos);
+		}
+		else
+		{
+			myPin.SetPos(0.5f);
+		}
+	}
+
+	public void GroundCheck()
+	{
+		if (IsConnected() && !isExternalE)
+		{
+			CircuitCalculator.UF.Union(PortID_X_0, 0);
+		}
 	}
 
 	[System.Serializable]
