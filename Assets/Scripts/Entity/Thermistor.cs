@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Components;
 using SpiceSharp.Components.Bipolars;
+using System;
 using UnityEngine.UI;
 
 /// <summary>
@@ -30,19 +31,24 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	double nowT = 30;
 	const double willTMax = 100;
 	const double willTMin = 0;
-	const double kPerSecond = 0.5;//每秒上升的比例
+	const double kPerSecond = 0.1;//每秒上升的比例
 	float deltaTime = 0;
 	void Update()
 	{
+		//算出比例
+		double bili = kPerSecond * UnityEngine.Time.deltaTime;
+		if (bili > 1) bili = 1;
+
+		//将当前温度调节至目标温度
+		nowT += (willT - nowT) * bili;
+
+		//更新显示
+		txtWill.text = "目标温度：" + willT.ToString("000.00") + "℃";
+		txtNow.text = "当前温度：" + nowT.ToString("000.00") + "℃";
+
 		deltaTime += UnityEngine.Time.deltaTime;
 		if (deltaTime > MySettings.hotRInterval)//触发
 		{
-			//算出比例
-			double bili = kPerSecond * deltaTime;
-			if (bili > 1) bili = 1;
-
-			//将当前温度调节至目标温度
-			nowT += (willT - nowT) * bili;
 
 			//电路计算
 			resistance = ResistanceOf(nowT);
@@ -53,7 +59,7 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	}
 	double ResistanceOf(double T)//温度转电阻
 	{
-		return T;
+		return 30 * Math.Pow(10, -Math.Log10(30) / 99 * T);
 	}
 
 
@@ -78,8 +84,6 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 
 	public void CalculatorUpdate()//电路计算之后
 	{
-		txtWill.text = willT.ToString("000.00");
-		txtNow.text = nowT.ToString("000.00");
 	}
 
 	public override void LoadElement()
