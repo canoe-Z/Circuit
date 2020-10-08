@@ -1,6 +1,9 @@
 ﻿using SpiceSharp.Components;
+<<<<<<< HEAD
 using SpiceSharp.Components.Bipolars;
 using System;
+=======
+>>>>>>> f5665819357b8000d301f03cef24f1b23a20e70e
 using UnityEngine.UI;
 
 /// <summary>
