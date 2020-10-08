@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components;
-using SpiceSharp.Components.Bipolars;
 using UnityEngine.UI;
 
 /// <summary>

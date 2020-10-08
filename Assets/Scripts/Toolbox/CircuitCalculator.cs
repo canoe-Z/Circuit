@@ -5,6 +5,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.Collections;
 using SpiceSharp.Entities;
+using System.Linq;
 
 /// <summary>
 /// 电路计算
@@ -15,7 +16,7 @@ public class CircuitCalculator : MonoBehaviour
 	public static int EntityNum { get; set; } = 0;                                              // 元件总数，创建元件时++
 	public static List<Entity> SpiceEntities { get; set; } = new List<Entity>();                // SpiceSharp计算的元件
 	public static List<CircuitPort> SpicePorts { get; set; } = new List<CircuitPort>();         // SpiceSharp计算的端口
-	public static List<(string,double)> InnerSpicePorts { get; set; } = new List<(string, double)>();
+	public static Dictionary<string, double> InnerSpicePorts { get; set; } = new Dictionary<string, double>();
 	public static WeightedQuickUnionUF UF { get; set; } = new WeightedQuickUnionUF(10000);      // 并查集，用于接地判断
 	public static WeightedQuickUnionUF LineUF { get; set; } = new WeightedQuickUnionUF(10000);  // 并查集，用于接地判断
 
@@ -73,6 +74,7 @@ public class CircuitCalculator : MonoBehaviour
 		GNDLine.GlobalGNDLineID = 0;
 
 		SpicePorts.Clear();
+		InnerSpicePorts.Clear();
 		SpiceEntities.Clear();
 		EnabledLines.Clear();
 		DisabledLines.Clear();
@@ -174,6 +176,7 @@ public class CircuitCalculator : MonoBehaviour
 	{
 		GNDLine.GlobalGNDLineID = 0;
 		SpicePorts.Clear();
+		InnerSpicePorts.Clear();
 		SpiceEntities.Clear();
 
 		ConnectGND(GNDLines);
@@ -248,6 +251,12 @@ public class CircuitCalculator : MonoBehaviour
 			foreach (CircuitPort i in SpicePorts)
 			{
 				i.U = exportDataEventArgs.GetVoltage(i.ID.ToString());
+			}
+
+			var keys = new List<string>(InnerSpicePorts.Keys);
+			foreach (string key in keys)
+			{
+				InnerSpicePorts[key] = exportDataEventArgs.GetVoltage(key);
 			}
 		};
 
