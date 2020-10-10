@@ -20541,7 +20541,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1605718955}
   m_HandleRect: {fileID: 1605718954}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0.99999994
   m_Size: 0.19794773
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -21452,9 +21452,9 @@ MonoBehaviour:
   btn_SliderR: {fileID: 1921507284}
   iptNum_R: {fileID: 646263107}
   btn_R: {fileID: 1322344275}
-  dpdType_NorminalR: {fileID: 2109929555}
-  btn_NorminalR: {fileID: 2007589969}
   dpd_Wucha: {fileID: 2109929555}
+  dpd_TypeOfR: {fileID: 1403176460}
+  btn_NorminalR: {fileID: 2007589969}
   dpdType_uA: {fileID: 818730399}
   btn_uA: {fileID: 1442715575}
   dpdType_Src: {fileID: 37839054}
