@@ -155,8 +155,8 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 		{
 			// 内置检流计
 			CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 100));
-			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), -1);
-			CircuitCalculator.InnerSpicePorts.Add(GetName("D"), -1);
+			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), null);
+			CircuitCalculator.InnerSpicePorts.Add(GetName("D"), null);
 		}
 
 		if(!isExternalE)
@@ -170,10 +170,11 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 
 	public void CalculatorUpdate()
 	{
+		// 挡位
 		double maxI = 1e-6;
 		if(IsConnected())
 		{
-			double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")] - CircuitCalculator.InnerSpicePorts[GetName("D")]) / maxI;
+			double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")].Value - CircuitCalculator.InnerSpicePorts[GetName("D")].Value) / maxI;
 			myPin.SetPos(0.5f + pos);
 		}
 		else
