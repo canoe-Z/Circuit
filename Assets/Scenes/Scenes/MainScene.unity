@@ -2259,7 +2259,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u5F85\u6D4B100\u03A9"
+  m_Text: "10%\u8BEF\u5DEE"
 --- !u!222 &237458978
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20541,7 +20541,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1605718955}
   m_HandleRect: {fileID: 1605718954}
   m_Direction: 2
-  m_Value: 0.99999994
+  m_Value: 1
   m_Size: 0.19794773
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -22611,13 +22611,11 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: "\u5F85\u6D4B100\u03A9"
+    - m_Text: "10%\u8BEF\u5DEE"
       m_Image: {fileID: 0}
-    - m_Text: "\u5F85\u6D4B1M\u03A9"
+    - m_Text: "5%\u8BEF\u5DEE"
       m_Image: {fileID: 0}
-    - m_Text: "\u5F85\u6D4B0.1\u03A9"
-      m_Image: {fileID: 0}
-    - m_Text: "\u6807\u79F0120\u03A9"
+    - m_Text: "0\u8BEF\u5DEE"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
