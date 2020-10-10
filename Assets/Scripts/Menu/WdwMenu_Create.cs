@@ -26,8 +26,9 @@ public class WdwMenu_Create : MonoBehaviour
 	public Button btn_SliderR;
 	public InputField iptNum_R;
 	public Button btn_R;
-	public Dropdown dpdType_NominalR;
-	public Button btn_NominalR;
+	public Dropdown dpdType_Resistance;
+	public Button btn_Resistance;
+	public Dropdown dpd_Wucha;
 	public Dropdown dpdType_uA;
 	public Button btn_uA;
 	public Dropdown dpdType_Src;
@@ -59,7 +60,7 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_Gmeter.onClick.AddListener(OnButton_Simple<Gmeter>);
 		btn_SliderR.onClick.AddListener(OnButtonSP_SliderR);
 		btn_R.onClick.AddListener(OnButtonSP_R);
-		btn_NominalR.onClick.AddListener(OnButtonSP_NominalR);
+		btn_Resistance.onClick.AddListener(OnButtonSP_NominalR);
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
 		btn_Src.onClick.AddListener(OnButtonSP_Src);
 
@@ -178,7 +179,7 @@ public class WdwMenu_Create : MonoBehaviour
 
 	void OnButtonSP_NominalR()
 	{
-		switch (dpdType_NominalR.value)
+		switch (dpdType_Resistance.value)
 		{
 			case 0: willBeSet = MyResistor.Create(100, "待测\n100Ω"); break;
 			case 1: willBeSet = MyResistor.Create(1e6, "待测\n1MΩ"); break;

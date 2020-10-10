@@ -21452,8 +21452,9 @@ MonoBehaviour:
   btn_SliderR: {fileID: 1921507284}
   iptNum_R: {fileID: 646263107}
   btn_R: {fileID: 1322344275}
-  dpdType_NominalR: {fileID: 1403176460}
-  btn_NominalR: {fileID: 2007589969}
+  dpdType_Resistance: {fileID: 1403176460}
+  btn_Resistance: {fileID: 2007589969}
+  dpd_Wucha: {fileID: 2109929555}
   dpdType_uA: {fileID: 818730399}
   btn_uA: {fileID: 1442715575}
   dpdType_Src: {fileID: 37839054}
