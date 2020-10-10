@@ -7015,7 +7015,7 @@ RectTransform:
   - {fileID: 20086626}
   - {fileID: 586032766}
   m_Father: {fileID: 883669806}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9506,9 +9506,9 @@ RectTransform:
   - {fileID: 253484463}
   - {fileID: 1921507283}
   - {fileID: 1403176459}
-  - {fileID: 2109929554}
   - {fileID: 2007589968}
   - {fileID: 646263106}
+  - {fileID: 2109929554}
   - {fileID: 1322344274}
   - {fileID: 818730398}
   - {fileID: 1442715574}
@@ -15061,7 +15061,7 @@ GameObject:
   - component: {fileID: 1403176461}
   - component: {fileID: 1403176460}
   m_Layer: 5
-  m_Name: _dpdR
+  m_Name: _dpdNorminalR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21275,7 +21275,7 @@ GameObject:
   - component: {fileID: 2007589970}
   - component: {fileID: 2007589969}
   m_Layer: 5
-  m_Name: btn_R
+  m_Name: btn_NorminalR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21294,7 +21294,7 @@ RectTransform:
   m_Children:
   - {fileID: 688063660}
   m_Father: {fileID: 883669806}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -21452,8 +21452,8 @@ MonoBehaviour:
   btn_SliderR: {fileID: 1921507284}
   iptNum_R: {fileID: 646263107}
   btn_R: {fileID: 1322344275}
-  dpdType_Resistance: {fileID: 1403176460}
-  btn_Resistance: {fileID: 2007589969}
+  dpdType_NorminalR: {fileID: 2109929555}
+  btn_NorminalR: {fileID: 2007589969}
   dpd_Wucha: {fileID: 2109929555}
   dpdType_uA: {fileID: 818730399}
   btn_uA: {fileID: 1442715575}
@@ -22535,7 +22535,7 @@ GameObject:
   - component: {fileID: 2109929556}
   - component: {fileID: 2109929555}
   m_Layer: 5
-  m_Name: _dpdR_Norminal
+  m_Name: _dpdR_Wucha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22556,11 +22556,11 @@ RectTransform:
   - {fileID: 485552079}
   - {fileID: 850100186}
   m_Father: {fileID: 883669806}
-  m_RootOrder: 17
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -535}
+  m_AnchoredPosition: {x: -600, y: -935}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2109929555
