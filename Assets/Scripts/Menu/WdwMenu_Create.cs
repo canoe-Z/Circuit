@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,11 +25,15 @@ public class WdwMenu_Create : MonoBehaviour
 	[Header("参数创建")]
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
+
+	[Header("误差电阻")]
 	public InputField iptNum_R;
 	public Button btn_R;
-	public Dropdown dpdType_Resistance;
-	public Button btn_Resistance;
 	public Dropdown dpd_Wucha;
+	[Header("预置电阻")]
+	public Dropdown dpd_TypeOfR;
+	public Button btn_NorminalR;
+
 	public Dropdown dpdType_uA;
 	public Button btn_uA;
 	public Dropdown dpdType_Src;
@@ -60,7 +65,7 @@ public class WdwMenu_Create : MonoBehaviour
 		btn_Gmeter.onClick.AddListener(OnButton_Simple<Gmeter>);
 		btn_SliderR.onClick.AddListener(OnButtonSP_SliderR);
 		btn_R.onClick.AddListener(OnButtonSP_R);
-		btn_Resistance.onClick.AddListener(OnButtonSP_NominalR);
+		btn_NorminalR.onClick.AddListener(OnButtonSP_NominalR);
 		btn_uA.onClick.AddListener(OnButtonSP_uA);
 		btn_Src.onClick.AddListener(OnButtonSP_Src);
 
@@ -179,7 +184,7 @@ public class WdwMenu_Create : MonoBehaviour
 
 	void OnButtonSP_NominalR()
 	{
-		switch (dpdType_Resistance.value)
+		switch (dpd_TypeOfR.value)
 		{
 			case 0: willBeSet = MyResistor.Create(100, "待测\n100Ω"); break;
 			case 1: willBeSet = MyResistor.Create(1e6, "待测\n1MΩ"); break;
