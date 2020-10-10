@@ -12,14 +12,13 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	public MyKnob knob;
 	public Text txtWill;
 	public Text txtNow;
+	public MySwitch mySwitch;
 	public override void EntityAwake()
 	{
-		mySwitch = transform.FindComponent_DFS<MySwitch>("MySwitch");
-		// 默认启动时开机，读档可覆盖该设置
-		mySwitch.IsOn = true;
-
 		knob.Devide = -1;
 		knob.CanLoop = false;
+
+		mySwitch.IsOn = false;
 	}
 
 	//电路
@@ -35,16 +34,33 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	float deltaTime = 0;
 	void Update()
 	{
-		//算出比例
+		double realWillT = willT;//备份一下
+
+		if (!mySwitch.IsOn)//如果关机
+		{
+			realWillT = MySettings.roomTemperature;//温度变为室温
+		}
+
+
+		//算出每帧上升比例
 		double bili = kPerSecond * UnityEngine.Time.deltaTime;
 		if (bili > 1) bili = 1;
 
 		//将当前温度调节至目标温度
-		nowT += (willT - nowT) * bili;
+		nowT += (realWillT - nowT) * bili;
 
-		//更新显示
-		txtWill.text = "目标温度：" + willT.ToString("000.00") + "℃";
-		txtNow.text = "当前温度：" + nowT.ToString("000.00") + "℃";
+		if (mySwitch.IsOn)//如果开机
+		{
+			//更新显示
+			txtWill.text = "目标温度：" + realWillT.ToString("0.00") + "℃";
+			txtNow.text = "当前温度：" + nowT.ToString("0.00") + "℃";
+		}
+		else
+		{
+			txtWill.text = "";
+			txtNow.text = "";
+		}
+
 
 		deltaTime += UnityEngine.Time.deltaTime;
 		if (deltaTime > MySettings.hotRInterval)//触发
@@ -63,8 +79,6 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	}
 
 
-
-	private MySwitch mySwitch;
 	void UpdateKnob()
 	{
 		willT = (willTMax - willTMin) * knob.KnobPos + willTMin;
