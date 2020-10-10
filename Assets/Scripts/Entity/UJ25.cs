@@ -331,7 +331,7 @@ public class UJ25 : EntityBase
 					GetName("G_G"),
 					PortID_G_G.ToString(),
 					GetName("PortG_G"),
-					20000));
+					100000));
 
 				CircuitCalculator.SpiceEntities.Add(new VoltageSource(
 					GetName("G_V"),

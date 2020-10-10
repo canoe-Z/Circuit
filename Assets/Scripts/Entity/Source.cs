@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 /// </summary>
 public class Source : EntityBase, ISource
 {
-	protected double E, R;
+	protected double En, R;
 	protected int PortID_G, PortID_V;
 	protected Text sourceText;
 
@@ -26,6 +27,8 @@ public class Source : EntityBase, ISource
 
 	public override void SetElement(int entityID)
 	{
+		double T = MySettings.roomTemperature;
+		double E = En - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0) + 9e-9 * Math.Pow(T - 20, 3.0);
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(entityID.ToString(), PortID_V.ToString(), string.Concat(entityID.ToString(), "_rPort"), E));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID.ToString(), "_r"), string.Concat(entityID.ToString(), "_rPort"), PortID_G.ToString(), R));
 		//默认不接地，连接到电路中使用，如果电路中没有形成对0的通路，将其接地
@@ -46,7 +49,7 @@ public class Source : EntityBase, ISource
 	/// <summary>
 	/// 创建标准电池
 	/// </summary>
-	/// <param name="E">电动势</param>
+	/// <param name="E">20度电动势</param>
 	/// <param name="R">内阻</param>
 	/// <param name="str">显示文本</param>
 	/// <returns></returns>
@@ -57,7 +60,7 @@ public class Source : EntityBase, ISource
 
 	private Source Set(double E, double R, string str)
 	{
-		this.E = E;
+		this.En = E;
 		this.R = R;
 		sourceText.text = str;
 		return this;
@@ -73,7 +76,7 @@ public class Source : EntityBase, ISource
 		public SourceStandData(Source source)
 		{
 			baseData = new EntityBaseData(source);
-			E = source.E;
+			E = source.En;
 			R = source.R;
 			str = source.sourceText.text;
 		}
