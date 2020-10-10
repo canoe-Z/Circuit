@@ -154,7 +154,21 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 		if(!isExternalG)
 		{
 			// 内置检流计
-			CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 100));
+			switch (buttonOnID)
+			{
+				case 0:
+					CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 100000));
+					break;
+				case 1:
+					CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 1000));
+					break;
+				case 2:
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("G"), GetName("C"), GetName("D"), 0));
+					break;
+				default:
+					CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("G"), GetName("C"), GetName("D"), 0));
+					break;
+			}
 			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), null);
 			CircuitCalculator.InnerSpicePorts.Add(GetName("D"), null);
 		}
@@ -174,8 +188,15 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 		double maxI = 1e-6;
 		if(IsConnected())
 		{
-			double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")].Value - CircuitCalculator.InnerSpicePorts[GetName("D")].Value) / maxI;
-			myPin.SetPos(0.5f + pos);
+			if(buttonOnID==-1)
+			{
+				myPin.SetPos(0.5f);
+			}
+			else
+			{
+				double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")].Value - CircuitCalculator.InnerSpicePorts[GetName("D")].Value) / maxI;
+				myPin.SetPos(0.5f + pos);
+			}
 		}
 		else
 		{
