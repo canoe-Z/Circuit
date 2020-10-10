@@ -4820,7 +4820,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u65E0\u8BEF\u5DEE\u7535\u963B"
+  m_Text: "\u666E\u901A\u7535\u963B"
 --- !u!222 &450449780
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7348,7 +7348,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u666E\u901A\u7535\u963B"
+  m_Text: "\u56FA\u5B9A\u7535\u963B"
 --- !u!222 &688063662
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20541,7 +20541,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1605718955}
   m_HandleRect: {fileID: 1605718954}
   m_Direction: 2
-  m_Value: 0.99999994
+  m_Value: 1
   m_Size: 0.19794773
   m_NumberOfSteps: 0
   m_OnValueChanged:

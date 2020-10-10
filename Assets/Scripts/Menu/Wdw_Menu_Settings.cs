@@ -11,8 +11,8 @@ public static class MySettings
 	public static float moveRatio = 1f;//移动速度
 	public static float turnRatio = 1f;//转动速度
 
+	//未保存程序
 	public static float roomTemperature = 20;//室温
-
 	public static float hotRInterval = 0.1f;//热敏电阻计算间隔
 }
 public class Wdw_Menu_Settings : MonoBehaviour

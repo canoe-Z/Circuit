@@ -26,11 +26,11 @@ public class WdwMenu_Create : MonoBehaviour
 	public InputField iptNum_SliderR;
 	public Button btn_SliderR;
 
-	[Header("误差电阻")]
+	[Header("	误差电阻")]
 	public InputField iptNum_R;
 	public Button btn_R;
 	public Dropdown dpd_Wucha;
-	[Header("预置电阻")]
+	[Header("	预置电阻")]
 	public Dropdown dpd_TypeOfR;
 	public Button btn_NorminalR;
 
@@ -157,23 +157,38 @@ public class WdwMenu_Create : MonoBehaviour
 		{
 			iptNum_R.text = "";
 
-			string str;
-
+			string strLast = "";
 			// 根据阻值确定显示方式
 			if (RValue >= 1e6)
 			{
-				str = (RValue / 1e6).ToString() + "MΩ";
+				strLast = (RValue / 1e6).ToString() + "MΩ";
 			}
 			else if (RValue >= 1e3)
 			{
-				str = (RValue / 1e3).ToString() + "kΩ";
+				strLast = (RValue / 1e3).ToString() + "kΩ";
 			}
 			else
 			{
-				str = RValue.ToString() + "Ω";
+				strLast = RValue.ToString() + "Ω";
 			}
 
-			willBeSet = MyResistor.Create(RValue, str).gameObject;
+			string strFront = "";
+			switch (dpd_Wucha.value)
+			{
+				case 0:
+					strFront = "10%误差";
+					RValue *= UnityEngine.Random.Range(0.9f, 1.1f);
+					break;//10%误差
+				case 1:
+					strFront = "5%误差";
+					RValue *= UnityEngine.Random.Range(0.95f, 1.05f);
+					break;//5%误差
+				case 2:
+					strFront = "无误差";
+					break;//0%误差
+			}
+
+			willBeSet = MyResistor.Create(RValue, strFront + strLast).gameObject;
 			NormalStartCreate();
 		}
 		else if (iptNum_R.text == "")
@@ -208,15 +223,9 @@ public class WdwMenu_Create : MonoBehaviour
 	{
 		switch (dpdType_Src.value)
 		{
-			case 0:
-				// TODO:将标准电池电动势计算转移到前端
-				double E20 = 1.01860;     // 20摄氏度下的标准电池电动势
-				double T = 25;
-				// 标准电池温度修正公式
-				double En = E20 - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0)
-					+ 9e-9 * Math.Pow(T - 20, 3.0);
-				willBeSet = Source.Create(En, 100, "标准电池");
-				break;//1.01865
+			case 0://1.01860
+				willBeSet = Source.Create(1.01860, 100, "标准电池");
+				break;
 			case 1:
 				double willE = UnityEngine.Random.Range(1.48f, 1.52f);//随机数
 				willBeSet = Source.Create(willE, 100, "待测电池");
@@ -225,15 +234,10 @@ public class WdwMenu_Create : MonoBehaviour
 		NormalStartCreate();
 	}
 
-	private void FixedUpdate()
-	{
-
-	}
 	void Update()
 	{
 		if (willBeSet)//如果带了一个物体
 		{
-
 			RaycastHit info;
 			Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
 			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, (1 << 11) | (1 << 0)))//0层碰撞

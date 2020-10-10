@@ -151,6 +151,7 @@ MonoBehaviour:
   knob: {fileID: 370815025060788696}
   txtWill: {fileID: 6975802083844588488}
   txtNow: {fileID: 6076622143567590631}
+  mySwitch: {fileID: 370815024200550058}
 --- !u!1 &370815024200550056
 GameObject:
   m_ObjectHideFlags: 0
