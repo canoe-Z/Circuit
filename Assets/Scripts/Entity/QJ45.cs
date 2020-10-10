@@ -7,9 +7,10 @@ using UnityEngine;
 public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 {
 	private double Ra;                      // 比例臂电阻
-	private double Rb = 1000;               // 比例臂电阻
+	private readonly double Rb = 1000;      // 比例臂电阻
 	private double rate;                    // 比例臂
 	private double Rn;                      // 标准电阻，比较臂
+	private double G_R;
 
 	private bool isExternalG = false;
 	private bool isExternalE = false;
@@ -151,29 +152,34 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("Rx_0"), GetName("B"), PortID_X_0.ToString(), 0));
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("Rx_1"), GetName("D"), PortID_X_1.ToString(), 0));
 
-		if(!isExternalG)
+		if (!isExternalG)
 		{
+			double R;
+
 			// 内置检流计
 			switch (buttonOnID)
 			{
 				case 0:
-					CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 100000));
+					R = 30000;
 					break;
 				case 1:
-					CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("D"), 1000));
+					R = 3000;
 					break;
 				case 2:
-					CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("G"), GetName("C"), GetName("D"), 0));
+					R = 0.0001;
 					break;
 				default:
-					CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("G"), GetName("C"), GetName("D"), 0));
+					R = 0;
 					break;
 			}
-			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), null);
-			CircuitCalculator.InnerSpicePorts.Add(GetName("D"), null);
+			G_R = 300;
+			CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G"), GetName("C"), GetName("R"), G_R));
+			CircuitCalculator.SpiceEntities.Add(new Resistor(GetName("G_R"), GetName("R"), GetName("D"), R));
+			CircuitCalculator.InnerSpicePorts.Add(GetName("C"), 0);
+			CircuitCalculator.InnerSpicePorts.Add(GetName("R"), 0);
 		}
 
-		if(!isExternalE)
+		if (!isExternalE)
 		{
 			// 内置4.5V电源
 			CircuitCalculator.SpiceEntities.Add(new VoltageSource(GetName("E"), GetName("A"), GetName("B"), 4.5));
@@ -185,16 +191,18 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 	public void CalculatorUpdate()
 	{
 		// 挡位
-		double maxI = 1e-6;
-		if(IsConnected())
+		double maxI = 3e-5;
+		if (IsConnected())
 		{
-			if(buttonOnID==-1)
+			if (buttonOnID == -1)
 			{
 				myPin.SetPos(0.5f);
 			}
 			else
 			{
-				double pos = (CircuitCalculator.InnerSpicePorts[GetName("C")].Value - CircuitCalculator.InnerSpicePorts[GetName("D")].Value) / maxI;
+				double I = (CircuitCalculator.InnerSpicePorts[GetName("C")] - CircuitCalculator.InnerSpicePorts[GetName("R")]) / G_R;
+				double pos = I / maxI;
+				Debug.LogWarning(I.ToString());
 				myPin.SetPos(0.5f + pos);
 			}
 		}
@@ -209,7 +217,9 @@ public class QJ45 : EntityBase, ICalculatorUpdate, ISource
 		if (IsConnected() && !isExternalE)
 		{
 			CircuitCalculator.UF.Union(PortID_X_0, 0);
+			CircuitCalculator.GNDLines.Add(new GNDLine(PortID_X_0));
 		}
+
 	}
 
 	[System.Serializable]

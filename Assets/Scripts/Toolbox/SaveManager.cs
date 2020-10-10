@@ -16,6 +16,7 @@ public class SaveData
 	private int colorID;            // 颜色配置
 	private CameraData cameraData;  // 窗口状态
 	public byte[] Bytes;            // 截图字节数组
+	public int PortNum;
 
 	// 禁止使用构造函数创建
 	private SaveData() { }
@@ -34,6 +35,7 @@ public class SaveData
 		}
 		savedata.colorID = DisplayController.MyColorID;
 		savedata.cameraData = SmallCamManager.Save();
+		savedata.PortNum = CircuitCalculator.PortNum;
 		return savedata;
 	}
 
@@ -48,6 +50,7 @@ public class SaveData
 		{
 			linedata.Load();
 		}
+		CircuitCalculator.PortNum = PortNum;
 		DisplayController.MyColorID = colorID;
 		cameraData.Load();
 	}

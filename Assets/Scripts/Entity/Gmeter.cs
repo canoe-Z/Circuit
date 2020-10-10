@@ -74,32 +74,32 @@ public class Gmeter : EntityBase, ICalculatorUpdate
 			case 2: //1uA
 				notChangeMyPinPos = false;
 				MaxI = 1e-6;
-				R = 10;
+				R = 1;
 				break;
 			case 3: //300nA
 				notChangeMyPinPos = false;
 				MaxI = 300 * 1e-9;
-				R = 30;
+				R = 3;
 				break;
 			case 4: //100nA
 				notChangeMyPinPos = false;
 				MaxI = 100 * 1e-9;
-				R = 100;
+				R = 10;
 				break;
 			case 5: //30nA
 				notChangeMyPinPos = false;
 				MaxI = 30 * 1e-9;
-				R = 300;
+				R = 30;
 				break;
 			case 6: //10nA
 				notChangeMyPinPos = false;
 				MaxI = 10 * 1e-9;
-				R = 1000;
+				R = 100;
 				break;
 			case 7: //3nA
 				notChangeMyPinPos = false;
 				MaxI = 3 * 1e-9;
-				R = 3000;
+				R = 300;
 				break;
 			default:
 				Debug.LogError("总之就是有个bug");
