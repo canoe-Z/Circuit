@@ -210,6 +210,7 @@ public class WdwMenu_Create : MonoBehaviour
 				double En = E20 - 3.99e-5 * (T - 20) - 0.94e-6 * Math.Pow(T - 20, 2.0)
 					+ 9e-9 * Math.Pow(T - 20, 3.0);
 				willBeSet = Source.Create(En, 100, "标准电池");
+				Debug.Log(En);
 				break;//1.01865
 			case 1:
 				double willE = UnityEngine.Random.Range(1.48f, 1.52f);//随机数
