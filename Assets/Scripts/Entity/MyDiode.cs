@@ -53,9 +53,14 @@ public class MyDiode : EntityBase
 		PortID_V = ChildPorts[1].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"),
-			PortID_G.ToString(), PortID_V.ToString(), "1N4007"));
+			PortID_V.ToString(), PortID_G.ToString(), "MyZener"));
+		/*
 		CircuitCalculator.SpiceEntities.Add(
 			CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		*/
+		//.MODEL IdealD D (Is=1e-14 Rs=0.0 N=1.0 Tt=0.0 Cjo=0.0 Vj=1.0 ....)
+		//CircuitCalculator.SpiceEntities.Add(
+			//CreateDiodeModel("MyZener", "Is=1e-20 Rs=100000 N=1.0 Cjo=1e-20 M=0.0 tt=1e-20 bv=12 ibv=1e-20 vj=100"));
 	}
 
 	public override EntityData Save() => new SimpleEntityData<MyDiode>(this);
