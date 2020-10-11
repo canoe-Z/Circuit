@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class AirComditioner : MonoBehaviour
@@ -11,10 +9,7 @@ public class AirComditioner : MonoBehaviour
     public Vector3 endEular;
 	float nowSpeedPS = 0;//每秒速度，当前的
 	float nowPos = 1.0f / 3;//当前位置，0-1
-    void Start()
-    {
-        
-    }
+
 	private void OnMouseOver()
 	{
 		//左键增加
@@ -35,6 +30,6 @@ public class AirComditioner : MonoBehaviour
 		willTemperature = nowPos * 15 + 15;
 
 		MySettings.roomTemperature += (willTemperature - MySettings.roomTemperature) * upSpeedK * Time.deltaTime;
-		screenText.text = "室温：" + MySettings.roomTemperature.ToString("0.00") + "℃";
+		screenText.text = "室温：" + MySettings.roomTemperature.ToString("0.0") + "℃";
 	}
 }
