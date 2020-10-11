@@ -96,7 +96,7 @@ public class MyKnob : MonoBehaviour
 			{
 				// 转速逐步加快
 				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
-				SetKnobRot(KnobPos + nowSpeedPerSec);
+				SetKnobRot(KnobPos + nowSpeedPerSec * Time.deltaTime * 60);
 				if (IsChangeConnection)
 				{
 
@@ -112,7 +112,7 @@ public class MyKnob : MonoBehaviour
 			{
 				// 转速逐步加快
 				nowSpeedPerSec += speedUpPerSecond * Time.deltaTime;
-				SetKnobRot(KnobPos - nowSpeedPerSec);
+				SetKnobRot(KnobPos - nowSpeedPerSec * Time.deltaTime * 60);
 				if (IsChangeConnection)
 				{
 
