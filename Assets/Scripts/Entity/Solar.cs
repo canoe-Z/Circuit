@@ -113,8 +113,8 @@ public class Solar : EntityBase, ISource
 		PortID_V = ChildPorts[1].ID;
 
 		CircuitCalculator.SpiceEntities.Add(new CurrentSource(string.Concat(entityID, "_S"), "S+", PortID_G.ToString(), Isc));
-		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"), PortID_G.ToString(), "S+", "1N4007"));
-		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"), PortID_G.ToString(), "S+", "Solar_1N4007"));
+		CircuitCalculator.SpiceEntities.Add(CreateDiodeModel("Solar_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R1"), "S+", PortID_G.ToString(), 10000));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R2"), PortID_V.ToString(), "S+", 0.5));
 	}
