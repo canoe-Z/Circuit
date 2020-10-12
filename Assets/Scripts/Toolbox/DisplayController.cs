@@ -47,8 +47,9 @@ public class DisplayController : Singleton<DisplayController>
 
 	Color[] crossColor = new Color[colorMax];
 	const int colorMax = 5;
-	Image imgCross;
-	Text txtFps;
+	public Image imgCross;
+	public Text txtFps;
+	public Text txtTips;
 
 	void Awake()
 	{
@@ -62,16 +63,16 @@ public class DisplayController : Singleton<DisplayController>
 
 	void Start()
 	{
-		imgCross = GetComponentInChildren<Image>();
-		txtFps = GetComponentInChildren<Text>();
 		Vector3 pos = txtFps.transform.position;
 		pos.x = 10;
 		txtFps.transform.position = pos;
 	}
-
+	public static string myTipsToShow = "";
 	int frameHide_counter = 0;
 	void Update()
 	{
+		txtTips.text = myTipsToShow;
+		myTipsToShow = null;
 		// 颜色控制
 		// 按Q切换颜色
 		if (Input.GetKeyDown(KeyCode.Q))
