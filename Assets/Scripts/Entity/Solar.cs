@@ -29,6 +29,9 @@ public class Solar : EntityBase, ISource
 
 		// 默认启动时关机，读档可覆盖该设置
 		mySwitch.IsOn = false;
+
+		// 滑块初始位置
+		mySlider.SetSliderPos(1f);
 	}
 
 	void Start()
@@ -54,7 +57,7 @@ public class Solar : EntityBase, ISource
 		float lightStrength = 1 / (fm * fm);    // 这东西最小值1/36，最大值1
 		Isc = lightStrength * IscMax;
 
-		// 更新光照强度的数值
+		// 更新光照强度的数值;
 		sloarText.text = EntityText.GetText(lightStrength * 1000, 1000.00, 2);
 	}
 
