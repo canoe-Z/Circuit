@@ -175,15 +175,15 @@ public class WdwMenu_Create : MonoBehaviour
 			switch (dpd_Wucha.value)
 			{
 				case 0:
-					strFront = "10%误差";
+					strFront = "10%误差\n";
 					RValue *= UnityEngine.Random.Range(0.9f, 1.1f);
 					break;//10%误差
 				case 1:
-					strFront = "5%误差";
+					strFront = "5%误差\n";
 					RValue *= UnityEngine.Random.Range(0.95f, 1.05f);
 					break;//5%误差
 				case 2:
-					strFront = "无误差";
+					strFront = "无误差\n";
 					break;//0%误差
 			}
 

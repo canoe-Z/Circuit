@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 电阻
 /// </summary>
-public class MyResistor : EntityBase
+public class MyResistor : EntityBase, IShow
 {
 	protected double RValue = 120;
 	protected Text resistanceText;
@@ -57,6 +57,10 @@ public class MyResistor : EntityBase
 		}
 
 		public override void Load() => BaseCreate<MyResistor>(baseData).Set(RValue, str);
+	}
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "电阻\n当前真实阻值：" + RValue.ToString("0.000000");
 	}
 }
 

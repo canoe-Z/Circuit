@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 热敏电阻
 /// </summary>
-public class Thermistor : EntityBase, ICalculatorUpdate,IShow
+public class Thermistor : EntityBase, ICalculatorUpdate, IShow
 {
 	//组件
 	public MyKnob knob;
