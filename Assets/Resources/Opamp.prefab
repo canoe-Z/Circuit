@@ -573,6 +573,7 @@ GameObject:
   - component: {fileID: 8211222471873673694}
   - component: {fileID: 2992256014405638415}
   - component: {fileID: 2427615211769004119}
+  - component: {fileID: 420363192241605244}
   m_Layer: 0
   m_Name: Opamp
   m_TagString: Untagged
@@ -662,6 +663,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinematicForParticles: 0
+--- !u!114 &420363192241605244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4443343252914091842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26733727183eee44fa70f6aea0d6fdaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outPort: {fileID: 0}
+  veePort: {fileID: 0}
+  vccPort: {fileID: 0}
+  NeedReset: 0
+  LastVcc: 0
+  LastVee: 0
 --- !u!1 &7872829149753915334
 GameObject:
   m_ObjectHideFlags: 0

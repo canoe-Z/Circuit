@@ -6,6 +6,7 @@ using SpiceSharp.Simulations;
 using System.Collections;
 using SpiceSharp.Entities;
 using System.Linq;
+using System;
 
 /// <summary>
 /// 电路计算
@@ -267,7 +268,7 @@ public class CircuitCalculator : MonoBehaviour
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			Debug.Log("仿真成功");
 		}
-		catch
+		catch(Exception e)
 		{
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			if (spiceEntities.Count == 0)
@@ -278,6 +279,7 @@ public class CircuitCalculator : MonoBehaviour
 			{
 				Debug.LogError(spiceEntities.Count.ToString());
 				Debug.LogError("仿真错误！");
+				Debug.LogError(e.ToString());
 			}
 		}
 	} // private static void SpiceSharpCalculate()

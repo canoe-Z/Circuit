@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Components;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,6 +45,14 @@ public class SliderR : EntityBase
 
 	public override void SetElement(int entityID)
 	{
+		if (Math.Abs(RLeft) < 0.001)
+		{
+			RLeft = 0.001;
+		}
+		if (Math.Abs(RRight) < 0.001)
+		{
+			RRight = 0.001;
+		}
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_L"), PortID_TL.ToString(), PortID_L.ToString(), RLeft));
 		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID, "_R"), PortID_TL.ToString(), PortID_R.ToString(), RRight));
 		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID, "_T"), PortID_TL.ToString(), PortID_TR.ToString(), 0));

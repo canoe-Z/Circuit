@@ -15,7 +15,7 @@ public class ThreeSource : EntityBase, ISource, ICalculatorUpdate
 	private readonly int[] G = new int[3];                      // 存放独立电源负极的端口ID
 	private readonly int[] V = new int[3];                      // 存放独立电源正极的端口ID
 	private readonly double[] E = new double[3];                // 电压数组
-	private readonly double[] R = new double[3];                // 内阻数组
+	private double[] R = new double[3];                // 内阻数组
 
 	private MySwitch mySwitch;
 	private List<MyKnob> knobs;
@@ -84,6 +84,9 @@ public class ThreeSource : EntityBase, ISource, ICalculatorUpdate
 			G[i] = ChildPorts[2 * i + 1].ID;
 			V[i] = ChildPorts[2 * i].ID;
 		}
+		R[0] = 0.1;
+		R[1] = 0.1;
+		R[2] = 0.1;
 	}
 
 	public void CalculatorUpdate()
@@ -173,8 +176,10 @@ public class ThreeSource : EntityBase, ISource, ICalculatorUpdate
 	/// <param name="n"></param>
 	public void SetElement(int n, int entityID)
 	{
-		CircuitCalculator.SpiceEntities.Add(new VoltageSource(string.Concat(entityID, "_", n), V[n].ToString(), string.Concat(entityID, "_rPort", n), E[n]));
-		CircuitCalculator.SpiceEntities.Add(new Resistor(string.Concat(entityID.ToString(), "_r", n), string.Concat(entityID, "_rPort", n), G[n].ToString(), R[n]));
+		CircuitCalculator.SpiceEntities.Add(
+			new VoltageSource(string.Concat(entityID, "_", n), V[n].ToString(), string.Concat(entityID, "_rPort", n), E[n]));
+		CircuitCalculator.SpiceEntities.Add(
+			new Resistor(string.Concat(entityID.ToString(), "_r", n), string.Concat(entityID, "_rPort", n), G[n].ToString(), R[n]));
 
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n + 1]);
