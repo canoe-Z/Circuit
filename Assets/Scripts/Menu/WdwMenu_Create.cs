@@ -175,15 +175,15 @@ public class WdwMenu_Create : MonoBehaviour
 			switch (dpd_Wucha.value)
 			{
 				case 0:
-					strFront = "10%误差";
+					strFront = "10%误差\n";
 					RValue *= UnityEngine.Random.Range(0.9f, 1.1f);
 					break;//10%误差
 				case 1:
-					strFront = "5%误差";
+					strFront = "5%误差\n";
 					RValue *= UnityEngine.Random.Range(0.95f, 1.05f);
 					break;//5%误差
 				case 2:
-					strFront = "无误差";
+					strFront = "无误差\n";
 					break;//0%误差
 			}
 
@@ -200,10 +200,10 @@ public class WdwMenu_Create : MonoBehaviour
 	{
 		switch (dpd_TypeOfR.value)
 		{
-			case 0: willBeSet = MyResistor.Create(100, "待测\n100Ω"); break;
-			case 1: willBeSet = MyResistor.Create(1e6, "待测\n1MΩ"); break;
-			case 2: willBeSet = MyResistor.Create(0.1, "待测\n0.1Ω"); break;
-			case 3: willBeSet = MyResistor.Create(120, "待测\n120Ω"); break;
+			case 0: willBeSet = MyResistor.Create(100 * Random.Range(0.9f, 1.1f), "待测\n100Ω"); break;
+			case 1: willBeSet = MyResistor.Create(1e6 * Random.Range(0.9f, 1.1f), "待测\n1MΩ"); break;
+			case 2: willBeSet = MyResistor.Create(0.1 * Random.Range(0.9f, 1.1f), "待测\n0.1Ω"); break;
+			case 3: willBeSet = MyResistor.Create(120 * Random.Range(0.9f, 1.1f), "待测\n120Ω"); break;
 		}
 		NormalStartCreate();
 	}

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 电阻箱
 /// </summary>
-public class RBox : EntityBase
+public class RBox : EntityBase, IShow
 {
 	private readonly int knobNum = 6;                           // 含有的旋钮个数
 
@@ -40,7 +40,7 @@ public class RBox : EntityBase
 		}
 
 		// 第一次执行初始化，此后受事件控制
-		for (var i = 1; i < knobs.Count; i++)
+		for (var i = 0; i < knobs.Count; i++)
 		{
 			int k = i;
 			knobs[i].KnobEvent += UpdateKnob;
@@ -172,5 +172,12 @@ public class RBox : EntityBase
 			RBox.rands = rands;
 			// 此时执行Start()
 		}
+	}
+
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "热敏电阻\n阻值1：" + nominal[2].ToString("0.000000") +
+			"\n阻值2：" + nominal[1].ToString("0.000000") +
+			"\n阻值3：" + nominal[0].ToString("0.000000");
 	}
 }

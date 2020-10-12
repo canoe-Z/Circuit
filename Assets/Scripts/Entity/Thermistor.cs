@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 热敏电阻
 /// </summary>
-public class Thermistor : EntityBase, ICalculatorUpdate
+public class Thermistor : EntityBase, ICalculatorUpdate, IShow
 {
 	//组件
 	public MyKnob knob;
@@ -17,6 +17,7 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	{
 		knob.Devide = -1;
 		knob.CanLoop = false;
+		knob.SetKnobRot((float)(willT - willTMin) / (float)(willTMax - willTMin));
 
 		mySwitch.IsOn = false;
 	}
@@ -26,8 +27,8 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	protected int PortID_Left, PortID_Right;
 
 	//渐近线
-	double willT = 30;
-	double nowT = 30;
+	double willT = MySettings.roomTemperature;
+	double nowT = MySettings.roomTemperature;
 	const double willTMax = 100;
 	const double willTMin = 0;
 	const double kPerSecond = 0.1;//每秒上升的比例
@@ -112,5 +113,10 @@ public class Thermistor : EntityBase, ICalculatorUpdate
 	}
 
 	public override EntityData Save() => new SimpleEntityData<Thermistor>(this);
+
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "热敏电阻\n当前真实阻值：" + resistance.ToString("0.000000");
+	}
 }
 

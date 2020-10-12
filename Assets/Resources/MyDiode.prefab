@@ -65,8 +65,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.35433182, y: 0.11287111, z: 0.60333043}
-  m_Center: {x: -0.0025601238, y: 0.052687556, z: 0.0014691055}
+  m_Size: {x: 0.35433182, y: 0.2, z: 1.2015753}
+  m_Center: {x: -0.0025601238, y: 0.1, z: -0.0026284456}
 --- !u!114 &8555051931360561150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2796573408746130837}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.109, z: 0.22}
+  m_LocalPosition: {x: 0, y: 0.209, z: 0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6063518192901969564}
@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6335531836917592080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.109, z: -0.22}
+  m_LocalPosition: {x: 0, y: 0.209, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1463331699364600710}
@@ -397,6 +397,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 65f945d7b0c518c47ae3d0fd8e7dea57,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 65f945d7b0c518c47ae3d0fd8e7dea57,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 65f945d7b0c518c47ae3d0fd8e7dea57,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 65f945d7b0c518c47ae3d0fd8e7dea57,
         type: 3}

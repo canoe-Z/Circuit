@@ -92,6 +92,10 @@ abstract public class EntityBase : MonoBehaviour
 		// X键按下时
 		if (Input.GetKey(KeyCode.X))
 		{
+			if(this is IShow show)
+			{
+				show.MyShowString();
+			}
 			// 启用边缘发光
 			transform.EnableFresnel(Color.blue);
 			if (Input.GetMouseButtonDown(1))
@@ -276,4 +280,8 @@ public interface ISource
 public interface ICalculatorUpdate
 {
 	void CalculatorUpdate();
+}
+public interface IShow
+{
+	void MyShowString();
 }
