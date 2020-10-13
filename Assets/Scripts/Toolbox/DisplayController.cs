@@ -67,6 +67,10 @@ public class DisplayController : Singleton<DisplayController>
 		pos.x = 10;
 		txtFps.transform.position = pos;
 	}
+
+	/// <summary>
+	/// 元件调用的提示文本
+	/// </summary>
 	public static string myTipsToShow = "";
 	int frameHide_counter = 0;
 	void Update()

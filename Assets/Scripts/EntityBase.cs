@@ -55,33 +55,45 @@ abstract public class EntityBase : MonoBehaviour
 		return circuitPorts;
 	}
 
-	// 元件移动
-	void OnMouseDrag()
-	{
-		if (!MoveController.CanOperate) return;
-
-		if (HitCheckTable(out Vector3 hitPos))
-		{
-			transform.position = hitPos;
-		}
-		else
-		{
-			Vector3 campos = Camera.main.transform.position;
-			Vector3 thispos = gameObject.transform.position;
-			float dis = (thispos - campos).magnitude;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			Vector3 vec = ray.direction;
-			vec.Normalize();
-			vec *= dis;
-			thispos = campos + vec;
-			gameObject.transform.position = thispos;
-		}
-	}
-
+	static float nowTime = 0;
 	void OnMouseOver()
 	{
 
 		if (!MoveController.CanOperate) return;
+
+		//按下鼠标左键
+		if (Input.GetMouseButtonDown(0))
+		{
+			nowTime = 0;
+		}
+		//拖动鼠标左键
+		if (Input.GetMouseButton(0))
+		{
+			nowTime += Time.deltaTime;
+			if (nowTime > 0.3f)
+			{
+				if (HitCheckTable(out Vector3 hitPos))
+				{
+					transform.position = hitPos;
+				}
+				else
+				{
+					Vector3 campos = Camera.main.transform.position;
+					Vector3 thispos = gameObject.transform.position;
+					float dis = (thispos - campos).magnitude;
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					Vector3 vec = ray.direction;
+					vec.Normalize();
+					vec *= dis;
+					thispos = campos + vec;
+					gameObject.transform.position = thispos;
+				}
+			}
+		}
+		else//没有拖动鼠标左键
+		{
+			nowTime = 0;
+		}
 
 		// 按鼠标中键摆正元件
 		if (Input.GetMouseButtonDown(2))

@@ -4,6 +4,8 @@ using UnityEngine;
 /// <summary>
 /// 鼠标操控
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Camera))]
 public class MoveController : MonoBehaviour
 {
 	/// <summary>
@@ -21,10 +23,12 @@ public class MoveController : MonoBehaviour
 	private static extern short GetKeyState(int keyCode);
 	private CharacterController characterController;
 
-	private readonly float rotateSpeed = 1;
-	private readonly float moveSpeed = 0.1f;
+	const float rotateSpeed = 1;
+	const float moveSpeedMax = 20;//速度上限dm/s
+	const float moveAcceleration = 60f;//加速度dm/s2
 
-	private bool W, A, S, D, Up, Down;
+	Rigidbody rigidBody;
+	Camera cam;
 
 	void Start()
 	{
@@ -33,27 +37,16 @@ public class MoveController : MonoBehaviour
 		Cursor.visible = false;
 
 		characterController = Camera.main.GetComponent<CharacterController>();
+		rigidBody = GetComponent<Rigidbody>();
+		rigidBody.velocity = Vector3.zero;//速度清零
+		cam = GetComponent<Camera>();
 	}
 
 	void Update()
 	{
-		GetKeyState();
 		Rotate(rotateSpeed);
-		Move(moveSpeed);
+		Move();
 		RopeUpdate();
-	}
-
-	/// <summary>
-	/// 判断按键状态
-	/// </summary>
-	private void GetKeyState()
-	{
-		W = Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
-		D = Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
-		S = Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
-		A = Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
-		Up = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
-		Down = Input.GetKey(KeyCode.Space);
 	}
 
 	/// <summary>
@@ -63,7 +56,7 @@ public class MoveController : MonoBehaviour
 	{
 		// 在菜单的时候禁止转头
 		if (!CanControll) return;
-		Vector3 camRot = Camera.main.transform.eulerAngles;
+		Vector3 camRot = transform.eulerAngles;
 
 		// 鼠标移动距离
 		float rh = Input.GetAxis("Mouse X");
@@ -83,21 +76,23 @@ public class MoveController : MonoBehaviour
 		if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
 		if (camRot.x < -89) camRot.x = -89;
 
-		Camera.main.transform.eulerAngles = camRot;
+		transform.eulerAngles = camRot;
 	}
 
 	/// <summary>
-	/// 视角移动
+	/// 移动
 	/// </summary>
-	private void Move(float speed)
+	private void Move()
 	{
 		// 在菜单的时候禁止移动
-		if (!CanControll) return;
+		if (!CanControll)
+		{
+			rigidBody.velocity = Vector3.zero;
+			return;
+		}
 
-		float dFront = 0;
-		float dRight = 0;
-		float dUp = 0;
 
+		float speed = moveSpeedMax;
 		// 大写锁定打开时，移动速度变为十分之一
 		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
 		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
@@ -105,18 +100,31 @@ public class MoveController : MonoBehaviour
 			speed /= 10;
 		}
 
-		if (W) dFront += speed;
-		if (D) dRight += speed;
+		//得到移动方向
+		Vector3 localForward = Vector3.zero;
+		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) localForward.z += 1;
+		if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) localForward.x += 1;
+		if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) localForward.z -= 1;
+		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) localForward.x -= 1;
+		if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) localForward.y -= 1;
+		if (Input.GetKey(KeyCode.Space)) localForward.y += 1;
 
-		if (S) dFront -= speed;
-		if (A) dRight -= speed;
 
-		if (Up) dUp -= speed;
-		if (Down) dUp += speed;
+		if (localForward.magnitude > 0.01f)//移动了
+		{
+			localForward.Normalize();//单位化
+			Vector3 control = transform.TransformDirection(localForward);//变到世界坐标系
 
-		Vector3 control = new Vector3(dRight, dUp, dFront) * Time.deltaTime * 100 * MySettings.moveRatio;
-		Vector3 world = Camera.main.gameObject.transform.TransformDirection(control);
-		characterController.Move(world);
+			rigidBody.velocity += control * moveAcceleration * Time.deltaTime;//获得加速度
+			if (rigidBody.velocity.magnitude > speed * MySettings.moveRatio)
+			{
+				rigidBody.velocity = rigidBody.velocity.normalized * speed;
+			}
+		}
+		else
+		{
+			rigidBody.velocity = rigidBody.velocity * 0.5f * Time.deltaTime;//速度衰减
+		}
 	}
 
 	/// <summary>
@@ -135,7 +143,7 @@ public class MoveController : MonoBehaviour
 				//line.GetComponent<MeshCollider>().convex = true;
 			}
 
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out RaycastHit hitInfo))
 			{
 				GameObject hitObject = hitInfo.collider.gameObject;
