@@ -17,8 +17,8 @@ public class OpAmp : EntityBase
 
 
 
-	double outInResis = 100000;//输出电阻(内部)
-	double loadResis = 1;//上下的电阻，vcc和vee之间的
+	double outInResis = 1e10;//输出电阻(内部)
+	double loadResis = 100;//上下的电阻，vcc和vee之间的
 	double gain = 1e5;
 
 	public override void EntityAwake() { }
@@ -72,6 +72,7 @@ public class OpAmp : EntityBase
 		CircuitCalculator.SpiceEntities.AddRange(new List<Entity>
 		{
 			CreateDiodeModel("Opamp_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"),
+			//CreateDiodeModel("Lixiang","Is=1e-24 N=1e-24 Rs=1e-24 Cjo=0 BV=10000 IBV=0 Vj=1e-8"),
 			new Resistor(string.Concat(entityID, "_RinZheng"),PortID_Zheng.ToString(),string.Concat(entityID, "nodeGND"), inResis/2),
 			new Resistor(string.Concat(entityID, "_RinFu"),PortID_Fu.ToString(),string.Concat(entityID, "nodeGND"), inResis/2),
 			//输入端放大

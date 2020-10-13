@@ -177,9 +177,9 @@ public class ThreeSource : EntityBase, ISource, ICalculatorUpdate
 	public void SetElement(int n, int entityID)
 	{
 		CircuitCalculator.SpiceEntities.Add(
-			new VoltageSource(string.Concat(entityID, "_", n), V[n].ToString(), string.Concat(entityID, "_rPort", n), E[n]));
+			new Resistor(string.Concat(entityID, "_", n), V[n].ToString(), string.Concat(entityID, "_rPort", n), R[n]));
 		CircuitCalculator.SpiceEntities.Add(
-			new Resistor(string.Concat(entityID.ToString(), "_r", n), string.Concat(entityID, "_rPort", n), G[n].ToString(), R[n]));
+			new VoltageSource(string.Concat(entityID.ToString(), "_r", n), string.Concat(entityID, "_rPort", n), G[n].ToString(), E[n]));
 
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n]);
 		CircuitCalculator.SpicePorts.Add(ChildPorts[2 * n + 1]);
