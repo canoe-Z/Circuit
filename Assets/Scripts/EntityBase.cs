@@ -57,11 +57,8 @@ abstract public class EntityBase : MonoBehaviour
 
 	static float nowTime = 0;
 	const float moveTrigTime = 0.3f;
-	void OnMouseOver()
+	void OnMouseDrag()
 	{
-
-		if (!MoveController.CanOperate) return;
-
 		//按下鼠标左键
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -96,6 +93,12 @@ abstract public class EntityBase : MonoBehaviour
 		{
 			nowTime = 0;
 		}
+	}
+	void OnMouseOver()
+	{
+
+		if (!MoveController.CanOperate) return;
+
 
 		// 按鼠标中键摆正元件
 		if (Input.GetMouseButtonDown(2))
