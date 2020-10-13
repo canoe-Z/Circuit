@@ -56,6 +56,7 @@ abstract public class EntityBase : MonoBehaviour
 	}
 
 	static float nowTime = 0;
+	const float moveTrigTime = 0.3f;
 	void OnMouseOver()
 	{
 
@@ -70,8 +71,9 @@ abstract public class EntityBase : MonoBehaviour
 		if (Input.GetMouseButton(0))
 		{
 			nowTime += Time.deltaTime;
-			if (nowTime > 0.3f)
+			if (nowTime > moveTrigTime)
 			{
+				DisplayController.myOperateTipsToShow += "正在移动元件\n";
 				if (HitCheckTable(out Vector3 hitPos))
 				{
 					transform.position = hitPos;

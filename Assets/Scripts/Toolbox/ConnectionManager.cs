@@ -6,7 +6,7 @@ using Obi;
 /// </summary>
 public class ConnectionManager : MonoBehaviour
 {
-	public static CircuitPort clickedPort = null;
+	static CircuitPort clickedPort = null;//可能存在的上一个导线
 
 	// 导线颜色配置
 
@@ -24,6 +24,10 @@ public class ConnectionManager : MonoBehaviour
 
 	void Update()
 	{
+		if (clickedPort)
+		{
+			DisplayController.myOperateTipsToShow += "点击下一个接线柱连接导线，单击右键取消本次连接\n";
+		}
 		// 右键清除连接状态
 		if (Input.GetMouseButtonDown(1))
 		{

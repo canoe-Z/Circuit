@@ -50,6 +50,7 @@ public class DisplayController : Singleton<DisplayController>
 	public Image imgCross;
 	public Text txtFps;
 	public Text txtTips;
+	public Text txtTipsOperate;
 
 	void Awake()
 	{
@@ -72,11 +73,18 @@ public class DisplayController : Singleton<DisplayController>
 	/// 元件调用的提示文本
 	/// </summary>
 	public static string myTipsToShow = "";
+	/// <summary>
+	/// 操作提示
+	/// </summary>
+	public static string myOperateTipsToShow = "";
+
 	int frameHide_counter = 0;
 	void Update()
 	{
 		txtTips.text = myTipsToShow;
 		myTipsToShow = null;
+		txtTipsOperate.text = myOperateTipsToShow;
+		myOperateTipsToShow = null;
 		// 颜色控制
 		// 按Q切换颜色
 		if (Input.GetKeyDown(KeyCode.Q))
