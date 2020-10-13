@@ -19693,7 +19693,6 @@ GameObject:
   - component: {fileID: 3952197926821122436}
   - component: {fileID: 2442910962835080712}
   - component: {fileID: 2571031137876701106}
-  - component: {fileID: 4134241495560046233}
   - component: {fileID: 5025677411296872277}
   m_Layer: 5
   m_Name: Tips
@@ -19763,21 +19762,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "\u4F60\u597D"
---- !u!114 &4134241495560046233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7596947116397874984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f14f49b61044e49ebb2f29511f2b3f41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateInterval: 0.5
-  showMedian: 0
-  medianLearnrate: 0.05
 --- !u!114 &5025677411296872277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19804,7 +19788,6 @@ GameObject:
   - component: {fileID: 2137868100975712350}
   - component: {fileID: 2101714765485010890}
   - component: {fileID: 6584149482734564108}
-  - component: {fileID: 3550269656510148012}
   - component: {fileID: 7066749285278057237}
   m_Layer: 5
   m_Name: TipsOperate
@@ -19874,21 +19857,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "\u4F60\u597D"
---- !u!114 &3550269656510148012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7850282435493891069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f14f49b61044e49ebb2f29511f2b3f41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateInterval: 0.5
-  showMedian: 0
-  medianLearnrate: 0.05
 --- !u!114 &7066749285278057237
 MonoBehaviour:
   m_ObjectHideFlags: 0
