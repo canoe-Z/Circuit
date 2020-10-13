@@ -19,6 +19,10 @@ public class MyHelper : MonoBehaviour
 		{
 			canvas.enabled = !canvas.enabled;
 		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			canvas.enabled = false;
+		}
 
 	}
 }
