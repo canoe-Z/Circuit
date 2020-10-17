@@ -101,11 +101,13 @@ public class ConnectionManager : MonoBehaviour
 	/// <returns>解析器</returns>
 	public static ObiSolver CreateSolver()
 	{
-		GameObject solverObject = new GameObject("RopeSolver", typeof(ObiSolver), typeof(ObiFixedUpdater));
-		ObiSolver solver = solverObject.GetComponent<ObiSolver>();
+		//获得解析器
+		ObiSolver obiSolver = FindObjectOfType<ObiSolver>();
+		obiSolver.enabled = true;//别问我为啥这么写，我也不知道
+		GameObject solverObject = new GameObject("RopeSolver", typeof(ObiFixedUpdater));
 		ObiFixedUpdater updater = solverObject.GetComponent<ObiFixedUpdater>();
-		updater.solvers.Add(solver);
-		return solver;
+		updater.solvers.Add(obiSolver);
+		return obiSolver;
 	}
 
 	/// <summary>
