@@ -18,7 +18,7 @@ public class SmallCamManager : MonoBehaviour
 			smallCams[i].name = "smallCam" + i;
 			smallCams[i].depth = 1;
 			smallCams[i].enabled = false;
-			Destroy(smallCams[i].gameObject.GetComponent<CharacterController>());
+			Destroy(smallCams[i].gameObject.GetComponent<MoveController>());
 		}
 
 		// 初始化显示位置
