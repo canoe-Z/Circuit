@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Wdw_Menu : Singleton<Wdw_Menu>
@@ -19,12 +20,10 @@ public class Wdw_Menu : Singleton<Wdw_Menu>
 	{
 	}
 
-
+	EventSystem es;
 	void Start()
 	{
-		if (mainThings == null) Debug.LogError("这里没挂");
-		if (exitGame == null) Debug.LogError("这里没挂");
-		if (continueGame == null) Debug.LogError("这里没挂");
+		es = EventSystem.current;
 		MyCloseMenu();
 		exitGame.onClick.AddListener(OnQuitButton);
 		continueGame.onClick.AddListener(OnContinueButton);
@@ -108,11 +107,10 @@ public class Wdw_Menu : Singleton<Wdw_Menu>
 		//默认界面是创建元件的界面
 		ToCreateMode();
 
-		Cursor.lockState = CursorLockMode.None;//解除鼠标锁定
-		Cursor.visible = true;
 		MoveController.CanOperate = false;
 		MoveController.CanControll = false;
 		mainThings.enabled = true;
+		es.enabled = true;
 
 		//清空输入框和下拉菜单
 		InputField[] inputFields = createThings.gameObject.GetComponentsInChildren<InputField>();
@@ -130,10 +128,9 @@ public class Wdw_Menu : Singleton<Wdw_Menu>
 	//关闭菜单
 	public void MyCloseMenu()
 	{
-		Cursor.lockState = CursorLockMode.Locked;//锁定鼠标于中央
-		Cursor.visible = false;
 		MoveController.CanOperate = true;
 		MoveController.CanControll = true;
 		mainThings.enabled = false;
+		es.enabled = false;
 	}
 }

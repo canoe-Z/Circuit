@@ -40,7 +40,7 @@ public class CircuitLine : MonoBehaviour
 
 	void Update()
 	{
-		if (MySettings.isEmission)
+		if (MySettings.isEmissionWhenOnLine)
 		{
 			GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
 		}
@@ -48,7 +48,7 @@ public class CircuitLine : MonoBehaviour
 
 	void OnMouseEnter()
 	{
-		if (MySettings.isEmission)
+		if (MySettings.isEmissionWhenOnLine)
 		{
 			transform.EnableFresnel(Color.blue);
 		}
@@ -56,7 +56,7 @@ public class CircuitLine : MonoBehaviour
 
 	void OnMouseExit()
 	{
-		if (MySettings.isEmission)
+		if (MySettings.isEmissionWhenOnLine)
 		{
 			transform.DisablFresnel();
 		}

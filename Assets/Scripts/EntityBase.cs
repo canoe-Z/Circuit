@@ -154,8 +154,8 @@ abstract public class EntityBase : MonoBehaviour
 	/// </summary>
 	private static bool HitCheckTable(out Vector3 hitPos)
 	{
-		Transform tr = SmallCamManager.MainCam.transform;
-		if (Physics.Raycast(tr.position, tr.forward, out RaycastHit info, 2000, 1 << 11))
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out RaycastHit info, 2000, 1 << 11))
 		{
 			hitPos = info.point;
 			return true;

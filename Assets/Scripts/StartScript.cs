@@ -5,7 +5,6 @@ public class StartScript : MonoBehaviour
 {
 	public void OnStartGame(string sceneName)
 	{
-		Cursor.visible = false;
 		SceneManager.LoadScene(sceneName);
 	}
 

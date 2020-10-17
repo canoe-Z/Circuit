@@ -238,8 +238,8 @@ public class WdwMenu_Create : MonoBehaviour
 		if (willBeSet)//如果带了一个物体
 		{
 			RaycastHit info;
-			Transform camTr = SmallCamManager.MainCam.gameObject.transform;//主摄像机
-			if (Physics.Raycast(camTr.position, camTr.forward, out info, 2000, (1 << 11) | (1 << 0)))//0层碰撞
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out info, 2000, (1 << 11) | (1 << 0)))//0层碰撞
 			{
 				willBeSet.transform.position = info.point;
 			}

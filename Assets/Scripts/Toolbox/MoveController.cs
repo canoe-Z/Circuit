@@ -25,8 +25,7 @@ public class MoveController : MonoBehaviour
 	//***转头参数***
 
 	//转头变量
-	Vector3 eularAngles;
-	Vector3 lastPosition;
+	Vector3 eularAngles = new Vector3(0, -90, 0);
 
 	//***移动参数***
 	const float moveSpeedMax = 20;//速度上限dm/s
@@ -41,9 +40,8 @@ public class MoveController : MonoBehaviour
 	void Start()
 	{
 		// 锁定光标并隐藏
-		//Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.lockState = CursorLockMode.Confined;
 
 		rigidBody = GetComponent<Rigidbody>();
 		rigidBody.velocity = Vector3.zero;//速度清零
@@ -57,60 +55,74 @@ public class MoveController : MonoBehaviour
 		RopeUpdate();
 	}
 
-	void MySetMousePosition(Vector3 pos)
-	{
-		MySetMousePosition(pos.x, pos.y);
-	}
-	void MySetMousePosition(float x, float y)
-	{
-		SetCursorPos((int)x, Screen.height - (int)y);//坐标系不同哦
-	}
 	/// <summary>
 	/// 视角旋转
 	/// </summary>
 	private void Rotate()
 	{
 		// 在菜单的时候禁止转头
-		if (!CanControll) return;
+		if (!CanControll)
+		{
+			Cursor.lockState = CursorLockMode.None;
+			return;
+		}
+
+
+
+		// 鼠标移动距离
+		float dx = Input.GetAxis("Mouse X");
+		float dy = Input.GetAxis("Mouse Y");
+		bool canMoveScreenX = false;
+		bool canMoveScreenY = false;
+
+		if (MySettings.lockCursor)
+		{
+			canMoveScreenX = true;
+			canMoveScreenY = true;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		else
+		{
+			Cursor.lockState = CursorLockMode.Confined;
+		}
+			
 
 		Vector3 nowPosition = Input.mousePosition;
-		Vector3 deltaPos = nowPosition - lastPosition;//得到增量
-		if (nowPosition.x > Screen.width - MySettings.xLimitCursorRange)
-			nowPosition.x = Screen.width - MySettings.xLimitCursorRange;
-		else if (nowPosition.x < MySettings.xLimitCursorRange)
-			nowPosition.x = MySettings.xLimitCursorRange;
-		if (nowPosition.y > Screen.height - MySettings.yLimitCursorRange)
-			nowPosition.y = Screen.height - MySettings.yLimitCursorRange;
-		else if (nowPosition.y < MySettings.yLimitCursorRange)
-			nowPosition.y = MySettings.yLimitCursorRange;
-		//MySetMousePosition(nowPosition);
-
-		lastPosition = nowPosition;
-		//if (Input.GetKey(KeyCode.C))
+		if (nowPosition.x > Screen.width - MySettings.xLimitCursorRange && dx > 0)
 		{
-			// 鼠标移动距离
-			float rh = Input.GetAxis("Mouse X");
-			float rv = Input.GetAxis("Mouse Y");
-
-
-			float speed = 1;
-			// 大写锁定打开时，转头速度乘以0.8
-			// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
-			if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
-			{
-				speed *= 0.8f;
-			}
-			Vector3 camRot = transform.eulerAngles;
-			eularAngles.x -= rv * speed * MySettings.turnRatio;
-			eularAngles.y += rh * speed * MySettings.turnRatio;
-
-			if (eularAngles.x > 89) eularAngles.x = 89;
-			else if (eularAngles.x < -89) eularAngles.x = -89;
-			if (eularAngles.y > 360) eularAngles.y -= 360;
-			else if (eularAngles.y < 0) eularAngles.y += 360;
-
-			transform.eulerAngles = eularAngles;
+			canMoveScreenX = true;
 		}
+		else if (nowPosition.x < MySettings.xLimitCursorRange && dx < 0)
+		{
+			canMoveScreenX = true;
+		}
+		if (nowPosition.y > Screen.height - MySettings.yLimitCursorRange && dy > 0)
+		{
+			canMoveScreenY = true;
+		}
+		else if (nowPosition.y < MySettings.yLimitCursorRange && dy < 0)
+		{
+			canMoveScreenY = true;
+		}
+
+		float speed = 1;
+		// 大写锁定打开时，转头速度乘以0.8
+		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
+		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
+		{
+			speed *= 0.8f;
+		}
+		if (canMoveScreenY)
+			eularAngles.x -= dy * speed * MySettings.turnRatio;
+		if (canMoveScreenX)
+			eularAngles.y += dx * speed * MySettings.turnRatio;
+
+		if (eularAngles.x > 89) eularAngles.x = 89;
+		else if (eularAngles.x < -89) eularAngles.x = -89;
+		if (eularAngles.y > 360) eularAngles.y -= 360;
+		else if (eularAngles.y < 0) eularAngles.y += 360;
+
+		transform.eulerAngles = eularAngles;
 	}
 
 	/// <summary>
@@ -150,9 +162,10 @@ public class MoveController : MonoBehaviour
 			Vector3 control = transform.TransformDirection(localForward);//变到世界坐标系
 
 			rigidBody.velocity += control * moveAcceleration * Time.deltaTime;//获得加速度
-			if (rigidBody.velocity.magnitude > speed * MySettings.moveRatio)
+
+			if (rigidBody.velocity.magnitude > speed * MySettings.moveRatio)//限制最大速度
 			{
-				rigidBody.velocity = rigidBody.velocity.normalized * speed;
+				rigidBody.velocity = rigidBody.velocity.normalized * speed * MySettings.moveRatio;
 			}
 		}
 		else
