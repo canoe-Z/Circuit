@@ -8,6 +8,10 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class MoveController : MonoBehaviour
 {
+	[DllImport("user32.dll")]// 用于获取CapsLock的状态
+	static extern short GetKeyState(int keyCode);
+	[DllImport("user32.dll")]// 用于获取CapsLock的状态
+	static extern int SetCursorPos(int x, int y);
 	/// <summary>
 	/// 可以操纵场景内已有对象
 	/// </summary>
@@ -18,14 +22,18 @@ public class MoveController : MonoBehaviour
 	/// </summary>
 	public static bool CanControll { get; set; } = true;
 
-	// 用于获取CapsLock的状态
-	[DllImport("user32.dll")]
-	private static extern short GetKeyState(int keyCode);
-	private CharacterController characterController;
+	//***转头参数***
 
-	const float rotateSpeed = 1;
+	//转头变量
+	Vector3 eularAngles;
+	Vector3 lastPosition;
+
+	//***移动参数***
 	const float moveSpeedMax = 20;//速度上限dm/s
 	const float moveAcceleration = 60f;//加速度dm/s2
+
+									   
+
 
 	Rigidbody rigidBody;
 	Camera cam;
@@ -33,10 +41,10 @@ public class MoveController : MonoBehaviour
 	void Start()
 	{
 		// 锁定光标并隐藏
-		Cursor.lockState = CursorLockMode.Locked;
+		//Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 
-		characterController = Camera.main.GetComponent<CharacterController>();
 		rigidBody = GetComponent<Rigidbody>();
 		rigidBody.velocity = Vector3.zero;//速度清零
 		cam = GetComponent<Camera>();
@@ -44,39 +52,65 @@ public class MoveController : MonoBehaviour
 
 	void Update()
 	{
-		Rotate(rotateSpeed);
+		Rotate();
 		Move();
 		RopeUpdate();
 	}
 
+	void MySetMousePosition(Vector3 pos)
+	{
+		MySetMousePosition(pos.x, pos.y);
+	}
+	void MySetMousePosition(float x, float y)
+	{
+		SetCursorPos((int)x, Screen.height - (int)y);//坐标系不同哦
+	}
 	/// <summary>
 	/// 视角旋转
 	/// </summary>
-	private void Rotate(float speed)
+	private void Rotate()
 	{
 		// 在菜单的时候禁止转头
 		if (!CanControll) return;
-		Vector3 camRot = transform.eulerAngles;
 
-		// 鼠标移动距离
-		float rh = Input.GetAxis("Mouse X");
-		float rv = Input.GetAxis("Mouse Y");
+		Vector3 nowPosition = Input.mousePosition;
+		Vector3 deltaPos = nowPosition - lastPosition;//得到增量
+		if (nowPosition.x > Screen.width - MySettings.xLimitCursorRange)
+			nowPosition.x = Screen.width - MySettings.xLimitCursorRange;
+		else if (nowPosition.x < MySettings.xLimitCursorRange)
+			nowPosition.x = MySettings.xLimitCursorRange;
+		if (nowPosition.y > Screen.height - MySettings.yLimitCursorRange)
+			nowPosition.y = Screen.height - MySettings.yLimitCursorRange;
+		else if (nowPosition.y < MySettings.yLimitCursorRange)
+			nowPosition.y = MySettings.yLimitCursorRange;
+		//MySetMousePosition(nowPosition);
 
-		// 大写锁定打开时，转头速度乘以0.8
-		// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
-		if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
+		lastPosition = nowPosition;
+		//if (Input.GetKey(KeyCode.C))
 		{
-			speed *= 0.8f;
+			// 鼠标移动距离
+			float rh = Input.GetAxis("Mouse X");
+			float rv = Input.GetAxis("Mouse Y");
+
+
+			float speed = 1;
+			// 大写锁定打开时，转头速度乘以0.8
+			// (((ushort)GetKeyState(0x14)) & 0xffff) != 0 -->大写锁定已打开
+			if ((((ushort)GetKeyState(0x14)) & 0xffff) != 0)
+			{
+				speed *= 0.8f;
+			}
+			Vector3 camRot = transform.eulerAngles;
+			eularAngles.x -= rv * speed * MySettings.turnRatio;
+			eularAngles.y += rh * speed * MySettings.turnRatio;
+
+			if (eularAngles.x > 89) eularAngles.x = 89;
+			else if (eularAngles.x < -89) eularAngles.x = -89;
+			if (eularAngles.y > 360) eularAngles.y -= 360;
+			else if (eularAngles.y < 0) eularAngles.y += 360;
+
+			transform.eulerAngles = eularAngles;
 		}
-
-		camRot.x -= rv * speed * MySettings.turnRatio;
-		camRot.y += rh * speed * MySettings.turnRatio;
-
-		if (camRot.x > 89 && camRot.x < 180) camRot.x = 89;
-		if (camRot.x < 271 && camRot.x > 180) camRot.x = 271;
-		if (camRot.x < -89) camRot.x = -89;
-
-		transform.eulerAngles = camRot;
 	}
 
 	/// <summary>

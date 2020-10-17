@@ -14,6 +14,9 @@ public static class MySettings
 	//未保存程序
 	public static float roomTemperature = 20;//室温
 	public static float hotRInterval = 0.1f;//热敏电阻计算间隔
+	public static float xLimitCursorRange = 100;//鼠标fixed的位置离屏幕距离
+	public static float yLimitCursorRange = 100;
+
 }
 public class Wdw_Menu_Settings : MonoBehaviour
 {
