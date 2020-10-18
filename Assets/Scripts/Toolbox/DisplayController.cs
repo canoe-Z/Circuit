@@ -5,6 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 用于显示光标，控制颜色和显示提示
 /// </summary>
+[RequireComponent(typeof(Canvas))]
 public class DisplayController : Singleton<DisplayController>
 {
 	/// <summary>
@@ -81,6 +82,11 @@ public class DisplayController : Singleton<DisplayController>
 	int frameHide_counter = 0;
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.F2))
+		{
+			GetComponent<Canvas>().enabled = !GetComponent<Canvas>().enabled;
+		}
+
 		txtTips.text = myTipsToShow;
 		myTipsToShow = null;
 		txtTipsOperate.text = myOperateTipsToShow;
