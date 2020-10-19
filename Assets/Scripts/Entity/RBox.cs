@@ -176,7 +176,7 @@ public class RBox : EntityBase, IShow
 
 	public void MyShowString()
 	{
-		DisplayController.myTipsToShow = "热敏电阻\n阻值1：" + nominal[2].ToString("0.000000") +
+		DisplayController.myTipsToShow = "电阻箱\n阻值1：" + nominal[2].ToString("0.000000") +
 			"\n阻值2：" + nominal[1].ToString("0.000000") +
 			"\n阻值3：" + nominal[0].ToString("0.000000");
 	}

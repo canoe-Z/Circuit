@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 单个独立电源，准确使用时可用于标准电源等场景，派生出标称类，用于待测电源和干电池
 /// </summary>
-public class Source : EntityBase, ISource
+public class Source : EntityBase, ISource, IShow
 {
 	protected double En, R;
 	protected int PortID_G, PortID_V;
@@ -67,6 +67,11 @@ public class Source : EntityBase, ISource
 	}
 
 	public override EntityData Save() => new SourceStandData(this);
+
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "电源\n真实电动势：" + En.ToString("0.000000");
+	}
 
 	[System.Serializable]
 	protected class SourceStandData : EntityData

@@ -60,11 +60,6 @@ abstract public class EntityBase : MonoBehaviour
 	void OnMouseDrag()
 	{
 		if (!MoveController.CanOperate) return;
-		//按下鼠标左键
-		if (Input.GetMouseButtonDown(0))
-		{
-			nowTime = 0;
-		}
 		//拖动鼠标左键
 		if (Input.GetMouseButton(0))
 		{
@@ -89,6 +84,17 @@ abstract public class EntityBase : MonoBehaviour
 					gameObject.transform.position = thispos;
 				}
 			}
+			else
+			{
+				int len = (int)(nowTime / moveTrigTime * 10);
+				string outStr = "";
+				for(int i = 0; i < 10; i++)
+				{
+					if (i < len) outStr += "_";
+					else outStr += "+";
+				}
+				DisplayController.myOperateTipsToShow += outStr + "\n";
+			}
 		}
 		else//没有拖动鼠标左键
 		{
@@ -101,6 +107,11 @@ abstract public class EntityBase : MonoBehaviour
 		if (!MoveController.CanOperate) return;
 
 
+		//按下鼠标左键
+		if (Input.GetMouseButtonDown(0))
+		{
+			nowTime = 0;//清除计时
+		}
 		// 按鼠标中键摆正元件
 		if (Input.GetMouseButtonDown(2))
 		{
