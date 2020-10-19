@@ -59,6 +59,7 @@ abstract public class EntityBase : MonoBehaviour
 	const float moveTrigTime = 0.3f;
 	void OnMouseDrag()
 	{
+		if (!MoveController.CanOperate) return;
 		//按下鼠标左键
 		if (Input.GetMouseButtonDown(0))
 		{
