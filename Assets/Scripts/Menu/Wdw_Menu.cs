@@ -106,7 +106,7 @@ public class Wdw_Menu : Singleton<Wdw_Menu>
 	{
 		//默认界面是创建元件的界面
 		ToCreateMode();
-
+		Cursor.visible = true;
 		MoveController.CanOperate = false;
 		MoveController.CanControll = false;
 		mainThings.enabled = true;
@@ -128,6 +128,7 @@ public class Wdw_Menu : Singleton<Wdw_Menu>
 	//关闭菜单
 	public void MyCloseMenu()
 	{
+		Cursor.visible = false;
 		MoveController.CanOperate = true;
 		MoveController.CanControll = true;
 		mainThings.enabled = false;
