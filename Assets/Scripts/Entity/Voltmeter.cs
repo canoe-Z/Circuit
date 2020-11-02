@@ -3,7 +3,7 @@
 /// <summary>
 /// 三量程电压表
 /// </summary>
-public class Voltmeter : EntityBase, ICalculatorUpdate
+public class Voltmeter : EntityBase, ICalculatorUpdate,IShow
 {
 	private readonly double MaxU0 = 1.5;
 	private readonly double MaxU1 = 5;
@@ -46,6 +46,10 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 		doublePin += (ChildPorts[2].U - GNDu) / MaxU1;
 		doublePin += (ChildPorts[3].U - GNDu) / MaxU2;
 		myPin.SetPos(doublePin);
+
+		showU0= (float)((ChildPorts[1].U - GNDu) / MaxU0);
+		showU1 = (float)((ChildPorts[1].U - GNDu) / MaxU0);
+		showU2 = (float)((ChildPorts[1].U - GNDu) / MaxU0);
 	}
 
 	public override void LoadElement()
@@ -66,6 +70,17 @@ public class Voltmeter : EntityBase, ICalculatorUpdate
 
 	public override EntityData Save() => new VoltmeterData(this);
 
+
+	float showU0= 0;
+	float showU1=0;
+	float showU2=0;
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "电压表\n当前真实电压：\n" 
+			+ "电压1：" + showU0.ToString("0.000000") + "内阻1：" + R0.ToString("0.000000")
+			+"\n电压2："+showU1.ToString("0.000000")+"内阻2：" + R1.ToString("0.000000") 
+			+"\n电压3：" + showU2.ToString("0.000000") + "内阻3：" + R2.ToString("0.000000");
+	}
 	[System.Serializable]
 	public class VoltmeterData : EntityData
 	{

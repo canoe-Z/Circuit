@@ -3,7 +3,7 @@
 /// <summary>
 /// 三量程电流表
 /// </summary>
-public class Ammeter : EntityBase, ICalculatorUpdate
+public class Ammeter : EntityBase, ICalculatorUpdate, IShow
 {
 	private readonly double MaxI0 = 0.015;
 	private readonly double MaxI1 = 0.15;
@@ -46,6 +46,11 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 		ChildPorts[2].I = (ChildPorts[2].U - ChildPorts[0].U) / R1;
 		ChildPorts[3].I = (ChildPorts[3].U - ChildPorts[0].U) / R2;
 
+		Itoshow0 = (float)ChildPorts[1].I;
+		Itoshow1 = (float)ChildPorts[2].I;
+		Itoshow2 = (float)ChildPorts[3].I;
+
+
 		double doublePin = 0;
 		doublePin += (ChildPorts[1].I) / MaxI0;
 		doublePin += (ChildPorts[2].I) / MaxI1;
@@ -71,6 +76,17 @@ public class Ammeter : EntityBase, ICalculatorUpdate
 	}
 
 	public override EntityData Save() => new AmmeterData(this);
+
+	float Itoshow0 = 0;
+	float Itoshow1 = 0;
+	float Itoshow2 = 0;
+	public void MyShowString()
+	{
+		DisplayController.myTipsToShow = "电流表\n当前真实电流：\n"
+			+ "电流1：" + Itoshow0.ToString("0.000000") + "内阻1：" + R0.ToString("0.000000")
+			+ "\n电流2：" + Itoshow1.ToString("0.000000") + "内阻2：" + R1.ToString("0.000000")
+			+ "\n电流3：" + Itoshow2.ToString("0.000000") + "内阻3：" + R2.ToString("0.000000");
+	}
 
 	[System.Serializable]
 	public class AmmeterData : EntityData
