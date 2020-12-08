@@ -11,6 +11,7 @@ public static class MySettings
 	public static bool lockCursor = false;//是否将鼠标光标锁定在屏幕中央
 	public static float moveRatio = 1f;//移动速度
 	public static float turnRatio = 1f;//转动速度
+	public static float moveARatio = 1f;//移动速度
 
 	//未保存程序
 	public static float roomTemperature = 20;//室温
@@ -21,6 +22,7 @@ public static class MySettings
 public class Wdw_Menu_Settings : MonoBehaviour
 {
 	public Slider sldMove;
+	public Slider sldMoveA;
 	public Slider sldTurn;
 	public Toggle tglLine;
 	public Toggle tglMyPinDamping;
@@ -30,6 +32,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 		LoadToSettings();//加载存档
 
 		sldMove.onValueChanged.AddListener((float value) => MySettings.moveRatio = value);
+		sldMoveA.onValueChanged.AddListener((float value) => MySettings.moveARatio = value);
 		sldTurn.onValueChanged.AddListener((float value) => MySettings.turnRatio = value);
 		tglCursor.onValueChanged.AddListener((bool value) => MySettings.lockCursor = value);
 		tglLine.onValueChanged.AddListener((bool value) => MySettings.isEmissionWhenOnLine = value);
@@ -40,6 +43,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 	public void SettingsToMenu()
 	{
 		sldMove.value = MySettings.moveRatio;
+		sldMoveA.value = MySettings.moveARatio;
 		sldTurn.value = MySettings.turnRatio;
 		tglLine.isOn = MySettings.isEmissionWhenOnLine;
 		tglMyPinDamping.isOn = MySettings.openMyPinDamping;
@@ -106,6 +110,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 		private bool isEmission;
 		private bool lockCursor;
 		private float moveRatio;
+		private float moveARatio;
 		private float turnRatio;
 
 
@@ -115,6 +120,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 			isEmission = MySettings.isEmissionWhenOnLine;
 			lockCursor = MySettings.lockCursor;
 			moveRatio = MySettings.moveRatio;
+			moveARatio = MySettings.moveARatio;
 			turnRatio = MySettings.turnRatio;
 		}
 		public void LoadToSettings()
@@ -123,6 +129,7 @@ public class Wdw_Menu_Settings : MonoBehaviour
 			MySettings.isEmissionWhenOnLine = isEmission;
 			MySettings.lockCursor = lockCursor;
 			MySettings.moveRatio = moveRatio;
+			MySettings.moveARatio = moveARatio;
 			MySettings.turnRatio = turnRatio;
 		}
 	}

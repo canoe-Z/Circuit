@@ -161,7 +161,7 @@ public class MoveController : MonoBehaviour
 			localForward.Normalize();//单位化
 			Vector3 control = transform.TransformDirection(localForward);//变到世界坐标系
 
-			rigidBody.velocity += control * moveAcceleration * Time.deltaTime;//获得加速度
+			rigidBody.velocity += control * moveAcceleration * Time.deltaTime * Mathf.Pow(10, MySettings.moveARatio);//获得加速度
 
 			if (rigidBody.velocity.magnitude > speed * MySettings.moveRatio)//限制最大速度
 			{
@@ -170,7 +170,7 @@ public class MoveController : MonoBehaviour
 		}
 		else
 		{
-			rigidBody.velocity = rigidBody.velocity * 0.5f * Time.deltaTime;//速度衰减
+			rigidBody.velocity = rigidBody.velocity * Time.deltaTime * (-MySettings.moveARatio + 1) / 2;//速度衰减
 		}
 	}
 
