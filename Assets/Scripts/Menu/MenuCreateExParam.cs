@@ -5,14 +5,14 @@ using UnityEngine;
 public class MenuCreateExParam : MonoBehaviour
 {
 
-	void Start()
-	{
+    void Start()
+    {
 
-	}
+    }
 
 
-	void Update()
-	{
+    void Update()
+    {
 
-	}
+    }
 }
