@@ -119,7 +119,7 @@ public class UJ25 : EntityBase
 		}
 		else
 		{
-			if(!buttons.Select(x => x.IsOn).Contains(true))
+			if (!buttons.Select(x => x.IsOn).Contains(true))
 			{
 				buttonOnID = -1;
 			}

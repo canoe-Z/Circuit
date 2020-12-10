@@ -31,7 +31,7 @@ public class MoveController : MonoBehaviour
 	const float moveSpeedMax = 20;//速度上限dm/s
 	const float moveAcceleration = 60f;//加速度dm/s2
 
-									   
+
 
 
 	Rigidbody rigidBody;
@@ -85,7 +85,7 @@ public class MoveController : MonoBehaviour
 		{
 			Cursor.lockState = CursorLockMode.Confined;
 		}
-			
+
 
 		Vector3 nowPosition = Input.mousePosition;
 		if (nowPosition.x > Screen.width - MySettings.xLimitCursorRange && dx > 0)

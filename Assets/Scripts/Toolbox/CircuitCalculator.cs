@@ -268,7 +268,7 @@ public class CircuitCalculator : MonoBehaviour
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			Debug.Log("仿真成功");
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			Debug.Log("被禁用的导线数目为：" + DisabledLines.Count);
 			if (spiceEntities.Count == 0)

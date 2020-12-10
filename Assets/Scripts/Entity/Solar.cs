@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SpiceSharp.Components;
 using SpiceSharp.Entities;
@@ -118,12 +119,17 @@ public class Solar : EntityBase, ISource
 
 		CircuitCalculator.SpiceEntities.AddRange(new List<Entity>
 		{
-			CreateDiodeModel("Solar_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"),
 			new CurrentSource(string.Concat(entityID, "_S"), "S+", PortID_G.ToString(), Isc),
 			new Diode(string.Concat(entityID, "_D"), PortID_G.ToString(), "S+", "Solar_1N4007"),
 			new Resistor(string.Concat(entityID, "_R1"), "S+", PortID_G.ToString(), 10000),
 			new Resistor(string.Concat(entityID, "_R2"), PortID_V.ToString(), "S+", 0.5)
 		});
+
+		if (CircuitCalculator.SpiceEntities.SingleOrDefault(x => x.Name == "Solar_1N4007") == null)
+		{
+			CircuitCalculator.SpiceEntities.Add(
+				CreateDiodeModel("Solar_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		}
 	}
 
 	public void GroundCheck()

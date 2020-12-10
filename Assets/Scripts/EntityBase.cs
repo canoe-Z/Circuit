@@ -88,7 +88,7 @@ abstract public class EntityBase : MonoBehaviour
 			{
 				int len = (int)(nowTime / moveTrigTime * 10);
 				string outStr = "";
-				for(int i = 0; i < 10; i++)
+				for (int i = 0; i < 10; i++)
 				{
 					if (i < len) outStr += "_";
 					else outStr += "+";
@@ -121,7 +121,7 @@ abstract public class EntityBase : MonoBehaviour
 		// X键按下时
 		if (Input.GetKey(KeyCode.X))
 		{
-			if(this is IShow show)
+			if (this is IShow show)
 			{
 				show.MyShowString();
 			}

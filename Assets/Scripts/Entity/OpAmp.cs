@@ -109,7 +109,7 @@ public class OpAmp : EntityBase
 			
 			//真输出电阻
 			new Resistor(string.Concat(entityID, "_RoutReal"),PortID_O.ToString(),string.Concat(entityID, "nodeOutWakeNB"),outResis),
-		}) ;
+		});
 	}
 
 	public override EntityData Save() => new SimpleEntityData<OpAmp>(this);

@@ -4,9 +4,9 @@ using UnityEngine.UI;
 public class AirComditioner : MonoBehaviour
 {
 	public Text screenText;
-    public Transform tr;
-    public Vector3 startEular;
-    public Vector3 endEular;
+	public Transform tr;
+	public Vector3 startEular;
+	public Vector3 endEular;
 	float nowSpeedPS = 0;//每秒速度，当前的
 	float nowPos = 1.0f / 3;//当前位置，0-1
 

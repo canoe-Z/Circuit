@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using SpiceSharp.Components;
 using SpiceSharp.Entities;
@@ -54,8 +55,11 @@ public class MyDiode : EntityBase
 
 		CircuitCalculator.SpiceEntities.Add(new Diode(string.Concat(entityID, "_D"),
 			PortID_V.ToString(), PortID_G.ToString(), "DIO_1N4007"));
-		CircuitCalculator.SpiceEntities.Add(
-			CreateDiodeModel("DIO_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		if (CircuitCalculator.SpiceEntities.SingleOrDefault(x => x.Name == "DIO_1N4007") == null)
+		{
+			CircuitCalculator.SpiceEntities.Add(
+				CreateDiodeModel("DIO_1N4007", "Is=1.09774e-8 Rs=0.0414388 N=1.78309 Cjo=2.8173e-11 M=0.318974 tt=9.85376e-6 Kf=0 Af=1"));
+		}
 	}
 
 	public override EntityData Save() => new SimpleEntityData<MyDiode>(this);
